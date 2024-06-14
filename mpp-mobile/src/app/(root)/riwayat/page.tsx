@@ -6,6 +6,8 @@ import { fetchRiwayatPermohonan } from "@/store/action/actionHistoryPermohonan";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import { redirect } from "next/navigation";
 
 interface PermissionType {
   id: number;
@@ -30,7 +32,12 @@ export default function RiwayatPage() {
     (state: RootState) => state.historyPermohonan.data
   );
 
+  const token = Cookies.get("Authorization");
+
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     dispatch(fetchRiwayatPermohonan());
   }, [dispatch]);
 

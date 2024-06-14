@@ -2,12 +2,15 @@
 import fetchProfile from "@/components/fetching/profile/profile";
 import ProfileScreen from "@/components/profiles/profileScreen/profileScreen";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { redirect } from "next/navigation";
 
 export default function ProfilePage({
   params,
 }: {
   params: { userId: number };
 }) {
+  const token = Cookies.get("Authorization");
   const [profile, setProfile] = useState({});
 
   const fetchProfiles = async (id: number) => {
@@ -21,6 +24,9 @@ export default function ProfilePage({
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchProfiles(params.userId);
   }, [params.userId]);
 

@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { useDispatch } from "react-redux";
 import {
@@ -20,6 +21,7 @@ import {
   setLayananId,
   setTanggal,
 } from "@/store/action/actionSurvei";
+import { redirect } from "next/navigation";
 
 type DataDinasType = {
   id: number;
@@ -46,6 +48,7 @@ export default function SurveySkmPage() {
   const debounceSearch = useDebounce(search);
   const [date, setDate] = useState("");
   const [changeOpacity, setChangeOpacity] = useState(false);
+  const token = Cookies.get("Authorization");
 
   const fetchDinas = async (search: string) => {
     try {
@@ -66,6 +69,9 @@ export default function SurveySkmPage() {
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchDinas(debounceSearch);
     fetchLayanan(instanceId);
   }, [debounceSearch]);

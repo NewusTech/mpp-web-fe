@@ -10,11 +10,12 @@ import { z } from "zod";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import FormComponents from "@/components/others/formComponents/formComponents";
 import { useRouter } from "next/navigation";
 import { Dispatch } from "redux";
+import { RootState } from "@/store/store";
 
 interface JWT {
   userId: number;
@@ -43,6 +44,7 @@ const formSchema = z.object({
 });
 
 export default function DataDiriPage() {
+  const permohonan = useSelector((state: RootState) => state.permohonan);
   const dispatch: Dispatch<any> = useDispatch();
   const [info, setInfo] = useState<Partial<InfoType["data"]>>({
     name: "",
@@ -51,6 +53,7 @@ export default function DataDiriPage() {
     alamat: "",
   });
   const router = useRouter();
+  console.log(permohonan, "ini redux lo");
 
   const fetchUserInfo = async (id: number) => {
     try {

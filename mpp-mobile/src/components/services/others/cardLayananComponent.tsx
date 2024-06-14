@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 export default function CardLayananComponent({ layanan }: any) {
+  const token = Cookies.get("Authorization");
   return (
     <div className="flex flex-col items-center justify-center w-[270px] outline outline-2 outline-[#C4C4C4] bg-[#F7F7F7] shadow-xl rounded-2xl">
       <div className="flex flex-col items-center justify-center w-[270px] h-[238px]">
@@ -27,13 +29,15 @@ export default function CardLayananComponent({ layanan }: any) {
 
       <div className="flex flex-row text-center items-center justify-center w-[270px] h-[50px] gap-[1px]">
         <Link
-          href="/layanan/booking-antrian"
+          href={`${!token}` ? `/login` : `/layanan/booking-antrian`}
           className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
           Booking Antrian
         </Link>
 
         <Link
-          href={`/layanan/permohonan-layanan/${layanan.id}`}
+          href={
+            `${!token}` ? `/login` : `/layanan/permohonan-layanan/${layanan.id}`
+          }
           className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
           Permohonan Layanan
         </Link>
