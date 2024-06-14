@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
+import Image from "next/image";
+import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 
 interface PermissionType {
   id: number;
@@ -44,7 +46,7 @@ export default function RiwayatPage() {
   console.log(historyData, "==");
 
   return (
-    <div className="flex flex-col justify-center items-center mt-[56px] mx-[35px] h-full">
+    <div className="flex flex-col justify-center mt-[56px] mx-[35px]">
       <div className="flex self-start">
         <h5 className="text-[20px] font-semibold text-primary-800">History</h5>
       </div>
@@ -62,30 +64,60 @@ export default function RiwayatPage() {
 
           <div>
             <TabsContent value="antrian">
-              <CardHistoryComponent
-                name="Nomor Antrian"
-                date="Tanggal"
-                time="Waktu"
-                status="Status"
-                value="antrian"
-                permohonan="Hello"
-              />
+              {historyData && historyData.length > 0 ? (
+                <>
+                  {historyData?.map((histori: PermissionType, i: number) => {
+                    return (
+                      <div key={i}>
+                        <CardHistoryComponent
+                          name="Nomor Antrian"
+                          date="Tanggal"
+                          time="Waktu"
+                          status="Status"
+                          value="antrian"
+                          permohonan="Hello"
+                        />
+                      </div>
+                    );
+                  })}
+                </>
+              ) : (
+                <div className="flex flex-col justify-center items-center h-[311px]">
+                  <Image src={sad} width={100} height={100} alt="sad" />
+
+                  <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
+                    Data tidak ditemukan!
+                  </p>
+                </div>
+              )}
             </TabsContent>
             <TabsContent className="flex flex-col gap-4" value="permohonan">
-              {historyData?.map((histori: PermissionType, i: number) => {
-                return (
-                  <div key={i}>
-                    <CardHistoryComponent
-                      name="Nomor Permohonan"
-                      date="Tanggal"
-                      time="Waktu"
-                      status="Status"
-                      value="permohonan"
-                      permohonan={histori}
-                    />
-                  </div>
-                );
-              })}
+              {historyData && historyData.length > 0 ? (
+                <>
+                  {historyData?.map((histori: PermissionType, i: number) => {
+                    return (
+                      <div key={i}>
+                        <CardHistoryComponent
+                          name="Nomor Permohonan"
+                          date="Tanggal"
+                          time="Waktu"
+                          status="Status"
+                          value="permohonan"
+                          permohonan={histori}
+                        />
+                      </div>
+                    );
+                  })}
+                </>
+              ) : (
+                <div className="flex flex-col justify-center items-center h-[311px]">
+                  <Image src={sad} width={100} height={100} alt="sad" />
+
+                  <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
+                    Data tidak ditemukan!
+                  </p>
+                </div>
+              )}
             </TabsContent>
           </div>
         </Tabs>

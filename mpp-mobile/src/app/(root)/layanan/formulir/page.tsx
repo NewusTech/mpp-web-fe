@@ -59,8 +59,6 @@ export default function FormulirPage() {
     }));
   };
 
-  console.log(form, "ini form");
-
   const handleClick = () => {
     let wadah: { layananform_id: number; data: string }[] = [];
 
@@ -74,6 +72,8 @@ export default function FormulirPage() {
 
     dispatch(setDataInput(wadah));
   };
+
+  console.log(form, "ini data dari api form");
 
   return (
     <div className="flex items-center justify-center mt-[14px] mx-[35px] mb-[15px]">
@@ -128,9 +128,9 @@ export default function FormulirPage() {
 
             <div className="flex flex-col mt-[32px]">
               <div className="flex flex-col mb-[8px]">
-                {form?.Layananforms?.map((el: LayananFormType) => {
+                {form?.Layananforms?.map((el: LayananFormType, i: number) => {
                   return (
-                    <div key={el.id} className="space-y-2">
+                    <div key={i} className="space-y-2">
                       <LayoutInput
                         typeForm={el.tipedata}
                         labelName={el.field}

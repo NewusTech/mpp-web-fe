@@ -2,7 +2,6 @@
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { useState } from "react";
 
 type LayoutFormType = {
   typeForm: string;
@@ -12,7 +11,7 @@ type LayoutFormType = {
   labelName: string;
   placeholder: string;
   opacity: boolean;
-  dataRadio: [id: number, key: string];
+  dataRadio: [{ id: number; key: string }];
 };
 
 export default function LayoutInput({
@@ -98,19 +97,28 @@ export default function LayoutInput({
           {labelName}
         </Label>
 
-        <div className="flex flex-row items-center space-x-2">
-          <Input
-            value={valueForm}
-            onChange={change}
-            name={nameForm}
-            type="radio"
-            placeholder={placeholder}
-            className="flex w-[15px] border border-neutral-700 h-[15px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
-          />
+        <div className="grid grid-cols-2 w-full justify-between">
+          {dataRadio.map((data: { id: number; key: string }, i: number) => {
+            return (
+              <div key={i} className="flex flex-row items-center space-x-2">
+                <Input
+                  value={valueForm}
+                  onChange={() =>
+                    change({ target: { name: nameForm, value: data.id } })
+                  }
+                  checked={valueForm === data.id}
+                  name={nameForm}
+                  type="radio"
+                  placeholder={placeholder}
+                  className="flex w-[15px] border border-neutral-700 h-[15px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
+                />
 
-          <Label className="text-neutral-700 text-[14px] font-normal">
-            Option A
-          </Label>
+                <Label className="text-neutral-700 text-[14px] font-normal">
+                  {data.key}
+                </Label>
+              </div>
+            );
+          })}
         </div>
       </>
     );

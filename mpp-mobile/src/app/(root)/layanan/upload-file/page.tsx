@@ -32,7 +32,10 @@ export default function UploadFilePage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
   const dispatch = useDispatch();
   const [dataFile, setDataFile] = useState<LayananType>();
-  const [input, setInput] = useState<{ [key: string]: any }>({});
+  const [input, setInput] = useState<{ [key: string]: File | null }>({});
+  const [dataPhoto, setDataPhoto] = useState({
+    data: "",
+  });
   const [fileName, setFileName] = useState<string | null>(null);
   const router = useRouter();
   const token = Cookies.get("Authorization");
@@ -59,46 +62,94 @@ export default function UploadFilePage() {
     fetchFile(permohonan.id);
   }, [permohonan.id]);
 
-  console.log(dataFile, "ini data file");
+  const change = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+
+    setDataPhoto({
+      ...dataPhoto,
+      [name]: files,
+    });
+
+    if (files && files.length > 0) {
+      const file = files[0] as File;
+
+      // Salin state datafile yang sudah ada
+      const updatedDataFile = [...permohonan.datafile];
+
+      // Cari jika sudah ada entry dengan layananform_id yang sama
+      const existingIndex = updatedDataFile.findIndex(
+        (item) => item.layananform_id === parseInt(name)
+      );
+
+      if (existingIndex !== -1) {
+        // Jika sudah ada, update entry yang sudah ada
+        updatedDataFile[existingIndex] = {
+          layananform_id: parseInt(name),
+          data: [...updatedDataFile[existingIndex].data, file],
+        };
+      } else {
+        // Jika belum ada, tambahkan entry baru
+        {
+          dataFile?.Layananforms.map((data: LayananFormType) => {
+            updatedDataFile.push({
+              layananform_id: parseInt(name),
+              data: [file],
+            });
+          });
+        }
+      }
+
+      // Update state Redux dengan data yang baru
+      dispatch(setInputFile(updatedDataFile));
+
+      // Simpan file yang dipilih dalam state komponen (opsional)
+      setInput((prevInput) => ({
+        ...prevInput,
+        [name]: file,
+      }));
+
+      // Menyimpan nama file yang diunggah
+      setFileName(file.name);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let tempat: { layananform_id: number; data: string }[] = [];
-
-    dataFile?.Layananforms.forEach((el: LayananFormType) => {
-      const fileDataURLString = input[el.field];
-
-      if (fileDataURLString) {
-        tempat.push({
-          layananform_id: el.id,
-          data: fileDataURLString,
-        });
-      }
-    });
-
-    dispatch(setInputFile(tempat));
-
     try {
       const formData = new FormData();
 
-      // Menggunakan formData.append untuk menambahkan data ke FormData
       formData.append("datainput", JSON.stringify(permohonan.datainput));
-      formData.append("datafile", JSON.stringify(permohonan.datafile)); // Jika perlu
 
-      // Menambahkan file yang diunggah ke FormData
-      dataFile?.Layananforms.forEach((el: LayananFormType) => {
-        const file = input[el.field];
-        if (file) {
-          formData.append("files", file); // Sesuaikan dengan nama field di backend
+      permohonan.datafile.forEach(
+        (fileData: { layananform_id: number; data: File[] }) => {
+          console.log(fileData.data, ">> ini file donggggg");
+
+          fileData.data.map((file: File) => {
+            console.log(file, "???");
+
+            const dataToSend = [
+              {
+                layananform_id: fileData.layananform_id,
+                data: file,
+              },
+            ];
+
+            console.log(dataToSend, "ini send dong");
+
+            console.log(JSON.stringify(dataToSend), ">>>ini data send");
+
+            formData.append("datafile", JSON.stringify(dataToSend));
+          });
         }
-      });
+      );
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/inputform/create/${permohonan.id}`,
         {
           method: "POST",
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: formData,
@@ -112,33 +163,12 @@ export default function UploadFilePage() {
       // Handle redirect atau tindakan setelah sukses submit
       // router.push("/");
     } catch (error: any) {
-      console.log(error.message, "ini error");
+      console.log(error, "ini error");
       toast("Harap lengkapi syarat-syaratnya!");
     }
   };
 
-  const change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-
-    if (files && files.length > 0) {
-      const reader = new FileReader();
-
-      reader.onload = function (event) {
-        if (event?.target && event?.target.result) {
-          setInput((prevInput) => ({
-            ...prevInput,
-            [name]: event?.target?.result as string,
-          }));
-        }
-      };
-
-      reader.readAsDataURL(files[0]); // Membaca file sebagai data URL
-
-      setFileName(files[0].name); // Menyimpan nama file yang diunggah
-    }
-  };
-
-  console.log(input, ">>> ini input <<<");
+  console.log(permohonan, ">> redux baru");
 
   return (
     <div className="flex justify-center mt-[24px] h-full">
@@ -214,8 +244,10 @@ export default function UploadFilePage() {
                         <input
                           type="file"
                           placeholder="Upload"
-                          name="data"
-                          defaultValue={input[el.field] || ""}
+                          name={`${el.id}`}
+                          defaultValue={
+                            input[el.field] ? input[el.field]?.name : ""
+                          }
                           onChange={change}
                           className="flex absolute opacity-0 hover:bg-primary-600 hover:text-neutral-50 w-[80px] h-[25px] border border-neutral-700 text-primary-700 py-[10px]"
                         />

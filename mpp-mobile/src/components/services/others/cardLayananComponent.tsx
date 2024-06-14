@@ -1,5 +1,20 @@
 import Link from "next/link";
 import Cookies from "js-cookie";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
+import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
+import { LogIn } from "lucide-react";
 
 export default function CardLayananComponent({ layanan }: any) {
   const token = Cookies.get("Authorization");
@@ -28,19 +43,91 @@ export default function CardLayananComponent({ layanan }: any) {
       </div>
 
       <div className="flex flex-row text-center items-center justify-center w-[270px] h-[50px] gap-[1px]">
-        <Link
-          href={`${!token}` ? `/login` : `/layanan/booking-antrian`}
-          className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
-          Booking Antrian
-        </Link>
+        {!token ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
+                booking Antrian
+              </div>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col h-[250px] bg-neutral-50 rounded-2xl items-center w-[300px] justify-center">
+              <DialogHeader>
+                <DialogDescription>
+                  <div className="bg-neutral-50 w-full">
+                    <Image
+                      src={loginDong}
+                      alt="Login Dong"
+                      width={200}
+                      height={200}
+                    />
 
-        <Link
-          href={
-            `${!token}` ? `/login` : `/layanan/permohonan-layanan/${layanan.id}`
-          }
-          className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
-          Permohonan Layanan
-        </Link>
+                    <p className="text-[14px] text-neutral-900 font-semibold mt-2">
+                      Maaf, Anda tidak mempunyai akses!
+                    </p>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="w-full">
+                <div className="flex flex-row w-full gap-2 items-center justify-center mt-4">
+                  <LogIn className="text-primary-800 w-[15px] h-[15px]" />
+
+                  <Link href={"/login"} className="text-primary-800">
+                    Login
+                  </Link>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <Link
+            href={`/layanan/booking-antrian`}
+            className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
+            Booking Antrian
+          </Link>
+        )}
+
+        {!token ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <div className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
+                Permohonan Layanan
+              </div>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col h-[250px] bg-neutral-50 rounded-2xl items-center w-[300px] justify-center">
+              <DialogHeader>
+                <DialogDescription>
+                  <div className="bg-neutral-50 w-full">
+                    <Image
+                      src={loginDong}
+                      alt="Login Dong"
+                      width={200}
+                      height={200}
+                    />
+
+                    <p className="text-[14px] text-neutral-900 font-semibold mt-2">
+                      Maaf, Anda tidak mempunyai akses!
+                    </p>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="w-full">
+                <div className="flex flex-row w-full gap-2 items-center justify-center mt-4">
+                  <LogIn className="text-primary-800 w-[15px] h-[15px]" />
+
+                  <Link href={"/login"} className="text-primary-800">
+                    Login
+                  </Link>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <Link
+            href={`/layanan/permohonan-layanan/${layanan.id}`}
+            className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
+            Permohonan Layanan
+          </Link>
+        )}
       </div>
     </div>
   );

@@ -5,15 +5,15 @@ interface DataInput {
   data: string;
 }
 
-interface DataFileInput {
+export interface DataFileInput {
   layananform_id: number;
-  data: string;
+  data: File[];
 }
 
 const initialState = {
   id: 0,
   datainput: [] as DataInput[],
-  datafile: [] as DataFileInput[],
+  datafile: [] as { layananform_id: number; data: File[] }[],
 };
 
 export const PermohonanSlice = createSlice({

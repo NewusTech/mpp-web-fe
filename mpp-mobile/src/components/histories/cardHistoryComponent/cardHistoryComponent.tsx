@@ -40,7 +40,9 @@ export default function CardHistoryComponent({
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">{name}</h6>
 
-          <p className="text-[14px] pl-2 font-normal text-primary-800">: A70</p>
+          <p className="text-[14px] pl-2 font-normal text-primary-800">
+            : {permohonan.id}
+          </p>
         </div>
 
         <div className="grid grid-cols-2">
@@ -69,7 +71,19 @@ export default function CardHistoryComponent({
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : Selesai
+            {value === "antrian" ? (
+              " 22 / 05 / 2024"
+            ) : (
+              <>
+                {permohonan.status === 0
+                  ? "Belum Selesai"
+                  : permohonan.status === 1 || permohonan.status === 2
+                  ? "Sedang diproses"
+                  : permohonan.status === 3
+                  ? "Selesai"
+                  : "Ditolak"}
+              </>
+            )}
           </p>
         </div>
       </div>
