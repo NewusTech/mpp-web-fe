@@ -11,6 +11,9 @@ import { toast } from "sonner";
 import FormComponents from "@/components/others/formComponents/formComponents";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { Dispatch } from "redux";
+import { useDispatch } from "react-redux";
+import { userRegister } from "@/store/action/actionRegister";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -50,6 +53,7 @@ type MyResponse<T = {}> = {
 };
 
 export default function RegisterScreen() {
+  const dispatch: Dispatch<any> = useDispatch();
   const router = useRouter();
   useEffect(() => {
     const token = Cookies.get("Authorization");
@@ -92,21 +96,7 @@ export default function RegisterScreen() {
     };
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-          cache: "no-store",
-        }
-      );
-
-      const result = await response.json();
-
-      // if (!response.ok) return router.push(`/register?error=${result.message}`);
+      dispatch(userRegister(formData));
 
       return router.push("/login");
     } catch (error: any) {
