@@ -43,8 +43,6 @@ export default function RiwayatPage() {
     dispatch(fetchRiwayatPermohonan());
   }, [dispatch]);
 
-  console.log(historyData, "==");
-
   return (
     <div className="flex flex-col justify-center mt-[56px] mx-[35px]">
       <div className="flex self-start">
@@ -75,7 +73,7 @@ export default function RiwayatPage() {
                           time="Waktu"
                           status="Status"
                           value="antrian"
-                          permohonan="Hello"
+                          permohonan={histori}
                         />
                       </div>
                     );

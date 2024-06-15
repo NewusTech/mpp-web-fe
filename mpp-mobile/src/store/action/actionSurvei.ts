@@ -37,7 +37,6 @@ export const surveySlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setDinasId, setLayananId, setTanggal, setDataSurvei } =
   surveySlice.actions;
 

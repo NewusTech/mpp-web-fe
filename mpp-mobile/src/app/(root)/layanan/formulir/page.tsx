@@ -73,8 +73,6 @@ export default function FormulirPage() {
     dispatch(setDataInput(wadah));
   };
 
-  console.log(form, "ini data dari api form");
-
   return (
     <div className="flex items-center justify-center mt-[14px] mx-[35px] mb-[15px]">
       <div className="flex flex-col items-centergap-[16px]">

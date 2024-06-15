@@ -3,6 +3,7 @@ import fetchInstansi from "@/components/fetching/instansi/instansi";
 import ServiceScreen from "@/components/services/serviceScreen/serviceScreen";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
+import { toast } from "sonner";
 
 interface Instansi {
   image: string;
@@ -20,7 +21,7 @@ export default function LayananPage() {
 
       setInstansi(res.data || []);
     } catch (error) {
-      console.log(error);
+      toast("Gagal mendapatkan data!");
     }
   };
 

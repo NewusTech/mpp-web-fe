@@ -22,15 +22,12 @@ export const PermohonanSlice = createSlice({
   reducers: {
     setId: (state, action: PayloadAction<number>) => {
       state.id = action.payload;
-      // localStorage.setItem("id", action.payload.toString());
     },
     setDataInput: (state, action: PayloadAction<DataInput[]>) => {
       state.datainput = action.payload;
-      // localStorage.setItem("datainput", action.payload.toString());
     },
     setInputFile: (state, action: PayloadAction<DataFileInput[]>) => {
       state.datafile = action.payload;
-      // localStorage.setItem("datafile", action.payload.toString());
     },
   },
 });

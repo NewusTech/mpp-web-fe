@@ -47,11 +47,6 @@ const formSchema = z.object({
   role_id: z.number({ message: "Role can not be empty" }),
 });
 
-type MyResponse<T = {}> = {
-  message?: string;
-  data?: T;
-};
-
 export default function RegisterScreen() {
   const dispatch: Dispatch<any> = useDispatch();
   const router = useRouter();
@@ -141,7 +136,6 @@ export default function RegisterScreen() {
                     <div>
                       <FormComponents
                         form={form.control}
-                        // classStyle="w-full h-[40px] pl-[16px] h-[40px]"
                         classStyle="w-[225px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Nama Lengkap"

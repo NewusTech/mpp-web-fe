@@ -14,6 +14,7 @@ import {
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { useDispatch } from "react-redux";
 import { setId } from "@/store/action/actionPermohonanLayanan";
+import { toast } from "sonner";
 
 export default function PermohonanLayananFirstScreen({
   params,
@@ -30,7 +31,7 @@ export default function PermohonanLayananFirstScreen({
 
       setService(layananByInstansi.data);
     } catch (error) {
-      console.log(error);
+      toast("Gagal mendapatkan data!");
     }
   };
 
