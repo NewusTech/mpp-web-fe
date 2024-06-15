@@ -1,13 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setInputFile } from "@/store/action/actionPermohonanLayanan";
 
 type LayananFormType = {
   id: number;
@@ -31,9 +29,8 @@ type FormType = {
 export default function UploadFilePage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
   const dispatch = useDispatch();
-  const [dataFile, setDataFile] = useState<LayananType>();
-  const [input, setInput] = useState<{ [key: string]: any }>({});
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [dataFile, setDataFile] = useState<LayananType | null>(null);
+
   const router = useRouter();
   const token = Cookies.get("Authorization");
 
@@ -59,89 +56,8 @@ export default function UploadFilePage() {
     fetchFile(permohonan.id);
   }, [permohonan.id]);
 
-  console.log(dataFile, "ini data file");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    let tempat: { layananform_id: number; data: string }[] = [];
-
-    dataFile?.Layananforms.forEach((el: LayananFormType) => {
-      const fileDataURLString = input[el.field];
-
-      if (fileDataURLString) {
-        tempat.push({
-          layananform_id: el.id,
-          data: fileDataURLString,
-        });
-      }
-    });
-
-    dispatch(setInputFile(tempat));
-
-    try {
-      const formData = new FormData();
-
-      // Menggunakan formData.append untuk menambahkan data ke FormData
-      formData.append("datainput", JSON.stringify(permohonan.datainput));
-      formData.append("datafile", JSON.stringify(permohonan.datafile)); // Jika perlu
-
-      // Menambahkan file yang diunggah ke FormData
-      dataFile?.Layananforms.forEach((el: LayananFormType) => {
-        const file = input[el.field];
-        if (file) {
-          formData.append("files", file); // Sesuaikan dengan nama field di backend
-        }
-      });
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/inputform/create/${permohonan.id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-          cache: "no-store",
-        }
-      );
-
-      const result = await response.json();
-      console.log(result, ">>> ini response <<<");
-
-      // Handle redirect atau tindakan setelah sukses submit
-      // router.push("/");
-    } catch (error: any) {
-      console.log(error.message, "ini error");
-      toast("Harap lengkapi syarat-syaratnya!");
-    }
-  };
-
-  const change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-
-    if (files && files.length > 0) {
-      const reader = new FileReader();
-
-      reader.onload = function (event) {
-        if (event?.target && event?.target.result) {
-          setInput((prevInput) => ({
-            ...prevInput,
-            [name]: event?.target?.result as string,
-          }));
-        }
-      };
-
-      reader.readAsDataURL(files[0]); // Membaca file sebagai data URL
-
-      setFileName(files[0].name); // Menyimpan nama file yang diunggah
-    }
-  };
-
-  console.log(input, ">>> ini input <<<");
-
   return (
-    <div className="flex justify-center mt-[24px] h-full">
+    <div className="flex justify-center mt-[24px]">
       <div className="flex flex-col items-center gap-[12px]">
         <div className="flex flex-col mb-[16px]">
           <div className="flex flex-col justify-center">
@@ -187,47 +103,27 @@ export default function UploadFilePage() {
 
         <div className="flex flex-col">
           <div className="flex flex-col">
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col items-center">
-              <div className="flex flex-row justify-between w-[290px] h-[80px] rounded-2xl mb-[8px] bg-white border border-[#7BBA78] px-[16px]">
-                {dataFile?.Layananforms?.map((el: LayananFormType) => {
-                  return (
-                    <div
-                      key={el.id}
-                      className="flex flex-col w-[152px] justify-center gap-[9px]">
-                      <h6 className="text-[12px] text-primary-800 font-semibold">
-                        {el.field}
-                      </h6>
-
-                      <p className="text-[10px] text-neutral-900 font-normal">
-                        {dataFile.desc}
-                      </p>
-                    </div>
-                  );
-                })}
-
-                <div className="flex self-center">
-                  {dataFile?.Layananforms?.map((el: LayananFormType) => {
-                    return (
-                      <div key={el.id}>
-                        <input
-                          type="file"
-                          placeholder="Upload"
-                          name="data"
-                          defaultValue={input[el.field] || ""}
-                          onChange={change}
-                          className="flex absolute opacity-0 hover:bg-primary-600 hover:text-neutral-50 w-[80px] h-[25px] border border-neutral-700 text-primary-700 py-[10px]"
-                        />
-                      </div>
-                    );
-                  })}
-
-                  <div className="flex items-center w-[80px] h-[25px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px]">
-                    {fileName || "Upload"}
+            <form className="flex flex-col items-center">
+              {dataFile?.Layananforms?.map((el: LayananFormType) => (
+                <div
+                  key={el.id}
+                  className="flex flex-row justify-between w-[290px] h-[80px] rounded-2xl mb-[8px] bg-white border border-[#7BBA78] px-[16px]">
+                  <div className="flex flex-col w-[152px] justify-center gap-[9px]">
+                    <h6 className="text-[12px] text-primary-800 font-semibold">
+                      {el.field}
+                    </h6>
+                    <p className="text-[10px] text-neutral-900 font-normal">
+                      {dataFile.desc}
+                    </p>
+                  </div>
+                  <div className="flex self-center">
+                    <input type="file" placeholder="Upload" />
+                    <label className="flex items-center w-[80px] h-[25px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
+                      Upload
+                    </label>
                   </div>
                 </div>
-              </div>
+              ))}
               <div className="h-[40px] w-[150px] flex self-center justify-center items-end mb-[22px] mt-[16px]">
                 <Button type="submit" variant="success">
                   Ajukan

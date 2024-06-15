@@ -53,7 +53,6 @@ export default function DataDiriPage() {
     alamat: "",
   });
   const router = useRouter();
-  console.log(permohonan, "ini redux lo");
 
   const fetchUserInfo = async (id: number) => {
     try {
@@ -77,7 +76,6 @@ export default function DataDiriPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: info.name,
-      // nik: "",
       telepon: info.telepon,
       alamat: info.alamat,
     },

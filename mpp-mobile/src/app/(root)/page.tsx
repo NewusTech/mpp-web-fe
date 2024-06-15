@@ -10,6 +10,7 @@ import fetchNews from "@/components/fetching/berita/berita";
 import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import facilitiesFetch from "@/components/fetching/facilities/facilities";
+import { toast } from "sonner";
 
 type Berita = {
   title: string;
@@ -65,7 +66,7 @@ function Home() {
       setLayanan(layanan);
       setFacilities(fasilitas);
     } catch (error) {
-      console.log(error);
+      toast("Gagal mendapatkan data!");
     }
   };
 

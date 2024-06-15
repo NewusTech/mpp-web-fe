@@ -17,7 +17,6 @@ export default function AuthLayout({
   return (
     <Provider store={store}>
       <div className={`${poppins.className} h-full w-screen`}>
-        {/* <div className={poppins.className}> */}
         {children}
         <Toaster position="top-center" />
       </div>

@@ -4,6 +4,7 @@ import ProfileScreen from "@/components/profiles/profileScreen/profileScreen";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ProfilePage({
   params,
@@ -19,7 +20,7 @@ export default function ProfilePage({
 
       setProfile(result.data);
     } catch (error) {
-      console.log(error);
+      toast("Gagal mendapatkan data!");
     }
   };
 

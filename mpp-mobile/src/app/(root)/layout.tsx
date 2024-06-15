@@ -2,7 +2,6 @@
 import FooterScreen from "@/components/landing/footerScreen/footerScreen";
 import NavbarScreen from "@/components/landing/navbarScreen/navbarScreen";
 import HamburgerMenu from "@/components/landing/others/hamburgerMenu/hamburgerMenu";
-import MultipleForm from "@/context/store";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import { store } from "@/store/store";
@@ -23,32 +22,28 @@ export default function AuthLayout({
 }>) {
   const isMobile = useMediaQuery("(max-width: 767px)");
   return (
-    <div className={`${poppins.className} bg-[#F7FBF7] h-full`}>
+    <div className={`${poppins.className} bg-[#F7FBF7] h-screen`}>
       {!isMobile ? (
         <Provider store={store}>
-          <MultipleForm>
-            <>
-              <NavbarScreen />
-              {children}
-              <Toaster position="top-center" />
-              <div className="flex flex-col items-end h-full">
-                <FooterScreen />
-              </div>
-            </>
-          </MultipleForm>
+          <>
+            <NavbarScreen />
+            {children}
+            <Toaster position="top-center" />
+            <div className="flex flex-col items-end">
+              <FooterScreen />
+            </div>
+          </>
         </Provider>
       ) : (
         <Provider store={store}>
-          <MultipleForm>
-            <>
-              <HamburgerMenu />
-              {children}
-              <Toaster position="top-center" />
-              <div className="flex flex-col items-end h-full">
-                <FooterScreen />
-              </div>
-            </>
-          </MultipleForm>
+          <>
+            <HamburgerMenu />
+            {children}
+            <Toaster position="top-center" />
+            <div className="flex flex-col items-end">
+              <FooterScreen />
+            </div>
+          </>
         </Provider>
       )}
     </div>

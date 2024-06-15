@@ -12,16 +12,13 @@ import fetchProfile from "@/components/fetching/profile/profile";
 import { useDispatch } from "react-redux";
 import { updateProfileUser } from "@/store/action/actionUpdateProfile";
 import { Dispatch } from "redux";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z
     .string({ message: "Name can not be empty" })
     .min(4, { message: "Name must be at least 4 characters" })
     .max(50, { message: "Name must be less than 50 characters" }),
-  // nik: z
-  //   .string({ message: "NIK can not be empty" })
-  //   .min(16, { message: "NIK must be at least 16 characters" })
-  //   .max(16, { message: "NIK must be less than 16 characters" }),
   telepon: z
     .string({ message: "Phone number can not be empty" })
     .min(9, { message: "Phone number must be at least 9 characters" })
@@ -76,7 +73,7 @@ export default function ProfileEditPage({
       setDetail(result.data);
       setIsDataFetched(true);
     } catch (error) {
-      console.log(error);
+      toast("Gagal mendapatkan data!");
     }
   };
 
@@ -88,7 +85,6 @@ export default function ProfileEditPage({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      // nik: "",
       telepon: "",
       email: "",
       kec: "",
@@ -104,7 +100,6 @@ export default function ProfileEditPage({
     if (isDataFetched && detail) {
       form.reset({
         name: detail?.name || "",
-        // nik: detail?.nik,
         telepon: detail?.telepon || "",
         email: detail?.email || "",
         kec: detail?.kec || "",
@@ -134,7 +129,7 @@ export default function ProfileEditPage({
       await fetchUser(params.id);
       router.push(`/profile/${params.id}`);
     } catch (error) {
-      console.log(error);
+      toast("Gagal mengupdate data!");
     }
   };
 
