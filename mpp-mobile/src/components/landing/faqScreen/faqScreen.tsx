@@ -36,16 +36,18 @@ export default function FAQScreen() {
   return (
     <div className="flex flex-col items-center mt-[56px]">
       <div className="flex flex-col items-center gap-[8px]">
-        <h3 className="text-primary-800 font-semibold text-[16px]">FAQ MPP</h3>
+        <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px]">
+          FAQ MPP
+        </h3>
 
-        <p className="text-[10px] text-primary-700 font-light px-[30px] text-center">
+        <p className="text-[10px] md:text-[16px] text-primary-700 font-light px-[30px] text-center">
           Pertanyaan yang sering diajukan terkait dengan Mal Pelayanan Publik
         </p>
       </div>
 
-      <div className="flex flex-col justify-center gap-[8px] mt-[16px] mx-[30px]">
-        {faqs.map((faq: faqType) => {
-          return <AccordingComponent key={faq.id} faq={faq} />;
+      <div className="flex flex-col md:w-full justify-center gap-[8px] mt-[16px] mx-[30px] md:mx-[70px]">
+        {faqs.map((faq: faqType, i: number) => {
+          return <AccordingComponent key={i} faq={faq} />;
         })}
       </div>
     </div>

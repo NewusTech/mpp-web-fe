@@ -4,6 +4,10 @@ const nextConfig = {
     const { middleware } = await import("./src/middlewares.ts");
     return middleware;
   },
+  reactStrictMode: true,
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
   async rewrites() {
     return [
       {

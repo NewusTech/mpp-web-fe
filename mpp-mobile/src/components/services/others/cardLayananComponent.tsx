@@ -20,23 +20,27 @@ export default function CardLayananComponent({ layanan }: any) {
   const token = Cookies.get("Authorization");
   return (
     <div className="flex flex-col items-center justify-center w-[270px] outline outline-2 outline-[#C4C4C4] bg-[#F7F7F7] shadow-xl rounded-2xl">
-      <div className="flex flex-col items-center justify-center w-[270px] h-[238px]">
-        <Link href={`/layanan/${layanan.slug}`}>
-          <img
+      <div className="flex flex-col items-center justify-center w-[270px] h-[296px]">
+        <Link
+          href={`/layanan/${layanan.slug}`}
+          className="h-[135px] w-full flex items-center justify-center">
+          <Image
             src={layanan.image}
-            className="w-[80px] h-[106.12px] mb-[8px]"
+            className="h-[107px]"
             alt="Lampung Timur"
+            width={80}
+            height={106.12}
           />
         </Link>
 
-        <div className="grid grid-rows-2 place-items-center">
+        <div className="flex flex-col justify-center pb-[45px] mt-[8px] w-full">
           <Link href={`/layanan/${layanan.slug}`}>
             <h6 className="text-[16px] text-center text-primary-800 font-semibold">
               {layanan.name}
             </h6>
           </Link>
 
-          <p className="text-[12px] text-neutral-700 font-normal">
+          <p className="text-[12px] text-center text-neutral-700 font-normal">
             Jumlah Layanan
           </p>
         </div>

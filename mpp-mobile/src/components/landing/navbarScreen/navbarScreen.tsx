@@ -23,7 +23,7 @@ const raleway = Raleway({
 export default function NavbarScreen() {
   const pathName = usePathname();
   return (
-    <div className="flex relative py-[32px] justify-between mx-[70px] z-10">
+    <div className="flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:bg-primary-700 md:px-[70px]">
       <Link href="/" className="flex flex-row w-[266px] h-[64px]">
         <Image src={logo} alt="Lampung Timur" className="w-[73px] h-[64px]" />
 

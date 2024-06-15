@@ -11,10 +11,13 @@ import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import facilitiesFetch from "@/components/fetching/facilities/facilities";
 import { toast } from "sonner";
+import Image from "next/image";
+import formatDate from "@/helpers/logout/formatted";
 
 type Berita = {
   title: string;
-  description: string;
+  slug: string;
+  desc: string;
   image: string;
   url: string;
   createdAt: string;
@@ -29,6 +32,7 @@ type MyBerita = {
 type Instansi = {
   name: string;
   url: string;
+  slug: string;
 };
 
 type MyInstansi = {
@@ -75,20 +79,20 @@ function Home() {
   }, [search]);
 
   return (
-    <div className="bg-[#F7FBF7] min-w-[360px] h-full">
+    <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[32px]">
       <div className="bg-[#F7FBF7]">
         <HeroScreen />
 
         <AboutScreen />
 
         <div className="flex flex-col mt-[56px] justify-center items-center">
-          <h4 className="text-primary-800 text-center text-[16px] font-bold">
+          <h4 className="text-primary-800 md:text-[32px] text-center text-[16px] font-bold md:mb-[32px]">
             Instansi Layanan MPP
           </h4>
 
-          <div className="flex flex-col flex-wrap justify-center items-center gap-[18px] my-[16px]">
-            {layanan?.data?.map((el: any) => {
-              return <CardLayananComponent key={el.id} layanan={el} />;
+          <div className="flex flex-col flex-wrap justify-center md:flex-row md:flex-wrap md:mx-[70px] items-center gap-[18px] md:gap-10 my-[16px]">
+            {layanan?.data?.map((el: Instansi, i: number) => {
+              return <CardLayananComponent key={i} layanan={el} />;
             })}
           </div>
 
@@ -102,18 +106,20 @@ function Home() {
         </div>
 
         <div className="flex flex-col items-center mt-[56px]">
-          <h3 className="text-primary-800 text-[16px] mb-[16px] font-semibold">
+          <h3 className="text-primary-800 text-[16px] md:text-[32px] mb-[16px] font-semibold">
             Fasilitas
           </h3>
 
-          <div className="flex flex-col flex-wrap justify-center gap-[16px]">
-            {facilities?.data?.map((el: any) => {
+          <div className="flex flex-col md:flex-row flex-wrap justify-center gap-[16px]">
+            {facilities?.data?.map((el: Facility, i: number) => {
               return (
-                <img
-                  key={el.id}
-                  className="w-[290px] h-[180px] rounded-xl"
+                <Image
+                  key={i}
+                  className="w-[290px] md:w-[370px] md:h-[295px] h-[180px] rounded-xl"
                   src={el.image}
                   alt="Facilities"
+                  width={290}
+                  height={180}
                 />
               );
             })}
@@ -121,20 +127,48 @@ function Home() {
         </div>
 
         <div className="flex flex-col items-center mt-[56px]">
-          <h3 className="text-primary-800 font-semibold text-[16px] mb-[16px]">
+          <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px]">
             Berita
           </h3>
 
-          <div className="flex flex-col items-center">
-            <div className="flex flex-col flex-wrap justify-center gap-[16px]">
-              {berita?.data?.map((el: any) => {
-                return <CardNewsComponent key={el.slug} news={el} />;
+          <div className="hidden md:w-full md:flex md:flex-col md:mx-[70px]">
+            <div className="md:flex md:flex-rows md:mx-[70px] md:gap-[32px]">
+              <Image
+                className="md:w-[960px] md:h-[410px] md:rounded-2xl"
+                src={(berita?.data[0]?.image as string) || ""}
+                alt="Berita"
+                width={560}
+                height={378}
+              />
+
+              <div className="hidden md:flex md:flex-col md:items-center md:gap-[16px]">
+                <div className="md:flex md:flex-col md:gap-[8px]">
+                  <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
+                    {berita?.data[0]?.title}
+                  </h3>
+
+                  <p className="md:text-[#000000] md:text-[16px] md:font-light">
+                    {/* {date}*/} tanggal
+                  </p>
+                </div>
+
+                <h5 className="md:text-[20px] md:text-black md:font-light">
+                  {berita?.data[0]?.desc}
+                </h5>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center md:mt-[16px]">
+            <div className="flex flex-col md:flex-row flex-wrap justify-center gap-[16px]">
+              {berita?.data?.map((news: Berita, i: number) => {
+                return <CardNewsComponent key={i} news={news} />;
               })}
             </div>
 
             <Link
               href="/berita"
-              className="flex justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
+              className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
               <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
                 Lihat Semua Berita
               </p>
