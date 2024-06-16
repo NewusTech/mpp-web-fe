@@ -15,7 +15,7 @@ interface faqType {
 
 export default function AccordingComponent({ faq }: faqType) {
   return (
-    <div>
+    <div className="md:w-full">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>{faq.question}</AccordionTrigger>
