@@ -1,15 +1,37 @@
 import CardNewsComponent from "../others/cardNewsComponent";
 
-export default function NewsScreen({ berita }: any) {
+type Berita = {
+  title: string;
+  slug: string;
+  desc: string;
+  image: string;
+  url: string;
+  createdAt: string;
+};
+
+type MyBerita = {
+  berita: Berita[];
+};
+
+export default function NewsScreen({ berita }: MyBerita) {
   return (
-    <div className="flex flex-col items-center mt-[24px] mb-[60px]">
-      <h3 className="text-primary-800 font-semibold text-[16px] mb-[32px]">
+    <div className="flex flex-col items-center mt-[24px] md:bg-primary-100 mb-[60px] md:mb-0 md:pb-[60px] md:mt-[56px]">
+      <h3 className="text-primary-800 font-semibold text-[16px] md:text-[32px] mb-[32px]">
         Berita
       </h3>
 
-      <div className="flex flex-col justify-center gap-[20px]">
-        {berita.map((el: any) => {
-          return <CardNewsComponent key={el.slug} news={el} />;
+      <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-[20px] md:gap-[40px] md:mx-[70px]">
+        {berita.map((news: Berita, i: number) => {
+          return (
+            <div
+              key={i}
+              className="md:flex md:flex-row md:flex-wrap md:gap-[20px]">
+              <CardNewsComponent key={i} news={news} />
+              <CardNewsComponent key={i} news={news} />
+              <CardNewsComponent key={i} news={news} />
+              <CardNewsComponent key={i} news={news} />
+            </div>
+          );
         })}
       </div>
     </div>
