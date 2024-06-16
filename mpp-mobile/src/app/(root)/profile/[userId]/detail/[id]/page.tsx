@@ -134,7 +134,7 @@ export default function ProfileEditPage({
   };
 
   return (
-    <div className="flex items-center justify-center mt-[24px] md:mt-[32px] md:bg-primary-100 md:mb-0 md:pb-[56px]">
+    <div className="flex items-center justify-center pb-[36px] bg-primary-100 mt-[24px] md:mt-[32px] md:mb-0 md:pb-[56px]">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
         <div className="flex self-start mb-[32px]">
           <h5 className="text-[20px] md:text-[26px] font-bold text-primary-800">
