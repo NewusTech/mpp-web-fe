@@ -85,29 +85,35 @@ export default function LoginScreen() {
 
   return (
     <div className="flex justify-center items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-screen">
-      <div className="flex flex-col gap-[10px] items-center justify-center rounded-2xl bg-primary-200 my-[70px] p-[32px]">
+      <div className="flex flex-col md:w-full gap-[10px] items-center md:items-start justify-center md:justify-start rounded-2xl bg-primary-200 my-[70px] md:py-[70px] p-[32px] md:px-[210px] md:mx-[285px]">
         <div className="flex flex-row">
-          <Image src={logo} alt="Lampung Timur" className="w-[73px] h-[69px]" />
+          <Image
+            src={logo}
+            alt="Lampung Timur"
+            className="w-[73px] md:w-[174px] h-[69px] md:h-[160px]"
+            width={73}
+            height={69}
+          />
 
           <div className="flex flex-col pl-[23px]">
             <h1
-              className={`text-primary-800 text-[24px] font-bold ${raleway.className}`}>
+              className={`text-primary-800 text-[24px] md:text-[48px] font-bold ${raleway.className}`}>
               MPP
             </h1>
 
             <h3
-              className={`${raleway.className} font-semibold text-[12px] text-secondary-700`}>
+              className={`${raleway.className} font-semibold text-[12px] md:text-[20px] text-secondary-700`}>
               MAL PELAYANAN PUBLIK
             </h3>
 
             <h3
-              className={`${raleway.className} font-normal text-neutral-800 text-[14px]`}>
+              className={`${raleway.className} font-normal text-neutral-800 text-[14px] md:text-[20px]`}>
               Lampung Timur
             </h3>
           </div>
         </div>
 
-        <div className="flex flex-col w-full justify-center mt-[32px]">
+        <div className="flex flex-col w-full justify-center mt-[32px] md:mt-[48px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -150,14 +156,14 @@ export default function LoginScreen() {
                 </div>
               </div>
 
-              <div className="flex flex-col items-end justify-end mt-[8px]">
-                <p className="flex flex-row gap-1 text-end font-normal text-[12px]">
+              <div className="flex flex-col md:flex-row md:gap-1 items-end justify-end mt-[8px] md:mt-[24px]">
+                <p className="flex flex-row gap-1 text-end font-normal text-[12px] md:text-[14px]">
                   Belum Punya akun? Silahkan
                 </p>
 
                 <Link
                   href="/register"
-                  className="text-[12px] font-bold text-primary-800 border-b border-b-primary-800">
+                  className="text-[12px] md:text-[14px] font-bold text-primary-800 border-b border-b-primary-800">
                   Daftar
                 </Link>
               </div>
