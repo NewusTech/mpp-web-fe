@@ -14,14 +14,40 @@ import Image from "next/image";
 import { Raleway } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 
 const raleway = Raleway({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
+interface JwtPayload {
+  userId: string;
+}
+
 export default function NavbarScreen() {
   const pathName = usePathname();
+  const [currentPath, setCurrentPath] = useState(pathName);
+  const [decoded, setDecoded] = useState<JwtPayload | null>(null);
+
+  useEffect(() => {
+    const auth = Cookies.get("Authorization");
+    if (auth) {
+      try {
+        const decodedToken = jwtDecode<JwtPayload>(auth);
+        setDecoded(decodedToken);
+      } catch (error) {
+        console.error("Invalid token", error);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("Authorization");
+    setDecoded(null);
+  };
   return (
     <div className="flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:bg-primary-700 md:px-[70px]">
       <Link href="/" className="flex flex-row w-[266px] h-[64px]">
@@ -114,16 +140,16 @@ export default function NavbarScreen() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <Link
-                href="/profile"
+                href={`/profile/${decoded?.userId}`}
                 className={`${
-                  pathName === "/profile"
+                  pathName === `/profile/${decoded?.userId}`
                     ? "text-[#7BBA78] hover:text-[#C4C4C4]"
                     : "text-[#C4C4C4] hover:text-[#7BBA78]"
                 }`}>
                 <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
                   <CircleUserRound
                     className={`${
-                      pathName === "/profile"
+                      pathName === `/profile/${decoded?.userId}`
                         ? "text-[#7BBA78] hover:text-[#C4C4C4]"
                         : "text-[#C4C4C4] hover:text-[#7BBA78]"
                     } w-[20px] h-[20px] mr-[16px]`}
@@ -131,7 +157,7 @@ export default function NavbarScreen() {
 
                   <p
                     className={`${
-                      pathName === "/profile"
+                      pathName === `/profile/${decoded?.userId}`
                         ? "text-[#7BBA78] hover:text-[#C4C4C4]"
                         : "text-[#C4C4C4] hover:text-[#7BBA78]"
                     } text-[16px]`}>

@@ -134,23 +134,23 @@ export default function ProfileEditPage({
   };
 
   return (
-    <div className="flex items-center justify-center mt-[24px]">
-      <div className="flex flex-col items-center w-full mx-[35px]">
+    <div className="flex items-center justify-center mt-[24px] md:mt-[32px] md:bg-primary-100 md:mb-0 md:pb-[56px]">
+      <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
         <div className="flex self-start mb-[32px]">
-          <h5 className="text-[20px] font-bold text-primary-800">
+          <h5 className="text-[20px] md:text-[26px] font-bold text-primary-800">
             Edit Profile
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] pt-[16px]">
+        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-[16px] md:pt-[32px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col">
-              <div className="flex flex-col w-full mb-[4px]">
+              className="flex flex-col w-full">
+              <div className="flex flex-col w-full mb-[4px] md:mb-4">
                 <FormComponents
                   form={form.control}
-                  classStyle="w-full h-[30px]"
+                  classStyle="w-full md:w-1/2 h-[30px] md:h-[40px]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                   placeholder="Qurotta Aini"
                   label="Nama Lengkap"
@@ -159,21 +159,21 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-full mb-[4px]">
+              <div className="flex flex-col w-full mb-[4px] md:mb-4">
                 <p className="text-[12px] text-neutral-900 font-semibold mb-[4px] mt-[2px]">
                   NIk
                 </p>
-                <div className="flex items-center w-full h-[30px] border border-neutral-700 pl-[16px] rounded-2xl">
+                <div className="flex items-center w-full md:w-1/2 h-[30px] md:h-[40px] border border-neutral-700 pl-[16px] rounded-2xl md:rounded-[50px]">
                   <p className="text-[14px] text-neutral-900 opacity-[100%]">
                     {detail?.nik}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col w-full mb-[4px]">
+              <div className="flex flex-col w-full mb-[4px] md:mb-4">
                 <FormComponents
                   form={form.control}
-                  classStyle="w-full h-[30px]"
+                  classStyle="w-full md:w-1/2 h-[30px] md:h-[40px]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                   placeholder="085764156224"
                   label="Nomor Telepon"
@@ -182,10 +182,10 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-full mb-[4px]">
+              <div className="flex flex-col w-full mb-[4px] md:mb-4">
                 <FormComponents
                   form={form.control}
-                  classStyle="w-full h-[30px]"
+                  classStyle="w-full md:w-1/2 h-[30px] md:h-[40px]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                   placeholder="Qurrotaaini@gmail.com"
                   label="Email"
@@ -194,11 +194,11 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="grid grid-cols-2 w-full my-[4px]">
-                <div className="flex flex-col w-[120px]">
+              <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
+                <div className="flex flex-col w-[120px] md:w-full">
                   <FormComponents
                     form={form.control}
-                    classStyle="w-full h-[30px]"
+                    classStyle="w-full md:w-full h-[30px] md:h-[40px]"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="Way Halim"
                     label="Kecamatan"
@@ -207,10 +207,10 @@ export default function ProfileEditPage({
                   />
                 </div>
 
-                <div className="flex flex-col w-[120px]">
+                <div className="flex flex-col w-[120px] md:w-full md:self-end">
                   <FormComponents
                     form={form.control}
-                    classStyle="w-full h-[30px]"
+                    classStyle="w-full md:w-full h-[30px] md:h-[40px]"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="Jagabaya"
                     label="Desa"
@@ -220,11 +220,11 @@ export default function ProfileEditPage({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 w-full my-[4px]">
-                <div className="flex flex-col w-[120px]">
+              <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
+                <div className="flex flex-col w-[120px] md:w-full">
                   <FormComponents
                     form={form.control}
-                    classStyle="w-full h-[30px]"
+                    classStyle="w-full md:w-full h-[30px] md:h-[40px]"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="01"
                     label="RT"
@@ -233,10 +233,10 @@ export default function ProfileEditPage({
                   />
                 </div>
 
-                <div className="flex flex-col w-[120px]">
+                <div className="flex flex-col w-[120px] md:w-full">
                   <FormComponents
                     form={form.control}
-                    classStyle="w-full h-[30px]"
+                    classStyle="w-full md:w-full h-[30px] md:h-[40px]"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="00"
                     label="RW"
@@ -246,10 +246,10 @@ export default function ProfileEditPage({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 w-full my-[4px]">
+              <div className="grid grid-cols-2 md:grid-cols-none w-full my-[4px] md:my-4">
                 <FormComponents
                   form={form.control}
-                  classStyle="w-[258px] h-[74px] text-[12px]"
+                  classStyle="w-[258px] md:w-full h-[74px] text-[12px]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                   placeholder="Jl. Pangeran Antasari"
                   label="Alamat"
@@ -258,9 +258,9 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex justify-center items-end self-end my-[16px]">
+              <div className="flex justify-center items-end self-end md:w-full md:self-center my-[16px] md:pb-[30px]">
                 <Button
-                  className="w-[90px] h-[30px] text-[12px]"
+                  className="w-[90px] md:w-[290px] h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                   type="submit"
                   variant="success">
                   Simpan
