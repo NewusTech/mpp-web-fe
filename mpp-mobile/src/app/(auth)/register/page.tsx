@@ -102,41 +102,41 @@ export default function RegisterScreen() {
   };
 
   return (
-    <div className="flex justify-center h-full items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen">
-      <div className="flex flex-col gap-[4px] h-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] my-[45px]">
+    <div className="flex justify-center md:py-[60px] items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen md:w-full">
+      <div className="flex flex-col gap-[4px] md:w-full h-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-[210px] my-[45px] md:px-[60px] md:pb-[16px]">
         <div className="flex flex-col pt-[32px]">
-          <h6 className="text-primary-800 text-[16px] font-semibold mb-[4px]">
+          <h6 className="text-primary-800 text-[16px] md:text-[32px] font-semibold mb-[4px]">
             DAFTAR
           </h6>
 
           <div className="flex flex-row items-start justify-start gap-1">
-            <p className="flex flex-row gap-1 font-normal text-[12px] text-neutral-800">
+            <p className="flex flex-row gap-1 font-normal text-[12px] md:text-[16px] text-neutral-800">
               Sudah Punya akun? Silahkan
             </p>
             <Link
               href="/login"
-              className="text-[12px] font-bold text-primary-800 border-b border-b-primary-800">
+              className="text-[12px] md:text-[16px] font-bold text-primary-800 border-b border-b-primary-800">
               Masuk
             </Link>
           </div>
         </div>
 
-        <div className="flex flex-col h-full mt-[32px]">
+        <div className="flex flex-col md:w-full h-full mt-[32px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col">
-              <div className="flex flex-col">
+              className="flex flex-col md:w-full">
+              <div className="flex flex-col md:w-full md:flex-none md:grid md:grid-cols-2">
                 <div className="flex flex-col">
-                  <h5 className="text-[12px] text-primary-800 font-semibold mb-[16px]">
+                  <h5 className="text-[12px] md:text-[20px] text-primary-800 font-semibold mb-[16px]">
                     Data Diri
                   </h5>
 
-                  <div className="grid grid-rows-4 gap-4 place-items-center">
-                    <div>
+                  <div className="grid grid-rows-4 md:w-full gap-4 place-items-center md:place-items-start">
+                    <div className="md:w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Nama Lengkap"
                         label="register"
@@ -145,10 +145,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div>
+                    <div className="md:w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="NIK"
                         label="register"
@@ -157,10 +157,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div>
+                    <div className="md:w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Nomor Telepon"
                         label="register"
@@ -169,10 +169,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div>
+                    <div className="md:w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Email"
                         label="register"
@@ -181,10 +181,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div>
+                    <div className="md:w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Password"
                         label="register"
@@ -195,16 +195,16 @@ export default function RegisterScreen() {
                   </div>
                 </div>
 
-                <div className="mt-[16px]">
-                  <h3 className="text-[12px] text-primary-800 font-semibold mb-[16px]">
+                <div className="mt-[16px] md:mt-0 md:pl-4">
+                  <h3 className="text-[12px] md:text-[20px] text-primary-800 font-semibold mb-[16px]">
                     Alamat
                   </h3>
 
-                  <div className="flex flex-col space-y-4 place-items-center">
-                    <div className="grid grid-cols-2 gap-[16px]">
+                  <div className="flex flex-col md:w-full space-y-4 place-items-center md:place-items-start">
+                    <div className="grid grid-cols-2 md:w-full gap-[16px]">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Kecamatan"
                         label="register"
@@ -214,7 +214,7 @@ export default function RegisterScreen() {
 
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Desa"
                         label="register"
@@ -223,10 +223,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-[16px]">
+                    <div className="grid grid-cols-2 md:w-full gap-[16px]">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="RT"
                         label="register"
@@ -236,7 +236,7 @@ export default function RegisterScreen() {
 
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="RW"
                         label="register"
@@ -245,10 +245,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div>
+                    <div className="md:w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[226px] h-[74px] text-[12px] placeholder:opacity-[70%]"
+                        classStyle="w-[226px] md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Alamat"
                         label="register"
@@ -261,7 +261,10 @@ export default function RegisterScreen() {
               </div>
 
               <div className="flex justify-center items-end my-[32px]">
-                <Button type="submit" variant="neutral">
+                <Button
+                  type="submit"
+                  className="md:w-[120px] md:h-[40px] md:text-[14px] md:font-semibold"
+                  variant="neutral">
                   Daftar
                 </Button>
               </div>
