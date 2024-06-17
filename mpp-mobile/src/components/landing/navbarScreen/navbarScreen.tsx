@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CircleUserRound } from "lucide-react";
+import { CircleUserRound, LogIn } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { History } from "lucide-react";
 import { LogOut } from "lucide-react";
@@ -17,6 +17,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import LogoutScreen from "@/components/actions/logoutScreen/logoutScreen";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -48,6 +49,7 @@ export default function NavbarScreen() {
     Cookies.remove("Authorization");
     setDecoded(null);
   };
+
   return (
     <div className="flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:bg-primary-700 md:px-[70px]">
       <Link href="/" className="flex flex-row w-[266px] h-[64px]">
@@ -193,31 +195,36 @@ export default function NavbarScreen() {
                 </DropdownMenuItem>
               </Link>
 
-              <button
-                className={`${
-                  pathName === "/logout"
-                    ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                    : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                }`}>
-                <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
-                  <LogOut
-                    className={`${
-                      pathName === "/logout"
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } w-[20px] h-[20px] mr-[16px]`}
-                  />
+              {decoded ? (
+                <LogoutScreen handleLogout={handleLogout} />
+              ) : (
+                <Link
+                  href={"/login"}
+                  className={`${
+                    pathName === "/login"
+                      ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                      : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                  }`}>
+                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
+                    <LogIn
+                      className={`${
+                        pathName === "/login"
+                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      } w-[20px] h-[20px] mr-[16px]`}
+                    />
 
-                  <p
-                    className={`${
-                      pathName === "/logout"
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } text-[16px]`}>
-                    Keluar
-                  </p>
-                </DropdownMenuItem>
-              </button>
+                    <p
+                      className={`${
+                        pathName === "/login"
+                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      } text-[16px]`}>
+                      Login
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
