@@ -19,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import CardHistoryAntrian from "@/components/histories/cardHistoryAntrian/cardHistoryAntrian";
+import PaginationComponent from "@/components/pagination/paginationComponent";
 
 interface PermissionType {
   id: number;
@@ -134,7 +136,7 @@ const permohonans = {
       instansi: "Dinas Lingkungan Hidup",
       waktu: "11.00 WIB",
       tanggal: "21 Juni 2024",
-      status: "Sedang diproses",
+      status: "Belum selesai",
       pesan: "Menunggu konfirmasi dari Pemerintah",
       tanggalSelesai: "23 Juni 2024",
     },
@@ -157,6 +159,9 @@ export default function RiwayatPage() {
     (state: RootState) => state.historyPermohonan.data
   );
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const [antrianPage, setAntrianPage] = useState<number>(1);
+  const [permohonanPage, setPermohonanPage] = useState<number>(1);
+  const itemsPerPage = 2;
   const token = Cookies.get("Authorization");
 
   useEffect(() => {
@@ -174,8 +179,20 @@ export default function RiwayatPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, [dispatch, token]);
 
+  const paginate = (items: any[], pageNumber: number, itemsPerPage: number) => {
+    const startIndex = (pageNumber - 1) * itemsPerPage;
+    return items.slice(startIndex, startIndex + itemsPerPage);
+  };
+
+  const currentAntrians = paginate(antrians.data, antrianPage, itemsPerPage);
+  const currentPermohonans = paginate(
+    permohonans.data,
+    permohonanPage,
+    itemsPerPage
+  );
+
   return (
-    <div className="flex flex-col justify-center bg-primary-100 mt-[56px] md:mt-[36px] md:mb-0 pb-[60px] md:pb-[73px] mx-[35px] md:mx-0 md:px-[167px]">
+    <div className="flex flex-col justify-center bg-primary-100 pt-[56px] md:mt-[36px] md:mb-0 pb-[60px] md:pb-[73px] mx-[35px] md:mx-0 md:px-[167px]">
       <div className="flex self-start md:mb-[36px]">
         <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
           History
@@ -280,20 +297,13 @@ export default function RiwayatPage() {
             ) : (
               <>
                 <TabsContent value="antrian">
-                  {historyData && historyData.length > 0 ? (
+                  {currentAntrians && currentAntrians.length > 0 ? (
                     <>
-                      {historyData?.map(
-                        (histori: PermissionType, i: number) => {
+                      {currentAntrians?.map(
+                        (antrian: AntrianType, i: number) => {
                           return (
                             <div key={i}>
-                              <CardHistoryComponent
-                                name="Nomor Antrian"
-                                date="Tanggal"
-                                time="Waktu"
-                                status="Status"
-                                value="antrian"
-                                permohonan={histori}
-                              />
+                              <CardHistoryAntrian antrian={antrian} />
                             </div>
                           );
                         }
@@ -307,22 +317,22 @@ export default function RiwayatPage() {
                       </p>
                     </div>
                   )}
+                  <PaginationComponent
+                    totalItems={antrians.data.length}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={antrianPage}
+                    onPageChange={setAntrianPage}
+                  />
                 </TabsContent>
+
                 <TabsContent className="flex flex-col gap-4" value="permohonan">
-                  {historyData && historyData.length > 0 ? (
+                  {currentPermohonans && currentPermohonans.length > 0 ? (
                     <>
-                      {historyData?.map(
-                        (histori: PermissionType, i: number) => {
+                      {currentPermohonans?.map(
+                        (permohonan: PermohonanType, i: number) => {
                           return (
                             <div key={i}>
-                              <CardHistoryComponent
-                                name="Nomor Permohonan"
-                                date="Tanggal"
-                                time="Waktu"
-                                status="Status"
-                                value="permohonan"
-                                permohonan={histori}
-                              />
+                              <CardHistoryComponent permohonan={permohonan} />
                             </div>
                           );
                         }
@@ -336,6 +346,12 @@ export default function RiwayatPage() {
                       </p>
                     </div>
                   )}
+                  <PaginationComponent
+                    totalItems={permohonans.data.length}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={permohonanPage}
+                    onPageChange={setPermohonanPage}
+                  />
                 </TabsContent>
               </>
             )}

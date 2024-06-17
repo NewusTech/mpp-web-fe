@@ -2,29 +2,26 @@ import { Download } from "lucide-react";
 import PopPermohonanComponent from "../others/popPermohonanComponent/popPermohonanComponent";
 import PopAntrianComponent from "../others/popAntrianComponent/popAntrianComponent";
 
-interface PermohonanType {
-  permohonan: {
-    layanan: string;
-    noPermohonan: string;
+interface AntrianType {
+  antrian: {
+    noAntrian: string;
     instansi: string;
+    waktu?: string;
     tanggal: string;
-    status: string;
-    pesan: string;
-    tanggalSelesai: string;
   };
 }
 
-export default function CardHistoryComponent({ permohonan }: PermohonanType) {
+export default function CardHistoryAntrian({ antrian }: AntrianType) {
   return (
-    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-xl w-full">
+    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-xl w-full mb-4">
       <div className="flex flex-col justify-center m-4 gap-2 h-full">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
-            No Permohonan
+            Nomor Antrian
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.noPermohonan}
+            : {antrian.noAntrian}
           </p>
         </div>
 
@@ -34,7 +31,15 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.instansi}
+            : {antrian.instansi}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2">
+          <h6 className="text-[14px] font-semibold text-primary-800">Waktu</h6>
+
+          <p className="text-[14px] pl-2 font-normal text-primary-800">
+            : {antrian.waktu}
           </p>
         </div>
 
@@ -44,21 +49,13 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.tanggal}
-          </p>
-        </div>
-
-        <div className="grid grid-cols-2">
-          <h6 className="text-[14px] font-semibold text-primary-800">Status</h6>
-
-          <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.status}
+            {antrian.tanggal}
           </p>
         </div>
       </div>
 
       <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
-        <PopPermohonanComponent permohonan={permohonan} />
+        <PopAntrianComponent antrian={antrian} />
       </div>
     </div>
   );

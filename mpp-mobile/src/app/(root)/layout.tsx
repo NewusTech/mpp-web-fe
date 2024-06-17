@@ -29,20 +29,18 @@ export default function AuthLayout({
             <NavbarScreen />
             <div className="flex-1 overflow-y-auto">{children}</div>
             <Toaster position="top-center" />
-            {/* <div className="flex flex-col items-end"> */}
             <FooterScreen />
-            {/* </div> */}
           </>
         </Provider>
       ) : (
         <Provider store={store}>
           <>
             <HamburgerMenu />
-            <div className="flex-1 overflow-y-auto">{children}</div>
+            <div className="flex-1 overflow-y-auto bg-primary-100">
+              {children}
+            </div>
             <Toaster position="top-center" />
-            {/* <div className="flex flex-col items-end"> */}
             <FooterScreen />
-            {/* </div> */}
           </>
         </Provider>
       )}

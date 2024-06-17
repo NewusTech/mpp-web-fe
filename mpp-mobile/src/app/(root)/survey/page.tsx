@@ -94,17 +94,17 @@ export default function SurveySkmPage() {
   };
 
   return (
-    <div className="flex items-center justify-center mt-[40px] mb-[200px]">
+    <div className="flex items-center justify-center bg-primary-100 md:w-full mt-[40px] mb-[200px] md:mb-0 md:pb-[70px]">
       <div className="flex flex-col items-center">
-        <div className="">
-          <h3 className="text-[16px] font-semibold text-primary-800">
+        <div className="md:flex md:justify-start md:self-start">
+          <h3 className="text-[16px] md:text-start md:text-[32px] font-semibold text-primary-800">
             Survey Kepuasan Masyarakat (SKM)
           </h3>
         </div>
 
-        <div className="flex flex-col w-full border border-neutral-700 items-center mt-[32px] bg-white rounded-2xl shadow-lg">
-          <div className="flex flex-col w-full px-[16px]">
-            <div className="flex flex-col w-full items-center mb-[10px] mx-[1px] mt-[62px]">
+        <div className="flex flex-col w-full md:w-[950px] border border-neutral-700 items-center mt-[32px] bg-white rounded-2xl shadow-lg">
+          <div className="flex flex-col w-full px-[16px] md:px-[105px]">
+            <div className="flex flex-col w-full items-center mb-[10px] md:mb-[40px] mx-[1px] mt-[62px]">
               <Select name="layanan_id" onValueChange={handleSelectChangeDinas}>
                 <SelectTrigger
                   className={`${
@@ -115,7 +115,7 @@ export default function SurveySkmPage() {
                     className={selected ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
-                <SelectContent className="w-[266px]">
+                <SelectContent className="w-[266px] md:w-full">
                   <div>
                     {instances?.map((el: any) => {
                       return (
@@ -145,7 +145,7 @@ export default function SurveySkmPage() {
                     className={selected ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
-                <SelectContent className="w-[266px]">
+                <SelectContent className="w-[266px] md:w-full">
                   <div>
                     {service?.map((el: any) => {
                       return (
@@ -162,7 +162,7 @@ export default function SurveySkmPage() {
               </Select>
             </div>
 
-            <div className="flex flex-col items-center my-[10px] mx-[1px]">
+            <div className="flex flex-col items-center my-[10px] md:my-[40px] mx-[1px]">
               <input
                 type="date"
                 name="tanggal"
@@ -185,7 +185,7 @@ export default function SurveySkmPage() {
 
             <div className="flex self-end justify-end items-end mb-[32px] mt-[16px]">
               <Button
-                className="text-[12px] text-neutral-50 w-[90px] h-[30px]"
+                className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
                 type="submit"
                 variant="warning">
                 <Link href="/survey/skm">Isi SKM</Link>
