@@ -1,89 +1,137 @@
 "use client";
 
-import FormComponent from "@/components/others/formComponent/formComponent";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Link from "next/link";
+import { useState } from "react";
 
-const formSchema = z.object({
-  service: z.string({ message: "Service can not be empty" }),
-  date: z.string({ message: "Date can not be empty" }),
-  time: z.string({ message: "Time can not be empty" }),
-});
+const instances = [
+  {
+    id: 1,
+    name: "Dinas Pendidikan",
+  },
+  {
+    id: 2,
+    name: "Dinas Kependudukan",
+  },
+  {
+    id: 3,
+    name: "Dinas Kesehatan",
+  },
+];
 
 export default function BookingAntrianScreen() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      service: "",
-      date: "",
-      time: "",
-    },
-  });
+  const [selected, setSelected] = useState<string | null>();
+  const [changeOpacity, setChangeOpacity] = useState(false);
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const handleSelectChangeDinas = (value: string) => {
+    setSelected(value);
+  };
+
+  const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChangeOpacity(true);
+  };
+
+  const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChangeOpacity(true);
   };
 
   return (
-    <div className="flex justify-center mt-[53.5px] mb-[234px]">
-      <div className="flex flex-col items-center">
-        <div className="">
-          <h5 className="text-[20px] font-semibold text-primary-800">
+    <div className="flex justify-center bg-primary-100 md:mx-[170px] mt-[53.5px] mb-[120px] md:mb-0 md:pb-[100px]">
+      <div className="flex w-full md:w-full flex-col items-center mx-6">
+        <div className="md:w-full">
+          <h5 className="text-[20px] md:text-[32px] font-semibold text-primary-800">
             Booking Antrian
           </h5>
         </div>
 
-        <div className="flex flex-col w-[312px] mt-[24px] pt-[16px] items-center h-full bg-white rounded-2xl shadow-lg">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col items-center justify-center">
-              <div className="flex flex-col items-center">
-                <FormComponent
-                  form={form.control}
-                  placeholder="Pilih Jenis Layanan"
-                  label="Pilih Jenis Layanan"
-                  type="select"
-                  name="service"
-                />
-              </div>
+        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-[32px] bg-white rounded-2xl shadow-lg">
+          <form className="flex flex-col w-full px-[16px] md:px-[105px]">
+            <div className="flex flex-col w-full items-center mb-[10px] md:mb-[20px] mx-[1px] mt-[62px]">
+              <Select name="layanan_id" onValueChange={handleSelectChangeDinas}>
+                <SelectTrigger
+                  className={`${
+                    !selected ? "opacity-50" : ""
+                  } border-b border-neutral-800 rounded-none pl-4 w-full mx-0 pr-0`}>
+                  <SelectValue
+                    placeholder="Pilih Dinas"
+                    className={selected ? "" : "placeholder:opacity-50"}
+                  />
+                </SelectTrigger>
+                <SelectContent className="w-[266px] md:w-full">
+                  <div>
+                    {instances.map(
+                      (dinas: { id: number; name: string }, i: number) => {
+                        return (
+                          <SelectItem
+                            key={i}
+                            className="pr-none"
+                            value={dinas.id.toString()}>
+                            {dinas.name}
+                          </SelectItem>
+                        );
+                      }
+                    )}
+                  </div>
+                </SelectContent>
+              </Select>
+            </div>
 
-              <div className="flex flex-col items-center">
-                <FormComponent
-                  form={form.control}
-                  placeholder="Tanggal"
-                  label="Tanggal"
-                  type="input"
-                  name="date"
-                />
-              </div>
+            <div className="flex flex-col items-center my-[10px] md:my-[20px] mx-[1px]">
+              <input
+                type="date"
+                name="tanggal"
+                className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900"
+                      : "text-gray-500 opacity-50"
+                  }`}
+                placeholder="Tanggal"
+                onChange={handleChangeDate}
+                style={{
+                  WebkitAppearance: "none",
+                  MozAppearance: "none",
+                  appearance: "none",
+                }}
+              />
+            </div>
 
-              <div className="flex flex-col items-center">
-                <FormComponent
-                  form={form.control}
-                  placeholder="Jam"
-                  label="Jam"
-                  type="input"
-                  name="time"
-                />
-              </div>
+            <div className="flex flex-col items-center my-[10px] md:my-[40px] mx-[1px]">
+              <input
+                type="time"
+                name="jam"
+                className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900"
+                      : "text-gray-500 opacity-50"
+                  }`}
+                placeholder="time"
+                onChange={handleChangeTime}
+                style={{
+                  WebkitAppearance: "none",
+                  MozAppearance: "none",
+                  appearance: "none",
+                }}
+              />
+            </div>
 
-              <div className="flex self-start justify-start items-end mb-[32px] mt-[20px]">
-                <Button
-                  className="bg-primary-700 hover:bg-primary-800 h-[30px] text-[12px] text-neutral-50 font-normal py-[6.5] px-[33px]"
-                  type="submit"
-                  variant="warning">
-                  Pilih
-                </Button>
-              </div>
-            </form>
-          </Form>
+            <div className="flex md:self-end mb-[32px] md:pb-8 mt-[16px]">
+              <Link
+                href="/layanan/booking-antrian/booking-result"
+                className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px] bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]"
+                type="submit">
+                Pilih
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </div>

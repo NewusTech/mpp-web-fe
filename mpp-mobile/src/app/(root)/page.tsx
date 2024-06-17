@@ -78,6 +78,10 @@ function Home() {
     fetchAll(search);
   }, [search]);
 
+  const image = berita?.data?.map((news: Berita) => {
+    return news?.image;
+  });
+
   return (
     <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[32px]">
       <div className="bg-[#F7FBF7]">
@@ -134,11 +138,11 @@ function Home() {
           <div className="hidden md:w-full md:flex md:flex-col md:mx-[70px]">
             <div className="md:flex md:flex-rows md:mx-[70px] md:gap-[32px]">
               <Image
-                className="md:w-[960px] md:h-[410px] md:rounded-2xl"
-                src={(berita?.data[0]?.image as string) || ""}
+                className="hidden md:w-[960px] md:h-[410px] md:rounded-2xl"
+                src={image?.[0] ?? ""}
                 alt="Berita"
-                width={560}
-                height={378}
+                width={960}
+                height={410}
               />
 
               <div className="hidden md:flex md:flex-col md:items-center md:gap-[16px]">
@@ -148,7 +152,7 @@ function Home() {
                   </h3>
 
                   <p className="md:text-[#000000] md:text-[16px] md:font-light">
-                    {/* {date}*/} tanggal
+                    {/* {date}*/} 28 Juni 2024
                   </p>
                 </div>
 

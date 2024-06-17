@@ -2,5 +2,9 @@ import BookingAntrianScreen from "@/components/services/serviceScreen/bookingAnt
 import React from "react";
 
 export default function BookingAntrianPage() {
-  return <BookingAntrianScreen />;
+  return (
+    <div className="bg-primary-100">
+      <BookingAntrianScreen />
+    </div>
+  );
 }
