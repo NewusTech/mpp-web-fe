@@ -119,7 +119,7 @@ export default function NavbarScreen() {
             SKM
           </Link>
           <Link
-            href="/statistics"
+            href="/statistik"
             className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
               pathName === "/statistik"
                 ? "text-[#F3CB53] hover:text-[#3A6C38]"
