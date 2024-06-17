@@ -2,7 +2,16 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Download } from "lucide-react";
 import PopUpAntrianComponent from "../popUpAntrianComponent/popUpAntrianComponent";
 
-export default function PopAntrianComponent() {
+interface AntrianType {
+  antrian: {
+    noAntrian: string;
+    instansi: string;
+    waktu?: string;
+    tanggal: string;
+  };
+}
+
+export default function PopAntrianComponent({ antrian }: AntrianType) {
   return (
     <div>
       <Dialog>
@@ -11,7 +20,7 @@ export default function PopAntrianComponent() {
         </DialogTrigger>
         <DialogContent className="flex flex-col w-[290px] h-[290px]">
           <div>
-            <PopUpAntrianComponent />
+            <PopUpAntrianComponent antrian={antrian} />
           </div>
         </DialogContent>
       </Dialog>

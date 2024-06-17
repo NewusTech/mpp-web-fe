@@ -1,40 +1,32 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TableCell, TableRow } from "@/components/ui/table";
 import PopPermohonanComponent from "../popPermohonanComponent/popPermohonanComponent";
 
-export default function TablePermohonanComponent() {
+interface PermohonanType {
+  permohonan: {
+    layanan: string;
+    noPermohonan: string;
+    instansi: string;
+    tanggal: string;
+    status: string;
+    pesan: string;
+    tanggalSelesai: string;
+  };
+}
+
+export default function TablePermohonanComponent({
+  permohonan,
+}: PermohonanType) {
   return (
-    <div className="mx-[10px]">
-      <Table className="flex flex-col w-[290px] overflow-x-scroll">
-        <TableHeader className="flex w-full">
-          <TableRow className="flex flex-row">
-            <TableHead className="bg-primary-400 w-[260px]">
-              Nomor Permohonan
-            </TableHead>
-            <TableHead className="bg-primary-400 w-[260px]">Instansi</TableHead>
-            <TableHead className="bg-primary-400 w-[260px]">Tanggal</TableHead>
-            <TableHead className="bg-primary-400 w-[260px]">Status</TableHead>
-            <TableHead className="bg-primary-400"></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="flex flex-wrap w-full">
-          <TableRow>
-            <TableCell className="w-[260px]">INV001</TableCell>
-            <TableCell className="w-[260px]">Paid</TableCell>
-            <TableCell className="w-[260px]">Credit Card</TableCell>
-            <TableCell className="w-[260px]">$250.00</TableCell>
-            <TableCell className="">
-              <PopPermohonanComponent />
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+    <div className="w-full">
+      <TableRow>
+        <TableCell className="w-1/2">{permohonan.noPermohonan}</TableCell>
+        <TableCell className="w-full">{permohonan.instansi}</TableCell>
+        <TableCell className="w-1/2">{permohonan.tanggal}</TableCell>
+        <TableCell className="w-1/2">{permohonan.status}</TableCell>
+        <TableCell className="w-1">
+          <PopPermohonanComponent permohonan={permohonan} />
+        </TableCell>
+      </TableRow>
     </div>
   );
 }
