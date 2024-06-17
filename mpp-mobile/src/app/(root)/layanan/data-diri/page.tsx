@@ -16,6 +16,7 @@ import FormComponents from "@/components/others/formComponents/formComponents";
 import { useRouter } from "next/navigation";
 import { Dispatch } from "redux";
 import { RootState } from "@/store/store";
+import Steps from "@/components/steps/steps";
 
 interface JWT {
   userId: number;
@@ -42,6 +43,14 @@ const formSchema = z.object({
     .max(13, { message: "Phone number must be less than 13 characters" }),
   alamat: z.string({ message: "Address can not be empty" }),
 });
+
+const steps = [
+  { id: 1, title: "1" },
+  { id: 2, title: "2" },
+  { id: 3, title: "3" },
+  { id: 4, title: "4" },
+];
+const currentStep = 2;
 
 export default function DataDiriPage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
@@ -118,115 +127,96 @@ export default function DataDiriPage() {
   };
 
   return (
-    <div className="flex items-center justify-center mx-[35px] mt-[24px] mb-[14px]">
-      <div className="flex flex-col items-center gap-[16px]">
-        <div className="flex flex-col gap-[24px]">
-          <div className="flex flex-col justify-center">
-            <h4 className="text-[20px] font-semibold text-primary-800">
-              Permohonan Layanan
-            </h4>
-          </div>
+    <div className="bg-primary-100 md:mt-[56px]">
+      <div className="flex items-center justify-center bg-primary-100 mx-[35px] md:mx-[250px] mt-[24px] mb-[30px] md:mb-0 md:pb-[30px]">
+        <div className="flex flex-col md:w-full items-center gap-[16px] md:mb-8">
+          <div className="flex flex-col md:flex-row md:justify-between md:w-full gap-[24px] md:mb-6">
+            <div className="flex flex-col justify-center">
+              <h4 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
+                Permohonan Layanan
+              </h4>
+            </div>
 
-          <div className="flex flex-row">
-            <div className="flex flex-row items-center justify-center">
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-primary-700 outline outline-1 outline-primary-700 active:bg-primary-700">
-                <p className="text-[14px] font-semibold text-primary-700 active:text-neutral-50">
-                  1
-                </p>
-              </div>
-
-              <div className="flex self-center w-[40px] h-[2px] bg-secondary-700"></div>
-
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-[#7BBA78] outline outline-1 outline-[#7BBA78] active:bg-[#7BBA78]">
-                <p className="text-[14px] font-semibold text-[#7BBA78] active:text-[#FEFEFE]">
-                  2
-                </p>
-              </div>
-
-              <div className="flex self-center w-[40px] h-[2px] bg-[#F3CB53]"></div>
-
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-[#7BBA78] outline outline-1 outline-[#7BBA78] active:bg-[#7BBA78]">
-                <p className="text-[14px] font-semibold text-[#7BBA78] active:text-[#FEFEFE]">
-                  3
-                </p>
-              </div>
-
-              <div className="flex self-center w-[40px] h-[2px] bg-[#F3CB53]"></div>
-
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-[#7BBA78] outline outline-1 outline-[#7BBA78] active:bg-[#7BBA78]">
-                <p className="text-[14px] font-semibold text-[#7BBA78] active:text-[#FEFEFE]">
-                  4
-                </p>
+            <div className="flex flex-row">
+              <div className="flex flex-row items-center justify-center">
+                {steps.map((step, index) => (
+                  <Steps
+                    key={step.id}
+                    title={step.title}
+                    isLastStep={index === steps.length - 1}
+                    isActive={step.id === currentStep}
+                  />
+                ))}
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col w-full border border-neutral-700 bg-white rounded-2xl shadow-lg">
-          <div className="flex flex-col mt-[22px] px-[21px]">
-            <h5 className="text-[14px] font-semibold text-primary-800">
-              Data Diri
-            </h5>
+          <div className="flex flex-col w-full border border-neutral-700 bg-white rounded-2xl shadow-lg">
+            <div className="flex flex-col mt-[22px] px-[21px] md:px-[90px]">
+              <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
+                Data Diri
+              </h5>
 
-            <div className="flex flex-col mt-[32px]">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="flex flex-col">
-                  <div className="flex flex-col w-full mb-[4px]">
-                    <FormComponents
-                      form={form.control}
-                      classStyle="w-full h-[40px]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
-                      placeholder="Qurotta Aini"
-                      label="Nama Lengkap"
-                      type="text"
-                      name="name"
-                    />
-                  </div>
-
-                  <div className="flex flex-col w-full mb-[4px]">
-                    <p className="text-[12px] text-neutral-900 font-semibold mb-[4px] mt-[2px]">
-                      NIk
-                    </p>
-                    <div className="flex items-center w-full h-[40px] border border-neutral-700 pl-[16px] rounded-[50px]">
-                      <p className="text-[14px] text-neutral-900 opacity-[100%]">
-                        {info?.nik}
-                      </p>
+              <div className="flex flex-col md:w-full mt-[32px]">
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col md:w-full">
+                    <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                      <FormComponents
+                        form={form.control}
+                        classStyle="w-full md:w-full h-[40px] md:h-[50px]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold md:font-normal"
+                        placeholder="Qurotta Aini"
+                        label="Nama Lengkap"
+                        type="text"
+                        name="name"
+                      />
                     </div>
-                  </div>
 
-                  <div className="flex flex-col w-full mb-[4px]">
-                    <FormComponents
-                      form={form.control}
-                      classStyle="w-full h-[40px]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
-                      placeholder="085764156224"
-                      label="Nomor Telepon"
-                      type="text"
-                      name="telepon"
-                    />
-                  </div>
+                    <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                      <p className="text-[12px] text-neutral-900 font-semibold mb-[4px] mt-[2px] md:font-normal">
+                        NIk
+                      </p>
+                      <div className="flex items-center w-full md:w-full h-[40px] md:h-[50px] border border-neutral-700 pl-[16px] rounded-[50px]">
+                        <p className="text-[14px] text-neutral-900 opacity-[100%]">
+                          {info?.nik}
+                        </p>
+                      </div>
+                    </div>
 
-                  <div className="grid grid-cols-2 w-full my-[4px]">
-                    <FormComponents
-                      form={form.control}
-                      classStyle="w-[258px] h-[74px] text-[14px]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
-                      placeholder="Jl. Pangeran Antasari"
-                      label="Alamat"
-                      type="textarea"
-                      name="alamat"
-                    />
-                  </div>
+                    <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                      <FormComponents
+                        form={form.control}
+                        classStyle="w-full md:w-full h-[40px] md:h-[50px]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold md:font-normal"
+                        placeholder="085764156224"
+                        label="Nomor Telepon"
+                        type="text"
+                        name="telepon"
+                      />
+                    </div>
 
-                  <div className="flex self-center h-[40px] w-[120px] mb-[19px] mt-[16px]">
-                    <Button type="submit" variant="success">
-                      Lanjut
-                    </Button>
-                  </div>
-                </form>
-              </Form>
+                    <div className="grid grid-cols-2 w-full my-[4px] md:mb-2">
+                      <FormComponents
+                        form={form.control}
+                        classStyle="w-[258px] md:w-[755px] h-[74px] md:h-[125px] text-[14px]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold md:font-normal"
+                        placeholder="Jl. Pangeran Antasari"
+                        label="Alamat"
+                        type="textarea"
+                        name="alamat"
+                      />
+                    </div>
+
+                    <div className="flex self-center md:justify-center h-[40px] w-[120px] md:w-full mb-[19px] mt-[16px] md:mt-6">
+                      <Button type="submit" variant="success">
+                        Lanjut
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              </div>
             </div>
           </div>
         </div>

@@ -37,7 +37,7 @@ export default function LayoutInput({
           name={nameForm}
           type="text"
           placeholder={placeholder}
-          className="flex w-full border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed mb-[8px]"
+          className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed mb-[8px]"
         />
       </>
     );
@@ -56,7 +56,7 @@ export default function LayoutInput({
           name={nameForm}
           type="number"
           placeholder={placeholder}
-          className="flex w-full border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
+          className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
         />
       </>
     );

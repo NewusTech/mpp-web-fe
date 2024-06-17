@@ -2,6 +2,7 @@
 
 import ByLayanan from "@/components/fetching/layanan/formInputByLayanan/ByLayanan";
 import LayoutInput from "@/components/layoutForms/layoutForm";
+import Steps from "@/components/steps/steps";
 import { Button } from "@/components/ui/button";
 import { setDataInput } from "@/store/action/actionPermohonanLayanan";
 import { RootState } from "@/store/store";
@@ -28,6 +29,14 @@ type FormType = {
   status: string;
   data: LayananType;
 };
+
+const steps = [
+  { id: 1, title: "1" },
+  { id: 2, title: "2" },
+  { id: 3, title: "3" },
+  { id: 4, title: "4" },
+];
+const currentStep = 3;
 
 export default function FormulirPage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
@@ -74,81 +83,62 @@ export default function FormulirPage() {
   };
 
   return (
-    <div className="flex items-center justify-center mt-[14px] mx-[35px] mb-[15px]">
-      <div className="flex flex-col items-centergap-[16px]">
-        <div className="flex flex-col gap-[24px]">
-          <div className="flex flex-col justify-center">
-            <h5 className="text-[20px] font-semibold text-primary-800">
-              Permohonan Layanan
-            </h5>
-          </div>
+    <div className="bg-primary-100 pt-2 md:mt-[48px]">
+      <div className="flex items-center justify-center bg-primary-100 mt-[14px] md:mt-[48px] mx-[35px] md:mx-[250px] mb-[35px] md:mb-0 md:pb-[80px]">
+        <div className="flex flex-col md:w-full gap-[16px]">
+          <div className="flex flex-col md:flex-row md:justify-between gap-[24px] md:gap-0">
+            <div className="flex flex-col justify-center">
+              <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
+                Permohonan Layanan
+              </h5>
+            </div>
 
-          <div className="flex flex-row self-center">
-            <div className="flex flex-row items-center justify-center">
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-primary-700 outline outline-1 outline-primary-700 active:bg-primary-700">
-                <p className="text-[14px] font-semibold text-primary-700 active:text-neutral-50">
-                  1
-                </p>
-              </div>
-
-              <div className="flex self-center w-[40px] h-[2px] bg-secondary-700"></div>
-
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-[#7BBA78] outline outline-1 outline-[#7BBA78] active:bg-[#7BBA78]">
-                <p className="text-[14px] font-semibold text-[#7BBA78] active:text-[#FEFEFE]">
-                  2
-                </p>
-              </div>
-
-              <div className="flex self-center w-[40px] h-[2px] bg-[#F3CB53]"></div>
-
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-[#7BBA78] outline outline-1 outline-[#7BBA78] active:bg-[#7BBA78]">
-                <p className="text-[14px] font-semibold text-[#7BBA78] active:text-[#FEFEFE]">
-                  3
-                </p>
-              </div>
-
-              <div className="flex self-center w-[40px] h-[2px] bg-[#F3CB53]"></div>
-
-              <div className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-[#7BBA78] outline outline-1 outline-[#7BBA78] active:bg-[#7BBA78]">
-                <p className="text-[14px] font-semibold text-[#7BBA78] active:text-[#FEFEFE]">
-                  4
-                </p>
+            <div className="flex flex-row self-center md:self-end">
+              <div className="flex flex-row items-center justify-center">
+                {steps.map((step, index) => (
+                  <Steps
+                    key={step.id}
+                    title={step.title}
+                    isLastStep={index === steps.length - 1}
+                    isActive={step.id === currentStep}
+                  />
+                ))}
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg mt-[20px]">
-          <div className="flex flex-col mt-[22px] px-[21px]">
-            <h5 className="text-[14px] font-semibold text-primary-800">
-              Formulir
-            </h5>
+          <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg mt-[20px]">
+            <div className="flex flex-col md:w-full mt-[22px] px-[21px] md:px-[75px] md:py-[32px]">
+              <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
+                Formulir
+              </h5>
 
-            <div className="flex flex-col mt-[32px]">
-              <div className="flex flex-col mb-[8px]">
-                {form?.Layananforms?.map((el: LayananFormType, i: number) => {
-                  return (
-                    <div key={i} className="space-y-2">
-                      <LayoutInput
-                        typeForm={el.tipedata}
-                        labelName={el.field}
-                        change={change}
-                        nameForm={el.field}
-                        valueForm={formValues[el.field] || ""}
-                        placeholder="Input di sini!"
-                        opacity={changeOpacity}
-                        dataRadio={el.datajson}
-                      />
-                    </div>
-                  );
-                })}
+              <div className="flex flex-col md:w-full mt-[32px]">
+                <div className="flex flex-col md:w-full mb-[8px] gap-3">
+                  {form?.Layananforms?.map((el: LayananFormType, i: number) => {
+                    return (
+                      <div key={i} className="space-y-2">
+                        <LayoutInput
+                          typeForm={el.tipedata}
+                          labelName={el.field}
+                          change={change}
+                          nameForm={el.field}
+                          valueForm={formValues[el.field] || ""}
+                          placeholder="Kirim Jawaban!"
+                          opacity={changeOpacity}
+                          dataRadio={el.datajson}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            <div className="flex self-center h-[40px] w-[120px] mb-[19px] mt-[16px]">
-              <Button type="submit" variant="success" onClick={handleClick}>
-                <Link href="/layanan/upload-file">Lanjut</Link>
-              </Button>
+              <div className="flex self-center md:justify-center h-[40px] w-[120px] md:w-full mb-[19px] mt-[16px]">
+                <Button type="submit" variant="success" onClick={handleClick}>
+                  <Link href="/layanan/upload-file">Lanjut</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
