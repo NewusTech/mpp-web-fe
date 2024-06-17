@@ -1,9 +1,23 @@
-export default function PopUpPermohonanComponent() {
+interface PermohonanType {
+  permohonan: {
+    layanan: string;
+    noPermohonan: string;
+    instansi: string;
+    tanggal: string;
+    status: string;
+    pesan: string;
+    tanggalSelesai: string;
+  };
+}
+
+export default function PopUpPermohonanComponent({
+  permohonan,
+}: PermohonanType) {
   return (
     <div className="flex flex-col mx-[32px] mt-[32px]">
       <div className="flex flex-col gap-[10px]">
         <h6 className="text-[16px] text-secondary-700 font-semibold">
-          Detail:
+          Detail: {permohonan.layanan}
         </h6>
 
         <div className="flex flex-col gap-[14px]">
@@ -13,7 +27,7 @@ export default function PopUpPermohonanComponent() {
             </p>
 
             <p className="text-[16px] text-neutral-900 font-normal">
-              HH / BB / TTTT
+              {permohonan.tanggal}
             </p>
           </div>
 
@@ -23,7 +37,7 @@ export default function PopUpPermohonanComponent() {
             </p>
 
             <p className="text-[16px] text-neutral-900 font-normal">
-              HH / BB / TTTT
+              {permohonan.tanggalSelesai}
             </p>
           </div>
 
@@ -31,7 +45,7 @@ export default function PopUpPermohonanComponent() {
             <p className="text-[16px] text-primary-900 font-semibold">Pesan</p>
 
             <p className="text-[16px] text-neutral-900 font-normal">
-              Lorem ipsum dolor sit amet
+              {permohonan.pesan}
             </p>
           </div>
         </div>
