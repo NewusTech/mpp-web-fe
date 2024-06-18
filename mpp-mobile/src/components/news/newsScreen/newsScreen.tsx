@@ -25,7 +25,7 @@ export default function NewsScreen({ berita }: MyBerita) {
           return (
             <div
               key={i}
-              className="md:flex md:flex-row md:flex-wrap md:gap-[20px]">
+              className="md:flex md:flex-row md:flex-wrap md:gap-[8px]">
               <CardNewsComponent key={i} news={news} />
               <CardNewsComponent key={i} news={news} />
               <CardNewsComponent key={i} news={news} />

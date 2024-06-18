@@ -30,9 +30,11 @@ type MyBerita = {
 };
 
 type Instansi = {
+  id: number;
   name: string;
-  url: string;
+  image: string;
   slug: string;
+  jmlLayanan: number;
 };
 
 type MyInstansi = {
@@ -99,7 +101,7 @@ function Home() {
   const slug = berita?.data[0].slug;
 
   return (
-    <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[32px]">
+    <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[96px]">
       <div className="bg-[#F7FBF7]">
         <HeroScreen />
 
@@ -110,7 +112,7 @@ function Home() {
             Instansi Layanan MPP
           </h4>
 
-          <div className="flex flex-col flex-wrap justify-center md:flex-row md:flex-wrap md:mx-[70px] items-center gap-[18px] md:gap-10 my-[16px]">
+          <div className="flex flex-col flex-wrap justify-center md:flex-row md:flex-wrap md:mx-[70px] items-center gap-[18px] md:gap-5 my-[16px]">
             {layanan?.data?.map((el: Instansi, i: number) => {
               return <CardLayananComponent key={i} layanan={el} />;
             })}
@@ -147,7 +149,7 @@ function Home() {
         </div>
 
         <div className="flex flex-col items-center mt-[56px]">
-          <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px]">
+          <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px] md:mb-[36px]">
             Berita
           </h3>
 
@@ -189,7 +191,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center md:mt-[16px]">
+          <div className="flex flex-col items-center md:self-start md:mx-[70px] md:mt-6">
             <div className="flex flex-col md:flex-row flex-wrap justify-center gap-[16px]">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;

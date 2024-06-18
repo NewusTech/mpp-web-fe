@@ -22,11 +22,11 @@ export default function BookingAntrianQRCodeScreen() {
               <div className="flex flex-col mt-[11px] mb-2">
                 <div className="flex justify-between mb-[8px]">
                   <p className="text-[10px] md:text-[16px] font-extralight">
-                    HH/BB/TTTT
+                    24/06/2024
                   </p>
 
                   <p className="text-[10px] md:text-[16px] font-extralight">
-                    00:00
+                    13.00
                   </p>
                 </div>
 
@@ -40,12 +40,10 @@ export default function BookingAntrianQRCodeScreen() {
               </div>
 
               <div className="flex flex-col justify-center items-center">
-                <h5 className="text-[14px] md:text-[20px] font-bold">
-                  Nomor Antrian
-                </h5>
+                <h5 className="text-[14px] md:text-[20px] font-bold">A101</h5>
 
                 <h5 className="text-[14px] md:text-[20px] font-normal">
-                  Loket
+                  Dinas Kesehatan
                 </h5>
               </div>
             </div>

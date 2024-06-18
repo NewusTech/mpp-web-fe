@@ -51,7 +51,7 @@ export default function AboutScreen() {
         </div>
       </div>
 
-      <div className="grid grid-rows-1 mt-[28px] space-y-4 mx-[30px] md:mx-[70px]">
+      <div className="grid grid-rows-1 mt-[28px] md:mt-0 space-y-4 mx-[30px] md:mx-[70px]">
         <h3 className="text-center text-[16px] text-primary-800 font-semibold md:text-[32px]">
           Tentang Mal Pelayanan Publik
         </h3>

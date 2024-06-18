@@ -236,7 +236,7 @@ export default function NavbarScreen() {
           ) : (
             <Link
               href="/login"
-              className="md:w-full md:text-[16px] md:px-[24px] md:py-[6px] md:bg-primary-800 md:text-neutral-50 md:rounded-[50px] md:hover:bg-primary-600">
+              className="md:w-full md:text-[16px] md:px-[24px] md:py-[6px] md:bg-primary-700 md:text-neutral-50 md:rounded-[50px] md:hover:bg-primary-600">
               Masuk
             </Link>
           )}
