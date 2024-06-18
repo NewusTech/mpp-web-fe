@@ -2,6 +2,16 @@
 
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import CardLayananComponent from "../others/cardLayananComponent";
+import backHome from "@/../../public/assets/undraw_back_home_nl-5-c.svg";
+import Image from "next/image";
+
+interface Layanantype {
+  id: number;
+  name: string;
+  image: string;
+  slug: string;
+  jmlLayanan: number;
+}
 
 export default function ServiceScreen({ instansi, change, search }: any) {
   return (
@@ -10,22 +20,33 @@ export default function ServiceScreen({ instansi, change, search }: any) {
         Layanan Mal Pelayanan Publik
       </h4>
 
-      <div className="flex flex-col justify-center gap-[36px]">
+      <div className="flex flex-col md:w-full justify-center gap-[36px]">
         <div className="w-full md:self-end md:w-1/3 md:pr-[60px]">
           <SearchComponent change={change} search={search} />
         </div>
 
-        <div className="flex flex-col md:w-full md:flex-wrap md:justify-center md:gap-[32px] md:flex-row gap-[16px]">
-          {instansi.map((layanan: any) => {
-            return (
-              <>
-                <CardLayananComponent key={layanan.id} layanan={layanan} />
-                <CardLayananComponent key={layanan.id} layanan={layanan} />
-                <CardLayananComponent key={layanan.id} layanan={layanan} />
-                <CardLayananComponent key={layanan.id} layanan={layanan} />
-              </>
-            );
-          })}
+        <div className="flex flex-col md:w-full md:flex-wrap md:justify-center md:gap-[16px] md:flex-row gap-[16px]">
+          {instansi.length > 0 ? (
+            <>
+              {instansi.map((layanan: Layanantype) => {
+                return (
+                  <>
+                    <CardLayananComponent key={layanan.id} layanan={layanan} />
+                    <CardLayananComponent key={layanan.id} layanan={layanan} />
+                    <CardLayananComponent key={layanan.id} layanan={layanan} />
+                    <CardLayananComponent key={layanan.id} layanan={layanan} />
+                  </>
+                );
+              })}
+            </>
+          ) : (
+            <div className="flex flex-col md:w-full justify-center items-center h-[311px]">
+              <Image src={backHome} width={300} height={300} alt="sad" />
+              <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
+                Data tidak ditemukan!
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

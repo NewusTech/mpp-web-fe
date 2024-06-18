@@ -18,10 +18,10 @@ export default function LogoutScreen({
   return (
     <button
       onClick={handleLogoutClick}
-      className="flex flex-row gap-[16px] md:ml-[10px] md:pt-1">
-      <LogOut className="text-primary-800 md:text-neutral-700 md:hover:text-primary-700 w-[20px] h-[20px]" />
+      className="flex flex-row gap-[16px] md:ml-[10px] md:pt-1 group">
+      <LogOut className="text-primary-800 md:text-neutral-700 w-[20px] h-[20px] group-hover:text-primary-700" />
 
-      <p className="text-primary-800 md:text-neutral-700 md:hover:text-primary-700 text-[14px] md:text-[16px]">
+      <p className="text-primary-800 md:text-neutral-700 text-[14px] md:text-[16px] group-hover:text-primary-700">
         Keluar
       </p>
     </button>

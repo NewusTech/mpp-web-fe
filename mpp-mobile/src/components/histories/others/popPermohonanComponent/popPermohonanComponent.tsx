@@ -31,7 +31,7 @@ export default function PopPermohonanComponent({ permohonan }: PermohonanType) {
         <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-white rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex w-full">
-              <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row md:justify-between md:w-full mx-[32px] my-[10px]">
+              <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row md:justify-between md:w-full mx-[32px] my-[10px] md:pt-5">
                 <h5 className="text-[20px] text-start text-primary-800 font-semibold">
                   {permohonan.noPermohonan}
                 </h5>
@@ -47,7 +47,7 @@ export default function PopPermohonanComponent({ permohonan }: PermohonanType) {
             <PopUpPermohonanComponent permohonan={permohonan} />
           </div>
 
-          <div className="flex justify-center items-end mx-[10px] mb-[10px] mt-[24px]">
+          <div className="flex justify-center items-end mx-[10px] mb-[10px] mt-[24px] md:pb-5">
             <Button type="submit" variant="link">
               Download
             </Button>

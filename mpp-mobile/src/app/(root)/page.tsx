@@ -30,9 +30,11 @@ type MyBerita = {
 };
 
 type Instansi = {
+  id: number;
   name: string;
-  url: string;
+  image: string;
   slug: string;
+  jmlLayanan: number;
 };
 
 type MyInstansi = {
@@ -95,8 +97,11 @@ function Home() {
 
   const date = formatDate("2024-06-15T08:36:14.883Z");
 
+  const image = berita?.data[0].image;
+  const slug = berita?.data[0].slug;
+
   return (
-    <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[32px]">
+    <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[96px]">
       <div className="bg-[#F7FBF7]">
         <HeroScreen />
 
@@ -107,7 +112,7 @@ function Home() {
             Instansi Layanan MPP
           </h4>
 
-          <div className="flex flex-col flex-wrap justify-center md:flex-row md:flex-wrap md:mx-[70px] items-center gap-[18px] md:gap-10 my-[16px]">
+          <div className="flex flex-col flex-wrap justify-center md:flex-row md:flex-wrap md:mx-[70px] items-center gap-[18px] md:gap-5 my-[16px]">
             {layanan?.data?.map((el: Instansi, i: number) => {
               return <CardLayananComponent key={i} layanan={el} />;
             })}
@@ -144,39 +149,49 @@ function Home() {
         </div>
 
         <div className="flex flex-col items-center mt-[56px]">
-          <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px]">
+          <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px] md:mb-[36px]">
             Berita
           </h3>
 
           <div className="hidden md:block md:w-full md:flex-col md:mx-[70px]">
             <div className="md:flex md:flex-rows md:mx-[70px] md:gap-[32px]">
-              <Image
-                className="md:w-[960px] md:h-[410px] md:rounded-2xl"
-                src={beritaSlug?.image || ""}
-                alt="Berita"
-                width={960}
-                height={410}
-              />
+              {slug && (
+                <Link href={`/berita/${slug}`} className="md:w-full">
+                  {image && (
+                    <Image
+                      className="md:w-full md:h-[410px] md:rounded-2xl"
+                      src={image}
+                      alt="Berita"
+                      width={960}
+                      height={410}
+                    />
+                  )}
+                </Link>
+              )}
 
-              <div className="md:flex md:flex-col md:items-center md:gap-[16px]">
-                <div className="md:flex md:flex-col md:gap-[8px]">
-                  <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
-                    {beritaSlug?.title}
-                  </h3>
+              {slug && (
+                <Link
+                  href={`/berita/${slug}`}
+                  className="md:flex md:flex-col md:items-center md:gap-[16px]">
+                  <div className="md:flex md:flex-col md:gap-[8px]">
+                    <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
+                      {beritaSlug?.title}
+                    </h3>
 
-                  <p className="md:text-[#000000] md:text-[16px] md:font-light">
-                    {date}
-                  </p>
-                </div>
+                    <p className="md:text-[#000000] md:text-[16px] md:font-light">
+                      {date}
+                    </p>
+                  </div>
 
-                <h5 className="md:text-[20px] md:text-black md:font-light">
-                  {beritaSlug?.desc}
-                </h5>
-              </div>
+                  <h5 className="md:text-[20px] md:text-black md:font-light">
+                    {beritaSlug?.desc}
+                  </h5>
+                </Link>
+              )}
             </div>
           </div>
 
-          <div className="flex flex-col items-center md:mt-[16px]">
+          <div className="flex flex-col items-center md:self-start md:mx-[70px] md:mt-6">
             <div className="flex flex-col md:flex-row flex-wrap justify-center gap-[16px]">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;

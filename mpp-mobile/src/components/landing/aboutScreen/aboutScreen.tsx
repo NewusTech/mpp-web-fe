@@ -51,29 +51,29 @@ export default function AboutScreen() {
         </div>
       </div>
 
-      <div className="grid grid-rows-1 mt-[28px] space-y-4 mx-[30px] md:mx-[70px]">
+      <div className="grid grid-rows-1 mt-[28px] md:mt-0 space-y-4 mx-[30px] md:mx-[70px]">
         <h3 className="text-center text-[16px] text-primary-800 font-semibold md:text-[32px]">
           Tentang Mal Pelayanan Publik
         </h3>
 
-        <p className="text-[10px] md:text-[16px] text-neutral-800 font-normal text-justify">
-          Lorem ipsum dolor sit amet consectetur. Tincidunt fermentum in neque
-          malesuada feugiat. Integer volutpat odio nisl dictumst. In lobortis
-          sodales ipsum facilisis in faucibus eu. Cras senectus dictum eget
-          maecenas libero dictum elementum. Amet nulla natoque aenean ultrices
-          iaculis. Ut eget volutpat massa diam tempus risus netus. Accumsan
-          vitae egestas porta commodo imperdiet imperdiet aenean. Eu ut bibendum
-          nulla netus diam eu. Ultricies arcu sit tincidunt leo nisl etiam nec
-          arcu. Vestibulum potenti tempus sapien scelerisque magna posuere at.
-          Sed iaculis elit quam enim nisl ullamcorper non sit eget. Quisque
-          adipiscing quam metus sit pharetra suspendisse neque congue lacus.
-          Nullam neque dolor diam vel etiam urna. Mauris in diam ac turpis nisl.
-          Consequat et urna eleifend nec. Sed morbi vehicula egestas elementum
-          sed neque in tellus nulla. Enim sed massa ut quis velit ornare vel
-          urna. Ut vitae egestas integer egestas. Viverra erat praesent faucibus
-          sodales. Tempus sit purus convallis ipsum faucibus mollis fermentum.
-          Nunc mi pellentesque facilisis interdum. Malesuada non id porta lorem.
-          Urna tellus ornare morbi turpis risus non.
+        <p className="text-[10px] md:text-[16px] text-neutral-800 font-normal text-justify md:text-center md:leading-10">
+          Mal Pelayanan Publik (MPP) merupakan konsep inovatif yang
+          mengintegrasikan berbagai layanan publik di satu lokasi yang nyaman
+          dan mudah diakses. Tujuan utamanya adalah meningkatkan kualitas
+          layanan kepada masyarakat dengan menyediakan berbagai layanan
+          administrasi dari berbagai instansi pemerintah dan swasta dalam satu
+          atap. MPP memudahkan masyarakat dalam mengurus berbagai keperluan
+          administrasi tanpa harus berpindah-pindah tempat. Dasar hukum
+          pendirian MPP Lampung Timur adalah sebagai berikut: Peraturan Presiden
+          Republik Indonesia Nomor 89 Tahun 2021 tentang Penyelenggaraan Mal
+          Pelayanan Publik. Peraturan Menteri PANRB Nomor 23 Tahun 2017 tentang
+          Penyelenggaraan Mal Pelayanan Publik. Peraturan Menteri PANRB Nomor 92
+          Tahun 2021 tentang Petunjuk Teknis Penyelenggaraan Mal Pelayanan
+          Publik. MPP dirancang untuk memberikan kemudahan, kenyamanan, dan
+          efisiensi dalam pelayanan publik, serta meningkatkan transparansi dan
+          akuntabilitas dalam pelayanan pemerintah. Lokasi yang terpadu juga
+          menghemat waktu dan biaya bagi masyarakat yang memerlukan berbagai
+          jenis layanan.
         </p>
       </div>
     </div>

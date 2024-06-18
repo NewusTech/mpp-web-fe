@@ -7,16 +7,23 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
 import { LogIn } from "lucide-react";
 
-export default function CardLayananComponent({ layanan }: any) {
+interface Layanantype {
+  layanan: {
+    id: number;
+    name: string;
+    image: string;
+    slug: string;
+    jmlLayanan: number;
+  };
+}
+
+export default function CardLayananComponent({ layanan }: Layanantype) {
   const token = Cookies.get("Authorization");
   return (
     <div className="flex flex-col items-center justify-center w-[270px] outline outline-2 outline-[#C4C4C4] bg-[#F7F7F7] shadow-xl rounded-2xl">
@@ -41,7 +48,7 @@ export default function CardLayananComponent({ layanan }: any) {
           </Link>
 
           <p className="text-[12px] text-center text-neutral-700 font-normal">
-            Jumlah Layanan
+            Jumlah Layanan : {layanan.jmlLayanan}
           </p>
         </div>
       </div>

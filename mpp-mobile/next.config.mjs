@@ -6,7 +6,17 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: [
+      "res.cloudinary.com",
+      "https://newus-bucket.s3.ap-southeast-2.amazonaws.com",
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "newus-bucket.s3.ap-southeast-2.amazonaws.com",
+        pathname: "/mpp/**",
+      },
+    ],
   },
   async rewrites() {
     return [

@@ -197,10 +197,10 @@ export default function DataDiriPage() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 w-full my-[4px] md:mb-2">
+                    <div className="grid grid-cols-2 md:grid-cols-none w-full my-[4px] md:mb-2">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[258px] md:w-[755px] h-[74px] md:h-[125px] text-[14px]"
+                        classStyle="w-[258px] md:w-full h-[74px] md:h-[125px] text-[14px]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold md:font-normal"
                         placeholder="Jl. Pangeran Antasari"
                         label="Alamat"

@@ -26,6 +26,33 @@ import { useEffect, useState } from "react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+const grafikBulanans = [
+  {
+    id: 1,
+    instansi: "Dinas Pariwisata",
+    total: 1600,
+    antrian: 300,
+    permohonan: 800,
+    skm: 500,
+  },
+  {
+    id: 2,
+    instansi: "Dinas Kesehatan",
+    total: 1600,
+    antrian: 300,
+    permohonan: 800,
+    skm: 500,
+  },
+  {
+    id: 3,
+    instansi: "Dinas Pariwisata",
+    total: 1600,
+    antrian: 300,
+    permohonan: 800,
+    skm: 500,
+  },
+];
+
 export default function StatisticsScreen() {
   const data = 700 + 300 + 1394;
   const months = [
@@ -255,13 +282,34 @@ export default function StatisticsScreen() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow>
-                    <TableCell className="w-full">Text</TableCell>
-                    <TableCell className="w-1/5">Text</TableCell>
-                    <TableCell className="w-1/5">Text</TableCell>
-                    <TableCell className="w-1/5">Text</TableCell>
-                    <TableCell className="w-1/5">Text</TableCell>
-                  </TableRow>
+                  {grafikBulanans.map(
+                    (
+                      data: {
+                        instansi: string;
+                        total: number;
+                        antrian: number;
+                        permohonan: number;
+                        skm: number;
+                      },
+                      i: number
+                    ) => {
+                      return (
+                        <TableRow key={i} className="flex flex-row w-full">
+                          <TableCell className="w-full">
+                            {data.instansi}
+                          </TableCell>
+                          <TableCell className="w-1/5">{data.total}</TableCell>
+                          <TableCell className="w-1/5">
+                            {data.antrian}
+                          </TableCell>
+                          <TableCell className="w-1/5">
+                            {data.permohonan}
+                          </TableCell>
+                          <TableCell className="w-1/5">{data.skm}</TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
                 </TableBody>
               </Table>
             )}
