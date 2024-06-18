@@ -1,13 +1,18 @@
 "use client";
-import { LogIn, X } from "lucide-react";
-import { Home } from "lucide-react";
-import { LayoutDashboard } from "lucide-react";
-import { Landmark } from "lucide-react";
-import { Mailbox } from "lucide-react";
-import { ClipboardList } from "lucide-react";
-import { BarChartBig } from "lucide-react";
-import { History } from "lucide-react";
-import { CircleUserRound } from "lucide-react";
+import {
+  LogIn,
+  Send,
+  X,
+  Home,
+  LayoutDashboard,
+  Landmark,
+  Mailbox,
+  ClipboardList,
+  BarChartBig,
+  History,
+  CircleUserRound,
+} from "lucide-react";
+
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { DrawerClose } from "@/components/ui/drawer";
@@ -109,6 +114,15 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
           <BarChartBig className="text-primary-800 w-[20px] h-[20px]" />
 
           <p className="text-primary-800 text-[14px]">Statistik</p>
+        </Link>
+
+        <Link
+          href="/pengaduan"
+          onClick={closeMenu}
+          className="flex flex-row gap-[16px]">
+          <Send className="text-primary-800 w-[20px] h-[20px]" />
+
+          <p className="text-primary-800 text-[14px]">Pengaduan</p>
         </Link>
 
         <Link
