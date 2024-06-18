@@ -54,6 +54,7 @@ type MyFacilities = {
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
+  const [beritaSlug, SetBeritaSlug] = useState<Berita>();
   const [layanan, setLayanan] = useState<MyInstansi>();
   const [facilities, setFacilities] = useState<MyFacilities>();
   const [search, setSearch] = useState("");
@@ -66,6 +67,20 @@ function Home() {
 
       const fasilitas = await facilitiesFetch();
 
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/artikel/get/mall-pelayanan-publik-lampung-timur-dibuka-tahun-2024`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+        }
+      );
+
+      const result = await response.json();
+
+      SetBeritaSlug(result.data);
       setBerita(news);
       setLayanan(layanan);
       setFacilities(fasilitas);
@@ -78,9 +93,7 @@ function Home() {
     fetchAll(search);
   }, [search]);
 
-  const image = berita?.data?.map((news: Berita) => {
-    return news?.image;
-  });
+  const date = formatDate("2024-06-15T08:36:14.883Z");
 
   return (
     <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[32px]">
@@ -135,29 +148,29 @@ function Home() {
             Berita
           </h3>
 
-          <div className="hidden md:w-full md:flex md:flex-col md:mx-[70px]">
+          <div className="hidden md:block md:w-full md:flex-col md:mx-[70px]">
             <div className="md:flex md:flex-rows md:mx-[70px] md:gap-[32px]">
               <Image
-                className="hidden md:w-[960px] md:h-[410px] md:rounded-2xl"
-                src={image?.[0] ?? ""}
+                className="md:w-[960px] md:h-[410px] md:rounded-2xl"
+                src={beritaSlug?.image || ""}
                 alt="Berita"
                 width={960}
                 height={410}
               />
 
-              <div className="hidden md:flex md:flex-col md:items-center md:gap-[16px]">
+              <div className="md:flex md:flex-col md:items-center md:gap-[16px]">
                 <div className="md:flex md:flex-col md:gap-[8px]">
                   <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
-                    {berita?.data[0]?.title}
+                    {beritaSlug?.title}
                   </h3>
 
                   <p className="md:text-[#000000] md:text-[16px] md:font-light">
-                    {/* {date}*/} 28 Juni 2024
+                    {date}
                   </p>
                 </div>
 
                 <h5 className="md:text-[20px] md:text-black md:font-light">
-                  {berita?.data[0]?.desc}
+                  {beritaSlug?.desc}
                 </h5>
               </div>
             </div>
