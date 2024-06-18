@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 // import required modules
-import { Pagination } from "swiper/modules";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
 export default function HeroScreen() {
   const images = [gedung, berita];
@@ -26,12 +26,14 @@ export default function HeroScreen() {
       <div className="pt-[20px] md:w-[50%] md:self-end md:flex md:pr-[35px]">
         <Swiper
           pagination={{ clickable: true }}
-          navigation={true} // tambahkan ini jika menggunakan navigation
+          navigation={true}
+          modules={[Pagination, Navigation, Autoplay]}
           className="mySwiper"
-          spaceBetween={10} // atur jarak antar slide
-          slidesPerView={1} // jumlah slide yang ditampilkan
+          spaceBetween={10}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{ delay: 3000 }}
           breakpoints={{
-            // penyesuaian untuk layar mobile
             768: {
               slidesPerView: 1,
               spaceBetween: 20,
