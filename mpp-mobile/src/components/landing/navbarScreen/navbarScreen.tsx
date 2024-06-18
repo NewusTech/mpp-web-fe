@@ -5,10 +5,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CircleUserRound, LogIn } from "lucide-react";
-import { ChevronDown } from "lucide-react";
-import { History } from "lucide-react";
-import { LogOut } from "lucide-react";
+import {
+  CircleUserRound,
+  LogIn,
+  Send,
+  ChevronDown,
+  History,
+} from "lucide-react";
+
 import logo from "@/../public/assets/450px-Lokasi_Lampung_Kabupaten_Lampung_Timur.png";
 import Image from "next/image";
 import { Raleway } from "next/font/google";
@@ -164,6 +168,33 @@ export default function NavbarScreen() {
                         : "text-[#C4C4C4] hover:text-[#7BBA78]"
                     } text-[16px]`}>
                     Profile
+                  </p>
+                </DropdownMenuItem>
+              </Link>
+
+              <Link
+                href="/pengaduan"
+                className={`${
+                  pathName === "/pengaduan"
+                    ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                    : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                }`}>
+                <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
+                  <Send
+                    className={`${
+                      pathName === "/pengaduan"
+                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                    } w-[20px] h-[20px] mr-[16px]`}
+                  />
+
+                  <p
+                    className={`${
+                      pathName === "/pengaduan"
+                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                    } text-[16px]`}>
+                    Pengaduan
                   </p>
                 </DropdownMenuItem>
               </Link>

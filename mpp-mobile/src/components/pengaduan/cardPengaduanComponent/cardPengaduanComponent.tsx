@@ -33,10 +33,10 @@ export default function CardPengaduanComponent() {
 
       <div className="flex w-full self-end justify-end">
         <Button
-          className="w-[48px] h-[18px] text-[8px] bg-secondary-700"
+          className="w-[48px] h-[18px] text-[8px] bg-secondary-700 hover:bg-secondary-600"
           type="submit"
           variant="success">
-          <Link href="/layanan/upload-file">Lihat</Link>
+          <Link href="/pengaduan">Lihat</Link>
         </Button>
       </div>
     </div>

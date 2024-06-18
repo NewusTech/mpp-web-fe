@@ -75,7 +75,7 @@ export default function PopUpPengaduanComponent() {
   };
 
   return (
-    <div>
+    <div className="md:flex md:justify-end md:mb-[24px]">
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>
           <div
