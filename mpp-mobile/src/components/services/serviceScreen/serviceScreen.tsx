@@ -2,6 +2,7 @@
 
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import CardLayananComponent from "../others/cardLayananComponent";
+import backHome from "@/../../public/assets/undraw_back_home_nl-5-c.svg";
 
 export default function ServiceScreen({ instansi, change, search }: any) {
   return (
@@ -10,7 +11,7 @@ export default function ServiceScreen({ instansi, change, search }: any) {
         Layanan Mal Pelayanan Publik
       </h4>
 
-      <div className="flex flex-col justify-center gap-[36px]">
+      <div className="flex flex-col md:w-full justify-center gap-[36px]">
         <div className="w-full md:self-end md:w-1/3 md:pr-[60px]">
           <SearchComponent change={change} search={search} />
         </div>

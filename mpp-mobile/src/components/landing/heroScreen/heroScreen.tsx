@@ -1,6 +1,9 @@
 import Image from "next/image";
 import gedung from "@/../public/assets/kab-lamtim.jpg";
-import berita from "@/../public/assets/berita.jpg";
+import kantor from "@/../public/assets/kantor bupati.jpg";
+import bupati from "@/../public/assets/M._Dawam_Rahardjo.jpg";
+import mpp from "@/../public/assets/mpp lamtim2.jpeg";
+import lamtim from "@/../public/assets/Lampung.webp";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -9,10 +12,10 @@ import "swiper/css/pagination";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
 export default function HeroScreen() {
-  const images = [gedung, berita];
+  const images = [bupati, gedung, kantor, mpp, lamtim];
 
   return (
-    <div className="md:px-[40px] md:pb-[65px] md:items-center md:flex md:justify-between w-dvw bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-35%">
+    <div className="md:px-[40px] md:pb-[65px] md:items-center md:flex md:justify-between w-dvw md:w-full bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-35%">
       <div className="flex flex-col px-[35px]">
         <h6 className="text-secondary-700 font-semibold md:text-[48px]">
           Selamat Datang
@@ -50,7 +53,7 @@ export default function HeroScreen() {
                   src={image}
                   alt="Gedung Kabupaten Lampung Timur"
                   layout="fill"
-                  objectFit="cover"
+                  objectFit="contain"
                 />
               </div>
             </SwiperSlide>

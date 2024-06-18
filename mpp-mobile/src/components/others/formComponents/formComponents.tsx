@@ -71,6 +71,7 @@ export default function FormComponents({
                 type="text"
                 className={`${classStyle}`}
                 placeholder={placeholder}
+                required
                 {...field}
               />
             </FormControl>

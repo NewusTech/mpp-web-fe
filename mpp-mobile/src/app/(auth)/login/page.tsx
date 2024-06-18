@@ -84,20 +84,20 @@ export default function LoginScreen() {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-screen">
-      <div className="flex flex-col md:w-full gap-[10px] items-center md:items-start justify-center md:justify-start rounded-2xl bg-primary-200 my-[70px] md:py-[70px] p-[32px] md:px-[210px] md:mx-[285px]">
+    <div className="flex justify-center items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-screen md:w-full md:h-full">
+      <div className="flex flex-col md:w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-2xl bg-primary-200 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
         <div className="flex flex-row">
           <Image
             src={logo}
             alt="Lampung Timur"
-            className="w-[73px] md:w-[174px] h-[69px] md:h-[160px]"
+            className="w-[73px] md:w-[170px] h-[69px] md:h-[160px]"
             width={73}
             height={69}
           />
 
           <div className="flex flex-col pl-[23px]">
             <h1
-              className={`text-primary-800 text-[24px] md:text-[48px] font-bold ${raleway.className}`}>
+              className={`text-primary-800 text-[24px] md:text-[44px] font-bold ${raleway.className}`}>
               MPP
             </h1>
 
@@ -122,7 +122,7 @@ export default function LoginScreen() {
                 <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal outline outline-1 outline-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
                   <FormComponents
                     form={form.control}
-                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[40px] pl-[15px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
+                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[40px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="NIK"
                     label="login"
@@ -138,7 +138,7 @@ export default function LoginScreen() {
                 <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal outline outline-1 outline-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
                   <FormComponents
                     form={form.control}
-                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[40px] pl-[15px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
+                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[40px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="Password"
                     label="login"

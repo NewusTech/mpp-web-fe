@@ -1,17 +1,15 @@
 export default function MppScreen() {
   return (
     <div className="flex flex-col items-center justify-center mt-[24px] md:mt-[56px] md:bg-primary-100 mx-[35px] md:mx-0 mb-[44px] md:mb-0 md:pb-[44px]">
-      <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-none place-items-center gap-[16px] px-[35px] md:mb-[62px]">
+      <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-none place-items-center md:place-items-start gap-[16px] px-[35px] md:mb-[62px]">
         <div className="flex flex-col text-center gap-[16px] md:gap-[40px]">
           <h4 className="text-primary-800 text-[16px] md:text-[26px] font-semibold">
             VISI
           </h4>
 
           <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
-            Lorem ipsum dolor sit amet consectetur. Est massa ut nisi purus arcu
-            laoreet imperdiet nibh. Quam odio lectus eu consectetur aliquam
-            viverra tincidunt in vulputate. Consequat netus quisque egestas
-            faucibus nulla. Ullamcorper volutpat semper volutpat in sem.
+            Mewujudkan Pelayanan Publik yang Terpadu, Efisien, dan Berorientasi
+            pada Kebutuhan Masyarakat.
           </p>
         </div>
 
@@ -21,10 +19,10 @@ export default function MppScreen() {
           </h4>
 
           <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
-            Lorem ipsum dolor sit amet consectetur. Est massa ut nisi purus arcu
-            laoreet imperdiet nibh. Quam odio lectus eu consectetur aliquam
-            viverra tincidunt in vulputate. Consequat netus quisque egestas
-            faucibus nulla. Ullamcorper volutpat semper volutpat in sem.
+            Meningkatkan Kualitas Pelayanan Publik, Memudahkan Akses Layanan
+            Bagi Masyarakat, Meningkatkan Efisiensi dan Efektivitas Pelayanan,
+            Mendorong Inovasi dalam Pelayanan Publik, Meningkatkan Transparansi
+            dan Akuntabilitas, Membangun Sinergi dengan Instansi Terkait.
           </p>
         </div>
       </div>

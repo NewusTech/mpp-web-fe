@@ -50,7 +50,7 @@ export default function BookingAntrianQRCodeScreen() {
               </div>
             </div>
 
-            <div className="h-[40px] w-[160px] md:w-full flex self-center justify-center items-center">
+            <div className="h-[40px] w-[160px] md:w-1/2 flex self-center justify-center items-center">
               <Button type="submit" variant="error">
                 Print
               </Button>

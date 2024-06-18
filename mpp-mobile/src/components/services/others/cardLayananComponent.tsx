@@ -7,11 +7,8 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
 import { LogIn } from "lucide-react";

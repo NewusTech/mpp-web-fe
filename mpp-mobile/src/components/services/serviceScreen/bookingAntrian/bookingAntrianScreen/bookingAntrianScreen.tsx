@@ -11,18 +11,18 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 
-const instances = [
+const services = [
   {
     id: 1,
-    name: "Dinas Pendidikan",
+    name: "Layanan Pembuatan KTP",
   },
   {
     id: 2,
-    name: "Dinas Kependudukan",
+    name: "Layanan Pembuatan Kartu Keluarga",
   },
   {
     id: 3,
-    name: "Dinas Kesehatan",
+    name: "Layanan Pembuatan Surat Sehat",
   },
 ];
 
@@ -53,27 +53,27 @@ export default function BookingAntrianScreen() {
 
         <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-[32px] bg-white rounded-2xl shadow-lg">
           <form className="flex flex-col w-full px-[16px] md:px-[105px]">
-            <div className="flex flex-col w-full items-center mb-[10px] md:mb-[20px] mx-[1px] mt-[62px]">
+            <div className="flex flex-col w-full items-center mb-[10px] md:mb-[20px] mx-[1px] md:mt-[62px]">
               <Select name="layanan_id" onValueChange={handleSelectChangeDinas}>
                 <SelectTrigger
                   className={`${
                     !selected ? "opacity-50" : ""
                   } border-b border-neutral-800 rounded-none pl-4 w-full mx-0 pr-0`}>
                   <SelectValue
-                    placeholder="Pilih Dinas"
+                    placeholder="Pilih Layanan"
                     className={selected ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
                 <SelectContent className="w-[266px] md:w-full">
                   <div>
-                    {instances.map(
-                      (dinas: { id: number; name: string }, i: number) => {
+                    {services.map(
+                      (service: { id: number; name: string }, i: number) => {
                         return (
                           <SelectItem
                             key={i}
                             className="pr-none"
-                            value={dinas.id.toString()}>
-                            {dinas.name}
+                            value={service.id.toString()}>
+                            {service.name}
                           </SelectItem>
                         );
                       }
@@ -83,7 +83,7 @@ export default function BookingAntrianScreen() {
               </Select>
             </div>
 
-            <div className="flex flex-col items-center my-[10px] md:my-[20px] mx-[1px]">
+            <div className="flex flex-col items-center my-[10px] md:mt-[14px] mx-[1px]">
               <input
                 type="date"
                 name="tanggal"
@@ -103,7 +103,7 @@ export default function BookingAntrianScreen() {
               />
             </div>
 
-            <div className="flex flex-col items-center my-[10px] md:my-[40px] mx-[1px]">
+            <div className="flex flex-col items-center my-[10px] md:my-[20px] mx-[1px]">
               <input
                 type="time"
                 name="jam"

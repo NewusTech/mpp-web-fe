@@ -95,6 +95,9 @@ function Home() {
 
   const date = formatDate("2024-06-15T08:36:14.883Z");
 
+  const image = berita?.data[0].image;
+  const slug = berita?.data[0].slug;
+
   return (
     <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[32px]">
       <div className="bg-[#F7FBF7]">
@@ -150,29 +153,39 @@ function Home() {
 
           <div className="hidden md:block md:w-full md:flex-col md:mx-[70px]">
             <div className="md:flex md:flex-rows md:mx-[70px] md:gap-[32px]">
-              <Image
-                className="md:w-[960px] md:h-[410px] md:rounded-2xl"
-                src={beritaSlug?.image || ""}
-                alt="Berita"
-                width={960}
-                height={410}
-              />
+              {slug && (
+                <Link href={`/berita/${slug}`} className="md:w-full">
+                  {image && (
+                    <Image
+                      className="md:w-full md:h-[410px] md:rounded-2xl"
+                      src={image}
+                      alt="Berita"
+                      width={960}
+                      height={410}
+                    />
+                  )}
+                </Link>
+              )}
 
-              <div className="md:flex md:flex-col md:items-center md:gap-[16px]">
-                <div className="md:flex md:flex-col md:gap-[8px]">
-                  <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
-                    {beritaSlug?.title}
-                  </h3>
+              {slug && (
+                <Link
+                  href={`/berita/${slug}`}
+                  className="md:flex md:flex-col md:items-center md:gap-[16px]">
+                  <div className="md:flex md:flex-col md:gap-[8px]">
+                    <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
+                      {beritaSlug?.title}
+                    </h3>
 
-                  <p className="md:text-[#000000] md:text-[16px] md:font-light">
-                    {date}
-                  </p>
-                </div>
+                    <p className="md:text-[#000000] md:text-[16px] md:font-light">
+                      {date}
+                    </p>
+                  </div>
 
-                <h5 className="md:text-[20px] md:text-black md:font-light">
-                  {beritaSlug?.desc}
-                </h5>
-              </div>
+                  <h5 className="md:text-[20px] md:text-black md:font-light">
+                    {beritaSlug?.desc}
+                  </h5>
+                </Link>
+              )}
             </div>
           </div>
 

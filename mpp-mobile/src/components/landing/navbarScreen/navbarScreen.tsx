@@ -5,13 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  CircleUserRound,
-  LogIn,
-  Send,
-  ChevronDown,
-  History,
-} from "lucide-react";
+import { CircleUserRound, Send, ChevronDown, History } from "lucide-react";
 
 import logo from "@/../public/assets/450px-Lokasi_Lampung_Kabupaten_Lampung_Timur.png";
 import Image from "next/image";
@@ -36,8 +30,16 @@ export default function NavbarScreen() {
   const pathName = usePathname();
   const [currentPath, setCurrentPath] = useState(pathName);
   const [decoded, setDecoded] = useState<JwtPayload | null>(null);
+  const [navbarColor, setNavbarColor] = useState("bg-primary-700");
 
   useEffect(() => {
+    setCurrentPath(pathName);
+    if (pathName === "/") {
+      setNavbarColor("bg-primary-700");
+    } else {
+      setNavbarColor("bg-primary-100");
+    }
+
     const auth = Cookies.get("Authorization");
     if (auth) {
       try {
@@ -47,7 +49,7 @@ export default function NavbarScreen() {
         console.error("Invalid token", error);
       }
     }
-  }, []);
+  }, [pathName]);
 
   const handleLogout = () => {
     Cookies.remove("Authorization");
@@ -55,7 +57,8 @@ export default function NavbarScreen() {
   };
 
   return (
-    <div className="flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:bg-primary-700 md:px-[70px]">
+    <div
+      className={`flex relative py-[32px] justify-between mx-[70px] bg-primary-700 md:mx-0 z-10 md:px-[70px] md:${navbarColor}`}>
       <Link href="/" className="flex flex-row w-[266px] h-[64px]">
         <Image src={logo} alt="Lampung Timur" className="w-[73px] h-[64px]" />
 
@@ -136,128 +139,107 @@ export default function NavbarScreen() {
         </div>
 
         <div className="flex flex-row justify-center ml-[10px]">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div className="flex flex-row justify-center ml-[10px]">
-                <CircleUserRound className="w-[24px] h-[24px] text-[#3A6C38] hover:text-[#F3CB53]" />
+          {decoded ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className="flex flex-row justify-center ml-[10px] group">
+                  <CircleUserRound className="w-[24px] h-[24px] text-[#3A6C38] group-hover:text-secondary-700" />
 
-                <ChevronDown className="w-[24px] h-[24px] text-[#3A6C38] hover:text-[#F3CB53]" />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <Link
-                href={`/profile/${decoded?.userId}`}
-                className={`${
-                  pathName === `/profile/${decoded?.userId}`
-                    ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                    : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                }`}>
-                <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
-                  <CircleUserRound
-                    className={`${
-                      pathName === `/profile/${decoded?.userId}`
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } w-[20px] h-[20px] mr-[16px]`}
-                  />
-
-                  <p
-                    className={`${
-                      pathName === `/profile/${decoded?.userId}`
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } text-[16px]`}>
-                    Profile
-                  </p>
-                </DropdownMenuItem>
-              </Link>
-
-              <Link
-                href="/pengaduan"
-                className={`${
-                  pathName === "/pengaduan"
-                    ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                    : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                }`}>
-                <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
-                  <Send
-                    className={`${
-                      pathName === "/pengaduan"
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } w-[20px] h-[20px] mr-[16px]`}
-                  />
-
-                  <p
-                    className={`${
-                      pathName === "/pengaduan"
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } text-[16px]`}>
-                    Pengaduan
-                  </p>
-                </DropdownMenuItem>
-              </Link>
-
-              <Link
-                href="/riwayat"
-                className={`${
-                  pathName === "/riwayat"
-                    ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                    : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                }`}>
-                <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
-                  <History
-                    className={`${
-                      pathName === "/riwayat"
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } w-[20px] h-[20px] mr-[16px]`}
-                  />
-
-                  <p
-                    className={`${
-                      pathName === "/riwayat"
-                        ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                        : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                    } text-[16px]`}>
-                    Riwayat
-                  </p>
-                </DropdownMenuItem>
-              </Link>
-
-              {decoded ? (
-                <LogoutScreen handleLogout={handleLogout} />
-              ) : (
+                  <ChevronDown className="w-[24px] h-[24px] text-[#3A6C38] group-hover:text-secondary-700" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
                 <Link
-                  href={"/login"}
+                  href={`/profile/${decoded?.userId}`}
                   className={`${
-                    pathName === "/login"
+                    pathName === `/profile/${decoded?.userId}`
                       ? "text-[#7BBA78] hover:text-[#C4C4C4]"
                       : "text-[#C4C4C4] hover:text-[#7BBA78]"
                   }`}>
-                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78]">
-                    <LogIn
+                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78] group">
+                    <CircleUserRound
                       className={`${
-                        pathName === "/login"
+                        pathName === `/profile/${decoded?.userId}`
                           ? "text-[#7BBA78] hover:text-[#C4C4C4]"
                           : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } w-[20px] h-[20px] mr-[16px]`}
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-primary-700`}
                     />
 
                     <p
                       className={`${
-                        pathName === "/login"
+                        pathName === `/profile/${decoded?.userId}`
                           ? "text-[#7BBA78] hover:text-[#C4C4C4]"
                           : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } text-[16px]`}>
-                      Login
+                      } text-[16px] group-hover:text-primary-700`}>
+                      Profile
                     </p>
                   </DropdownMenuItem>
                 </Link>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+
+                <Link
+                  href="/pengaduan"
+                  className={`${
+                    pathName === "/pengaduan"
+                      ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                      : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                  }`}>
+                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78] group">
+                    <Send
+                      className={`${
+                        pathName === "/pengaduan"
+                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-primary-700`}
+                    />
+
+                    <p
+                      className={`${
+                        pathName === "/pengaduan"
+                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      } text-[16px] group-hover:text-primary-700`}>
+                      Pengaduan
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link
+                  href="/riwayat"
+                  className={`${
+                    pathName === "/riwayat"
+                      ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                      : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                  }`}>
+                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78] group">
+                    <History
+                      className={`${
+                        pathName === "/riwayat"
+                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-primary-700`}
+                    />
+
+                    <p
+                      className={`${
+                        pathName === "/riwayat"
+                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
+                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      } text-[16px] group-hover:text-primary-700`}>
+                      Riwayat
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+
+                <LogoutScreen handleLogout={handleLogout} />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link
+              href="/login"
+              className="md:w-full md:text-[16px] md:px-[24px] md:py-[6px] md:bg-primary-800 md:text-neutral-50 md:rounded-[50px] md:hover:bg-primary-600">
+              Masuk
+            </Link>
+          )}
         </div>
       </div>
     </div>
