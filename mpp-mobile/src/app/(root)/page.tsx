@@ -191,20 +191,22 @@ function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center md:self-start md:mx-[70px] md:mt-6">
-            <div className="flex flex-col md:flex-row flex-wrap justify-center gap-[16px]">
+          <div className="flex flex-col md:w-full md:justify-start items-center md:mt-6 md:px-[70px]">
+            <div className="flex flex-col md:flex-row flex-wrap md:self-start gap-[16px] md:gap-2">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}
             </div>
 
-            <Link
-              href="/berita"
-              className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
-              <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
-                Lihat Semua Berita
-              </p>
-            </Link>
+            <div className="md:flex md:justify-center">
+              <Link
+                href="/berita"
+                className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
+                <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
+                  Lihat Semua Berita
+                </p>
+              </Link>
+            </div>
           </div>
         </div>
 
