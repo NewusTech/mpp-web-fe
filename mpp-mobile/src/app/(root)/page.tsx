@@ -60,12 +60,13 @@ function Home() {
   const [layanan, setLayanan] = useState<MyInstansi>();
   const [facilities, setFacilities] = useState<MyFacilities>();
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   const fetchAll = async (search: string) => {
     try {
-      const news = await fetchNews();
+      const news = await fetchNews(page, 4);
 
-      const layanan = await fetchInstansi(search);
+      const layanan = await fetchInstansi(search, page, 8);
 
       const fasilitas = await facilitiesFetch();
 
@@ -192,7 +193,7 @@ function Home() {
           </div>
 
           <div className="flex flex-col md:w-full md:justify-start items-center md:mt-6 md:px-[70px]">
-            <div className="flex flex-col md:flex-row flex-wrap md:self-start gap-[16px] md:gap-2">
+            <div className="flex flex-col md:w-full md:flex-row flex-wrap md:justify-between gap-[16px] md:gap-0">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}

@@ -33,7 +33,7 @@ export default function CardLayananComponent({ layanan }: Layanantype) {
           className="h-[135px] w-full flex items-center justify-center">
           <Image
             src={layanan.image}
-            className="h-[107px]"
+            className="h-[107px] object-contain"
             alt="Lampung Timur"
             width={80}
             height={106.12}

@@ -121,7 +121,7 @@ export default function NavbarScreen() {
           <Link
             href="/survey"
             className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
-              pathName === "/skm"
+              pathName === "/survey"
                 ? "text-[#F3CB53] hover:text-[#3A6C38]"
                 : "text-[#3A6C38] hover:text-[#F3CB53]"
             } font-light`}>

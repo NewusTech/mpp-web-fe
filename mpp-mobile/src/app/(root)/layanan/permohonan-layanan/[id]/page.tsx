@@ -25,6 +25,13 @@ const steps = [
 ];
 const currentStep = 1;
 
+function splitByNumberedItems(text: string) {
+  const splitText = text
+    .split(/(?=\d+\.\s)/)
+    .map((item: string) => item.trim());
+  return splitText;
+}
+
 export default function PermohonanLayananFirstScreen({
   params,
 }: {
@@ -33,6 +40,7 @@ export default function PermohonanLayananFirstScreen({
   const dispatch = useDispatch();
   const [service, setService] = useState<any>([]);
   const [selected, setSelected] = useState(null);
+  const [selectedService, setSelectedService] = useState<any>(null);
 
   const fetchLayanan = async (id: number) => {
     try {
@@ -50,8 +58,19 @@ export default function PermohonanLayananFirstScreen({
 
   const handleSelectChange = (value: any) => {
     dispatch(setId(value));
-    setSelected(value);
+    const selected = service.find((el: any) => el.id === value);
+    setSelectedService(selected);
   };
+
+  let content = [];
+
+  if (selectedService) {
+    const text = selectedService.desc;
+    const result = splitByNumberedItems(text);
+    content.push(result);
+  }
+
+  console.log(content, "???");
 
   return (
     <div className="flex items-center justify-center mt-[24px] md:mt-[48px] md:mx-[167px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[135px]">
@@ -103,17 +122,19 @@ export default function PermohonanLayananFirstScreen({
             Informasi Layanan
           </h5>
 
-          <ul className="list-disc list-inside ml-[8px]">
-            {service?.map((el: any, i: number) => {
-              return (
-                <div key={i}>
-                  <li className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                    {el.desc}
-                  </li>
-                </div>
-              );
-            })}
-          </ul>
+          {selectedService && (
+            <div className="list-disc list-inside ml-[8px]">
+              {content[0].map((item: string, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
+                    {item}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <div className="mt-[56px] md:w-full md:flex md:justify-center">
