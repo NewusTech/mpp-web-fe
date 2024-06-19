@@ -42,7 +42,7 @@ export default function InstansiDetail({
   }, [params.slug]);
 
   return (
-    <div className="flex flex-col md:bg-primary-50 md:rounded-2xl md:shadow-xl mx-[35px] md:mx-[70px] md:px-[70px] my-[24px] md:mt-[36px] md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-[36px] md:pt-[36px]">
+    <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-xl mx-[35px] md:mx-[70px] md:px-[70px] my-[24px] md:mt-[36px] md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-8 md:pt-[36px]">
       <div className="md:flex md:flex-row md:w-full">
         <div className="flex flex-col items-center justify-center mx-[10px] md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-2xl rounded-2xl">
           <div className="flex items-center justify-center w-[270px]">

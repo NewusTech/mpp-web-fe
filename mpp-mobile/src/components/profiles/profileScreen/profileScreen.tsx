@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function ProfileScreen({ profile }: any) {
   return (
-    <div className="flex items-center justify-center w-full mt-[24px] mb-[24px] md:mb-0 md:pt-[24px] md:mt-[32px] md:pb-[70px] md:bg-primary-100">
+    <div className="flex items-center justify-center w-full mt-[24px] mb-[24px] md:mb-0 md:pt-[24px] md:mt-[32px] md:pb-[70px] bg-primary-100">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
         <div className="flex self-start mb-[32px]">
           <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">

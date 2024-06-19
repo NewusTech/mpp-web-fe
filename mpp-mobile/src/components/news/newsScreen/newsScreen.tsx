@@ -15,21 +15,18 @@ type MyBerita = {
 
 export default function NewsScreen({ berita }: MyBerita) {
   return (
-    <div className="flex flex-col items-center mt-[24px] md:bg-primary-100 mb-[60px] md:mb-0 md:pb-[60px] md:mt-[56px]">
+    <div className="flex flex-col items-center mt-[24px]bg-primary-100 mb-[60px] md:mb-0 md:pb-[60px] md:mt-[56px]">
       <h3 className="text-primary-800 font-semibold text-[16px] md:text-[32px] mb-[32px]">
         Berita
       </h3>
 
-      <div className="flex flex-col md:flex-row md:flex-wrap justify-center gap-[20px] md:gap-[40px] md:mx-[70px]">
+      <div className="flex flex-col md:flex-row md:flex-wrap md:items-start justify-center gap-[20px] md:gap-4 md:mx-[70px]">
         {berita.map((news: Berita, i: number) => {
           return (
             <div
               key={i}
               className="md:flex md:flex-row md:flex-wrap md:gap-[8px]">
-              <CardNewsComponent key={i} news={news} />
-              <CardNewsComponent key={i} news={news} />
-              <CardNewsComponent key={i} news={news} />
-              <CardNewsComponent key={i} news={news} />
+              <CardNewsComponent news={news} />
             </div>
           );
         })}

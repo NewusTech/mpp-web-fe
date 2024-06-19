@@ -3,7 +3,7 @@ import React from "react";
 
 export default function BookingAntrianPage() {
   return (
-    <div className="bg-primary-100">
+    <div className="bg-primary-100 md:mb-0">
       <BookingAntrianScreen />
     </div>
   );
