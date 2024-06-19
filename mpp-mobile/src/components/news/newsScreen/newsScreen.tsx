@@ -20,7 +20,7 @@ export default function NewsScreen({ berita }: MyBerita) {
         Berita
       </h3>
 
-      <div className="flex flex-col md:flex-row md:flex-wrap md:items-start justify-center gap-[20px] md:gap-4 md:mx-[70px]">
+      <div className="flex flex-col md:flex-row md:flex-wrap md:items-center justify-center gap-[20px] md:gap-2 md:mx-[70px]">
         {berita.map((news: Berita, i: number) => {
           return (
             <div
