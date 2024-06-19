@@ -61,7 +61,7 @@ export default function PengaduanScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col bg-primary-100 mt-[48px] mx-[35px] md:mx-[170px] pb-[124px]">
+    <div className="flex flex-col bg-primary-100 mt-[48px] mx-[35px] md:mx-[170px] md:mb-0 pb-[124px] md:pb-[130px]">
       <div>
         <h1 className="text-[20px] md:text-[26px] text-primary-800 font-bold">
           Pengaduan Layanan
@@ -72,11 +72,7 @@ export default function PengaduanScreen() {
 
           <div className="flex flex-col">
             {!isWideScreen ? (
-              <>
-                <CardPengaduanComponent />
-                <CardPengaduanComponent />
-                <CardPengaduanComponent />
-              </>
+              <CardPengaduanComponent />
             ) : (
               <Table className="flex flex-col w-full">
                 <TableHeader className="flex w-full">

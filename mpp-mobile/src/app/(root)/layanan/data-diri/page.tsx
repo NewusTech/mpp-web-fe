@@ -127,7 +127,7 @@ export default function DataDiriPage() {
   };
 
   return (
-    <div className="bg-primary-100 md:mt-[56px]">
+    <div className="bg-primary-100 md:mt-[56px] md:mb-0 md:pb-8">
       <div className="flex items-center justify-center bg-primary-100 mx-[35px] md:mx-[250px] mt-[24px] mb-[30px] md:mb-0 md:pb-[30px]">
         <div className="flex flex-col md:w-full items-center gap-[16px] md:mb-8">
           <div className="flex flex-col md:flex-row md:justify-between md:w-full gap-[24px] md:mb-6">

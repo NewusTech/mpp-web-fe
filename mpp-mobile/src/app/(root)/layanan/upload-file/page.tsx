@@ -78,7 +78,7 @@ export default function UploadFilePage() {
   }, [permohonan.id]);
 
   return (
-    <div className="flex justify-center bg-primary-100 mt-[24px] md:mx-[250px] md:mb-0 md:pb-[285px]">
+    <div className="flex justify-center bg-primary-100 mt-[24px] md:mx-[250px] md:mb-0 md:pb-[385px]">
       <div className="flex flex-col md:w-full items-center gap-[12px]">
         <div className="flex flex-col md:w-full md:justify-between md:flex-row mb-[16px]">
           <div className="flex flex-col justify-center">

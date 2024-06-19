@@ -119,7 +119,7 @@ export default function StatisticsScreen() {
   };
 
   return (
-    <div className="flex items-center md:w-full justify-center pt-[24px] bg-primary-200 pb-[70px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
+    <div className="flex items-center md:w-full justify-center pt-[24px] bg-primary-100 pb-[70px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
       <div className="flex flex-col md:w-full gap-[10px] md:mx-[70px]">
         <div className="flex flex-col items-center md:flex-none md:grid md:grid-cols-2 md:w-full gap-[16px]">
           <div className="flex flex-col bg-white w-[290px] md:w-full shadow-xl rounded-2xl relative">

@@ -63,19 +63,27 @@ export default function BookingAntrianQRCodeScreen() {
 
           <ul className="list-disc list-inside ml-[12px]">
             <li className="text-[12px] md:text-[16px] text-[#656565] font-normal">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Perlu mencantumkan nama lengkap, nomor kontak yang bisa dihubungi,
+              dan jika diperlukan, nomor identitas seperti KTP atau paspor.
             </li>
 
             <li className="text-[12px] md:text-[16px] text-[#656565] font-normal">
-              Pariatur aperiam ullam consequatur impedit et est facilis
+              Menentukan jenis layanan yang dibutuhkan untuk memastikan antrian
+              yang sesuai.
             </li>
 
             <li className="text-[12px] md:text-[16px] text-[#656565] font-normal">
-              tempora quaerat reiciendis a officiis, quibusdam error ratione
+              Memilih waktu dan tanggal preferensi untuk kunjungan.
             </li>
 
             <li className="text-[12px] md:text-[16px] text-[#656565] font-normal">
-              corporis cum molestiae porro fuga dicta!
+              Proses untuk mengonfirmasi booking, baik melalui email, SMS, atau
+              aplikasi khusus.
+            </li>
+
+            <li className="text-[12px] md:text-[16px] text-[#656565] font-normal">
+              Setuju terhadap syarat dan ketentuan yang berlaku dalam penggunaan
+              layanan booking antrian.
             </li>
           </ul>
         </div>

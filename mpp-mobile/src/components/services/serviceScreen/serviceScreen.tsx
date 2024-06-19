@@ -28,15 +28,8 @@ export default function ServiceScreen({ instansi, change, search }: any) {
         <div className="flex flex-col md:w-full md:flex-wrap md:justify-center md:gap-[16px] md:flex-row gap-[16px]">
           {instansi.length > 0 ? (
             <>
-              {instansi.map((layanan: Layanantype) => {
-                return (
-                  <>
-                    <CardLayananComponent key={layanan.id} layanan={layanan} />
-                    <CardLayananComponent key={layanan.id} layanan={layanan} />
-                    <CardLayananComponent key={layanan.id} layanan={layanan} />
-                    <CardLayananComponent key={layanan.id} layanan={layanan} />
-                  </>
-                );
+              {instansi.map((layanan: Layanantype, i: number) => {
+                return <CardLayananComponent key={i} layanan={layanan} />;
               })}
             </>
           ) : (

@@ -15,7 +15,7 @@ export default function NewsDetailScreen({ berita }: Berita) {
   const date = formatLongDate(berita.createdAt);
 
   return (
-    <div className="flex items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-[56px] mx-[35px] md:mx-0 md:px-[70px] mb-[107px] md:mb-0 md:pb-[107px] md:bg-primary-100">
+    <div className="flex items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-[56px] mx-[35px] md:mx-0 md:px-[70px] mb-[107px] md:mb-0 md:pb-[107px] bg-primary-100">
       <div className="flex flex-col md:flex-row items-center md:items-start md:justify-start gap-[16px]">
         <div className="flex w-full self-center md:self-start">
           <Image

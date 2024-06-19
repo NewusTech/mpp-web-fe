@@ -84,7 +84,7 @@ export default function LayoutInput({
             opacity
               ? "text-neutral-900 text-[14px]"
               : "text-gray-500 opacity-50"
-          } flex appearance-none w-full border border-neutral-800 pl-[16px] h-[36px] text-[12px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed`}
+          } flex appearance-none w-full border border-neutral-800 pl-[16px] h-[36px] md:h-[50px] text-[12px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed`}
         />
       </>
     );

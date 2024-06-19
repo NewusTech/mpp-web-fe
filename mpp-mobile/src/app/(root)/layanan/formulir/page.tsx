@@ -83,7 +83,7 @@ export default function FormulirPage() {
   };
 
   return (
-    <div className="bg-primary-100 pt-2 md:mt-[48px]">
+    <div className="bg-primary-100 pt-2 md:mt-[48px] md:mb-0 md:pb-8">
       <div className="flex items-center justify-center bg-primary-100 mt-[14px] md:mt-[48px] mx-[35px] md:mx-[250px] mb-[35px] md:mb-0 md:pb-[80px]">
         <div className="flex flex-col md:w-full gap-[16px]">
           <div className="flex flex-col md:flex-row md:justify-between gap-[24px] md:gap-0">
