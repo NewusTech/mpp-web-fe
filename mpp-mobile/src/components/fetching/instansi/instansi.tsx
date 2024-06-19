@@ -2,12 +2,16 @@
 
 import Cookies from "js-cookie";
 
-export default async function fetchInstansi(search: string) {
+export default async function fetchInstansi(
+  search: string,
+  page = 1,
+  limit = 8
+) {
   const token = Cookies.get("Authorization");
 
   if (search) {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/instansi/get?search=${search}`,
+      `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/instansi/get?search=${search}&page=${page}&limit=${limit}`,
       {
         method: "GET",
         headers: {
@@ -20,7 +24,7 @@ export default async function fetchInstansi(search: string) {
     return response.json();
   } else {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/instansi/get`,
+      `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/instansi/get?page=${page}&limit=${limit}`,
       {
         method: "GET",
         headers: {

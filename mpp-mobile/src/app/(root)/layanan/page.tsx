@@ -17,7 +17,7 @@ export default function LayananPage() {
 
   const fetchLayanan = async (search: string) => {
     try {
-      const res = await fetchInstansi(search);
+      const res = await fetchInstansi(search, 1, 12);
 
       setInstansi(res.data || []);
     } catch (error) {
