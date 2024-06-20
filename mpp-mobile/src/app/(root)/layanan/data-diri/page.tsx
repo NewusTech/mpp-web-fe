@@ -84,9 +84,9 @@ export default function DataDiriPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: info.name,
-      telepon: info.telepon,
-      alamat: info.alamat,
+      name: info?.name,
+      telepon: info?.telepon,
+      alamat: info?.alamat,
     },
   });
 
@@ -197,10 +197,10 @@ export default function DataDiriPage() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-none w-full my-[4px] md:mb-2">
+                    <div className="grid grid-cols-1 md:grid-cols-none w-full my-[4px] md:mb-2">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[258px] md:w-full h-[74px] md:h-[125px] text-[14px]"
+                        classStyle="w-full md:w-full rounded-xl h-[74px] md:h-[125px] text-[14px]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold md:font-normal"
                         placeholder="Jl. Pangeran Antasari"
                         label="Alamat"

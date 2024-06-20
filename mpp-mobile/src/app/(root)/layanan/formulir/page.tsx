@@ -8,7 +8,9 @@ import { setDataInput } from "@/store/action/actionPermohonanLayanan";
 import { RootState } from "@/store/store";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { useDispatch, useSelector } from "react-redux";
+import Image from "next/image";
 
 type LayananFormType = {
   id: number;
@@ -113,32 +115,46 @@ export default function FormulirPage() {
                 Formulir
               </h5>
 
-              <div className="flex flex-col md:w-full mt-[32px]">
-                <div className="flex flex-col md:w-full mb-[8px] gap-3">
-                  {form?.Layananforms?.map((el: LayananFormType, i: number) => {
-                    return (
-                      <div key={i} className="space-y-2">
-                        <LayoutInput
-                          typeForm={el.tipedata}
-                          labelName={el.field}
-                          change={change}
-                          nameForm={el.field}
-                          valueForm={formValues[el.field] || ""}
-                          placeholder="Kirim Jawaban!"
-                          opacity={changeOpacity}
-                          dataRadio={el.datajson}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+              {form?.Layananforms ? (
+                <div className="flex flex-col w-full md:w-full mt-[32px]">
+                  <div className="flex flex-col w-full md:w-full mb-[8px] gap-3">
+                    {form?.Layananforms?.map(
+                      (el: LayananFormType, i: number) => {
+                        return (
+                          <div key={i} className="space-y-2 w-full">
+                            <LayoutInput
+                              typeForm={el.tipedata}
+                              labelName={el.field}
+                              change={change}
+                              nameForm={el.field}
+                              valueForm={formValues[el.field] || ""}
+                              placeholder="Kirim Jawaban!"
+                              opacity={changeOpacity}
+                              dataRadio={el.datajson}
+                            />
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
 
-              <div className="flex self-center md:justify-center h-[40px] w-[120px] md:w-full mb-[19px] mt-[16px]">
-                <Button type="submit" variant="success" onClick={handleClick}>
-                  <Link href="/layanan/upload-file">Lanjut</Link>
-                </Button>
-              </div>
+                  <div className="flex self-center md:justify-center h-[40px] w-[120px] md:w-full mb-[19px] mt-[16px]">
+                    <Button
+                      type="submit"
+                      variant="success"
+                      onClick={handleClick}>
+                      <Link href="/layanan/upload-file">Lanjut</Link>
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="container mx-auto mt-7 flex flex-col md:w-full justify-center items-center w-full h-full pb-16">
+                  <Image src={backHome} width={300} height={300} alt="sad" />
+                  <p className="text-center text-neutral-900 text-[20px] md:text-[32px] font-thin mt-8 mb-8">
+                    Data tidak ditemukan!
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

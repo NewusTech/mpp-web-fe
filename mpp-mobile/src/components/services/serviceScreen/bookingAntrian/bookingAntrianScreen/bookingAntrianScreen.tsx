@@ -43,17 +43,17 @@ export default function BookingAntrianScreen() {
   };
 
   return (
-    <div className="flex justify-center bg-primary-100 md:mx-[170px] mt-[53.5px] mb-[120px] md:mb-0 md:pb-[100px]">
-      <div className="flex w-full md:w-full flex-col items-center mx-6">
+    <div className="flex w-full justify-center bg-primary-100 px-[35px] md:px-[75px] mt-[53.5px] mb-[170px] md:mb-0 md:pb-[130px]">
+      <div className="flex w-full h-full md:w-full flex-col items-center">
         <div className="md:w-full">
           <h5 className="text-[20px] md:text-[32px] font-semibold text-primary-800">
             Booking Antrian
           </h5>
         </div>
 
-        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-[32px] bg-white rounded-2xl shadow-lg">
-          <form className="flex flex-col w-full px-[16px] md:px-[105px]">
-            <div className="flex flex-col w-full items-center mb-[10px] md:mb-[20px] mx-[1px] md:mt-[62px]">
+        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-white rounded-2xl shadow-lg">
+          <form className="flex flex-col w-full md:px-[105px]">
+            <div className="flex flex-col w-full items-center mt-8 mb-[10px] md:mb-[20px] mx-[1px] md:mt-[62px]">
               <Select name="layanan_id" onValueChange={handleSelectChangeDinas}>
                 <SelectTrigger
                   className={`${
@@ -71,7 +71,7 @@ export default function BookingAntrianScreen() {
                         return (
                           <SelectItem
                             key={i}
-                            className="pr-none"
+                            className="pr-none text-neutral-900"
                             value={service.id.toString()}>
                             {service.name}
                           </SelectItem>

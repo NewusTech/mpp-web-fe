@@ -16,9 +16,11 @@ export default function AuthLayout({
 }>) {
   return (
     <Provider store={store}>
-      <div className={`${poppins.className} h-full w-screen`}>
-        {children}
-        <Toaster position="top-center" />
+      <div className={`${poppins.className} h-screen w-screen`}>
+        <div className="flex-1 overflow-y-auto">
+          {children}
+          <Toaster position="top-center" />
+        </div>
       </div>
     </Provider>
   );

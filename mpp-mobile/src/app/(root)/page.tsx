@@ -32,7 +32,7 @@ type MyBerita = {
 type Instansi = {
   id: number;
   name: string;
-  image: string;
+  image?: string;
   slug: string;
   jmlLayanan: number;
 };
@@ -96,27 +96,41 @@ function Home() {
     fetchAll(search);
   }, [search]);
 
-  const date = formatDate("2024-06-15T08:36:14.883Z");
+  let date = "";
 
-  const image = berita?.data[0].image;
-  const slug = berita?.data[0].slug;
+  if (berita?.data[0].createdAt) {
+    date = formatDate(`${berita?.data[berita.data.length - 1].createdAt}`);
+  }
+
+  const image = berita?.data[berita.data.length - 1].image;
+  const slug = berita?.data[berita.data.length - 1].slug;
+
+  const photos = layanan?.data.map((service: Instansi) => {
+    return service.image;
+  });
+
+  console.log(berita, "???");
 
   return (
-    <div className="bg-[#F7FBF7] min-w-[360px] h-full pb-[96px]">
+    <div className="bg-[#F7FBF7] w-full h-full mb-[24px] md:pb-[75px]">
       <div className="bg-[#F7FBF7]">
         <HeroScreen />
 
         <AboutScreen />
 
-        <div className="flex flex-col mt-[56px] justify-center items-center">
+        <div className="flex w-full px-[35px] flex-col mt-[56px] justify-center items-center">
           <h4 className="text-primary-800 md:text-[32px] text-center text-[16px] font-bold md:mb-[32px]">
             Instansi Layanan MPP
           </h4>
 
-          <div className="flex flex-col flex-wrap justify-center md:flex-row md:flex-wrap md:mx-[70px] items-center gap-[18px] md:gap-5 my-[16px]">
-            {layanan?.data?.map((el: Instansi, i: number) => {
-              return <CardLayananComponent key={i} layanan={el} />;
-            })}
+          <div className="flex flex-col w-full flex-wrap justify-center md:flex-row md:mx-[70px] items-center gap-[18px] md:gap-5 my-[16px]">
+            {photos && (
+              <>
+                {layanan?.data?.map((el: Instansi, i: number) => {
+                  return <CardLayananComponent key={i} layanan={el} />;
+                })}
+              </>
+            )}
           </div>
 
           <Link
@@ -128,36 +142,36 @@ function Home() {
           </Link>
         </div>
 
-        <div className="flex flex-col items-center mt-[56px]">
+        <div className="flex w-full flex-col items-center px-[35px] mt-[56px] md:px-[70px]">
           <h3 className="text-primary-800 text-[16px] md:text-[32px] mb-[16px] font-semibold">
             Fasilitas
           </h3>
 
-          <div className="flex flex-col md:flex-row flex-wrap justify-center gap-[16px]">
+          <div className="flex flex-col w-full md:flex-row md:grid md:grid-cols-3 flex-wrap justify-center gap-[16px]">
             {facilities?.data?.map((el: Facility, i: number) => {
               return (
                 <Image
                   key={i}
-                  className="w-[290px] md:w-[370px] md:h-[295px] h-[180px] rounded-xl"
+                  className="w-full md:w-full md:h-[295px] h-[180px] rounded-xl"
                   src={el.image}
                   alt="Facilities"
-                  width={290}
-                  height={180}
+                  width={100}
+                  height={100}
                 />
               );
             })}
           </div>
         </div>
 
-        <div className="flex flex-col items-center mt-[56px]">
+        <div className="flex flex-col items-center mt-[56px] px-[35px md:px-0 md:mx-[70px]">
           <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px] md:mb-[36px]">
             Berita
           </h3>
 
-          <div className="hidden md:block md:w-full md:flex-col md:mx-[70px]">
-            <div className="md:flex md:flex-rows md:mx-[70px] md:gap-[32px]">
+          <div className="hidden md:block md:w-full md:flex-col">
+            <div className="md:flex md:flex-rows md:w-full md:gap-[32px]">
               {slug && (
-                <Link href={`/berita/${slug}`} className="md:w-full">
+                <Link href={`/berita/${slug}`} className="md:w-6/12">
                   {image && (
                     <Image
                       className="md:w-full md:h-[410px] md:rounded-2xl"
@@ -173,7 +187,7 @@ function Home() {
               {slug && (
                 <Link
                   href={`/berita/${slug}`}
-                  className="md:flex md:flex-col md:items-center md:gap-[16px]">
+                  className="md:flex md:flex-col md:items-center md:w-6/12 md:gap-[16px]">
                   <div className="md:flex md:flex-col md:gap-[8px]">
                     <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
                       {beritaSlug?.title}
@@ -192,8 +206,8 @@ function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col md:w-full md:justify-start items-center md:mt-6 md:px-[70px]">
-            <div className="flex flex-col md:w-full md:flex-row flex-wrap md:justify-between gap-[16px] md:gap-0">
+          <div className="flex flex-col w-full px-[35px] md:px-0 md:w-full items-center md:mt-6">
+            <div className="flex flex-col w-full md:w-full md:flex-row md:grid md:grid-cols-4 flex-wrap md:justify-between gap-[16px] md:gap-6">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}

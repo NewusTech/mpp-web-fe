@@ -26,10 +26,11 @@ const steps = [
 const currentStep = 1;
 
 function splitByNumberedItems(text: string) {
-  const splitText = text
-    .split(/(?=\d+\.\s)/)
-    .map((item: string) => item.trim());
-  return splitText;
+  let splitText = [""];
+  if (text) {
+    splitText = text.split(/(?=\d+\.\s)/).map((item: string) => item.trim());
+    return splitText;
+  }
 }
 
 export default function PermohonanLayananFirstScreen({
@@ -70,10 +71,8 @@ export default function PermohonanLayananFirstScreen({
     content.push(result);
   }
 
-  console.log(content, "???");
-
   return (
-    <div className="flex items-center justify-center mt-[24px] md:mt-[48px] md:mx-[167px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[135px]">
+    <div className="flex items-center justify-center mt-[24px] md:mt-[48px] md:mx-[167px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
       <div className="flex flex-col md:w-full items-center mx-[35px] gap-[16px]">
         <div className="flex flex-col md:w-full">
           <div className="flex flex-col md:flex-row md:justify-between w-[300px] md:w-full h-[50px] md:h-6 gap-[24px]">
@@ -124,7 +123,7 @@ export default function PermohonanLayananFirstScreen({
 
           {selectedService && (
             <div className="list-disc list-inside ml-[8px]">
-              {content[0].map((item: string, i: number) => {
+              {content[0]?.map((item: string, i: number) => {
                 return (
                   <div
                     key={i}

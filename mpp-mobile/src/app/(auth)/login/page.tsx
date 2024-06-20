@@ -119,10 +119,10 @@ export default function LoginScreen() {
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-2">
               <div className="flex flex-col gap-[8px]">
-                <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal outline outline-1 outline-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
+                <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal border border-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
                   <FormComponents
                     form={form.control}
-                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[40px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
+                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="NIK"
                     label="login"
@@ -135,10 +135,10 @@ export default function LoginScreen() {
                   </div>
                 </div>
 
-                <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal outline outline-1 outline-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
+                <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal border border-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
                   <FormComponents
                     form={form.control}
-                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[40px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
+                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
                     labelStyle="text-[12px] text-neutral-900 font-semibold"
                     placeholder="Password"
                     label="login"

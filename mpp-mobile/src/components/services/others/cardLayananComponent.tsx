@@ -17,7 +17,7 @@ interface Layanantype {
   layanan: {
     id: number;
     name: string;
-    image: string;
+    image?: string;
     slug: string;
     jmlLayanan: number;
   };
@@ -26,14 +26,14 @@ interface Layanantype {
 export default function CardLayananComponent({ layanan }: Layanantype) {
   const token = Cookies.get("Authorization");
   return (
-    <div className="flex flex-col items-center justify-center w-[270px] outline outline-2 outline-[#C4C4C4] bg-[#F7F7F7] shadow-xl rounded-2xl">
+    <div className="flex flex-col items-center justify-center w-full md:w-[300px] outline outline-2 outline-[#C4C4C4] bg-[#F7F7F7] shadow-xl rounded-2xl">
       <div className="flex flex-col items-center justify-center w-[270px] h-[296px]">
         <Link
           href={`/layanan/${layanan.slug}`}
           className="h-[135px] w-full flex items-center justify-center">
           <Image
-            src={layanan.image}
-            className="h-[107px] object-contain"
+            src={layanan?.image || ""}
+            className="h-[107px] object-fit"
             alt="Lampung Timur"
             width={80}
             height={106.12}
@@ -53,7 +53,7 @@ export default function CardLayananComponent({ layanan }: Layanantype) {
         </div>
       </div>
 
-      <div className="flex flex-row text-center items-center justify-center w-[270px] h-[50px] gap-[1px]">
+      <div className="flex flex-row text-center items-center justify-center w-full md:w-[300px] h-[50px] gap-[1px]">
         {!token ? (
           <Dialog>
             <DialogTrigger asChild>

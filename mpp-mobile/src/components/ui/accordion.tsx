@@ -24,7 +24,7 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex w-[300px] md:px-[70px] md:w-full md:mx-[70px] h-[40px] md:h-[80px] px-[16px] data-[state=closed]:rounded-xl bg-primary-700 text-secondary-700 text-[10px] md:text-[20px] font-semibold items-center justify-between py-4 transition-all hover:underline [&[data-state=open]>svg]:rotate-180 data-[state=open]:rounded-t-xl",
+        "flex w-full text-start md:px-[70px] md:w-full h-[40px] md:h-[80px] px-[16px] data-[state=closed]:rounded-xl bg-primary-700 text-secondary-700 text-[10px] md:text-[20px] font-semibold items-center justify-between py-4 transition-all hover:underline [&[data-state=open]>svg]:rotate-180 data-[state=open]:rounded-t-xl",
         className
       )}
       {...props}>
@@ -45,7 +45,7 @@ const AccordionContent = React.forwardRef<
     {...props}>
     <div
       className={cn(
-        "bg-neutral-300 md:mx-[70px] rounded-b-xl text-[10px] md:text-[16px] text-black font-normal text-center px-[16px] py-[16px]",
+        "bg-neutral-300 rounded-b-xl text-[10px] md:text-[16px] text-black font-normal text-center px-[16px] py-[16px]",
         className
       )}>
       {children}
