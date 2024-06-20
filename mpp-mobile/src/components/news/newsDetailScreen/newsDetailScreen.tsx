@@ -20,7 +20,7 @@ export default function NewsDetailScreen({ berita }: Berita) {
         <div className="flex w-full self-center md:self-start">
           <Image
             src={berita.image}
-            className="flex w-[290px] md:w-[726px] h-[210px] md:h-[512px] md:rounded-xl"
+            className="flex w-full h-full md:rounded-xl"
             alt="Berita"
             width={290}
             height={210}

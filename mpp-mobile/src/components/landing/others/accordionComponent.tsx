@@ -17,9 +17,11 @@ export default function AccordingComponent({ faq }: faqType) {
   return (
     <div className="md:w-full">
       <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
+        <AccordionItem className="w-full h-full" value="item-1">
           <AccordionTrigger>{faq.question}</AccordionTrigger>
-          <AccordionContent>{faq.answer}</AccordionContent>
+          <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+            {faq.answer}
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

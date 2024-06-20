@@ -34,7 +34,7 @@ export default function FAQScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center mt-[56px]">
+    <div className="flex w-full flex-col items-center mt-[56px]">
       <div className="flex flex-col items-center gap-[8px]">
         <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px]">
           FAQ MPP
@@ -45,7 +45,7 @@ export default function FAQScreen() {
         </p>
       </div>
 
-      <div className="flex flex-col md:w-full justify-center gap-[8px] mt-[16px] mx-[30px] md:mx-[70px]">
+      <div className="flex flex-col md:w-full justify-center gap-[8px] mt-[16px] px-[30px] md:px-[70px]">
         {faqs.map((faq: faqType, i: number) => {
           return <AccordingComponent key={i} faq={faq} />;
         })}

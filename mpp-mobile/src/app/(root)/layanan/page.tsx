@@ -6,7 +6,7 @@ import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";
 
 interface Instansi {
-  image: string;
+  image?: string;
   name: string;
 }
 

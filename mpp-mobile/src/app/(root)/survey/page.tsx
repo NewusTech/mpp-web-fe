@@ -168,11 +168,11 @@ export default function SurveySkmPage() {
                 name="tanggal"
                 value={date}
                 onChange={handleChangeDate}
-                className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                className={`w-full pl-4 h-[40px] rounded-none border-b bg-none border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
                   ${
                     changeOpacity
                       ? "text-neutral-900"
-                      : "text-gray-500 opacity-50"
+                      : "text-neutral-900 opacity-50"
                   }`}
                 placeholder="Tanggal"
                 style={{

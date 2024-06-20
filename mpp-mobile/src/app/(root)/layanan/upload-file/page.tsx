@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
+import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Link from "next/link";
+import Image from "next/image";
 
 type LayananFormType = {
   id: number;
@@ -103,42 +105,51 @@ export default function UploadFilePage() {
 
         <div className="flex flex-col md:w-full">
           <div className="flex flex-col md:w-full">
-            <form className="flex flex-col items-center md:w-full">
-              {dataFile?.Layananforms?.map((el: LayananFormType) => (
-                <div
-                  key={el.id}
-                  className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-[#7BBA78] px-[16px]">
-                  <div className="flex flex-col w-[152px] md:w-full justify-center gap-[9px]">
-                    <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
-                      {el.field}
-                    </h6>
-                    <p className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
-                      {dataFile.desc}
-                    </p>
+            {dataFile?.Layananforms ? (
+              <form className="flex flex-col items-center md:w-full">
+                {dataFile?.Layananforms?.map((el: LayananFormType) => (
+                  <div
+                    key={el.id}
+                    className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-[#7BBA78] px-[16px]">
+                    <div className="flex flex-col w-[152px] md:w-full justify-center gap-[9px]">
+                      <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
+                        {el.field}
+                      </h6>
+                      <p className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
+                        {dataFile.desc}
+                      </p>
+                    </div>
+                    <div className="flex self-center">
+                      <input
+                        id="fileInput"
+                        type="file"
+                        placeholder="Upload"
+                        className="md:appearance-none hidden"
+                        onChange={handleFileChange}
+                      />
+                      <label
+                        htmlFor="fileInput"
+                        className="flex items-center w-[80px] md:w-[230px] h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
+                        {fileName}
+                      </label>
+                    </div>
                   </div>
-                  <div className="flex self-center">
-                    <input
-                      id="fileInput"
-                      type="file"
-                      placeholder="Upload"
-                      className="md:appearance-none hidden"
-                      onChange={handleFileChange}
-                    />
-                    <label
-                      htmlFor="fileInput"
-                      className="flex items-center w-[80px] md:w-[230px] h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
-                      {fileName}
-                    </label>
-                  </div>
-                </div>
-              ))}
+                ))}
 
-              <div className="h-[40px] w-[150px] md:w-full flex self-center justify-center items-end mb-[22px] mt-[16px] md:mt-[24px]">
-                <Button type="submit" variant="success">
-                  <Link href="/riwayat"> Ajukan</Link>
-                </Button>
+                <div className="h-[40px] w-[150px] md:w-full flex self-center justify-center items-end mb-[22px] mt-[16px] md:mt-[24px]">
+                  <Button type="submit" variant="success">
+                    <Link href="/riwayat"> Ajukan</Link>
+                  </Button>
+                </div>
+              </form>
+            ) : (
+              <div className="container mx-auto mt-7 flex flex-col md:w-full justify-center items-center w-full h-full pb-16">
+                <Image src={backHome} width={300} height={300} alt="sad" />
+                <p className="text-center text-neutral-900 text-[20px] md:text-[32px] font-thin mt-8 mb-10">
+                  Data tidak ditemukan!
+                </p>
               </div>
-            </form>
+            )}
           </div>
         </div>
       </div>

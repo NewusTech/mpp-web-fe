@@ -8,7 +8,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-// import required modules
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
 export default function HeroScreen() {
@@ -26,7 +25,7 @@ export default function HeroScreen() {
         </p>
       </div>
 
-      <div className="pt-[20px] md:w-[50%] md:self-end md:flex md:pr-[35px]">
+      <div className="pt-[20px] w-full md:w-[50%] md:self-end md:flex md:pr-[35px]">
         <Swiper
           pagination={{ clickable: true }}
           navigation={true}

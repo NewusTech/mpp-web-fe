@@ -53,7 +53,20 @@ const grafikBulanans = [
   },
 ];
 
-export default function StatisticsScreen() {
+interface StatistikType {
+  statistik: {
+    countPerYear: {};
+    formattedCountByInstansi: [
+      {
+        name: string;
+        permohonan_count: number;
+        skm_count: number;
+      }
+    ];
+  };
+}
+
+export default function StatisticsScreen({ statistik }: StatistikType) {
   const data = 700 + 300 + 1394;
   const months = [
     "Januari",

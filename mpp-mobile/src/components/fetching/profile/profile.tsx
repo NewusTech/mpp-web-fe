@@ -6,7 +6,7 @@ export default async function fetchProfile(id: number) {
   const token = Cookies.get("Authorization");
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/alluserinfo/get/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/getforuser`,
     {
       method: "GET",
       headers: {

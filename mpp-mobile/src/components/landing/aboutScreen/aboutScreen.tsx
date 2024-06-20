@@ -1,6 +1,6 @@
 export default function AboutScreen() {
   return (
-    <div className="flex flex-col justify-center mt-[14px] bg-neutral-50 md:bg-[#F7FBF7] md:mt-0 md:pt-[25px]">
+    <div className="flex flex-col justify-center mt-[14px] bg-neutral-100 md:mt-0 md:pt-[25px]">
       <div className="grid grid-cols-4 mx-[35px]">
         <div className="grid grid-rows-2 place-items-center mr-[10px]">
           <div className="flex items-center justify-center w-[50px] h-[50px] bg-[#FEFEFE] rounded-[50%] shadow-lg md:w-[150px] md:h-[150px]">

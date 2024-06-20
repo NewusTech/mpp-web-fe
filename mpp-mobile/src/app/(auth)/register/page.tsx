@@ -140,10 +140,10 @@ export default function RegisterScreen() {
                   </h5>
 
                   <div className="grid grid-rows-4 md:w-full gap-4 place-items-center md:place-items-start">
-                    <div className="md:w-full">
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Nama Lengkap"
                         label="register"
@@ -152,10 +152,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div className="md:w-full">
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="NIK"
                         label="register"
@@ -164,10 +164,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div className="md:w-full">
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Nomor Telepon"
                         label="register"
@@ -176,10 +176,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div className="md:w-full">
+                    <div className="md:w-full w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[225px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Email"
                         label="register"
@@ -191,7 +191,7 @@ export default function RegisterScreen() {
                     <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal outline outline-1 outline-neutral-700 placeholder:text-[14px] placeholder:text-neutral-700">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-full md:w-full pl-[16px] h-[40px] border-none outline-none text-[14px] mr-4 placeholder:opacity-[70%]"
+                        classStyle="w-full rounded-[50px] outline-none border-none md:w-full pl-[16px] h-[40px] border-none outline-none text-[14px] mr-4 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Password"
                         label="register"
@@ -215,21 +215,23 @@ export default function RegisterScreen() {
                     Alamat
                   </h3>
 
-                  <div className="flex flex-col md:w-full space-y-4 place-items-center md:place-items-start">
-                    <div className="grid grid-cols-2 md:w-full gap-[16px]">
+                  <div className="grid grid-rows-4 md:w-full gap-4 place-items-center md:place-items-start">
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Kecamatan"
                         label="register"
                         type="text"
                         name="kec"
                       />
+                    </div>
 
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Desa"
                         label="register"
@@ -237,21 +239,22 @@ export default function RegisterScreen() {
                         name="desa"
                       />
                     </div>
-
-                    <div className="grid grid-cols-2 md:w-full gap-[16px]">
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="RT"
                         label="register"
                         type="text"
                         name="rt"
                       />
+                    </div>
 
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[105px] md:w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        classStyle="w-full pl-[16px] h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="RW"
                         label="register"
@@ -260,10 +263,10 @@ export default function RegisterScreen() {
                       />
                     </div>
 
-                    <div className="md:w-full">
+                    <div className="w-full">
                       <FormComponents
                         form={form.control}
-                        classStyle="w-[226px] md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
+                        classStyle="w-full rounded-3xl md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                         placeholder="Alamat"
                         label="register"
