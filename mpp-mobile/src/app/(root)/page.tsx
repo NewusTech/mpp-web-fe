@@ -70,20 +70,6 @@ function Home() {
 
       const fasilitas = await facilitiesFetch();
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/artikel/get/mall-pelayanan-publik-lampung-timur-dibuka-tahun-2024`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-        }
-      );
-
-      const result = await response.json();
-
-      SetBeritaSlug(result.data);
       setBerita(news);
       setLayanan(layanan);
       setFacilities(fasilitas);
@@ -104,12 +90,12 @@ function Home() {
 
   const image = berita?.data[berita.data.length - 1].image;
   const slug = berita?.data[berita.data.length - 1].slug;
+  const desc = berita?.data[berita.data.length - 1].desc;
+  const title = berita?.data[berita.data.length - 1].title;
 
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
   });
-
-  console.log(berita, "???");
 
   return (
     <div className="bg-[#F7FBF7] w-full h-full mb-[24px] md:pb-[75px]">
@@ -190,7 +176,7 @@ function Home() {
                   className="md:flex md:flex-col md:items-center md:w-6/12 md:gap-[16px]">
                   <div className="md:flex md:flex-col md:gap-[8px]">
                     <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
-                      {beritaSlug?.title}
+                      {title}
                     </h3>
 
                     <p className="md:text-[#000000] md:text-[16px] md:font-light">
@@ -199,7 +185,7 @@ function Home() {
                   </div>
 
                   <h5 className="md:text-[20px] md:text-black md:font-light">
-                    {beritaSlug?.desc}
+                    {desc}
                   </h5>
                 </Link>
               )}

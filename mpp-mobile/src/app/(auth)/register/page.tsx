@@ -11,9 +11,6 @@ import { toast } from "sonner";
 import FormComponents from "@/components/others/formComponents/formComponents";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Dispatch } from "redux";
-import { useDispatch } from "react-redux";
-import { userRegister } from "@/store/action/actionRegister";
 import { Eye, EyeOff } from "lucide-react";
 
 const raleway = Raleway({
@@ -49,7 +46,6 @@ const formSchema = z.object({
 });
 
 export default function RegisterScreen() {
-  const dispatch: Dispatch<any> = useDispatch();
   const router = useRouter();
   const [seen, setSeen] = useState(true);
 
@@ -94,7 +90,19 @@ export default function RegisterScreen() {
     };
 
     try {
-      dispatch(userRegister(formData));
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+          cache: "no-store",
+        }
+      );
+
+      const result = await response.json();
 
       toast.success("Berhasil membuat akun, silahkan login", {
         duration: 1000,
