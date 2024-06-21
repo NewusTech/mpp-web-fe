@@ -24,15 +24,19 @@ export const surveySlice = createSlice({
   reducers: {
     setDinasId: (state, action: PayloadAction<number>) => {
       state.dinasId = action.payload;
+      localStorage.setItem("dinasId", action.payload.toString());
     },
     setLayananId: (state, action: PayloadAction<number>) => {
       state.layananId = action.payload;
+      localStorage.setItem("layananId", action.payload.toString());
     },
     setTanggal: (state, action: PayloadAction<string>) => {
       state.tanggal = action.payload;
+      localStorage.setItem("dataTanggal", action.payload);
     },
     setDataSurvei: (state, action: PayloadAction<DataInputSurvey[]>) => {
       state.datainput = action.payload;
+      localStorage.setItem("dataSurvei", JSON.stringify(action.payload));
     },
   },
 });

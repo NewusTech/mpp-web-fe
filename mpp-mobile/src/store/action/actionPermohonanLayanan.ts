@@ -22,6 +22,7 @@ export const PermohonanSlice = createSlice({
   reducers: {
     setId: (state, action: PayloadAction<number>) => {
       state.id = action.payload;
+      localStorage.setItem("instanceId", action.payload.toString());
     },
     setDataInput: (state, action: PayloadAction<DataInput[]>) => {
       state.datainput = action.payload;
