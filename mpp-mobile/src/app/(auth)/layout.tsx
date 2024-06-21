@@ -1,9 +1,7 @@
 "use client";
-import { persistor, store } from "@/store/store";
+
 import { Poppins } from "next/font/google";
-import { Provider } from "react-redux";
 import { Toaster } from "sonner";
-import { PersistGate } from "redux-persist/integration/react";
 
 const poppins = Poppins({
   subsets: ["latin"],
