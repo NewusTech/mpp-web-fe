@@ -111,6 +111,8 @@ export default function ProfileEditPage({
     }
   }, [isDataFetched, detail, form]);
 
+  console.log(detail, ">>>");
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const formData = {
       name: values.name,
@@ -125,13 +127,15 @@ export default function ProfileEditPage({
     };
 
     try {
-      dispatch(updateProfileUser(formData, detail?.id ?? 0));
+      dispatch(updateProfileUser(formData, detail?.id || 0));
       await fetchUser(params.id);
-      router.push(`/profile/${params.id}`);
+      // router.push(`/profile/${params.id}`);
     } catch (error) {
       toast("Gagal mengupdate data!");
     }
   };
+
+  console.log(detail, "ini mau update");
 
   return (
     <div className="flex items-center justify-center pb-[36px] bg-primary-100 mt-[24px] md:mt-[32px] md:mb-0 md:pb-[56px]">

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Link from "next/link";
 import Image from "next/image";
+import { toast } from "sonner";
 
 type LayananFormType = {
   id: number;
@@ -30,6 +31,18 @@ type FormType = {
   data: LayananType;
 };
 
+interface FormData {
+  id: string;
+  field: string;
+  tipedata: string;
+  datajson?: { id: string; key: string }[];
+}
+
+interface DocData {
+  id: string;
+  field: string;
+}
+
 const steps = [
   { id: 1, title: "1" },
   { id: 2, title: "2" },
@@ -40,22 +53,14 @@ const currentStep = 4;
 
 export default function UploadFilePage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
-  const dispatch = useDispatch();
   const [dataFile, setDataFile] = useState<LayananType | null>(null);
-
+  const [docValues, setDocValues] = useState<Record<string, File | null>>({});
   const router = useRouter();
   const token = Cookies.get("Authorization");
 
   const [fileName, setFileName] = useState("Upload");
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileName(file.name);
-    } else {
-      setFileName("Upload");
-    }
-  };
+  console.log(permohonan, "ini apa dong");
 
   const fetchFile = async (id: number) => {
     const response = await fetch(
@@ -79,8 +84,76 @@ export default function UploadFilePage() {
     fetchFile(permohonan.id);
   }, [permohonan.id]);
 
+  console.log(dataFile, "ini data file");
+
+  const handleDocChange = (id: string, file: File | null) => {
+    setDocValues((prevValues) => ({
+      ...prevValues,
+      [id]: file,
+    }));
+  };
+
+  const resultDocs = dataFile?.Layananforms || [];
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    permohonan.datainput.map(
+      (input: { layananform_id: number; data: string | [] }, i: number) => {
+        Object.entries(input).forEach(([key, value], index) => {
+          if (
+            typeof value === "object" &&
+            value !== null &&
+            !Array.isArray(value)
+          ) {
+            // Mengonversi objek menjadi array
+            const selectedValues = Object.keys(value).filter((k) => value[k]);
+            formData.append(`datainput[${index}][layananform_id]`, key);
+            formData.append(
+              `datainput[${index}][data]`,
+              JSON.stringify(selectedValues)
+            );
+          } else {
+            // Jika value adalah data primitif
+            formData.append(`datainput[${index}][layananform_id]`, key);
+            formData.append(`datainput[${index}][data]`, value.toString());
+          }
+        });
+      }
+    );
+
+    Object.entries(docValues).forEach(([key, value], index) => {
+      if (value) {
+        formData.append(`datafile[${index}][layananform_id]`, key);
+        formData.append(`datafile[${index}][data]`, value); // Menambahkan file ke FormData
+      }
+    });
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/inputform/create/${permohonan.id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`,
+          },
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      console.log(data, "???");
+      // if (response.ok) {
+      //   toast(data.message);
+      //   router.push("/riwayat");
+      // }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
-    <div className="flex justify-center bg-primary-100 mt-[24px] md:mx-[250px] md:mb-0 md:pb-[55px]">
+    <div className="flex justify-center bg-primary-100 mt-[24px] md:mx-[250px] md:mb-0 md:pb-[362px]">
       <div className="flex flex-col md:w-full items-center gap-[12px]">
         <div className="flex flex-col md:w-full md:justify-between md:flex-row mb-[16px]">
           <div className="flex flex-col justify-center">
@@ -120,13 +193,24 @@ export default function UploadFilePage() {
                       </p>
                     </div>
                     <div className="flex self-center">
-                      <input
-                        id="fileInput"
-                        type="file"
-                        placeholder="Upload"
-                        className="md:appearance-none hidden"
-                        onChange={handleFileChange}
-                      />
+                      {resultDocs.map((v, i) => {
+                        return (
+                          <input
+                            key={i}
+                            id="fileInput"
+                            type="file"
+                            placeholder="Upload"
+                            className="md:appearance-none hidden"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              handleDocChange(
+                                v.id.toString(),
+                                e.target.files ? e.target.files[0] : null
+                              )
+                            }
+                          />
+                        );
+                      })}
+
                       <label
                         htmlFor="fileInput"
                         className="flex items-center w-[80px] md:w-[230px] h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
@@ -137,7 +221,10 @@ export default function UploadFilePage() {
                 ))}
 
                 <div className="h-[40px] w-[150px] md:w-full flex self-center justify-center items-end mb-[22px] mt-[16px] md:mt-[24px]">
-                  <Button type="submit" variant="success">
+                  <Button
+                    type="submit"
+                    onSubmit={handleSubmit}
+                    variant="success">
                     <Link href="/riwayat"> Ajukan</Link>
                   </Button>
                 </div>

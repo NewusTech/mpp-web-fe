@@ -43,10 +43,11 @@ const currentStep = 3;
 export default function FormulirPage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
   const dispatch = useDispatch();
-
   const [form, setForm] = useState<LayananType>();
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
+
+  console.log(permohonan, "ini dari persist");
 
   const fetchInputForm = async (id: number) => {
     const result: FormType = await ByLayanan(id);
@@ -85,7 +86,7 @@ export default function FormulirPage() {
   };
 
   return (
-    <div className="bg-primary-100 pt-2 md:mt-[48px] md:mb-0 md:pb-8">
+    <div className="bg-primary-100 pt-2 md:mt-[48px] md:mb-0 md:pb-[150px]">
       <div className="flex items-center justify-center bg-primary-100 mt-[14px] md:mt-[48px] mx-[35px] md:mx-[250px] mb-[35px] md:mb-0 md:pb-[80px]">
         <div className="flex flex-col md:w-full gap-[16px]">
           <div className="flex flex-col md:flex-row md:justify-between gap-[24px] md:gap-0">

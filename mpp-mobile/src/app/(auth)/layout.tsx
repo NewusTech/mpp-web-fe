@@ -1,8 +1,9 @@
 "use client";
-import { store } from "@/store/store";
+import { persistor, store } from "@/store/store";
 import { Poppins } from "next/font/google";
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
+import { PersistGate } from "redux-persist/integration/react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,13 +16,11 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider store={store}>
-      <div className={`${poppins.className} h-screen w-screen`}>
-        <div className="flex-1 overflow-y-auto">
-          {children}
-          <Toaster position="top-center" />
-        </div>
+    <div className={`${poppins.className} h-screen w-screen`}>
+      <div className="flex-1 overflow-y-auto">
+        {children}
+        <Toaster position="top-center" />
       </div>
-    </Provider>
+    </div>
   );
 }
