@@ -1,4 +1,4 @@
-export default async function statistikFetch(limit = 1000000, month: number) {
+export default async function statistikFetch(limit = 1000000, month: string) {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/statistik?limit=${limit}&month=${month}`,
     {
