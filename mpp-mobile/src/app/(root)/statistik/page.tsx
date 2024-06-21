@@ -38,33 +38,6 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const grafikBulanans = [
-  {
-    id: 1,
-    instansi: "Dinas Pariwisata",
-    total: 1600,
-    antrian: 300,
-    permohonan: 800,
-    skm: 500,
-  },
-  {
-    id: 2,
-    instansi: "Dinas Kesehatan",
-    total: 1600,
-    antrian: 300,
-    permohonan: 800,
-    skm: 500,
-  },
-  {
-    id: 3,
-    instansi: "Dinas Pariwisata",
-    total: 1600,
-    antrian: 300,
-    permohonan: 800,
-    skm: 500,
-  },
-];
-
 type DataStatistik = {
   name: string;
   permohonan_count: number;
@@ -88,13 +61,16 @@ export default function StatisticsPage() {
   const [aspectRatio, setAspectRatio] = useState(2.5);
   const [isWideScreen, setIsWideScreen] = useState(false);
   const [statistiData, setStatistiData] = useState<number>(1);
-  const [selectedMonth, setSelectedMonth] = useState<number>(1);
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
   const itemsPerPage = 10;
   const limitData = 1000000;
 
   const token = Cookies.get("Authorization");
 
-  const fetchStatistik = async (month: number) => {
+  console.log(statistik, "ini grafik");
+  console.log(dataChart, "ini chart");
+
+  const fetchStatistik = async (month: string) => {
     try {
       const result = await statistikFetch(limitData, month);
 
@@ -202,8 +178,6 @@ export default function StatisticsPage() {
     );
   };
 
-  console.log(statistik, "????");
-
   const calculateTotalCount = (countPerYear: { [key: string]: number }) => {
     const total = Object.values(countPerYear).reduce(
       (sum, count) => sum + count,
@@ -212,13 +186,12 @@ export default function StatisticsPage() {
     setTotalCount(total);
   };
 
-  const handleMonthChange = (selectedMonth: number) => {
-    setSelectedMonth(selectedMonth);
-    fetchStatistik(selectedMonth);
+  const handleMonthChange = (month: string) => {
+    setSelectedMonth(month);
   };
 
   return (
-    <div className="flex items-center md:w-full justify-center pt-[24px] bg-primary-100 pb-[70px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
+    <div className="flex items-center md:w-full justify-center pt-[24px] bg-primary-100 pb-[70px] md:pb-[120px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
       <div className="flex flex-col md:w-full gap-[10px] md:mx-[70px]">
         <div className="flex flex-col items-center md:flex-none md:grid md:grid-cols-2 md:w-full gap-[16px]">
           <div className="flex flex-col bg-white w-[290px] md:w-full shadow-xl rounded-2xl relative">
@@ -285,7 +258,7 @@ export default function StatisticsPage() {
             </h4>
 
             <div className="flex items-center w-[258px] h-[40px] justify-between border border-[#C4C4C4] rounded-[50px] pl-[10px] py-[10px] my-[16px]">
-              <Select>
+              <Select onValueChange={handleMonthChange}>
                 <SelectTrigger className="w-[258px] rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                   <SelectValue
                     placeholder="Bulan"
@@ -294,10 +267,7 @@ export default function StatisticsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   {months.map((month: string, i: number) => (
-                    <SelectItem
-                      key={i}
-                      value={(i + 1).toString()}
-                      onClick={() => setSelectedMonth(i + 1)}>
+                    <SelectItem key={i} value={(i + 1).toString()}>
                       {month}
                     </SelectItem>
                   ))}
@@ -321,49 +291,47 @@ export default function StatisticsPage() {
                 />
               </>
             ) : (
-              <Table className="flex flex-col w-full">
-                <TableHeader className="flex w-full">
-                  <TableRow className="flex flex-row w-full">
-                    <TableHead className="w-full bg-[#F0F0F0]">
-                      Instansi
-                    </TableHead>
-                    <TableHead className="w-1/5">Total</TableHead>
-                    <TableHead className="w-1/5">Antrian</TableHead>
-                    <TableHead className="w-1/5">Permohonan</TableHead>
-                    <TableHead className="w-1/5">SKM</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {grafikBulanans.map(
-                    (
-                      data: {
-                        instansi: string;
-                        total: number;
-                        antrian: number;
-                        permohonan: number;
-                        skm: number;
-                      },
-                      i: number
-                    ) => {
+              <>
+                <Table className="flex flex-col w-full">
+                  <TableHeader className="flex w-full">
+                    <TableRow className="flex flex-row w-full">
+                      <TableHead className="w-full bg-[#F0F0F0]">
+                        Instansi
+                      </TableHead>
+                      <TableHead className="w-1/5">Total</TableHead>
+                      <TableHead className="w-1/5">Antrian</TableHead>
+                      <TableHead className="w-1/5">Permohonan</TableHead>
+                      <TableHead className="w-1/5">SKM</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentDataGrafik.map((data: DataStatistik, i: number) => {
                       return (
                         <TableRow key={i} className="flex flex-row w-full">
-                          <TableCell className="w-full">
-                            {data.instansi}
-                          </TableCell>
-                          <TableCell className="w-1/5">{data.total}</TableCell>
+                          <TableCell className="w-full">{data.name}</TableCell>
+                          <TableCell className="w-1/5">300</TableCell>
+                          <TableCell className="w-1/5">300</TableCell>
                           <TableCell className="w-1/5">
-                            {data.antrian}
+                            {data.permohonan_count}
                           </TableCell>
                           <TableCell className="w-1/5">
-                            {data.permohonan}
+                            {data.skm_count}
                           </TableCell>
-                          <TableCell className="w-1/5">{data.skm}</TableCell>
                         </TableRow>
                       );
-                    }
-                  )}
-                </TableBody>
-              </Table>
+                    })}
+                  </TableBody>
+                </Table>
+
+                <div className="md:flex md:justify-end">
+                  <PaginationComponent
+                    totalItems={statistik?.formattedCountByInstansi.length || 0}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={statistiData}
+                    onPageChange={setStatistiData}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>
