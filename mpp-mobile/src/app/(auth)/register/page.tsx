@@ -86,7 +86,7 @@ export default function RegisterScreen() {
       rt: values.rt,
       rw: values.rw,
       alamat: values.alamat,
-      role_id: 3,
+      role_id: 5,
     };
 
     try {

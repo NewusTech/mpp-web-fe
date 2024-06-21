@@ -44,15 +44,17 @@ export default function SurveySkmPage() {
   const [instanceId, setInstanceId] = useState<number>(1);
   const [service, setService] = useState<DataLayananType[]>();
   const [selected, setSelected] = useState(null);
+  const [selectedDinas, setSelectedDinas] = useState<number | null>(null);
+  const [selectedLayanan, setSelectedLayanan] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const debounceSearch = useDebounce(search);
   const [date, setDate] = useState("");
   const [changeOpacity, setChangeOpacity] = useState(false);
   const token = Cookies.get("Authorization");
 
-  const fetchDinas = async (search: string) => {
+  const fetchDinas = async (search: string, page: number, limit: number) => {
     try {
-      const instansis = await fetchInstansi(search);
+      const instansis = await fetchInstansi(search, page, limit);
       setInstances(instansis.data);
     } catch (error) {
       toast("Gagal Memuat Data!");
@@ -72,18 +74,43 @@ export default function SurveySkmPage() {
     if (!token) {
       redirect("/login");
     }
-    fetchDinas(debounceSearch);
-    fetchLayanan(instanceId);
+    fetchDinas(debounceSearch, 1, 1000000);
+
+    const storedDinasId = localStorage.getItem("dinasId");
+    const storedLayananId = localStorage.getItem("layananId");
+    const storedDate = localStorage.getItem("dataTanggal");
+
+    if (storedDinasId) {
+      setSelectedDinas(Number(storedDinasId));
+      setInstanceId(Number(storedDinasId));
+    }
+
+    if (storedLayananId) {
+      setSelectedLayanan(Number(storedLayananId));
+    }
+
+    if (storedDate) {
+      setDate(storedDate);
+      setChangeOpacity(true);
+    }
   }, [debounceSearch]);
+
+  useEffect(() => {
+    if (instanceId) {
+      fetchLayanan(instanceId);
+    }
+  }, [instanceId]);
 
   const handleSelectChangeDinas = (value: any) => {
     dispatch(setDinasId(value));
     setInstanceId(value);
+    setSelectedDinas(value);
     setSelected(value);
   };
 
   const handleSelectChangeLayanan = (value: any) => {
     dispatch(setLayananId(value));
+    setSelectedLayanan(value);
     setSelected(value);
   };
 
@@ -94,7 +121,7 @@ export default function SurveySkmPage() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-primary-100 md:w-full mt-[40px] mb-[200px] md:mb-0 md:pb-[70px]">
+    <div className="flex items-center justify-center bg-primary-100 md:w-full mt-[40px] mb-[200px] md:mb-0 md:pb-[150px]">
       <div className="flex flex-col items-center">
         <div className="md:flex md:justify-start md:self-start">
           <h3 className="text-[16px] md:text-start md:text-[32px] font-semibold text-primary-800">
@@ -105,24 +132,27 @@ export default function SurveySkmPage() {
         <div className="flex flex-col w-full md:w-[950px] border border-neutral-700 items-center mt-[32px] bg-white rounded-2xl shadow-lg">
           <div className="flex flex-col w-full px-[16px] md:px-[105px]">
             <div className="flex flex-col w-full items-center mb-[10px] md:mb-[40px] mx-[1px] mt-[62px]">
-              <Select name="layanan_id" onValueChange={handleSelectChangeDinas}>
+              <Select
+                name="layanan_id"
+                onValueChange={handleSelectChangeDinas}
+                value={selectedDinas ? String(selectedDinas) : undefined}>
                 <SelectTrigger
                   className={`${
-                    !selected ? "opacity-50" : ""
+                    !selectedDinas ? "opacity-50" : ""
                   } border-b border-neutral-800 rounded-none pl-4 w-full mx-0 pr-0`}>
                   <SelectValue
                     placeholder="Pilih Dinas"
-                    className={selected ? "" : "placeholder:opacity-50"}
+                    className={selectedDinas ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
                 <SelectContent className="w-[266px] md:w-full">
                   <div>
-                    {instances?.map((el: any) => {
+                    {instances?.map((el: DataDinasType, i: number) => {
                       return (
                         <SelectItem
                           className="pr-none"
-                          key={el.slug}
-                          value={el.id}>
+                          key={i}
+                          value={String(el.id)}>
                           {el.name}
                         </SelectItem>
                       );
@@ -135,24 +165,25 @@ export default function SurveySkmPage() {
             <div className="flex flex-col items-center mx-[1px] mt-[8px]">
               <Select
                 name="layanan_id"
-                onValueChange={handleSelectChangeLayanan}>
+                onValueChange={handleSelectChangeLayanan}
+                value={selectedLayanan ? String(selectedLayanan) : undefined}>
                 <SelectTrigger
                   className={`${
-                    !selected ? "opacity-50" : ""
+                    !selectedLayanan ? "opacity-50" : ""
                   } border-b border-neutral-800 rounded-none pl-4 w-full mx-0 pr-0`}>
                   <SelectValue
                     placeholder="Pilih Jenis Layanan"
-                    className={selected ? "" : "placeholder:opacity-50"}
+                    className={selectedLayanan ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
                 <SelectContent className="w-[266px] md:w-full">
                   <div>
-                    {service?.map((el: any) => {
+                    {service?.map((el: any, i: number) => {
                       return (
                         <SelectItem
                           className="pr-none"
-                          key={el.slug}
-                          value={el.id}>
+                          key={i}
+                          value={String(el.id)}>
                           {el.name}
                         </SelectItem>
                       );
