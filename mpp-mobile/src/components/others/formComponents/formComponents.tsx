@@ -240,6 +240,31 @@ export default function FormComponents({
     );
   }
 
+  if ((type === "select" && name === "kecamatan_id") || name === "desa_id") {
+    return (
+      <FormField
+        control={form}
+        name={name}
+        render={({ field }) => (
+          <FormItem>
+            <Label className={`${labelStyle}`}>{label}</Label>
+            <FormControl>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder={placeholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Light</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
+  }
+
   if (type === "select") {
     return (
       <FormField

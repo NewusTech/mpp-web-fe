@@ -84,7 +84,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-screen md:w-full md:h-full">
+    <div className="flex justify-center items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-screen md:w-full">
       <div className="flex flex-col md:w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-2xl bg-primary-200 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
         <div className="flex flex-row">
           <Image
