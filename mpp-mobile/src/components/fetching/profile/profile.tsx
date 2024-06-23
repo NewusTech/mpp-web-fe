@@ -2,7 +2,7 @@
 
 import Cookies from "js-cookie";
 
-export default async function fetchProfile(id: number) {
+export default async function fetchProfile() {
   const token = Cookies.get("Authorization");
 
   const response = await fetch(

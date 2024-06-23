@@ -3,15 +3,16 @@ import Cookies from "js-cookie";
 import { toast } from "sonner";
 
 interface UserData {
-  name: string;
-  nik: string;
-  telepon: string;
+  id?: number;
+  name?: string;
+  nik?: string;
+  telepon?: string;
   email?: string;
-  kec?: string;
-  desa?: string;
+  keamatan_id?: string;
+  desa_id?: string;
   rt?: string;
   rw?: string;
-  alamat: string;
+  alamat?: string;
 }
 
 interface UpdateProfileState {
@@ -24,8 +25,8 @@ const initialState = {
     nik: "",
     telepon: "",
     email: "",
-    kec: "",
-    desa: "",
+    kecamatan_id: "",
+    desa_id: "",
     rt: "",
     rw: "",
     alamat: "",
@@ -42,11 +43,11 @@ export const UpdateProfileSlice = createSlice({
   },
 });
 
-export function updateProfileUser(profileUser: UserData, id: number) {
+export function updateProfileUser(profileUser: UserData, slug: string) {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${slug}`,
         {
           method: "PUT",
           headers: {
