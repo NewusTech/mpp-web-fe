@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import React from "react";
 
-export default function RegisterInput({
+export default function ProfileEditInput({
   name,
   labelStyle,
   classStyle,
