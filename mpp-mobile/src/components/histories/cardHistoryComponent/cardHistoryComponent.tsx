@@ -1,20 +1,29 @@
 import { Download } from "lucide-react";
 import PopPermohonanComponent from "../others/popPermohonanComponent/popPermohonanComponent";
 import PopAntrianComponent from "../others/popAntrianComponent/popAntrianComponent";
+import formatDate from "@/helpers/logout/formatted";
 
 interface PermohonanType {
   permohonan: {
-    layanan: string;
+    id: number;
+    instansi_name: string;
+    layanan_name: string;
     noPermohonan: string;
     instansi: string;
     tanggal: string;
-    status: string;
+    status: number;
     pesan: string;
     tanggalSelesai: string;
+    createdAt: string;
   };
 }
 
 export default function CardHistoryComponent({ permohonan }: PermohonanType) {
+  let permohonanDate = "";
+  if (permohonan.createdAt) {
+    permohonanDate = formatDate(`${permohonan.createdAt}`);
+  }
+
   return (
     <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-xl w-full">
       <div className="flex flex-col justify-center m-4 gap-2 h-full">
@@ -24,7 +33,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.noPermohonan}
+            : {permohonan.id}
           </p>
         </div>
 
@@ -34,7 +43,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.instansi}
+            : {permohonan.instansi_name}
           </p>
         </div>
 
@@ -44,7 +53,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.tanggal}
+            : {permohonanDate}
           </p>
         </div>
 
