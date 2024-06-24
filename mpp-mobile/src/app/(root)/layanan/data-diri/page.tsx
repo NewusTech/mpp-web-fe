@@ -29,6 +29,7 @@ type InfoType = {
     nik: string;
     telepon: string;
     alamat: string;
+    slug: string;
   };
 };
 
@@ -63,9 +64,9 @@ export default function DataDiriPage() {
   });
   const router = useRouter();
 
-  const fetchUserInfo = async (id: number) => {
+  const fetchUserInfo = async () => {
     try {
-      const result = await fetchProfile(id);
+      const result = await fetchProfile();
 
       setInfo(result.data);
     } catch (error: any) {
@@ -74,11 +75,7 @@ export default function DataDiriPage() {
   };
 
   useEffect(() => {
-    const auth = Cookies.get("Authorization");
-    if (auth) {
-      const decodedToken = jwtDecode<JWT>(auth);
-      fetchUserInfo(decodedToken.userId);
-    }
+    fetchUserInfo();
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -107,12 +104,10 @@ export default function DataDiriPage() {
       telepon: values.telepon,
       alamat: values.alamat,
     };
-    const auth = Cookies.get("Authorization");
-    if (auth) {
-      const decodedToken = jwtDecode<JWT>(auth);
-      fetchUserInfo(decodedToken.userId);
 
-      dispatch(updateProfileUser(formData, decodedToken.userId ?? 0));
+    if (info.slug) {
+      fetchUserInfo();
+      dispatch(updateProfileUser(formData, info.slug));
       router.push(`/layanan/formulir`);
     }
   };
