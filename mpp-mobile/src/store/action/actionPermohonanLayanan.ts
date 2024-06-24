@@ -5,15 +5,9 @@ interface DataInput {
   data: string;
 }
 
-export interface DataFileInput {
-  layananform_id: number;
-  data: File[];
-}
-
 const initialState = {
   id: 0,
   datainput: [] as DataInput[],
-  datafile: [] as { layananform_id: number; data: File[] }[],
 };
 
 export const PermohonanSlice = createSlice({
@@ -26,13 +20,11 @@ export const PermohonanSlice = createSlice({
     },
     setDataInput: (state, action: PayloadAction<DataInput[]>) => {
       state.datainput = action.payload;
-    },
-    setInputFile: (state, action: PayloadAction<DataFileInput[]>) => {
-      state.datafile = action.payload;
+      localStorage.setItem("dataInput", JSON.stringify(action.payload));
     },
   },
 });
 
-export const { setId, setDataInput, setInputFile } = PermohonanSlice.actions;
+export const { setId, setDataInput } = PermohonanSlice.actions;
 
 export default PermohonanSlice.reducer;

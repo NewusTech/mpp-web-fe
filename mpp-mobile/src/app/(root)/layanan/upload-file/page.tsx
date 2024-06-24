@@ -5,10 +5,9 @@ import Cookies from "js-cookie";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RootState } from "@/store/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
-import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -19,16 +18,11 @@ type LayananFormType = {
 };
 
 type LayananType = {
-  Layananforms: [LayananFormType];
+  Layananforms: LayananFormType[];
   desc: string;
   image: string;
   name: string;
   slug: string;
-};
-
-type FormType = {
-  status: string;
-  data: LayananType;
 };
 
 interface FormData {
@@ -36,11 +30,6 @@ interface FormData {
   field: string;
   tipedata: string;
   datajson?: { id: string; key: string }[];
-}
-
-interface DocData {
-  id: string;
-  field: string;
 }
 
 const steps = [
@@ -51,16 +40,33 @@ const steps = [
 ];
 const currentStep = 4;
 
+type DataInputItem = {
+  layananform_id: string;
+  data: string;
+};
+
 export default function UploadFilePage() {
   const permohonan = useSelector((state: RootState) => state.permohonan);
   const [dataFile, setDataFile] = useState<LayananType | null>(null);
   const [docValues, setDocValues] = useState<Record<string, File | null>>({});
   const router = useRouter();
   const token = Cookies.get("Authorization");
+  const [instansiId, setInstansiId] = useState<number | null>(null);
+  const [dataInput, setDataInput] = useState<any[]>([]);
+  const [fileName, setFileName] = useState<Record<string, string>>({});
 
-  const [fileName, setFileName] = useState("Upload");
+  useEffect(() => {
+    const storedInstanceId = localStorage.getItem("instanceId");
+    const storedDataInput = localStorage.getItem("dataInput");
 
-  console.log(permohonan, "ini apa dong");
+    if (storedInstanceId) {
+      setInstansiId(Number(storedInstanceId));
+    }
+
+    if (storedDataInput) {
+      setDataInput(JSON.parse(storedDataInput));
+    }
+  }, []);
 
   const fetchFile = async (id: number) => {
     const response = await fetch(
@@ -75,80 +81,90 @@ export default function UploadFilePage() {
       }
     );
 
-    const result: FormType = await response.json();
+    const result = await response.json();
 
     setDataFile(result.data);
   };
 
   useEffect(() => {
-    fetchFile(permohonan.id);
-  }, [permohonan.id]);
-
-  console.log(dataFile, "ini data file");
+    if (instansiId !== null) {
+      fetchFile(instansiId);
+    }
+  }, [instansiId]);
 
   const handleDocChange = (id: string, file: File | null) => {
     setDocValues((prevValues) => ({
       ...prevValues,
       [id]: file,
     }));
+    setFileName((prevNames) => ({
+      ...prevNames,
+      [id]: file ? file.name : "Upload",
+    }));
   };
 
-  const resultDocs = dataFile?.Layananforms || [];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleSubmit = async () => {
-    const formData = new FormData();
+    const formDataArray: {
+      datainput: DataInputItem[];
+      datafile: any[];
+    }[] = [
+      {
+        datainput: dataInput,
+        datafile: [],
+      },
+    ];
 
-    permohonan.datainput.map(
-      (input: { layananform_id: number; data: string | [] }, i: number) => {
-        Object.entries(input).forEach(([key, value], index) => {
-          if (
-            typeof value === "object" &&
-            value !== null &&
-            !Array.isArray(value)
-          ) {
-            // Mengonversi objek menjadi array
-            const selectedValues = Object.keys(value).filter((k) => value[k]);
-            formData.append(`datainput[${index}][layananform_id]`, key);
-            formData.append(
-              `datainput[${index}][data]`,
-              JSON.stringify(selectedValues)
-            );
-          } else {
-            // Jika value adalah data primitif
-            formData.append(`datainput[${index}][layananform_id]`, key);
-            formData.append(`datainput[${index}][data]`, value.toString());
-          }
+    Object.entries(docValues).forEach(([key, value]) => {
+      if (value) {
+        formDataArray[0].datafile.push({
+          layananform_id: key,
+          data: value,
         });
       }
-    );
+    });
 
-    Object.entries(docValues).forEach(([key, value], index) => {
-      if (value) {
-        formData.append(`datafile[${index}][layananform_id]`, key);
-        formData.append(`datafile[${index}][data]`, value); // Menambahkan file ke FormData
-      }
+    const formData = new FormData();
+    formDataArray[0].datainput.forEach((input, index) => {
+      formData.append(
+        `datainput[${index}][layananform_id]`,
+        input.layananform_id
+      );
+      formData.append(`datainput[${index}][data]`, input.data);
+    });
+
+    formDataArray[0].datafile.forEach((file, index) => {
+      formData.append(
+        `datafile[${index}][layananform_id]`,
+        file.layananform_id
+      );
+      formData.append(`datafile[${index}][data]`, file.data);
     });
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/inputform/create/${permohonan.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/inputform/create/${instansiId}`,
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
           },
           body: formData,
         }
       );
 
       const data = await response.json();
-      console.log(data, "???");
-      // if (response.ok) {
-      //   toast(data.message);
-      //   router.push("/riwayat");
-      // }
+
+      if (response.ok) {
+        toast(data.message);
+        localStorage.clear();
+        router.push("/riwayat");
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("An error occurred while submitting the form.");
     }
   };
 
@@ -179,8 +195,10 @@ export default function UploadFilePage() {
         <div className="flex flex-col md:w-full">
           <div className="flex flex-col md:w-full">
             {dataFile?.Layananforms ? (
-              <form className="flex flex-col items-center md:w-full">
-                {dataFile?.Layananforms?.map((el: LayananFormType) => (
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col items-center md:w-full">
+                {dataFile.Layananforms.map((el) => (
                   <div
                     key={el.id}
                     className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-[#7BBA78] px-[16px]">
@@ -193,39 +211,29 @@ export default function UploadFilePage() {
                       </p>
                     </div>
                     <div className="flex self-center">
-                      {resultDocs.map((v, i) => {
-                        return (
-                          <input
-                            key={i}
-                            id="fileInput"
-                            type="file"
-                            placeholder="Upload"
-                            className="md:appearance-none hidden"
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                              handleDocChange(
-                                v.id.toString(),
-                                e.target.files ? e.target.files[0] : null
-                              )
-                            }
-                          />
-                        );
-                      })}
-
+                      <input
+                        id={`fileInput-${el.id}`}
+                        type="file"
+                        className="md:appearance-none hidden"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          handleDocChange(
+                            el.id.toString(),
+                            e.target.files ? e.target.files[0] : null
+                          )
+                        }
+                      />
                       <label
-                        htmlFor="fileInput"
+                        htmlFor={`fileInput-${el.id}`}
                         className="flex items-center w-[80px] md:w-[230px] h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
-                        {fileName}
+                        {fileName[el.id.toString()] || "Upload"}
                       </label>
                     </div>
                   </div>
                 ))}
 
                 <div className="h-[40px] w-[150px] md:w-full flex self-center justify-center items-end mb-[22px] mt-[16px] md:mt-[24px]">
-                  <Button
-                    type="submit"
-                    onSubmit={handleSubmit}
-                    variant="success">
-                    <Link href="/riwayat"> Ajukan</Link>
+                  <Button type="submit" variant="success">
+                    Ajukan
                   </Button>
                 </div>
               </form>
