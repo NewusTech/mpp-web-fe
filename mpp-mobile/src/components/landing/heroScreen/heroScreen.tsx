@@ -10,7 +10,11 @@ import "swiper/css/pagination";
 
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
-export default function HeroScreen() {
+type CarouselType = {
+  image: string;
+}[];
+
+export default function HeroScreen({ carousel }: { carousel: CarouselType }) {
   const images = [gedung, bupati, kantor, mpp, lamtim];
 
   return (
@@ -45,11 +49,11 @@ export default function HeroScreen() {
               spaceBetween: 50,
             },
           }}>
-          {images.map((image, index) => (
+          {carousel.map((image, index) => (
             <SwiperSlide key={index}>
               <div className="w-full h-[300px] md:h-[450px]">
                 <Image
-                  src={image}
+                  src={image.image}
                   alt="Gedung Kabupaten Lampung Timur"
                   layout="fill"
                   objectFit="cover"

@@ -13,6 +13,8 @@ import facilitiesFetch from "@/components/fetching/facilities/facilities";
 import { toast } from "sonner";
 import Image from "next/image";
 import formatDate from "@/helpers/logout/formatted";
+import fetchInformasi from "@/components/fetching/infromasi/informasi";
+import fetchCarousel from "@/components/fetching/carousel/carousel";
 
 type Berita = {
   title: string;
@@ -54,11 +56,23 @@ type MyFacilities = {
   data: [Facility];
 };
 
+interface InfoLandingType {
+  instansiCount: string;
+  layananCount: string;
+  permohonanCountToday: string;
+}
+
+interface CarouselType {
+  image: string;
+}
+
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
   const [beritaSlug, SetBeritaSlug] = useState<Berita>();
   const [layanan, setLayanan] = useState<MyInstansi>();
   const [facilities, setFacilities] = useState<MyFacilities>();
+  const [infoLanding, setInfoLanding] = useState<InfoLandingType | undefined>();
+  const [carousel, setCarousel] = useState<CarouselType[] | undefined>();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
@@ -70,9 +84,15 @@ function Home() {
 
       const fasilitas = await facilitiesFetch();
 
+      const dashboard = await fetchInformasi();
+
+      const carousel = await fetchCarousel();
+
       setBerita(news);
       setLayanan(layanan);
       setFacilities(fasilitas);
+      setInfoLanding(dashboard.data);
+      setCarousel(carousel.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
@@ -100,9 +120,17 @@ function Home() {
   return (
     <div className="bg-[#F7FBF7] w-full h-full mb-[24px] md:pb-[75px]">
       <div className="bg-[#F7FBF7]">
-        <HeroScreen />
+        {carousel && <HeroScreen carousel={carousel} />}
 
-        <AboutScreen />
+        <AboutScreen
+          infoLanding={
+            infoLanding ?? {
+              instansiCount: "",
+              layananCount: "",
+              permohonanCountToday: "",
+            }
+          }
+        />
 
         <div className="flex w-full px-[35px] flex-col mt-[56px] justify-center items-center">
           <h4 className="text-primary-800 md:text-[32px] text-center text-[16px] font-bold md:mb-[32px]">

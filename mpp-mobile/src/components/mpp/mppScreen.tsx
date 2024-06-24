@@ -1,4 +1,11 @@
-export default function MppScreen() {
+interface VisiMisiType {
+  visimisi: {
+    visi: string;
+    misi: string;
+  };
+}
+
+export default function MppScreen({ visimisi }: VisiMisiType) {
   return (
     <div className="flex flex-col w-full items-center justify-center mt-[24px] px-[35px] md:px-0 md:mt-[56px] bg-primary-100 md:mx-0 mb-[24px] md:mb-0 md:pb-[150px]">
       <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-none place-items-center md:place-items-start md:mx-[35px] gap-[16px] md:mb-[62px]">
@@ -8,8 +15,7 @@ export default function MppScreen() {
           </h4>
 
           <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
-            Mewujudkan Pelayanan Publik yang Terpadu, Efisien, dan Berorientasi
-            pada Kebutuhan Masyarakat.
+            {visimisi.visi}
           </p>
         </div>
 
@@ -19,10 +25,7 @@ export default function MppScreen() {
           </h4>
 
           <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
-            Meningkatkan Kualitas Pelayanan Publik, Memudahkan Akses Layanan
-            Bagi Masyarakat, Meningkatkan Efisiensi dan Efektivitas Pelayanan,
-            Mendorong Inovasi dalam Pelayanan Publik, Meningkatkan Transparansi
-            dan Akuntabilitas, Membangun Sinergi dengan Instansi Terkait.
+            {visimisi.misi}
           </p>
         </div>
       </div>

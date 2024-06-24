@@ -67,9 +67,6 @@ export default function StatisticsPage() {
 
   const token = Cookies.get("Authorization");
 
-  console.log(statistik, "ini grafik");
-  console.log(dataChart, "ini chart");
-
   const fetchStatistik = async (month: string) => {
     try {
       const result = await statistikFetch(limitData, month);
