@@ -1,9 +1,33 @@
+"use client";
+
+import fetchVisiMisi from "@/components/fetching/visimisi/visimisi";
 import MppScreen from "@/components/mpp/mppScreen";
+import { useEffect, useState } from "react";
+
+interface VisiMisiType {
+  visi: string;
+  misi: string;
+}
 
 export default function MppPage() {
+  const [visimisi, setVisimisi] = useState<VisiMisiType>({
+    visi: "",
+    misi: "",
+  });
+
+  const fetchVisiMisiMpp = async () => {
+    const response = await fetchVisiMisi();
+
+    setVisimisi(response.data);
+  };
+
+  useEffect(() => {
+    fetchVisiMisiMpp();
+  }, []);
+
   return (
     <div className="bg-primary-100 md:h-full">
-      <MppScreen />
+      <MppScreen visimisi={visimisi} />
     </div>
   );
 }
