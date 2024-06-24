@@ -1,28 +1,49 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import PopPermohonanComponent from "../popPermohonanComponent/popPermohonanComponent";
+import formatDate from "@/helpers/logout/formatted";
 
 interface PermohonanType {
   permohonan: {
-    layanan: string;
+    id: number;
+    instansi_name: string;
+    layanan_name: string;
     noPermohonan: string;
     instansi: string;
     tanggal: string;
-    status: string;
+    status: number;
     pesan: string;
     tanggalSelesai: string;
+    createdAt: string;
   };
 }
 
 export default function TablePermohonanComponent({
   permohonan,
 }: PermohonanType) {
+  let permohonanDate = "";
+  if (permohonan.createdAt) {
+    permohonanDate = formatDate(`${permohonan.createdAt}`);
+  }
+
+  let permohonanStatus;
+
+  if (permohonan.status === 1 || permohonan.status === 2) {
+    permohonanStatus = "Sedang diproses";
+  } else if (permohonan.status === 0) {
+    permohonanStatus = "Belum diproses";
+  } else if (permohonan.status === 3) {
+    permohonanStatus = "Selesai";
+  } else {
+    permohonanStatus = "Ditolak";
+  }
+
   return (
     <div className="w-full">
       <TableRow>
-        <TableCell className="w-1/2">{permohonan.noPermohonan}</TableCell>
-        <TableCell className="w-full">{permohonan.instansi}</TableCell>
-        <TableCell className="w-1/2">{permohonan.tanggal}</TableCell>
-        <TableCell className="w-1/2">{permohonan.status}</TableCell>
+        <TableCell className="w-1/2">{permohonan.id}</TableCell>
+        <TableCell className="w-full">{permohonan.instansi_name}</TableCell>
+        <TableCell className="w-1/2">{permohonanDate}</TableCell>
+        <TableCell className="w-1/2">{permohonanStatus}</TableCell>
         <TableCell className="w-1">
           <PopPermohonanComponent permohonan={permohonan} />
         </TableCell>

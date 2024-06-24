@@ -99,6 +99,19 @@ interface PermohonanType {
   tanggalSelesai: string;
 }
 
+interface PermohonanDataType {
+  id: number;
+  instansi_name: string;
+  layanan_name: string;
+  noPermohonan: string;
+  instansi: string;
+  tanggal: string;
+  status: number;
+  pesan: string;
+  tanggalSelesai: string;
+  createdAt: string;
+}
+
 const permohonans = {
   data: [
     {
@@ -186,20 +199,22 @@ export default function RiwayatPage() {
 
   const currentAntrians = paginate(antrians.data, antrianPage, itemsPerPage);
   const currentPermohonans = paginate(
-    permohonans.data,
+    historyData,
     permohonanPage,
     itemsPerPage
   );
 
+  console.log(historyData, ">>");
+
   return (
-    <div className="flex flex-col justify-center bg-primary-100 pt-[56px] md:mt-[36px] md:mb-0 pb-[60px] md:pb-[73px] mx-[35px] md:mx-0 md:px-[167px]">
+    <div className="flex flex-col justify-center bg-primary-100 pt-[56px] md:mt-[12px] md:mb-0 pb-[60px] md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
       <div className="flex self-start md:mb-[36px]">
         <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
           History
         </h5>
       </div>
 
-      <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:rounded-2xl md:shadow-xl">
+      <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:pb-[50px] md:rounded-2xl md:shadow-xl">
         <Tabs
           defaultValue="antrian"
           className="flex flex-col w-full gap-[10px]">
@@ -258,32 +273,41 @@ export default function RiwayatPage() {
                 </TabsContent>
 
                 <TabsContent value="permohonan">
-                  {permohonans && permohonans.data.length > 0 ? (
-                    <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
-                      <TableHeader className="md:flex md:w-full">
-                        <TableRow className="md:flex md:flex-row md:w-full">
-                          <TableHead className="w-1/2">
-                            Nomor Permohonan
-                          </TableHead>
-                          <TableHead className="w-full">Instansi</TableHead>
-                          <TableHead className="w-1/2">Tanggal</TableHead>
-                          <TableHead className="w-1/2">Status</TableHead>
-                          <TableHead className="w-1"></TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {permohonans?.data?.map(
-                          (permohonan: PermohonanType, i: number) => {
-                            return (
-                              <TablePermohonanComponent
-                                key={i}
-                                permohonan={permohonan}
-                              />
-                            );
-                          }
-                        )}
-                      </TableBody>
-                    </Table>
+                  {currentPermohonans && currentPermohonans.length > 0 ? (
+                    <>
+                      <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
+                        <TableHeader className="md:flex md:w-full">
+                          <TableRow className="md:flex md:flex-row md:w-full">
+                            <TableHead className="w-1/2">
+                              Nomor Permohonan
+                            </TableHead>
+                            <TableHead className="w-full">Instansi</TableHead>
+                            <TableHead className="w-1/2">Tanggal</TableHead>
+                            <TableHead className="w-1/2">Status</TableHead>
+                            <TableHead className="w-1"></TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {currentPermohonans?.map(
+                            (permohonan: PermohonanDataType, i: number) => {
+                              return (
+                                <TablePermohonanComponent
+                                  key={i}
+                                  permohonan={permohonan}
+                                />
+                              );
+                            }
+                          )}
+                        </TableBody>
+                      </Table>
+
+                      <PaginationComponent
+                        totalItems={permohonans.data.length}
+                        itemsPerPage={itemsPerPage}
+                        currentPage={permohonanPage}
+                        onPageChange={setPermohonanPage}
+                      />
+                    </>
                   ) : (
                     <div className="flex flex-col justify-center items-center h-[311px]">
                       <Image src={sad} width={100} height={100} alt="sad" />
@@ -329,7 +353,7 @@ export default function RiwayatPage() {
                   {currentPermohonans && currentPermohonans.length > 0 ? (
                     <>
                       {currentPermohonans?.map(
-                        (permohonan: PermohonanType, i: number) => {
+                        (permohonan: PermohonanDataType, i: number) => {
                           return (
                             <div key={i}>
                               <CardHistoryComponent permohonan={permohonan} />

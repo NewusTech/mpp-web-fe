@@ -11,13 +11,16 @@ import PopUpPermohonanComponent from "../popUpPermohonanComponent/popUpPermohona
 
 interface PermohonanType {
   permohonan: {
-    layanan: string;
+    id: number;
+    instansi_name: string;
+    layanan_name: string;
     noPermohonan: string;
     instansi: string;
     tanggal: string;
-    status: string;
+    status: number;
     pesan: string;
     tanggalSelesai: string;
+    createdAt: string;
   };
 }
 
@@ -33,7 +36,7 @@ export default function PopPermohonanComponent({ permohonan }: PermohonanType) {
             <DialogTitle className="flex w-full">
               <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row md:justify-between md:w-full mx-[32px] my-[10px] md:pt-5">
                 <h5 className="text-[20px] text-start text-primary-800 font-semibold">
-                  {permohonan.noPermohonan}
+                  {permohonan.id}
                 </h5>
 
                 <h5 className="text-[20px] text-end text-success-700 font-semibold">
