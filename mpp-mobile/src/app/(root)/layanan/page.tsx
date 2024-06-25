@@ -20,6 +20,7 @@ interface Layanantype {
   image?: string;
   slug: string;
   jmlLayanan: number;
+  active_offline: boolean;
 }
 
 export default function LayananPage() {

@@ -20,13 +20,26 @@ interface Layanantype {
     image?: string;
     slug: string;
     jmlLayanan: number;
+    active_offline: boolean;
   };
 }
 
 export default function CardLayananComponent({ layanan }: Layanantype) {
   const token = Cookies.get("Authorization");
+
+  let bgStatus = "";
+  let textStatus = "";
+
+  if (layanan.active_offline === true) {
+    bgStatus = "bg-success-700";
+    textStatus = "Buka";
+  } else {
+    bgStatus = "bg-error-700";
+    textStatus = "Tutup";
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center w-full md:w-[300px] outline outline-2 outline-[#C4C4C4] bg-[#F7F7F7] shadow-xl rounded-2xl">
+    <div className="flex flex-col items-center justify-center w-full md:w-[300px] outline outline-2 outline-neutral-700 bg-neutral-50 shadow-xl rounded-2xl">
       <div className="flex flex-col items-center justify-center w-[270px] h-[296px]">
         <Link
           href={`/layanan/${layanan.slug}`}
@@ -40,7 +53,7 @@ export default function CardLayananComponent({ layanan }: Layanantype) {
           />
         </Link>
 
-        <div className="flex flex-col justify-center pb-[45px] mt-[8px] w-full">
+        <div className="flex flex-col justify-center pb-35px] mt-[8px] w-full">
           <Link href={`/layanan/${layanan.slug}`}>
             <h6 className="text-[16px] text-center text-primary-800 font-semibold">
               {layanan.name}
@@ -50,6 +63,11 @@ export default function CardLayananComponent({ layanan }: Layanantype) {
           <p className="text-[12px] text-center text-neutral-700 font-normal">
             Jumlah Layanan : {layanan.jmlLayanan}
           </p>
+
+          <div
+            className={`${bgStatus} flex justify-center items-center w-1/4 h-[20px] rounded-[50px] mt-4 self-center`}>
+            <p className="text-[10px] text-neutral-50">{textStatus}</p>
+          </div>
         </div>
       </div>
 

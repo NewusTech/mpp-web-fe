@@ -37,6 +37,7 @@ type Instansi = {
   image?: string;
   slug: string;
   jmlLayanan: number;
+  active_offline: boolean;
 };
 
 type MyInstansi = {
@@ -78,7 +79,7 @@ function Home() {
 
   const fetchAll = async (search: string) => {
     try {
-      const news = await fetchNews(page, 4);
+      const news = await fetchNews(page, 3);
 
       const layanan = await fetchInstansi(search, page, 8);
 
@@ -118,8 +119,8 @@ function Home() {
   });
 
   return (
-    <div className="bg-[#F7FBF7] w-full h-full mb-[24px] md:pb-[75px]">
-      <div className="bg-[#F7FBF7]">
+    <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px]">
+      <div className="bg-primary-50">
         {carousel && <HeroScreen carousel={carousel} />}
 
         <AboutScreen
@@ -132,53 +133,34 @@ function Home() {
           }
         />
 
-        <div className="flex w-full px-[35px] flex-col mt-[56px] justify-center items-center">
-          <h4 className="text-primary-800 md:text-[32px] text-center text-[16px] font-bold md:mb-[32px]">
-            Instansi Layanan MPP
-          </h4>
+        <div className="mx-5 md:mx-8 bg-primary-200 rounded-xl p-5 md:p-8 mt-5">
+          <div className="flex w-full flex-col justify-center items-center">
+            <h4 className="text-primary-800 text-[20px] md:text-[32px] text-center font-bold md:mb-[32px]">
+              Instansi Layanan MPP
+            </h4>
 
-          <div className="flex flex-col w-full flex-wrap justify-center md:flex-row md:mx-[70px] items-center gap-[18px] md:gap-5 my-[16px]">
-            {photos && (
-              <>
-                {layanan?.data?.map((el: Instansi, i: number) => {
-                  return <CardLayananComponent key={i} layanan={el} />;
-                })}
-              </>
-            )}
-          </div>
+            <div className="flex flex-col w-full flex-wrap justify-center md:flex-row items-center gap-5 my-[16px]">
+              {photos && (
+                <>
+                  {layanan?.data?.map((el: Instansi, i: number) => {
+                    return <CardLayananComponent key={i} layanan={el} />;
+                  })}
+                </>
+              )}
+            </div>
 
-          <Link
-            href="/layanan"
-            className="flex justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
-            <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
-              Lihat Semua Instansi
-            </p>
-          </Link>
-        </div>
-
-        <div className="flex w-full flex-col items-center px-[35px] mt-[56px] md:px-[70px]">
-          <h3 className="text-primary-800 text-[16px] md:text-[32px] mb-[16px] font-semibold">
-            Fasilitas
-          </h3>
-
-          <div className="flex flex-col w-full md:flex-row md:grid md:grid-cols-3 flex-wrap justify-center gap-[16px]">
-            {facilities?.data?.map((el: Facility, i: number) => {
-              return (
-                <Image
-                  key={i}
-                  className="w-full md:w-full md:h-[295px] h-[180px] rounded-xl"
-                  src={el.image}
-                  alt="Facilities"
-                  width={100}
-                  height={100}
-                />
-              );
-            })}
+            <Link
+              href="/layanan"
+              className="flex justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
+              <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
+                Lihat Semua Instansi
+              </p>
+            </Link>
           </div>
         </div>
 
-        <div className="flex flex-col items-center mt-[56px] px-[35px md:px-0 md:mx-[70px]">
-          <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px] mb-[16px] md:mb-[36px]">
+        <div className="flex flex-col bg-primary-200 items-center mt-5 mx-5 md:mx-8 py-5 rounded-xl md:p-8">
+          <h3 className="text-primary-800 text-[26px] md:text-[32px] font-semibold mb-[16px] md:mb-[36px]">
             Berita
           </h3>
 
@@ -220,8 +202,8 @@ function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full px-[35px] md:px-0 md:w-full items-center md:mt-6">
-            <div className="flex flex-col w-full md:w-full md:flex-row md:grid md:grid-cols-4 flex-wrap md:justify-between gap-[16px] md:gap-6">
+          <div className="flex flex-col px-5 md:px-0 w-full items-center md:mt-6">
+            <div className="flex flex-col w-full md:flex-row md:grid md:grid-cols-3 flex-wrap md:justify-between gap-[16px] md:gap-5">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}
