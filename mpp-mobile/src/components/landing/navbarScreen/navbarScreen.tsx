@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CircleUserRound, Send, ChevronDown, History } from "lucide-react";
 
-import logo from "@/../public/assets/450px-Lokasi_Lampung_Kabupaten_Lampung_Timur.png";
+import logo from "@/../public/assets/DesignLogoMpp.svg";
 import Image from "next/image";
 import { Raleway } from "next/font/google";
 import Link from "next/link";
@@ -30,12 +30,12 @@ export default function NavbarScreen() {
   const pathName = usePathname();
   const [currentPath, setCurrentPath] = useState(pathName);
   const [decoded, setDecoded] = useState<JwtPayload | null>(null);
-  const [navbarColor, setNavbarColor] = useState("bg-primary-700");
+  const [navbarColor, setNavbarColor] = useState("bg-primary-800");
 
   useEffect(() => {
     setCurrentPath(pathName);
     if (pathName === "/") {
-      setNavbarColor("bg-primary-700");
+      setNavbarColor("bg-primary-800");
     } else {
       setNavbarColor("bg-primary-100");
     }
@@ -58,24 +58,19 @@ export default function NavbarScreen() {
 
   return (
     <div
-      className={`flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:px-[70px] md:${navbarColor}`}>
+      className={`flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:px-[70px] bg-none`}>
       <Link href="/" className="flex flex-row w-[266px] h-[64px]">
         <Image src={logo} alt="Lampung Timur" className="w-[73px] h-[64px]" />
 
         <div className="flex flex-col w-[193px] h-[64px] leading-none">
           <h3
-            className={`text-[#3A6C38] text-[24px] ${raleway.className} font-extrabold`}>
-            MPP
-          </h3>
-
-          <h3
-            className={`${raleway.className} font-bold text-[14px] text-[#F3CB53] py-[4px]`}>
+            className={`${raleway.className} font-bold text-[14px] text-secondary-700 py-[4px]`}>
             MAL PELAYANAN PUBLIK
           </h3>
 
           <h3
-            className={`${raleway.className} font-normal text-[#656565] text-[12px]`}>
-            Lampung Timur
+            className={`${raleway.className} font-normal text-primary-700 text-[12px]`}>
+            Kabupaten Lampung Timur
           </h3>
         </div>
       </Link>
@@ -84,55 +79,55 @@ export default function NavbarScreen() {
         <div className="flex flex-row items-center">
           <Link
             href="/"
-            className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
+            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
               pathName === "/"
-                ? "text-[#F3CB53] hover:text-[#3A6C38]"
-                : "text-[#3A6C38] hover:text-[#F3CB53]"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
             Beranda
           </Link>
           <Link
             href="/mpp"
-            className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
+            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
               pathName === "/mpp"
-                ? "text-[#F3CB53] hover:text-[#3A6C38]"
-                : "text-[#3A6C38] hover:text-[#F3CB53]"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
             MPP
           </Link>
           <Link
             href="/layanan"
-            className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
+            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
               pathName === "/layanan"
-                ? "text-[#F3CB53] hover:text-[#3A6C38]"
-                : "text-[#3A6C38] hover:text-[#F3CB53]"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
             Layanan
           </Link>
           <Link
             href="/berita"
-            className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
+            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
               pathName === "/berita"
-                ? "text-[#F3CB53] hover:text-[#3A6C38]"
-                : "text-[#3A6C38] hover:text-[#F3CB53]"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
             Berita
           </Link>
           <Link
             href="/survey"
-            className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
+            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
               pathName === "/survey"
-                ? "text-[#F3CB53] hover:text-[#3A6C38]"
-                : "text-[#3A6C38] hover:text-[#F3CB53]"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
             SKM
           </Link>
           <Link
             href="/statistik"
-            className={`text-center w-[111.5px] text-[20px] text-[#3A6C38] ${
+            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
               pathName === "/statistik"
-                ? "text-[#F3CB53] hover:text-[#3A6C38]"
-                : "text-[#3A6C38] hover:text-[#F3CB53]"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
             Statistik
           </Link>
@@ -143,9 +138,9 @@ export default function NavbarScreen() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="flex flex-row justify-center ml-[10px] group">
-                  <CircleUserRound className="w-[24px] h-[24px] text-[#3A6C38] group-hover:text-secondary-700" />
+                  <CircleUserRound className="w-[24px] h-[24px] text-primary-800 group-hover:text-secondary-700" />
 
-                  <ChevronDown className="w-[24px] h-[24px] text-[#3A6C38] group-hover:text-secondary-700" />
+                  <ChevronDown className="w-[24px] h-[24px] text-primary-800 group-hover:text-secondary-700" />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -153,24 +148,24 @@ export default function NavbarScreen() {
                   href={`/profile/${decoded?.userId}`}
                   className={`${
                     pathName === `/profile/${decoded?.userId}`
-                      ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                      : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78] group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
                     <CircleUserRound
                       className={`${
                         pathName === `/profile/${decoded?.userId}`
-                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } w-[20px] h-[20px] mr-[16px] group-hover:text-primary-700`}
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
                     />
 
                     <p
                       className={`${
                         pathName === `/profile/${decoded?.userId}`
-                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } text-[16px] group-hover:text-primary-700`}>
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
                       Profile
                     </p>
                   </DropdownMenuItem>
@@ -180,24 +175,24 @@ export default function NavbarScreen() {
                   href="/pengaduan"
                   className={`${
                     pathName === "/pengaduan"
-                      ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                      : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78] group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
                     <Send
                       className={`${
                         pathName === "/pengaduan"
-                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } w-[20px] h-[20px] mr-[16px] group-hover:text-primary-700`}
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
                     />
 
                     <p
                       className={`${
                         pathName === "/pengaduan"
-                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } text-[16px] group-hover:text-primary-700`}>
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
                       Pengaduan
                     </p>
                   </DropdownMenuItem>
@@ -207,24 +202,24 @@ export default function NavbarScreen() {
                   href="/riwayat"
                   className={`${
                     pathName === "/riwayat"
-                      ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                      : "text-[#C4C4C4] hover:text-[#7BBA78]"
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-[#C4C4C4] hover:text-[#7BBA78] focus:text-[#7BBA78] group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
                     <History
                       className={`${
                         pathName === "/riwayat"
-                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } w-[20px] h-[20px] mr-[16px] group-hover:text-primary-700`}
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
                     />
 
                     <p
                       className={`${
                         pathName === "/riwayat"
-                          ? "text-[#7BBA78] hover:text-[#C4C4C4]"
-                          : "text-[#C4C4C4] hover:text-[#7BBA78]"
-                      } text-[16px] group-hover:text-primary-700`}>
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
                       Riwayat
                     </p>
                   </DropdownMenuItem>
@@ -236,7 +231,7 @@ export default function NavbarScreen() {
           ) : (
             <Link
               href="/login"
-              className="md:w-full md:text-[16px] md:px-[24px] md:py-[6px] md:bg-primary-700 md:text-neutral-50 md:rounded-[50px] md:hover:bg-primary-600">
+              className="md:w-full md:text-[16px] md:px-[24px] md:py-[6px] md:bg-secondary-700 md:text-neutral-50 md:rounded-[50px] md:hover:bg-secondary-700">
               Masuk
             </Link>
           )}

@@ -18,8 +18,8 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType }) {
   const images = [gedung, bupati, kantor, mpp, lamtim];
 
   return (
-    <div className="md:px-[40px] md:pb-[65px] md:items-center md:flex md:justify-between w-dvw md:w-full bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-35%">
-      <div className="flex flex-col px-[35px]">
+    <div className="md:items-center md:flex md:justify-between w-dvw md:w-full bg-primary-700">
+      <div className="flex flex-col px-[35px] pb-6 md:hidden">
         <h6 className="text-secondary-700 font-semibold md:text-[48px]">
           Selamat Datang
         </h6>
@@ -29,7 +29,7 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType }) {
         </p>
       </div>
 
-      <div className="pt-[20px] w-full md:w-[50%] md:self-end md:flex md:pr-[35px]">
+      <div className="w-full md:self-end md:flex md:h-full">
         <Swiper
           pagination={{ clickable: true }}
           navigation={true}
@@ -51,9 +51,10 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType }) {
           }}>
           {carousel.map((image, index) => (
             <SwiperSlide key={index}>
-              <div className="w-full h-[300px] md:h-[450px]">
+              <div className="w-full h-[300px] md:h-[650px]">
                 <Image
                   src={image.image}
+                  className="w-full h-full"
                   alt="Gedung Kabupaten Lampung Timur"
                   layout="fill"
                   objectFit="cover"

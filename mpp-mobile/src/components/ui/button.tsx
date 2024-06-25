@@ -10,18 +10,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] w-[120px] h-[40px] text-[#FEFEFE] font-normal px-[36px] py-[10px] font-extrabold",
+          "bg-primary-700 hover:bg-primary-600 rounded-[50px] w-[120px] h-[40px] text-neutral-50 font-normal px-[36px] py-[10px] font-extrabold",
         neutral:
-          "bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] w-[120px] h-[40px] text-[#FEFEFE] font-semibold px-[36px] py-[10px] text-[14px]",
+          "bg-primary-700 hover:bg-primary-600 rounded-[50px] w-[120px] h-[40px] text-neutral-50 font-semibold px-[36px] py-[10px] text-[14px]",
         secondary:
-          "bg-[#FEFEFE] hover:bg-[#7BBA78] rounded-[50px] w-[290px] h-[40px] text-[#7BBA78] font-normal px-[130.5px] py-[9px] outline outline-1 outline-[#DEDEDE]",
+          "bg-neutral-50 hover:bg-primary-700 rounded-[50px] w-[290px] h-[40px] text-primary-700 font-normal px-[130.5px] py-[9px] outline outline-1 outline-neutral-50",
         success:
-          "bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] w-[290px] h-[40px] text-[#FEFEFE] font-normal px-[114px] py-[9px] outline outline-1 outline-[#DEDEDE]",
+          "bg-primary-700 hover:bg-primary-600 rounded-[50px] w-[290px] h-[40px] text-neutral-50 font-normal px-[114px] py-[9px] outline outline-1 outline-neutral-50",
         warning:
-          "bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] text-[#FEFEFE] font-normal text-[16px] py-[11px] px-[99.5px]",
+          "bg-primary-700 hover:bg-primary-600 rounded-[50px] text-neutral-50 font-normal text-[16px] py-[11px] px-[99.5px]",
         error:
-          "bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] w-[290px] h-[40px] text-[#FEFEFE] font-normalSemibold text-[16px] py-[9px] px-[126px]",
-        link: "bg-[#7BBA78] hover:bg-[#3A6C38] rounded-[50px] w-[120px] h-[40px] text-[#FEFEFE] font-normalSemibold text-[14px] py-[9px] px-[126px]",
+          "bg-primary-700 hover:bg-primary-600 rounded-[50px] w-[290px] h-[40px] text-neutral-50 font-normalSemibold text-[16px] py-[9px] px-[126px]",
+        link: "bg-primary-700 hover:bg-primary-600 rounded-[50px] w-[120px] h-[40px] text-neutral-50 font-normalSemibold text-[14px] py-[9px] px-[126px]",
       },
       size: {
         default: "h-10 px-4 py-2",
