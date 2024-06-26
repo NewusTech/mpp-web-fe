@@ -7,20 +7,7 @@ import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-interface ProfileType {
-  id: number;
-  name: string;
-  email: string;
-  telepon: string;
-  nik: string;
-  kecamatan_name: string;
-  desa_name: string;
-  rt: string;
-  rw: string;
-  alamat: string;
-  slug: string;
-}
+import { ProfileType } from "@/types/type";
 
 export default function ProfilePage({
   params,
@@ -156,9 +143,9 @@ export default function ProfilePage({
 
             <Link
               href={`/profile/${profile?.id}/detail/${profile?.slug}`}
-              className="h-[72px] flex justify-center items-end md:items-center self-end md:self-center mb-[32px] md:mt-[32px]">
+              className="h-[40px] flex justify-center rounded-[50px] items-end md:items-center self-end md:self-center mb-[32px] md:mt-[32px]">
               <Button
-                className="w-[90px] md:w-[290px] h-[30px] md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
+                className="w-[90px] md:w-[290px] border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
                 type="submit"
                 variant="secondary">
                 Edit

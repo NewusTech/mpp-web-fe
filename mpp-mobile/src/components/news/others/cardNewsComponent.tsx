@@ -1,21 +1,11 @@
 import { formatLongDate } from "@/helpers/logout/formatted";
+import { Berita } from "@/types/type";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
 import Link from "next/link";
 
-type Berita = {
-  news: {
-    title: string;
-    slug: string;
-    desc: string;
-    image: string;
-    url: string;
-    createdAt: string;
-  };
-};
-
-export default function CardNewsComponent({ news }: Berita) {
+export default function CardNewsComponent({ news }: { news: Berita }) {
   const date = formatLongDate(news?.createdAt);
 
   return (

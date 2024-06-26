@@ -2,12 +2,8 @@
 
 import fetchVisiMisi from "@/components/fetching/visimisi/visimisi";
 import MppScreen from "@/components/mpp/mppScreen";
+import { VisiMisiType } from "@/types/type";
 import { useEffect, useState } from "react";
-
-interface VisiMisiType {
-  visi: string;
-  misi: string;
-}
 
 export default function MppPage() {
   const [visimisi, setVisimisi] = useState<VisiMisiType>({

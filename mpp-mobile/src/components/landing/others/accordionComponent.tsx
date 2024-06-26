@@ -4,16 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { faqType } from "@/types/type";
 
-interface faqType {
-  faq: {
-    id: number;
-    question: string;
-    answer: string;
-  };
-}
-
-export default function AccordingComponent({ faq }: faqType) {
+export default function AccordingComponent({ faq }: { faq: faqType }) {
   return (
     <div className="md:w-full">
       <Accordion type="single" collapsible>

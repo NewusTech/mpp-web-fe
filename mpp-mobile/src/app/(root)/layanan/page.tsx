@@ -8,20 +8,7 @@ import { toast } from "sonner";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import CardLayananComponent from "@/components/services/others/cardLayananComponent";
 import PaginationComponent from "@/components/pagination/paginationComponent";
-
-interface Instansi {
-  image?: string;
-  name: string;
-}
-
-interface Layanantype {
-  id: number;
-  name: string;
-  image?: string;
-  slug: string;
-  jmlLayanan: number;
-  active_offline: boolean;
-}
+import { Layanantype } from "@/types/type";
 
 export default function LayananPage() {
   const [instansi, setInstansi] = useState([]);

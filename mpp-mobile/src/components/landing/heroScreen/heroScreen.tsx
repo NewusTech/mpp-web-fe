@@ -1,22 +1,12 @@
 import Image from "next/image";
-import gedung from "@/../public/assets/kab-lamtim.jpg";
-import kantor from "@/../public/assets/kantor bupati.jpg";
-import bupati from "@/../public/assets/inspektorat.jpg";
-import mpp from "@/../public/assets/mpp lamtim2.jpeg";
-import lamtim from "@/../public/assets/Lampung.webp";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import { CarouselType } from "@/types/type";
 
-type CarouselType = {
-  image: string;
-}[];
-
-export default function HeroScreen({ carousel }: { carousel: CarouselType }) {
-  const images = [gedung, bupati, kantor, mpp, lamtim];
-
+export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
   return (
     <div className="md:items-center md:flex md:justify-between w-dvw md:w-full bg-primary-700">
       <div className="flex flex-col px-[35px] pb-6 md:hidden">
@@ -54,7 +44,7 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType }) {
               <div className="w-full h-[300px] md:h-[650px]">
                 <Image
                   src={image.image}
-                  className="w-full h-full"
+                  className="w-full h-full object-cover"
                   alt="Gedung Kabupaten Lampung Timur"
                   layout="fill"
                   objectFit="cover"

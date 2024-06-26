@@ -15,65 +15,33 @@ import Image from "next/image";
 import formatDate from "@/helpers/logout/formatted";
 import fetchInformasi from "@/components/fetching/infromasi/informasi";
 import fetchCarousel from "@/components/fetching/carousel/carousel";
-
-type Berita = {
-  title: string;
-  slug: string;
-  desc: string;
-  image: string;
-  url: string;
-  createdAt: string;
-};
-
-type MyBerita = {
-  status: string;
-  message: string;
-  data: [Berita];
-};
-
-type Instansi = {
-  id: number;
-  name: string;
-  image?: string;
-  slug: string;
-  jmlLayanan: number;
-  active_offline: boolean;
-};
-
-type MyInstansi = {
-  status: string;
-  message: string;
-  data: [Instansi];
-};
-
-type Facility = {
-  id: number;
-  image: string;
-};
-
-type MyFacilities = {
-  status: string;
-  message: string;
-  data: [Facility];
-};
-
-interface InfoLandingType {
-  instansiCount: string;
-  layananCount: string;
-  permohonanCountToday: string;
-}
-
-interface CarouselType {
-  image: string;
-}
+import fetchVideo from "@/components/fetching/video/video";
+import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
+import MppNext from "@/components/mppNext/mppNext";
+import {
+  AlurType,
+  AppType,
+  Berita,
+  CarouselType,
+  FacilityType,
+  InfoLandingType,
+  Instansi,
+  MyBerita,
+  MyInstansi,
+  VideoType,
+} from "@/types/type";
+import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
   const [beritaSlug, SetBeritaSlug] = useState<Berita>();
   const [layanan, setLayanan] = useState<MyInstansi>();
-  const [facilities, setFacilities] = useState<MyFacilities>();
+  const [facilities, setFacilities] = useState<FacilityType[]>();
   const [infoLanding, setInfoLanding] = useState<InfoLandingType | undefined>();
   const [carousel, setCarousel] = useState<CarouselType[] | undefined>();
+  const [video, setVideo] = useState<VideoType>();
+  const [alur, setAlur] = useState<AlurType>();
+  const [apps, setApps] = useState<AppType[] | undefined>();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
@@ -89,11 +57,26 @@ function Home() {
 
       const carousel = await fetchCarousel();
 
+      const videos = await fetchVideo();
+
+      const alurMpp = await fetchAlurMpp();
+
+      const app = await fetchAppSupport(1000000);
+
       setBerita(news);
       setLayanan(layanan);
-      setFacilities(fasilitas);
+      setFacilities(fasilitas.data);
       setInfoLanding(dashboard.data);
       setCarousel(carousel.data);
+      if (videos.data) {
+        setVideo(videos.data);
+      }
+      if (alurMpp.data) {
+        setAlur(alurMpp.data);
+      }
+      if (app) {
+        setApps(app.data);
+      }
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
@@ -158,6 +141,13 @@ function Home() {
             </Link>
           </div>
         </div>
+
+        <MppNext
+          facilities={facilities || []}
+          video={video || { video: "" }}
+          alur={alur || { image: "" }}
+          apps={apps || []}
+        />
 
         <div className="flex flex-col bg-primary-200 items-center mt-5 mx-5 md:mx-8 py-5 rounded-xl md:p-8">
           <h3 className="text-primary-800 text-[26px] md:text-[32px] font-semibold mb-[16px] md:mb-[36px]">

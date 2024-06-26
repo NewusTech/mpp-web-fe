@@ -1,11 +1,6 @@
-interface VisiMisiType {
-  visimisi: {
-    visi: string;
-    misi: string;
-  };
-}
+import { VisiMisiType } from "@/types/type";
 
-export default function MppScreen({ visimisi }: VisiMisiType) {
+export default function MppScreen({ visimisi }: { visimisi: VisiMisiType }) {
   return (
     <div className="flex flex-col w-full items-center justify-center mt-[24px] px-[35px] md:px-0 md:mt-[56px] bg-primary-100 md:mx-0 mb-[24px] md:mb-0 md:pb-[150px]">
       <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-none place-items-center md:place-items-start md:mx-[35px] gap-[16px] md:mb-[62px]">

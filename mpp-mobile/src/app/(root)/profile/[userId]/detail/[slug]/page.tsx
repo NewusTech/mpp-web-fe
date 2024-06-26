@@ -23,30 +23,7 @@ import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import Cookies from "js-cookie";
-
-interface UpdateUserType {
-  id?: number;
-  name?: string;
-  nik?: string;
-  telepon?: string;
-  email?: string;
-  kecamatan_id?: string;
-  desa_id?: string;
-  rt?: string;
-  rw?: string;
-  alamat?: string;
-  slug?: string;
-}
-
-interface KecamatanType {
-  id: number;
-  name: string;
-}
-
-interface DesaType {
-  id: number;
-  name: string;
-}
+import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
 
 export default function ProfileEditPage({
   params,

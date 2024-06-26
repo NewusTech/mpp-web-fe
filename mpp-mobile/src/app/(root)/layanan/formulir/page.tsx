@@ -59,6 +59,8 @@ export default function FormulirPage() {
     fetchInputForm(permohonan.id);
   }, [permohonan.id]);
 
+  console.log(form, ">>>");
+
   const change = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
