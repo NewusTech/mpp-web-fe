@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Cookies from "js-cookie";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -12,19 +11,13 @@ import {
 import Image from "next/image";
 import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
 import { LogIn } from "lucide-react";
+import { Layanantype } from "@/types/type";
 
-interface Layanantype {
-  layanan: {
-    id: number;
-    name: string;
-    image?: string;
-    slug: string;
-    jmlLayanan: number;
-    active_offline: boolean;
-  };
-}
-
-export default function CardLayananComponent({ layanan }: Layanantype) {
+export default function CardLayananComponent({
+  layanan,
+}: {
+  layanan: Layanantype;
+}) {
   const token = Cookies.get("Authorization");
 
   let bgStatus = "";
@@ -46,7 +39,7 @@ export default function CardLayananComponent({ layanan }: Layanantype) {
           className="h-[135px] w-full flex items-center justify-center">
           <Image
             src={layanan?.image || ""}
-            className="h-[107px] object-fit"
+            className="h-full object-contain"
             alt="Lampung Timur"
             width={80}
             height={106.12}

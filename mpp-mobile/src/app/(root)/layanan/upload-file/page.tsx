@@ -10,27 +10,7 @@ import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Image from "next/image";
 import { toast } from "sonner";
-
-type LayananFormType = {
-  id: number;
-  field: string;
-  tipedata: string;
-};
-
-type LayananType = {
-  Layananforms: LayananFormType[];
-  desc: string;
-  image: string;
-  name: string;
-  slug: string;
-};
-
-interface FormData {
-  id: string;
-  field: string;
-  tipedata: string;
-  datajson?: { id: string; key: string }[];
-}
+import { LayananType } from "@/types/type";
 
 const steps = [
   { id: 1, title: "1" },

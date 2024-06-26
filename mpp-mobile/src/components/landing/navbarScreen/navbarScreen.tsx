@@ -59,10 +59,10 @@ export default function NavbarScreen() {
   return (
     <div
       className={`flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:px-[70px] bg-none`}>
-      <Link href="/" className="flex flex-row w-[266px] h-[64px]">
+      <Link href="/" className="flex flex-row w-[266px] h-[64px] gap-x-4">
         <Image src={logo} alt="Lampung Timur" className="w-[73px] h-[64px]" />
 
-        <div className="flex flex-col w-[193px] h-[64px] leading-none">
+        <div className="flex flex-col justify-center w-[193px] h-[64px] leading-none">
           <h3
             className={`${raleway.className} font-bold text-[14px] text-secondary-700 py-[4px]`}>
             MAL PELAYANAN PUBLIK

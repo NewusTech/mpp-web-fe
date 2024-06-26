@@ -35,19 +35,9 @@ import {
 import CardGrafikBulananComponent from "@/components/statistics/cardGrafikBulananComponent/cardGrafikBulananComponent";
 import CardYearStatistik from "@/components/fetching/statistiks/cardYearStatistiks/cardYearStatistik";
 import PaginationComponent from "@/components/pagination/paginationComponent";
+import { DataStatistik, StatistikType } from "@/types/type";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-type DataStatistik = {
-  name: string;
-  permohonan_count: number;
-  skm_count: number;
-};
-
-type StatistikType = {
-  countPerYear: { [key: string]: number };
-  formattedCountByInstansi: DataStatistik[];
-};
 
 export default function StatisticsPage() {
   const [statistik, setStatistik] = useState<StatistikType | null>();

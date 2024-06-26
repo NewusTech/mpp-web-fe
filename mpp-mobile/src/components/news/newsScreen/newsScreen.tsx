@@ -1,13 +1,5 @@
+import { Berita } from "@/types/type";
 import CardNewsComponent from "../others/cardNewsComponent";
-
-type Berita = {
-  title: string;
-  slug: string;
-  desc: string;
-  image: string;
-  url: string;
-  createdAt: string;
-};
 
 type MyBerita = {
   berita: Berita[];

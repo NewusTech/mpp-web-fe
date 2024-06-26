@@ -17,21 +17,7 @@ import { useRouter } from "next/navigation";
 import { Dispatch } from "redux";
 import { RootState } from "@/store/store";
 import Steps from "@/components/steps/steps";
-
-interface JWT {
-  userId: number;
-}
-
-type InfoType = {
-  status: string;
-  data: {
-    name: string;
-    nik: string;
-    telepon: string;
-    alamat: string;
-    slug: string;
-  };
-};
+import { InfoType } from "@/types/type";
 
 const formSchema = z.object({
   name: z

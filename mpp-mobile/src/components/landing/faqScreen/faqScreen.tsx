@@ -1,13 +1,8 @@
 "use client";
 
+import { faqType } from "@/types/type";
 import AccordingComponent from "../others/accordionComponent";
 import { useEffect, useState } from "react";
-
-interface faqType {
-  id: number;
-  question: string;
-  answer: string;
-}
 
 export default function FAQScreen() {
   const [faqs, setFaqs] = useState([]);
