@@ -7,7 +7,7 @@ type MyBerita = {
 
 export default function NewsScreen({ berita }: MyBerita) {
   return (
-    <div className="flex flex-col items-center mt-[24px] bg-primary-100 mb-[60px] md:mb-0 md:pb-[300px] md:px-[70px] md:mt-[24px]">
+    <div className="flex flex-col items-center pt-[24px] bg-primary-100 mb-[60px] md:mb-0 md:pb-[300px] md:px-[70px] md:pt-[24px]">
       <h3 className="text-primary-800 font-semibold text-[16px] md:text-[32px] mb-[32px]">
         Berita
       </h3>

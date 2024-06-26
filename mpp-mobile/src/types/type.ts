@@ -154,3 +154,9 @@ export interface AppType {
   link: string;
   desc: string;
 }
+
+export interface CardStepProps {
+  title: string;
+  isLastStep: boolean;
+  isActive: boolean;
+}

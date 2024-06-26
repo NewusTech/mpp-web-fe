@@ -35,7 +35,7 @@ export default function NavbarScreen() {
   useEffect(() => {
     setCurrentPath(pathName);
     if (pathName === "/") {
-      setNavbarColor("bg-primary-800");
+      setNavbarColor("bg-primary-50");
     } else {
       setNavbarColor("bg-primary-100");
     }
@@ -58,7 +58,7 @@ export default function NavbarScreen() {
 
   return (
     <div
-      className={`flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:px-[70px] bg-none`}>
+      className={`flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:px-[70px] ${navbarColor}`}>
       <Link href="/" className="flex flex-row w-[266px] h-[64px] gap-x-4">
         <Image src={logo} alt="Lampung Timur" className="w-[73px] h-[64px]" />
 
@@ -86,15 +86,79 @@ export default function NavbarScreen() {
             } font-light`}>
             Beranda
           </Link>
-          <Link
-            href="/mpp"
-            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
-              pathName === "/mpp"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
-            } font-light`}>
-            MPP
-          </Link>
+
+          <div className="w-[111.5px] ml-6 mr-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <div className="flex flex-row gap-x-5 justify-center items-center group">
+                  <h3 className="text-center text-[20px] text-primary-800 group-hover:text-secondary-700">
+                    MPP
+                  </h3>
+
+                  <ChevronDown className="w-[24px] h-[24px] text-primary-800 group-hover:text-secondary-700" />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <Link
+                  href={`/mpp/tentang-mpp`}
+                  className={`${
+                    pathName === `/mpp/tentang-mpp`
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
+                  }`}>
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                    <p
+                      className={`${
+                        pathName === `/mpp/tentang-mpp`
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
+                      Tentang MPP
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link
+                  href="/mpp/fasilitas"
+                  className={`${
+                    pathName === "/pengaduan"
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
+                  }`}>
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                    <p
+                      className={`${
+                        pathName === "/mpp/fasilitas"
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
+                      Fasilitas
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link
+                  href="/mpp/aplikasi-pendukung"
+                  className={`${
+                    pathName === "/mpp/aplikasi-pendukung"
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
+                  }`}>
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                    <p
+                      className={`${
+                        pathName === "/mpp/aplikasi-pendukung"
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
+                      Aplikasi Pendukung
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
           <Link
             href="/layanan"
             className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
