@@ -1,8 +1,4 @@
-export interface CardStepProps {
-  title: string;
-  isLastStep: boolean;
-  isActive: boolean;
-}
+import { CardStepProps } from "@/types/type";
 
 export default function Steps({ title, isLastStep, isActive }: CardStepProps) {
   return (

@@ -48,7 +48,7 @@ export default function LayananPage() {
   );
 
   return (
-    <div className="w-full flex flex-col bg-primary-100 items-center px-[35px] mt-[24px] mb-[46px] md:mb-0 md:pb-[200px] md:px-[70px]">
+    <div className="w-full flex flex-col bg-primary-100 items-center px-[35px] pt-[24px] mb-[46px] md:mb-0 md:pb-[200px] md:px-[70px]">
       <h4 className="text-primary-800 text-[16px] md:text-[32px] mb-[32px] font-semibold">
         Layanan Mal Pelayanan Publik
       </h4>
