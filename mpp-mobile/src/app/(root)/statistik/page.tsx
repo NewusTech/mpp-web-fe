@@ -132,7 +132,11 @@ export default function StatisticsPage() {
         {
           label: "Statistics",
           data: data,
-          backgroundColor: ["#7BBA78", "#F8E29E", "#F3CB53"],
+          backgroundColor: [
+            "bg-secondary-700",
+            "bg-primary-700",
+            "bg-secondary-500",
+          ],
         },
       ],
     });
@@ -211,7 +215,7 @@ export default function StatisticsPage() {
 
           <div className="flex flex-col bg-white w-[290px] md:w-full shadow-xl rounded-2xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
-              <h5 className="text-[16px] md:text-[20px] text-[#3A6C38] font-semibold">
+              <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Permohonan Layanan
               </h5>
 

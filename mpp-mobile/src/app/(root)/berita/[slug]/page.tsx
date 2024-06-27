@@ -1,3 +1,4 @@
+import fetchNews from "@/components/fetching/berita/berita";
 import NewsDetailScreen from "@/components/news/newsDetailScreen/newsDetailScreen";
 
 async function fetchDetailNews(slug: string) {
@@ -20,6 +21,15 @@ export default async function DetailBeritaPage({
   params: { slug: string };
 }) {
   const detail = await fetchDetailNews(params.slug);
+  const news = await fetchNews(1, 1000000, detail.data.id);
 
-  return <NewsDetailScreen berita={detail.data} />;
+  const sortedNews = news.data.sort((a: any, b: any) => {
+    const dateA = new Date(a.publishedAt).getTime();
+    const dateB = new Date(b.publishedAt).getTime();
+    return dateB - dateA;
+  });
+
+  const latestNews = sortedNews.slice(0, 3);
+
+  return <NewsDetailScreen berita={detail.data} latestNews={latestNews} />;
 }

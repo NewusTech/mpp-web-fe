@@ -22,11 +22,14 @@ export default function AuthLayout({
 }>) {
   const isMobile = useMediaQuery("(max-width: 767px)");
   return (
-    <div className={`${poppins.className} bg-primary-50 w-full relative`}>
+    <div
+      className={`${poppins.className} bg-primary-50 w-full relative flex flex-col min-h-screen`}>
       {!isMobile ? (
         <Provider store={store}>
           <NavbarScreen />
-          <div className="flex-1 overflow-y-auto">{children}</div>
+          <div className="flex-1 overflow-y-auto bg-primary-100">
+            {children}
+          </div>
           <Toaster position="top-center" />
           <div className="w-full absolute bottom-0 bg-primary-50">
             <FooterScreen />
@@ -35,7 +38,7 @@ export default function AuthLayout({
       ) : (
         <Provider store={store}>
           <HamburgerMenu />
-          <div className="flex-1 overflow-y-auto w-full bg-primary-50">
+          <div className="flex-1 overflow-y-auto w-full bg-primary-100">
             {children}
           </div>
           <Toaster position="top-center" />

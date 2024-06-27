@@ -193,7 +193,7 @@ function Home() {
           </div>
 
           <div className="flex flex-col px-5 md:px-0 w-full items-center md:mt-6">
-            <div className="flex flex-col w-full md:flex-row md:grid md:grid-cols-3 flex-wrap md:justify-between gap-[16px] md:gap-5">
+            <div className="flex flex-col w-full md:grid md:grid-cols-3 gap-[16px] md:justify-center md:gap-5">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}

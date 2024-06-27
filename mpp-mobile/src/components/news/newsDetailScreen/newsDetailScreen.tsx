@@ -1,26 +1,24 @@
 import formatDate, { formatLongDate } from "@/helpers/logout/formatted";
+import { Berita } from "@/types/type";
 import Image from "next/image";
+import CardNewsComponent from "../others/cardNewsComponent";
 
-type Berita = {
-  berita: {
-    title: string;
-    slug: string;
-    desc: string;
-    image: string;
-    url: string;
-    createdAt: string;
-  };
-};
-export default function NewsDetailScreen({ berita }: Berita) {
+export default function NewsDetailScreen({
+  berita,
+  latestNews,
+}: {
+  berita: Berita;
+  latestNews: Berita[];
+}) {
   const date = formatLongDate(berita.createdAt);
 
   return (
-    <div className="flex items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-[56px] mx-[35px] md:mx-0 md:px-[70px] mb-[107px] md:mb-0 md:pb-[107px] bg-primary-100">
-      <div className="flex flex-col md:flex-row items-center md:items-start md:justify-start gap-[16px]">
-        <div className="flex w-full self-center md:self-start">
+    <div className="flex flex-col items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-8 mx-[35px] md:mx-0 pt-3 pb-8 md:mb-0 md:pb-[150px] bg-primary-100">
+      <div className="flex flex-col md:px-[150px] items-center gap-6">
+        <div className="flex w-full h-full md:h-[550px] self-center">
           <Image
             src={berita.image}
-            className="flex w-full h-full md:rounded-xl"
+            className="flex w-full h-full object-cover md:rounded-xl"
             alt="Berita"
             width={290}
             height={210}
@@ -33,9 +31,17 @@ export default function NewsDetailScreen({ berita }: Berita) {
               {berita.title}
             </h6>
 
-            <p className="text-[12px] md:text-[14px] text-neutral-900 font-normal">
-              {date}
-            </p>
+            <div className="flex flex-row">
+              <p className="text-[12px] pr-4 md:text-[14px] text-neutral-900 font-normal">
+                {berita.Instansi?.name}
+              </p>
+
+              <ul>
+                <li className="text-[12px] list-disc md:text-[14px] text-neutral-900 font-normal">
+                  {date}
+                </li>
+              </ul>
+            </div>
           </div>
 
           <div className="flex justify-center items-center w-full">
@@ -44,6 +50,20 @@ export default function NewsDetailScreen({ berita }: Berita) {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="flex w-full items-center md:px-[70px] mt-[35px]">
+        <h6 className="text-[16px] md:text-[28px] text-neutral-900">
+          Berita Lainnya
+        </h6>
+
+        <div className="flex-1 w-full h-full border border-neutral-700 ml-4"></div>
+      </div>
+
+      <div className="flex flex-col md:px-[70px] mt-3 md:mt-5 md:flex-row md:flex-wrap md:w-full md:justify-center md:gap-x-6">
+        {latestNews.map((berita: Berita, i: number) => (
+          <CardNewsComponent key={i} news={berita} />
+        ))}
       </div>
     </div>
   );
