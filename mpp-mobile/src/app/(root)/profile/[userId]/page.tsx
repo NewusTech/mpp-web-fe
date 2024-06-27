@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ProfileType } from "@/types/type";
+import { ProfileNewType, ProfileType } from "@/types/type";
 
 export default function ProfilePage({
   params,
@@ -15,7 +15,7 @@ export default function ProfilePage({
   params: { userId: number };
 }) {
   const token = Cookies.get("Authorization");
-  const [profile, setProfile] = useState<ProfileType>();
+  const [profile, setProfile] = useState<ProfileNewType>();
 
   const fetchProfiles = async () => {
     try {
@@ -34,8 +34,74 @@ export default function ProfilePage({
     fetchProfiles();
   }, []);
 
+  let gender = "";
+
+  if (profile?.gender === 1) {
+    gender = "Laki-laki";
+  } else if (profile?.gender === 2) {
+    gender = "Perempuan";
+  }
+
+  let agama = "";
+
+  switch (profile?.agama) {
+    case 1:
+      agama = "Islam";
+      break;
+    case 2:
+      agama = "Kristen";
+      break;
+    case 3:
+      agama = "Katolik";
+      break;
+    case 4:
+      agama = "Hindu";
+      break;
+    case 5:
+      agama = "Buddha";
+      break;
+    case 6:
+      agama = "Konghucu";
+      break;
+  }
+
+  let pendidikan = "";
+
+  switch (profile?.pendidikan) {
+    case 1:
+      pendidikan = "Tidak Sekolah";
+      break;
+    case 2:
+      pendidikan = "SD";
+      break;
+    case 3:
+      pendidikan = "SMP";
+      break;
+    case 4:
+      pendidikan = "SMA";
+      break;
+    case 5:
+      pendidikan = "Diploma 1";
+      break;
+    case 6:
+      pendidikan = "Diploma 2";
+      break;
+    case 7:
+      pendidikan = "Diploma 3";
+      break;
+    case 8:
+      pendidikan = "Strata 1 / Diploma 4";
+      break;
+    case 9:
+      pendidikan = "Strata 2";
+      break;
+    case 10:
+      pendidikan = "Strata 3";
+      break;
+  }
+
   return (
-    <div className="flex items-center justify-center w-full mt-[24px] mb-[24px] md:mb-0 md:pt-[24px] md:mt-[32px] md:pb-[70px] bg-primary-100">
+    <div className="flex items-center justify-center w-full mt-[24px] md:mt-0 mb-[24px] md:pt-[24px] md:pb-[70px] bg-primary-100">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
         <div className="flex self-start mb-[32px]">
           <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
@@ -46,48 +112,96 @@ export default function ProfilePage({
         <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg md:px-[75px] md:pt-[32px]">
           <div className="flex flex-col px-[16px] pt-[16px]">
             <div className="grid grid-rows-7 gap-[8px]">
-              <div className="flex flex-col w-full mb-[4px] md:mb-2">
-                <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                  Nama Lengkap
-                </label>
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Nama Lengkap
+                  </label>
 
-                <label className="text-[12px] md:text-[14px] text-neutral-900">
-                  {profile?.name}
-                </label>
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {profile?.name}
+                  </label>
+                </div>
+
+                <div className="flex flex-col w-full my-[4px] md:my-0 md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Jenis Kelamin
+                  </label>
+
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {gender || "Harap Perbarui Data Diri Anda!"}
+                  </label>
+                </div>
               </div>
 
-              <div className="flex flex-col w-full my-[4px] md:my-2">
-                <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                  NIK
-                </label>
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    NIK
+                  </label>
 
-                <label className="text-[12px] md:text-[14px] text-neutral-900">
-                  {profile?.nik}
-                </label>
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {profile?.nik}
+                  </label>
+                </div>
+
+                <div className="flex flex-col w-full my-[4px] md:my-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Agama
+                  </label>
+
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {agama || "Harap Perbarui Data Diri Anda!"}
+                  </label>
+                </div>
               </div>
 
-              <div className="flex flex-col w-full my-[4px] md:my-2">
-                <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                  Nomor Telepon
-                </label>
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Nomor Telepon
+                  </label>
 
-                <label className="text-[12px] md:text-[14px] text-neutral-900">
-                  {profile?.telepon}
-                </label>
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {profile?.telepon}
+                  </label>
+                </div>
+
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Pendidikan
+                  </label>
+
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {pendidikan || "Harap Perbarui Data Diri Anda!"}
+                  </label>
+                </div>
               </div>
 
-              <div className="flex flex-col w-full my-[4px] md:my-2">
-                <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                  Email
-                </label>
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Email
+                  </label>
 
-                <label className="text-[12px] md:text-[14px] text-neutral-900">
-                  {profile?.email}
-                </label>
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {profile?.email}
+                  </label>
+                </div>
+
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Pekerjaan
+                  </label>
+
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {profile?.pekerjaan || "Harap Perbarui Data Diri Anda!"}
+                  </label>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 w-full my-[4px] md:my-2">
-                <div className="flex flex-col">
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Kecamatan
                   </label>
@@ -97,7 +211,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col pl-3">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Desa
                   </label>
@@ -108,8 +222,8 @@ export default function ProfilePage({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 w-full my-[4px] md:my-2">
-                <div className="flex flex-col">
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     RT
                   </label>
@@ -119,7 +233,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col pl-3">
+                <div className="flex flex-col w-full mb-[4px] md:mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     RW
                   </label>

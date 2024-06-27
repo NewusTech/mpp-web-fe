@@ -98,10 +98,32 @@ export interface ProfileType {
   slug: string;
 }
 
+export interface ProfileNewType {
+  id: number;
+  name: string;
+  email: string;
+  telepon: string;
+  nik: string;
+  gender?: number;
+  agama?: number;
+  pendidikan?: number;
+  pekerjaan?: string;
+  kecamatan_name: string;
+  desa_name: string;
+  rt: string;
+  rw: string;
+  alamat: string;
+  slug: string;
+}
+
 export interface UpdateUserType {
   id?: number;
   name?: string;
   nik?: string;
+  gender?: string;
+  agama?: string;
+  pendidikan?: string;
+  pekerjaan?: string;
   telepon?: string;
   email?: string;
   kecamatan_id?: string;
