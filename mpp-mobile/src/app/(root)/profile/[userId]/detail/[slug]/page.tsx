@@ -300,8 +300,8 @@ export default function ProfileEditPage({
 
         <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-[16px] md:pt-[32px]">
           <form onSubmit={onSubmit} className="flex flex-col w-full">
-            <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
-              <div className="flex flex-col w-full mb-[4px] md:mb-4">
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full md:mb-4">
                 <ProfileEditInput
                   name="name"
                   types="text"
@@ -314,7 +314,7 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-full mb-[4px] md:mb-4">
+              <div className="flex flex-col w-full mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
                   Jenis Kelamin
                 </Label>
@@ -350,8 +350,8 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
-              <div className="flex flex-col w-full mb-[4px] md:mb-4">
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
                   name="nik"
                   types="number"
@@ -364,7 +364,7 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-full mb-[4px] md:mb-4">
+              <div className="flex flex-col w-full mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
                   Agama
                 </Label>
@@ -400,8 +400,8 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
-              <div className="flex flex-col w-full mb-[4px] md:mb-4">
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
                   name="telepon"
                   types="number"
@@ -414,7 +414,7 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-full mb-[4px] md:mb-4">
+              <div className="flex flex-col w-full mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
                   Pendidikan
                 </Label>
@@ -457,8 +457,8 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
-              <div className="flex flex-col w-[120px] mb-[4px] md:mb-4 md:w-full">
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
                   name="email"
                   types="text"
@@ -471,7 +471,7 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-[120px] mb-[4px] md:mb-4 md:w-full">
+              <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
                   name="pekerjaan"
                   types="text"
@@ -485,8 +485,8 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
-              <div className="flex flex-col w-[120px] mb-[4px] md:mb-4 md:w-full">
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
                   Kecamatan
                 </Label>
@@ -535,7 +535,7 @@ export default function ProfileEditPage({
                 </Select>
               </div>
 
-              <div className="flex flex-col w-[120px] mb-[4px] md:mb-4 md:w-full">
+              <div className="flex flex-col w-full mb-4w-full">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
                   Desa
                 </Label>
@@ -578,8 +578,8 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 w-full my-[4px] md:gap-4">
-              <div className="flex flex-col w-[120px] mb-[4px] md:mb-4 md:w-full">
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
                   name="rt"
                   types="number"
@@ -592,7 +592,7 @@ export default function ProfileEditPage({
                 />
               </div>
 
-              <div className="flex flex-col w-[120px] mb-[4px] md:mb-4 md:w-full">
+              <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
                   name="rw"
                   types="number"
@@ -606,8 +606,8 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-none w-full my-[4px] md:my-4">
-              <Label className="text-[12px] text-neutral-900 md:mb-4 font-semibold">
+            <div className="flex flex-col w-full">
+              <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                 ALamat
               </Label>
 

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Image from "next/image";
+import { Textarea } from "@/components/ui/textarea";
 
 type SurveiFormType = {
   id: number;
@@ -31,6 +32,7 @@ export default function SurveySKMPage() {
   const router = useRouter();
   const [surveis, setSurveis] = useState<SurveiType>();
   const [input, setInput] = useState<{ [key: string]: any }>({});
+  const [kritissaran, setKritissaran] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const token = Cookies.get("Authorization");
 
@@ -75,6 +77,7 @@ export default function SurveySKMPage() {
     const formData = {
       datainput,
       date: localStorage.getItem("dataTanggal"),
+      kritiksaran: kritissaran,
     };
 
     const response = await fetch(
@@ -97,8 +100,15 @@ export default function SurveySKMPage() {
     router.push("/survey");
   };
 
+  const isButtonDisabled = () => {
+    return (
+      Object.keys(input).length !== (surveis?.Surveyforms?.length || 0) ||
+      kritissaran.trim() === ""
+    );
+  };
+
   return (
-    <div className="flex items-center justify-center md:w-full bg-primary-100 mt-[50px] mx-[20px] mb-[27px] md:mb-0 md:pb-[150px]">
+    <div className="flex items-center justify-center md:w-full bg-primary-100 mt-[50px] md:mt-0 md:pt-6 mx-[20px] mb-[27px] md:mb-0 md:pb-[150px]">
       <div className="flex flex-col md:w-full items-center md:mx-[230px]">
         <div className="flex flex-col md:w-full bg-white rounded-2xl shadow-lg px-[16px]">
           <div className="flex justify-center my-[22px] mb-[16px]">
@@ -162,11 +172,28 @@ export default function SurveySKMPage() {
                   })}
                 </div>
 
+                <div className="w-full px-5 mt-5">
+                  <Label className="text-[12px] font-normal text-primary-800">
+                    Kritik dan Saran
+                  </Label>
+
+                  <Textarea
+                    name="kritiksaran"
+                    value={kritissaran}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                      setKritissaran(e.target.value)
+                    }
+                    placeholder="Masukkan Kritik dan Saran"
+                    className="mt-5 h-[150px] border border-neutral-700 placeholder:opacity-35"
+                  />
+                </div>
+
                 <div className="flex self-center justify-center items-end mb-[22px] mt-[32px]">
                   <Button
                     className="w-[90px] h-[30px] text-[12px] text-neutral-50 font-light"
                     type="submit"
-                    variant="link">
+                    variant="link"
+                    disabled={isButtonDisabled()}>
                     Selesai
                   </Button>
                 </div>

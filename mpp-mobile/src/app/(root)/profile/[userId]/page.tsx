@@ -101,7 +101,7 @@ export default function ProfilePage({
   }
 
   return (
-    <div className="flex items-center justify-center w-full mt-[24px] md:mt-0 mb-[24px] md:pt-[24px] md:pb-[70px] bg-primary-100">
+    <div className="flex items-center justify-center w-full mb-[24px] pt-[24px] md:pb-[70px] bg-primary-100">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
         <div className="flex self-start mb-[32px]">
           <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
@@ -111,9 +111,9 @@ export default function ProfilePage({
 
         <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg md:px-[75px] md:pt-[32px]">
           <div className="flex flex-col px-[16px] pt-[16px]">
-            <div className="grid grid-rows-7 gap-[8px]">
+            <div className="grid grid-rows-7 gap-2">
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Nama Lengkap
                   </label>
@@ -123,7 +123,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col w-full my-[4px] md:my-0 md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Jenis Kelamin
                   </label>
@@ -135,7 +135,7 @@ export default function ProfilePage({
               </div>
 
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     NIK
                   </label>
@@ -145,7 +145,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col w-full my-[4px] md:my-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Agama
                   </label>
@@ -157,7 +157,7 @@ export default function ProfilePage({
               </div>
 
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Nomor Telepon
                   </label>
@@ -167,7 +167,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Pendidikan
                   </label>
@@ -179,7 +179,7 @@ export default function ProfilePage({
               </div>
 
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Email
                   </label>
@@ -189,7 +189,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Pekerjaan
                   </label>
@@ -201,7 +201,7 @@ export default function ProfilePage({
               </div>
 
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Kecamatan
                   </label>
@@ -211,7 +211,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Desa
                   </label>
@@ -223,7 +223,7 @@ export default function ProfilePage({
               </div>
 
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     RT
                   </label>
@@ -233,7 +233,7 @@ export default function ProfilePage({
                   </label>
                 </div>
 
-                <div className="flex flex-col w-full mb-[4px] md:mb-2">
+                <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     RW
                   </label>
@@ -244,7 +244,7 @@ export default function ProfilePage({
                 </div>
               </div>
 
-              <div className="flex flex-col w-full mt-[4px] md:my-2">
+              <div className="flex flex-col w-full mb-2">
                 <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                   Alamat
                 </label>

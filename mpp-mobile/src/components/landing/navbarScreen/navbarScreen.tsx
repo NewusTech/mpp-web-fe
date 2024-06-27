@@ -5,7 +5,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CircleUserRound, Send, ChevronDown, History } from "lucide-react";
+import {
+  CircleUserRound,
+  Send,
+  ChevronDown,
+  History,
+  ClipboardList,
+} from "lucide-react";
 
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import Image from "next/image";
@@ -168,6 +174,7 @@ export default function NavbarScreen() {
             } font-light`}>
             Layanan
           </Link>
+
           <Link
             href="/berita"
             className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
@@ -177,15 +184,17 @@ export default function NavbarScreen() {
             } font-light`}>
             Berita
           </Link>
+
           <Link
-            href="/survey"
+            href="/kontak"
             className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
-              pathName === "/survey"
+              pathName === "/kontak"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
-            SKM
+            Kontak
           </Link>
+
           <Link
             href="/statistik"
             className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
@@ -231,6 +240,33 @@ export default function NavbarScreen() {
                           : "text-neutral-700 hover:text-secondary-700"
                       } text-[16px] group-hover:text-secondary-700`}>
                       Profile
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link
+                  href="/survey"
+                  className={`${
+                    pathName === "/survey"
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
+                  }`}>
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                    <ClipboardList
+                      className={`${
+                        pathName === "/survey"
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
+                    />
+
+                    <p
+                      className={`${
+                        pathName === "/survey"
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700`}>
+                      SKM
                     </p>
                   </DropdownMenuItem>
                 </Link>
