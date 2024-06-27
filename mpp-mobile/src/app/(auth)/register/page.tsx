@@ -291,7 +291,7 @@ export default function RegisterScreen() {
                   Alamat
                 </h3>
 
-                <div className="grid grid-rows-4 md:w-full gap-4 place-items-center md:place-items-start">
+                <div className="grid md:grid-rows-3 md:w-full gap-4 place-items-center md:place-items-start">
                   <div className="w-full">
                     <Label className="text-[12px] text-neutral-900 font-semibold">
                       Kecamatan
@@ -386,30 +386,32 @@ export default function RegisterScreen() {
                     </Select>
                   </div>
 
-                  <div className="w-full">
-                    <RegisterInput
-                      name="rt"
-                      types="number"
-                      value={newUser.rt}
-                      change={changeUser}
-                      labelName="RT"
-                      placeholder="RT"
-                      classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
-                    />
-                  </div>
+                  <div className="flex md:flex-row flex-col w-full md:justify-between gap-4">
+                    <div className="w-full md:w-1/2">
+                      <RegisterInput
+                        name="rt"
+                        types="number"
+                        value={newUser.rt}
+                        change={changeUser}
+                        labelName="RT"
+                        placeholder="RT"
+                        classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      />
+                    </div>
 
-                  <div className="w-full">
-                    <RegisterInput
-                      name="rw"
-                      types="number"
-                      value={newUser.rw}
-                      change={changeUser}
-                      labelName="RW"
-                      placeholder="RW"
-                      classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
-                    />
+                    <div className="w-full md:w-1/2">
+                      <RegisterInput
+                        name="rw"
+                        types="number"
+                        value={newUser.rw}
+                        change={changeUser}
+                        labelName="RW"
+                        placeholder="RW"
+                        classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      />
+                    </div>
                   </div>
 
                   <div className="w-full">
@@ -422,7 +424,7 @@ export default function RegisterScreen() {
                       placeholder="Alamat"
                       value={newUser.alamat}
                       onChange={changeUser}
-                      className="w-full rounded-3xl md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
+                      className="w-full rounded-3xl h-[74px] border border-neutral-700 md:h-[122px] text-[12px] placeholder:opacity-[70%]"
                     />
                   </div>
                 </div>

@@ -6,7 +6,7 @@ export default function AboutScreen({
   infoLanding: InfoLandingType;
 }) {
   return (
-    <div className="flex flex-col justify-center mt-[14px] mx-5 md:mx-8 md:mt-8 md:rounded-xl md:pt-[25px]">
+    <div className="flex flex-col justify-center mt-[14px] mx-5 md:mx-8 md:mt-0 md:pt-8 md:rounded-xl">
       <div className="flex flex-col justify-center bg-primary-200 py-5 md:py-8 rounded-xl">
         <div className="grid grid-cols-4 mx-4 gap-1 md:gap-x-5">
           <div className="flex w-full">

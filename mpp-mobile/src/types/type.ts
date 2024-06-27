@@ -1,10 +1,15 @@
 export type Berita = {
+  id: number;
   title: string;
   slug: string;
   desc: string;
   image: string;
   url: string;
   createdAt: string;
+  Instansi: {
+    id: number;
+    name: string;
+  };
 };
 
 export interface Layanantype {
