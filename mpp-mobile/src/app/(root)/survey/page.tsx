@@ -120,8 +120,12 @@ export default function SurveySkmPage() {
     dispatch(setTanggal(e.target.value));
   };
 
+  const isButtonDisabled = () => {
+    return !selectedDinas || !selectedLayanan || !date;
+  };
+
   return (
-    <div className="flex items-center justify-center bg-primary-100 md:w-full mt-[40px] mb-[200px] md:mb-0 md:pb-[150px]">
+    <div className="flex items-center justify-center bg-primary-100 w-full pt-12 md:pt-6 pb-[380px] md:pb-[150px]">
       <div className="flex flex-col items-center">
         <div className="md:flex md:justify-start md:self-start">
           <h3 className="text-[16px] md:text-start md:text-[32px] font-semibold text-primary-800">
@@ -218,7 +222,8 @@ export default function SurveySkmPage() {
               <Button
                 className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
                 type="submit"
-                variant="warning">
+                variant="warning"
+                disabled={isButtonDisabled()}>
                 <Link href="/survey/skm">Isi SKM</Link>
               </Button>
             </div>
