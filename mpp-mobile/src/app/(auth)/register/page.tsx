@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
@@ -66,7 +66,6 @@ export default function RegisterScreen() {
     alamat: "",
   });
   const [seen, setSeen] = useState(true);
-  const [search, setSearch] = useState<string>("");
   const [kecamatan, setKecamatan] = useState<KecamatanType[]>();
   const [desa, setDesa] = useState<DesaType[]>([]);
   const [selectedKecamatan, setSelectedKecamatan] = useState<number | null>(
@@ -77,6 +76,7 @@ export default function RegisterScreen() {
   const [searchDesa, setSearchDesa] = useState<string>("");
   const debounceSearchKecamatan = useDebounce(searchKecamatan);
   const debounceSearchDesa = useDebounce(searchDesa);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
     try {
@@ -119,6 +119,7 @@ export default function RegisterScreen() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/register`,
@@ -147,6 +148,8 @@ export default function RegisterScreen() {
       console.log(error);
 
       toast(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -177,8 +180,8 @@ export default function RegisterScreen() {
   }, [selectedDesa]);
 
   return (
-    <div className="flex justify-center md:py-[60px] items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-full md:w-full">
-      <div className="flex flex-col gap-[4px] md:w-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-[250px] my-[45px] md:my-0 md:px-[60px]">
+    <section className="md:container md:mx-auto flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:min-w-full md:h-screen">
+      <div className="flex flex-col gap-[4px] md:w-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-[300px] my-[45px] md:my-0 md:px-[60px]">
         <div className="flex flex-col pt-[32px]">
           <h6 className="text-primary-800 text-[16px] md:text-[28px] font-semibold mb-[4px]">
             DAFTAR
@@ -214,7 +217,7 @@ export default function RegisterScreen() {
                       labelName="Nama Lengkap"
                       placeholder="Nama Lengkap"
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
                   </div>
 
@@ -227,7 +230,7 @@ export default function RegisterScreen() {
                       labelName="NIK"
                       placeholder="NIK"
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
                   </div>
 
@@ -240,7 +243,7 @@ export default function RegisterScreen() {
                       labelName="Nomor Telepon"
                       placeholder="Nomor Telepon"
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
                   </div>
 
@@ -253,12 +256,12 @@ export default function RegisterScreen() {
                       labelName="Email"
                       placeholder="Email@gmail.com"
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
                   </div>
 
                   <div className="flex flex-col w-full">
-                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                    <Label className="text-[12px] text-primary-800 font-semibold">
                       Kata Sandi
                     </Label>
                     <div className="flex items-center mt-1 justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal border border-neutral-700 placeholder:text-[14px] placeholder:text-neutral-700">
@@ -293,7 +296,7 @@ export default function RegisterScreen() {
 
                 <div className="grid md:grid-rows-3 md:w-full gap-4 place-items-center md:place-items-start">
                   <div className="w-full">
-                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                    <Label className="text-[12px] text-primary-800 font-semibold">
                       Kecamatan
                     </Label>
 
@@ -343,7 +346,7 @@ export default function RegisterScreen() {
                   </div>
 
                   <div className="w-full">
-                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                    <Label className="text-[12px] text-primary-800 font-semibold">
                       Desa
                     </Label>
 
@@ -396,7 +399,7 @@ export default function RegisterScreen() {
                         labelName="RT"
                         placeholder="RT"
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                        labelStyle="text-[12px] text-neutral-900 font-semibold"
+                        labelStyle="text-[12px] text-primary-800 font-semibold"
                       />
                     </div>
 
@@ -409,13 +412,13 @@ export default function RegisterScreen() {
                         labelName="RW"
                         placeholder="RW"
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                        labelStyle="text-[12px] text-neutral-900 font-semibold"
+                        labelStyle="text-[12px] text-primary-800 font-semibold"
                       />
                     </div>
                   </div>
 
                   <div className="w-full">
-                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                    <Label className="text-[12px] text-primary-800 font-semibold">
                       ALamat
                     </Label>
 
@@ -436,12 +439,12 @@ export default function RegisterScreen() {
                 type="submit"
                 className="md:w-[120px] md:h-[40px] md:text-[14px] md:font-semibold"
                 variant="neutral">
-                Daftar
+                {isLoading ? <Loader className="animate-spin" /> : "Daftar"}
               </Button>
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

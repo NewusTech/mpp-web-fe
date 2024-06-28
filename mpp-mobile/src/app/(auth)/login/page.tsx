@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { EyeOff, Eye, UserRound } from "lucide-react";
-import logo from "@/../public/assets/450px-Lokasi_Lampung_Kabupaten_Lampung_Timur.png";
+import { EyeOff, Eye, UserRound, Loader } from "lucide-react";
+import logo from "@/../public/assets/DesignLogoMpp.svg";
 import Image from "next/image";
 import { Raleway } from "next/font/google";
 import { useEffect, useState } from "react";
@@ -33,6 +33,7 @@ const formSchema = z.object({
 export default function LoginScreen() {
   const router = useRouter();
   const [seen, setSeen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,6 +51,7 @@ export default function LoginScreen() {
   }, [router]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
     try {
       const formData = {
         nik: values.nik,
@@ -80,13 +82,15 @@ export default function LoginScreen() {
     } catch (error: any) {
       toast.error(error.message);
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center bg-gradient-to-tr from-[#FAEBBC] from-[-20%] to-[#7bba78] to-90% w-screen h-screen md:w-full">
+    <section className="md:container md:mx-auto flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:min-w-full">
       <div className="flex flex-col md:w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-2xl bg-primary-200 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
-        <div className="flex flex-row">
+        <div className="flex flex-col items-center justify-center w-full">
           <Image
             src={logo}
             alt="Lampung Timur"
@@ -95,20 +99,15 @@ export default function LoginScreen() {
             height={69}
           />
 
-          <div className="flex flex-col pl-[23px]">
-            <h1
-              className={`text-primary-800 text-[24px] md:text-[44px] font-bold ${raleway.className}`}>
-              MPP
-            </h1>
-
+          <div className="flex flex-col pl-[23px] justify-center items-center">
             <h3
-              className={`${raleway.className} font-semibold text-[12px] md:text-[20px] text-secondary-700`}>
+              className={`${raleway.className} font-semibold text-[12px] md:text-[20px] text-primary-700`}>
               MAL PELAYANAN PUBLIK
             </h3>
 
             <h3
-              className={`${raleway.className} font-normal text-neutral-800 text-[14px] md:text-[20px]`}>
-              Lampung Timur
+              className={`${raleway.className} font-normal text-primary-800 text-[14px] md:text-[16px]`}>
+              Kabupaten Lampung Timur
             </h3>
           </div>
         </div>
@@ -157,7 +156,7 @@ export default function LoginScreen() {
               </div>
 
               <div className="flex flex-col md:flex-row md:gap-1 items-end justify-end mt-[8px] md:mt-[24px]">
-                <p className="flex flex-row gap-1 text-end font-normal text-[12px] md:text-[14px]">
+                <p className="flex flex-row gap-1 text-end text-neutral-800 font-normal text-[12px] md:text-[14px]">
                   Belum Punya akun? Silahkan
                 </p>
 
@@ -173,13 +172,13 @@ export default function LoginScreen() {
                   className="text-[14px] font-normal"
                   type="submit"
                   variant="primary">
-                  Masuk
+                  {isLoading ? <Loader className="animate-spin" /> : "Masuk"}
                 </Button>
               </div>
             </form>
           </Form>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
