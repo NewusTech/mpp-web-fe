@@ -23,33 +23,12 @@ import { Label } from "@radix-ui/react-label";
 import RegisterInput from "@/components/others/registerInput/registerInput";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { DesaType, KecamatanType } from "@/types/type";
 
 const raleway = Raleway({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
-
-interface KecamatanType {
-  id: number;
-  name: string;
-}
-
-interface DataKecamatanType {
-  status: number;
-  message: string;
-  data: KecamatanType[];
-}
-
-interface DesaType {
-  id: number;
-  name: string;
-}
-
-interface DataDesaType {
-  status: number;
-  message: string;
-  data: DesaType[];
-}
 
 export default function RegisterScreen() {
   const router = useRouter();

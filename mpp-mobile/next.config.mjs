@@ -37,12 +37,12 @@ const nextConfig = {
         destination: "/survey/:path*",
       },
       {
-        source: "/layanan/booking-antrian/:path*",
-        destination: "/layanan/booking-antrian/:path*",
+        source: "/instansi/booking-antrian/:path*",
+        destination: "/instansi/booking-antrian/:path*",
       },
       {
-        source: "/layanan/permohonan-layanan/:path*",
-        destination: "/layanan/permohonan-layanan/:path*",
+        source: "/instansi/permohonan-layanan/:path*",
+        destination: "/instansi/permohonan-layanan/:path*",
       },
     ];
   },

@@ -22,7 +22,6 @@ import { Textarea } from "@/components/ui/textarea";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
-import Cookies from "js-cookie";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
 
 const genders = [

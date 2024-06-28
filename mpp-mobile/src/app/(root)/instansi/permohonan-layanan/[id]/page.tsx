@@ -11,11 +11,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { useDispatch } from "react-redux";
 import { setId } from "@/store/action/actionPermohonanLayanan";
 import { toast } from "sonner";
 import Steps from "@/components/steps/steps";
+import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
+import { JenisLayananType } from "@/types/type";
+import { Loader } from "lucide-react";
 
 const steps = [
   { id: 1, title: "1" },
@@ -39,15 +41,23 @@ export default function PermohonanLayananFirstScreen({
   params: { id: number };
 }) {
   const dispatch = useDispatch();
-  const [service, setService] = useState<any>([]);
-  const [selected, setSelected] = useState(null);
-  const [selectedService, setSelectedService] = useState<any>(null);
+  const [service, setService] = useState<JenisLayananType[]>([]);
+  const [selectedService, setSelectedService] = useState<JenisLayananType>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchLayanan = async (id: number) => {
     try {
       const layananByInstansi = await ByInstansi(id);
 
       setService(layananByInstansi.data);
+
+      const instanceId = localStorage.getItem("instanceId");
+      if (instanceId) {
+        const selected = layananByInstansi.data.find(
+          (el: JenisLayananType) => el.id.toString() === instanceId
+        );
+        setSelectedService(selected);
+      }
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
@@ -58,8 +68,10 @@ export default function PermohonanLayananFirstScreen({
   }, [params.id]);
 
   const handleSelectChange = (value: any) => {
-    dispatch(setId(value));
-    const selected = service.find((el: any) => el.id === value);
+    dispatch(setId(Number(value)));
+    const selected = service.find(
+      (el: JenisLayananType) => el.id.toString() === value
+    );
     setSelectedService(selected);
   };
 
@@ -71,9 +83,17 @@ export default function PermohonanLayananFirstScreen({
     content.push(result);
   }
 
+  const isButtonDisabled = () => {
+    return !selectedService;
+  };
+
+  const handleButtonClick = () => {
+    setIsLoading(true);
+  };
+
   return (
-    <div className="flex items-center justify-center mt-[24px] md:mt-[48px] md:mx-[167px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
-      <div className="flex flex-col md:w-full items-center mx-[35px] gap-[16px]">
+    <div className="flex flex-col items-center justify-center mt-[24px] md:mt-[48px] md:mx-[70px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
+      <div className="flex flex-col w-full items-center bg-neutral-50 rounded-xl shadow-lg mx-[35px] md:p-[60px] gap-[16px]">
         <div className="flex flex-col md:w-full">
           <div className="flex flex-col md:flex-row md:justify-between w-[300px] md:w-full h-[50px] md:h-6 gap-[24px]">
             <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
@@ -96,15 +116,25 @@ export default function PermohonanLayananFirstScreen({
             <div>
               <div className="flex self-center h-[40px]">
                 <div className="flex w-full md:w-1/2 border border-neutral-700 h-[40px] rounded-[50px]">
-                  <Select name="layanan_id" onValueChange={handleSelectChange}>
-                    <SelectTrigger className={!selected ? "opacity-50" : ""}>
+                  <Select
+                    name="layanan_id"
+                    onValueChange={handleSelectChange}
+                    defaultValue={localStorage.getItem("instanceId") || ""}>
+                    <SelectTrigger
+                      className={
+                        !selectedService && !localStorage.getItem("instanceId")
+                          ? "opacity-50"
+                          : ""
+                      }>
                       <SelectValue placeholder="Pilih Layanan Permohonan" />
                     </SelectTrigger>
                     <SelectContent>
-                      {service?.map((el: any) => {
+                      {service?.map((el: JenisLayananType) => {
                         return (
                           <div key={el.id}>
-                            <SelectItem value={el.id}>{el.name}</SelectItem>
+                            <SelectItem value={String(el.id)}>
+                              {el.name}
+                            </SelectItem>
                           </div>
                         );
                       })}
@@ -116,34 +146,38 @@ export default function PermohonanLayananFirstScreen({
           </div>
         </div>
 
-        <div className="flex flex-col self-start w-[300px] h-[137px] gap-[16px] pt-[16px]">
-          <h5 className="text-[14px] md:text-[20px] font-semibold">
-            Informasi Layanan
-          </h5>
-
-          {selectedService && (
-            <div className="list-disc list-inside ml-[8px]">
-              {content[0]?.map((item: string, i: number) => {
-                return (
-                  <div
-                    key={i}
-                    className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                    {item}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
         <div className="mt-[56px] md:w-full md:flex md:justify-center">
           <Button
             className="w-[120px] md:w-1/4 text-[14px] text-neutral-50 font-normal"
             type="submit"
-            variant="success">
-            <Link href="/layanan/data-diri">Lanjut</Link>
+            variant="success"
+            disabled={isButtonDisabled()}
+            onClick={handleButtonClick}>
+            <Link href="/instansi/data-diri">
+              {isLoading ? <Loader className="animate-spin" /> : "Lanjut"}
+            </Link>
           </Button>
         </div>
+      </div>
+
+      <div className="flex flex-col bg-neutral-50 rounded-xl self-start w-full h-full gap-[16px] mt-5 p-[64px]">
+        <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold">
+          Informasi Layanan
+        </h5>
+
+        {selectedService && (
+          <div className="list-disc list-inside ml-[8px]">
+            {content[0]?.map((item: string, i: number) => {
+              return (
+                <div
+                  key={i}
+                  className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
+                  {item}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

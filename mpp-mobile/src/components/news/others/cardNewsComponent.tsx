@@ -23,9 +23,13 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
       </Link>
 
       <div className="flex flex-row self-start gap-x-8">
-        <p className="text-[12px] text-neutral-800 font-normal">{date}</p>
+        {news?.Instansi?.name && (
+          <p className="text-[12px] text-neutral-800 font-normal">
+            {news.Instansi.name}
+          </p>
+        )}
         <ul>
-          <li className="list-disc text-[12px] text-neutral-800 font-normal">
+          <li className="list-disc text-[12px] text-neutral-800 font-normal ml-4">
             {date}
           </li>
         </ul>

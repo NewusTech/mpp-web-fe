@@ -166,13 +166,13 @@ export default function NavbarScreen() {
           </div>
 
           <Link
-            href="/layanan"
+            href="/instansi"
             className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
-              pathName === "/layanan"
+              pathName === "/instansi"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"
             } font-light`}>
-            Layanan
+            Instansi
           </Link>
 
           <Link

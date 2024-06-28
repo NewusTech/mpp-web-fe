@@ -11,6 +11,7 @@ import Steps from "@/components/steps/steps";
 import Image from "next/image";
 import { toast } from "sonner";
 import { LayananType } from "@/types/type";
+import { Loader } from "lucide-react";
 
 const steps = [
   { id: 1, title: "1" },
@@ -34,6 +35,7 @@ export default function UploadFilePage() {
   const [instansiId, setInstansiId] = useState<number | null>(null);
   const [dataInput, setDataInput] = useState<any[]>([]);
   const [fileName, setFileName] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const storedInstanceId = localStorage.getItem("instanceId");
@@ -85,6 +87,7 @@ export default function UploadFilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const formDataArray: {
       datainput: DataInputItem[];
@@ -145,6 +148,8 @@ export default function UploadFilePage() {
       }
     } catch (error) {
       toast.error("An error occurred while submitting the form.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -181,7 +186,7 @@ export default function UploadFilePage() {
                 {dataFile.Layananforms.map((el) => (
                   <div
                     key={el.id}
-                    className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-[#7BBA78] px-[16px]">
+                    className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-primary-700 px-[16px]">
                     <div className="flex flex-col w-[152px] md:w-full justify-center gap-[9px]">
                       <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                         {el.field}
@@ -213,7 +218,7 @@ export default function UploadFilePage() {
 
                 <div className="h-[40px] w-[150px] md:w-full flex self-center justify-center items-end mb-[22px] mt-[16px] md:mt-[24px]">
                   <Button type="submit" variant="success">
-                    Ajukan
+                    {isLoading ? <Loader className="animate-spin" /> : "Ajukan"}
                   </Button>
                 </div>
               </form>

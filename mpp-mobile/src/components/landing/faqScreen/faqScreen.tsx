@@ -1,8 +1,13 @@
 "use client";
 
 import { faqType } from "@/types/type";
-import AccordingComponent from "../others/accordionComponent";
 import { useEffect, useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export default function FAQScreen() {
   const [faqs, setFaqs] = useState([]);
@@ -41,9 +46,22 @@ export default function FAQScreen() {
       </div>
 
       <div className="flex flex-col md:w-full justify-center gap-[8px] mt-[16px] px-[30px] md:px-[70px]">
-        {faqs.map((faq: faqType, i: number) => {
-          return <AccordingComponent key={i} faq={faq} />;
-        })}
+        <Accordion type="single" collapsible>
+          {faqs &&
+            faqs.map((faq: faqType, index: number) => {
+              return (
+                <AccordionItem
+                  key={index}
+                  className="w-full h-full mb-2"
+                  value={`item-${index}`}>
+                  <AccordionTrigger>{faq.question}</AccordionTrigger>
+                  <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+        </Accordion>
       </div>
     </div>
   );

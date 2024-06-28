@@ -132,11 +132,7 @@ export default function StatisticsPage() {
         {
           label: "Statistics",
           data: data,
-          backgroundColor: [
-            "bg-secondary-700",
-            "bg-primary-700",
-            "bg-secondary-500",
-          ],
+          backgroundColor: ["#3568C0", "#FF9742", "#FFC595"],
         },
       ],
     });

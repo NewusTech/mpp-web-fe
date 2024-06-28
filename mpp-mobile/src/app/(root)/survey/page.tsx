@@ -14,7 +14,6 @@ import fetchInstansi from "@/components/fetching/instansi/instansi";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { useDispatch } from "react-redux";
 import {
   setDinasId,
@@ -22,6 +21,7 @@ import {
   setTanggal,
 } from "@/store/action/actionSurvei";
 import { redirect } from "next/navigation";
+import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 
 type DataDinasType = {
   id: number;
