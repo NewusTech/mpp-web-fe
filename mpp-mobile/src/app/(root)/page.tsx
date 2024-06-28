@@ -96,10 +96,13 @@ function Home() {
   const slug = berita?.data[berita.data.length - 1].slug;
   const desc = berita?.data[berita.data.length - 1].desc;
   const title = berita?.data[berita.data.length - 1].title;
+  const instansi = berita?.data[berita.data.length - 1].Instansi.name;
 
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
   });
+
+  console.log(berita, "ini berita");
 
   return (
     <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px]">
@@ -133,7 +136,7 @@ function Home() {
             </div>
 
             <Link
-              href="/layanan"
+              href="/instansi"
               className="flex justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
               <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
                 Lihat Semua Instansi
@@ -173,18 +176,25 @@ function Home() {
               {slug && (
                 <Link
                   href={`/berita/${slug}`}
-                  className="md:flex md:flex-col md:items-center md:w-6/12 md:gap-[16px]">
+                  className="md:flex md:flex-col md:w-6/12 md:gap-[16px]">
                   <div className="md:flex md:flex-col md:gap-[8px]">
-                    <h3 className="md:text-[#000000] md:text-[30px] md:font-semibold">
+                    <h3 className="md:text-neutral-900 md:text-start md:text-[30px] md:font-semibold">
                       {title}
                     </h3>
 
-                    <p className="md:text-[#000000] md:text-[16px] md:font-light">
-                      {date}
-                    </p>
+                    <div className="md:flex md:flex-row">
+                      <p className="md:text-neutral-800 md:text-[16px] md:font-light">
+                        {instansi}
+                      </p>
+                      <ul>
+                        <li className="list-disc md:text-[16px] text-neutral-800 font-normal ml-6">
+                          {date}
+                        </li>
+                      </ul>
+                    </div>
                   </div>
 
-                  <h5 className="md:text-[20px] md:text-black md:font-light">
+                  <h5 className="md:text-[20px] md:text-justify md:text-black md:font-light">
                     {desc}
                   </h5>
                 </Link>

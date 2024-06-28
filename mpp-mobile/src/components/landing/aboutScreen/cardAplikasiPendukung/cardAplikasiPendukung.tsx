@@ -5,7 +5,7 @@ import { AppType } from "@/types/type";
 export default function CardAplikasiPendukung({ app }: { app: AppType }) {
   return (
     <div className="bg-neutral-50 md:w-[432px] flex flex-col md:flex-row p-5 rounded-xl">
-      <div className="md:w-[100px] md:h-[100px] rounded-xl md:rounded-[50px] bg-primary-700">
+      <div className="md:w-[100px] md:h-[100px] overflow-auto rounded-xl md:rounded-[50px] bg-primary-700">
         <Image
           src={app.image}
           width={100}

@@ -81,12 +81,12 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
         </Link>
 
         <Link
-          href="/layanan"
+          href="/instansi"
           onClick={closeMenu}
           className="flex flex-row gap-[16px]">
           <Landmark className="text-primary-800 w-[20px] h-[20px]" />
 
-          <p className="text-primary-800 text-[14px]">Layanan</p>
+          <p className="text-primary-800 text-[14px]">Instansi</p>
         </Link>
 
         <Link

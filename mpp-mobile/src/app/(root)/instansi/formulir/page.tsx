@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
+import { Loader } from "lucide-react";
 
 type LayananFormType = {
   id: number;
@@ -46,6 +47,7 @@ export default function FormulirPage() {
   const [form, setForm] = useState<LayananType>();
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log(permohonan, "ini dari persist");
 
@@ -58,8 +60,6 @@ export default function FormulirPage() {
   useEffect(() => {
     fetchInputForm(permohonan.id);
   }, [permohonan.id]);
-
-  console.log(form, ">>>");
 
   const change = (
     e: React.ChangeEvent<
@@ -74,6 +74,7 @@ export default function FormulirPage() {
   };
 
   const handleClick = () => {
+    setIsLoading(true);
     let wadah: { layananform_id: number; data: string }[] = [];
 
     form?.Layananforms.map((el: any) => {
@@ -146,7 +147,13 @@ export default function FormulirPage() {
                       type="submit"
                       variant="success"
                       onClick={handleClick}>
-                      <Link href="/layanan/upload-file">Lanjut</Link>
+                      <Link href="/instansi/upload-file">
+                        {isLoading ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          "Lanjut"
+                        )}
+                      </Link>
                     </Button>
                   </div>
                 </div>

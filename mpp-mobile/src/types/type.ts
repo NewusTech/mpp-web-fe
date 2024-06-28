@@ -12,6 +12,18 @@ export type Berita = {
   };
 };
 
+export interface JenisLayananType {
+  id: number;
+  active_offline: boolean;
+  createdAt: string;
+  instansi_id: number;
+  instansi_name: string;
+  name: string;
+  slug: string;
+  status: boolean;
+  desc: string;
+}
+
 export interface Layanantype {
   id: number;
   name: string;

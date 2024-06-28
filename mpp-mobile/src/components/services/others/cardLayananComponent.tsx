@@ -35,7 +35,7 @@ export default function CardLayananComponent({
     <div className="flex flex-col items-center justify-center w-full md:w-[300px] outline outline-2 outline-neutral-700 bg-neutral-50 shadow-xl rounded-2xl">
       <div className="flex flex-col items-center justify-center w-[270px] h-[296px]">
         <Link
-          href={`/layanan/${layanan.slug}`}
+          href={`/instansi/${layanan.slug}`}
           className="h-[135px] w-full flex items-center justify-center">
           <Image
             src={layanan?.image || ""}
@@ -47,7 +47,7 @@ export default function CardLayananComponent({
         </Link>
 
         <div className="flex flex-col justify-center pb-35px] mt-[8px] w-full">
-          <Link href={`/layanan/${layanan.slug}`}>
+          <Link href={`/instansi/${layanan.slug}`}>
             <h6 className="text-[16px] text-center text-primary-800 font-semibold">
               {layanan.name}
             </h6>
@@ -102,7 +102,7 @@ export default function CardLayananComponent({
           </Dialog>
         ) : (
           <Link
-            href={`/layanan/booking-antrian`}
+            href={`/instansi/booking-antrian/${layanan.id}`}
             className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
             Booking Antrian
           </Link>
@@ -145,7 +145,7 @@ export default function CardLayananComponent({
           </Dialog>
         ) : (
           <Link
-            href={`/layanan/permohonan-layanan/${layanan.id}`}
+            href={`/instansi/permohonan-layanan/${layanan.id}`}
             className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
             Permohonan Layanan
           </Link>

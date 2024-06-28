@@ -142,29 +142,31 @@ export default function MppNext({
             Fasilitas Mal Pelayanan Publik
           </h3>
 
-          {facilities &&
-            facilities.map((facility: FacilityType, i: number) => {
-              return (
-                <Accordion key={i} type="single" collapsible>
-                  <AccordionItem className="w-full h-full mb-3" value="item-1">
-                    <AccordionTrigger className="md:h-[60px]">
-                      {facility.title}
-                    </AccordionTrigger>
-                    <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
-                      <div className="md:w-full md:h-full">
-                        <Image
-                          src={facility.image}
-                          className="md:w-full md:h-full object-cover"
-                          alt="permohonan & antrian"
-                          width={960}
-                          height={190}
-                        />
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              );
-            })}
+          <Accordion type="single" collapsible>
+            {facilities &&
+              facilities.map((facility: FacilityType, i: number) => {
+                return (
+                  <>
+                    <AccordionItem className="mb-2" value={`item-${i}`}>
+                      <AccordionTrigger key={i} className="md:h-[60px]">
+                        {facility.title}
+                      </AccordionTrigger>
+                      <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+                        <div className="md:w-full md:h-full">
+                          <Image
+                            src={facility.image}
+                            className="md:w-full md:h-full object-cover"
+                            alt="permohonan & antrian"
+                            width={960}
+                            height={190}
+                          />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </>
+                );
+              })}
+          </Accordion>
 
           <div className="flex self-end h-full">
             <p className="self-end border-b text-primary-800">
