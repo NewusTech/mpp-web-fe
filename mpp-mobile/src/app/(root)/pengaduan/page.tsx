@@ -13,6 +13,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const dataPengaduan = [
   {
@@ -116,12 +123,81 @@ export default function PengaduanScreen() {
                           <TableCell className="w-full">{data.title}</TableCell>
                           <TableCell className="w-2/3">{data.status}</TableCell>
                           <TableCell className="w-1/2">
-                            <Button
-                              className="w-[48px] h-[18px] text-[8px] bg-secondary-700 hover:bg-secondary-600"
-                              type="submit"
-                              variant="success">
-                              <Link href="/pengaduan">Lihat</Link>
-                            </Button>
+                            <Dialog>
+                              <DialogTrigger>
+                                <Button
+                                  className="w-[48px] h-[18px] text-[8px] bg-secondary-700 hover:bg-secondary-600"
+                                  type="submit"
+                                  variant="success">
+                                  Lihat
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-white rounded-2xl">
+                                <div className="flex flex-col mx-[32px] my-[32px]">
+                                  <div className="flex flex-col gap-[14px]">
+                                    <div className="flex flex-col gap-[8px]">
+                                      <p className="text-[16px] text-primary-900 font-semibold">
+                                        Instansi
+                                      </p>
+
+                                      <p className="text-[16px] text-neutral-900 font-normal">
+                                        123
+                                      </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-[8px]">
+                                      <p className="text-[16px] text-primary-900 font-semibold">
+                                        Layanan
+                                      </p>
+
+                                      <p className="text-[16px] text-neutral-900 font-normal">
+                                        123
+                                      </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-[8px]">
+                                      <p className="text-[16px] text-primary-900 font-semibold">
+                                        Judul Pengaduan
+                                      </p>
+
+                                      <p className="text-[16px] text-neutral-900 font-normal">
+                                        123
+                                      </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-[8px]">
+                                      <p className="text-[16px] text-primary-900 font-semibold">
+                                        Aduan
+                                      </p>
+
+                                      <p className="text-[16px] text-neutral-900 font-normal">
+                                        123
+                                      </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-[8px]">
+                                      <p className="text-[16px] text-primary-900 font-semibold">
+                                        Dokumen
+                                      </p>
+
+                                      <p className="text-[16px] text-neutral-900 font-normal">
+                                        123
+                                      </p>
+                                    </div>
+
+                                    <div className="flex flex-col gap-[8px]">
+                                      <p className="text-[16px] text-primary-900 font-semibold">
+                                        Balasan
+                                      </p>
+
+                                      <p className="text-[16px] text-neutral-900 font-normal">
+                                        123
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
                           </TableCell>
                         </TableRow>
                       );

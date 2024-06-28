@@ -1,6 +1,6 @@
 import formatDate, { formatLongDate } from "@/helpers/logout/formatted";
 import { Berita } from "@/types/type";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import CardNewsComponent from "../others/cardNewsComponent";
 
 export default function NewsDetailScreen({

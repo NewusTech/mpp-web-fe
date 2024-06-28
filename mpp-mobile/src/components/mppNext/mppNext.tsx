@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import React from "react";
 import image from "@/../../public/assets/undraw_synchronize_re_4irq.svg";
 
@@ -146,24 +146,22 @@ export default function MppNext({
             {facilities &&
               facilities.map((facility: FacilityType, i: number) => {
                 return (
-                  <>
-                    <AccordionItem className="mb-2" value={`item-${i}`}>
-                      <AccordionTrigger key={i} className="md:h-[60px]">
-                        {facility.title}
-                      </AccordionTrigger>
-                      <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
-                        <div className="md:w-full md:h-full">
-                          <Image
-                            src={facility.image}
-                            className="md:w-full md:h-full object-cover"
-                            alt="permohonan & antrian"
-                            width={960}
-                            height={190}
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </>
+                  <AccordionItem key={i} className="mb-2" value={`item-${i}`}>
+                    <AccordionTrigger className="md:h-[60px]">
+                      {facility.title}
+                    </AccordionTrigger>
+                    <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+                      <div className="md:w-full md:h-full">
+                        <Image
+                          src={facility.image}
+                          className="md:w-full md:h-full object-cover"
+                          alt="permohonan & antrian"
+                          width={960}
+                          height={190}
+                        />
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
                 );
               })}
           </Accordion>

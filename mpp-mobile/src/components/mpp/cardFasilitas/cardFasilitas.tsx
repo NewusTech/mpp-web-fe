@@ -1,11 +1,11 @@
 import React from "react";
 import image from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export default function CardFasilitas() {
   return (
-    <div className="flex flex-col bg-neutral-50 h-full full rounded-xl">
-      <div className="md:w-[400px] h-full">
+    <div className="flex flex-col bg-neutral-50 h-full w-full rounded-xl">
+      <div className="md:w-full h-full">
         <Image
           src={image}
           className="w-full h-full object-cover"

@@ -10,7 +10,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { useDispatch, useSelector } from "react-redux";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Loader } from "lucide-react";
 
 type LayananFormType = {

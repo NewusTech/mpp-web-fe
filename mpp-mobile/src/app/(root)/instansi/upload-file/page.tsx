@@ -8,7 +8,7 @@ import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { toast } from "sonner";
 import { LayananType } from "@/types/type";
 import { Loader } from "lucide-react";

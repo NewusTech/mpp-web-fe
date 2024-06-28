@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import qrcode from "@/../public/assets/png-transparent-qr-code-information-qr-code-android-qrcode-text-rectangle-monochrome-thumbnail.png";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 interface AntrianType {
   antrian: {

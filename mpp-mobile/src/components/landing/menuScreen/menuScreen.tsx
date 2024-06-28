@@ -72,12 +72,30 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
         </Link>
 
         <Link
-          href="/mpp"
+          href="/mpp/tentang-mpp"
           onClick={closeMenu}
           className="flex flex-row gap-[16px]">
           <LayoutDashboard className="text-primary-800 w-[20px] h-[20px]" />
 
-          <p className="text-primary-800 text-[14px]">MPP</p>
+          <p className="text-primary-800 text-[14px]">Tentang MPP</p>
+        </Link>
+
+        <Link
+          href="/mpp/fasilitas"
+          onClick={closeMenu}
+          className="flex flex-row gap-[16px]">
+          <LayoutDashboard className="text-primary-800 w-[20px] h-[20px]" />
+
+          <p className="text-primary-800 text-[14px]">Fasilitas</p>
+        </Link>
+
+        <Link
+          href="/mpp/aplikasi-pendukung"
+          onClick={closeMenu}
+          className="flex flex-row gap-[16px]">
+          <LayoutDashboard className="text-primary-800 w-[20px] h-[20px]" />
+
+          <p className="text-primary-800 text-[14px]">Aplikasi Pendukung</p>
         </Link>
 
         <Link
@@ -123,6 +141,15 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
           <Send className="text-primary-800 w-[20px] h-[20px]" />
 
           <p className="text-primary-800 text-[14px]">Pengaduan</p>
+        </Link>
+
+        <Link
+          href="/kontak"
+          onClick={closeMenu}
+          className="flex flex-row gap-[16px]">
+          <Send className="text-primary-800 w-[20px] h-[20px]" />
+
+          <p className="text-primary-800 text-[14px]">Kontak</p>
         </Link>
 
         <Link

@@ -29,7 +29,7 @@ export default function PopPermohonanComponent({ permohonan }: PermohonanType) {
     <div>
       <Dialog>
         <DialogTrigger>
-          <Download className="text-[#656565] w-[15px] h-[15px]" />
+          <Download className="text-neutral-800 w-[15px] h-[15px]" />
         </DialogTrigger>
         <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-white rounded-2xl">
           <DialogHeader>

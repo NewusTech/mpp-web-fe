@@ -10,7 +10,7 @@ import { Label } from "@radix-ui/react-label";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Textarea } from "@/components/ui/textarea";
 
 type SurveiFormType = {

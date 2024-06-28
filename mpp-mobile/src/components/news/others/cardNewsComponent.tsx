@@ -1,7 +1,7 @@
 import { formatLongDate } from "@/helpers/logout/formatted";
 import { Berita } from "@/types/type";
 import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 import Link from "next/link";
 
@@ -9,13 +9,13 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
   const date = formatLongDate(news?.createdAt);
 
   return (
-    <div className="flex flex-col items-center p-5 bg-neutral-50 max-w-[350px] justify-center md:max-w-[500px] md:h-[450px] rounded-xl gap-[16px]">
+    <div className="flex flex-col items-center p-5 bg-neutral-50 max-w-[350px] justify-center md:max-w-[500px] md:h-[380px] rounded-xl gap-[16px]">
       <Link
         href={`/berita/${news.slug}`}
-        className="flex flex-col w-full h-[200px] md:w-full md:h-full rounded-xl">
+        className="flex flex-col w-full h-[200px] md:h-[180px] rounded-xl">
         <Image
           src={news.image}
-          className="w-full h-full object-contain rounded-xl"
+          className="w-full h-full object-cover rounded-xl"
           width={100}
           height={167}
           alt="Lampung Timur"

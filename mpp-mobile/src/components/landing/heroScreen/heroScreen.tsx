@@ -1,23 +1,41 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { CarouselType } from "@/types/type";
+import Link from "next/link";
+import { Raleway } from "next/font/google";
+import logo from "@/../public/assets/DesignLogoMpp.svg";
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
 
 export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
   return (
     <div className="md:items-center md:flex md:justify-between w-dvw md:w-full bg-primary-700">
-      <div className="flex flex-col px-[35px] pb-6 md:hidden">
-        <h6 className="text-secondary-700 font-semibold md:text-[48px]">
-          Selamat Datang
-        </h6>
+      <Link
+        href="/"
+        className="flex justify-center self-center w-full py-4 gap-x-4 bg-neutral-50 flex-row md:hidden">
+        <div className="w-2/12">
+          <Image src={logo} alt="Lampung Timur" className="w-full h-full" />
+        </div>
 
-        <p className="text-neutral-50 text-[12px] font-normal md:text-[26px]">
-          di Mal Pelayanan Publik Lampung Timur
-        </p>
-      </div>
+        <div className="flex flex-col self-center justify-center w-6/12 h-full leading-none">
+          <h3
+            className={`${raleway.className} font-bold text-[14px] text-secondary-700 py-[4px]`}>
+            MAL PELAYANAN PUBLIK
+          </h3>
+
+          <h3
+            className={`${raleway.className} font-normal text-primary-700 text-[12px]`}>
+            Kabupaten Lampung Timur
+          </h3>
+        </div>
+      </Link>
 
       <div className="w-full md:self-end md:flex md:h-full">
         <Swiper
