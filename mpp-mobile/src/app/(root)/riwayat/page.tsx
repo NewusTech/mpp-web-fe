@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import TablePermohonanComponent from "@/components/histories/others/tablePermohonanComponent/tablePermohonanComponent";
 import TableAntrianComponent from "@/components/histories/others/tableAntrianComponent/tableAntrianComponent";
@@ -204,7 +204,7 @@ export default function RiwayatPage() {
     itemsPerPage
   );
 
-  console.log(historyData, ">>");
+  console.log(currentPermohonans, ">>");
 
   return (
     <div className="flex flex-col justify-center bg-primary-100 pt-[56px] md:mt-[12px] md:mb-0 pb-[60px] md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">

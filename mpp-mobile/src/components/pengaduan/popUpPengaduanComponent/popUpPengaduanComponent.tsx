@@ -195,6 +195,31 @@ export default function PopUpPengaduanComponent() {
                     />
                   </div>
 
+                  <div className="flex flex-col my-[10px] md:mt-[40px] mx-[1px]">
+                    <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      Dokumen
+                    </Label>
+
+                    <input
+                      type="file"
+                      name="image"
+                      value={title}
+                      onChange={handleChangeTitle}
+                      className={`w-full h-[40px] border-none pr-2 placeholder:text-[12px] focus:outline-none appearance-none 
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900"
+                      : "text-gray-500 opacity-50"
+                  }`}
+                      placeholder="Judul Pengajuan"
+                      style={{
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        appearance: "none",
+                      }}
+                    />
+                  </div>
+
                   <div className="flex justify-center mb-[32px] mt-[16px]">
                     <Button
                       className="text-[14px] text-neutral-50 w-[120px] md:w-[235px] h-[40px] md:h-[40px]"

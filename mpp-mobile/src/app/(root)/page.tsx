@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import facilitiesFetch from "@/components/fetching/facilities/facilities";
 import { toast } from "sonner";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import formatDate from "@/helpers/logout/formatted";
 import fetchInformasi from "@/components/fetching/infromasi/informasi";
 import fetchCarousel from "@/components/fetching/carousel/carousel";
@@ -101,8 +101,6 @@ function Home() {
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
   });
-
-  console.log(berita, "ini berita");
 
   return (
     <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px]">

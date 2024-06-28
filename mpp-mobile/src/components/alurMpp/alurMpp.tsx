@@ -34,7 +34,7 @@ export default function AlurMpp({
   }
 
   return (
-    <div className="flex w-full flex-row md:pb-8">
+    <div className="flex w-full flex-col md:flex-row md:pb-8">
       <div className="grid grid-rows-2 w-[250px] place-items-center md:grid-rows-none md:flex md:flex-col md:gap-[30px]">
         <div
           className={`flex justify-center items-center ${bgcolor} rounded-[50%] w-[50px] h-[50px] space-y-2`}>

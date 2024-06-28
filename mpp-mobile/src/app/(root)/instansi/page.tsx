@@ -1,7 +1,7 @@
 "use client";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";

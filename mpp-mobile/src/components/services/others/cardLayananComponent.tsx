@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
 import { LogIn } from "lucide-react";
 import { Layanantype } from "@/types/type";

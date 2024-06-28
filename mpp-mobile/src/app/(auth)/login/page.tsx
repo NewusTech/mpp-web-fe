@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { EyeOff, Eye, UserRound, Loader } from "lucide-react";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Raleway } from "next/font/google";
 import { useEffect, useState } from "react";
 import Link from "next/link";

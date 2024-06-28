@@ -18,7 +18,7 @@ import fetchInstansi from "@/components/fetching/instansi/instansi";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import PaginationComponent from "@/components/pagination/paginationComponent";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 export default function BeritaPage() {
   const [news, setNews] = useState<Berita[]>();
@@ -106,7 +106,7 @@ export default function BeritaPage() {
   );
 
   return (
-    <div className="flex flex-col items-center pt-[24px] bg-primary-100 pb-[60px] md:pb-[200px] md:px-[70px] md:pt-[24px]">
+    <div className="flex flex-col items-center pt-[24px] px-9 bg-primary-100 pb-[60px] md:pb-[200px] md:px-[70px] md:pt-[24px]">
       <h3 className="text-primary-800 font-semibold text-[16px] md:text-[32px] mb-[32px]">
         Berita
       </h3>
@@ -114,7 +114,7 @@ export default function BeritaPage() {
       <div className="flex w-full flex-row md:self-start md:items-start rounded-2xl gap-4 mb-4">
         <div
           onClick={handleAllClick}
-          className={`flex items-center justify-center md:min-w-[120px] text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
+          className={`flex items-center justify-center w-1/2 md:w-1/12 text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
             selectedInstansiId === null
               ? "bg-primary-200 border-primary-700 text-primary-700"
               : "border-neutral-700 text-neutral-700"
@@ -122,7 +122,7 @@ export default function BeritaPage() {
           Semua
         </div>
 
-        <div className="flex items-center w-[350px] h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+        <div className="flex items-center w-full md:w-1/4 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
           <Select onValueChange={handleInstansiChange}>
             <SelectTrigger
               className={`w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
