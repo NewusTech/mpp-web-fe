@@ -7,13 +7,9 @@ import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ProfileNewType, ProfileType } from "@/types/type";
+import { ProfileNewType } from "@/types/type";
 
-export default function ProfilePage({
-  params,
-}: {
-  params: { userId: number };
-}) {
+export default function ProfilePage() {
   const token = Cookies.get("Authorization");
   const [profile, setProfile] = useState<ProfileNewType>();
 
@@ -256,7 +252,7 @@ export default function ProfilePage({
             </div>
 
             <Link
-              href={`/profile/${profile?.id}/detail/${profile?.slug}`}
+              href={`/profile/detail/${profile?.slug}`}
               className="h-[40px] flex justify-center rounded-[50px] items-end md:items-center self-end md:self-center mb-[32px] md:mt-[32px]">
               <Button
                 className="w-[90px] md:w-[290px] border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"

@@ -1,23 +1,11 @@
 import formatDate from "@/helpers/logout/formatted";
-
-interface PermohonanType {
-  permohonan: {
-    id: number;
-    instansi_name: string;
-    layanan_name: string;
-    noPermohonan: string;
-    instansi: string;
-    tanggal: string;
-    status: number;
-    pesan: string;
-    tanggalSelesai: string;
-    createdAt: string;
-  };
-}
+import { PermohonanDataType } from "@/types/type";
 
 export default function PopUpPermohonanComponent({
   permohonan,
-}: PermohonanType) {
+}: {
+  permohonan: PermohonanDataType;
+}) {
   let permohonanDate = "";
   if (permohonan.createdAt) {
     permohonanDate = formatDate(`${permohonan.createdAt}`);
@@ -46,7 +34,7 @@ export default function PopUpPermohonanComponent({
             </p>
 
             <p className="text-[16px] text-neutral-900 font-normal">
-              {permohonanDate}
+              {permohonan.tanggalSelesai && permohonan.tanggalSelesai}
             </p>
           </div>
 

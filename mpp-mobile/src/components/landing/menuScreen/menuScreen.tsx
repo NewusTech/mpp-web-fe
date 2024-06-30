@@ -162,7 +162,7 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
         </Link>
 
         <Link
-          href={`/profile/${decoded?.userId}`}
+          href={`/profile/`}
           onClick={closeMenu}
           className="flex flex-row gap-[16px]">
           <CircleUserRound className="text-primary-800 w-[20px] h-[20px]" />

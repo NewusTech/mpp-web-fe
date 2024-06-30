@@ -12,16 +12,14 @@ interface AntrianType {
 
 export default function TableAntrianComponent({ antrian }: AntrianType) {
   return (
-    <div className="w-full">
-      <TableRow>
-        <TableCell className="w-1/2">{antrian.noAntrian}</TableCell>
-        <TableCell className="w-full">{antrian.instansi}</TableCell>
-        <TableCell className="w-1/2">{antrian.waktu}</TableCell>
-        <TableCell className="w-1/2">{antrian.tanggal}</TableCell>
-        <TableCell className="w-1">
-          <PopAntrianComponent antrian={antrian} />
-        </TableCell>
-      </TableRow>
-    </div>
+    <TableRow>
+      <TableCell className="w-1/2">{antrian.noAntrian}</TableCell>
+      <TableCell className="w-full">{antrian.instansi}</TableCell>
+      <TableCell className="w-1/2">{antrian.waktu}</TableCell>
+      <TableCell className="w-1/2">{antrian.tanggal}</TableCell>
+      <TableCell className="w-1">
+        <PopAntrianComponent antrian={antrian} />
+      </TableCell>
+    </TableRow>
   );
 }

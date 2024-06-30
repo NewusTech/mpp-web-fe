@@ -1,8 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { PengaduanType } from "@/types/type";
 import { Link } from "lucide-react";
 import React from "react";
 
-export default function CardPengaduanComponent() {
+export default function CardPengaduanComponent({
+  pengaduan,
+}: {
+  pengaduan: PengaduanType;
+}) {
   return (
     <div className="bg-primary-100 rounded-2xl shadow-xl px-[16px] py-[29px] mt-[16px]">
       <div className="grid grid-rows-3">
