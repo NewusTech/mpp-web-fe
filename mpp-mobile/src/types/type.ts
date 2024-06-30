@@ -12,6 +12,41 @@ export type Berita = {
   };
 };
 
+export interface PermohonanDataType {
+  id: number;
+  instansi_name: string;
+  layanan_name: string;
+  noPermohonan: string;
+  instansi: string;
+  tanggal: string;
+  status: number;
+  pesan: string;
+  tanggalSelesai: string;
+  createdAt: string;
+}
+
+export interface PengaduanType {
+  id: number;
+  judul: string;
+  image: string;
+  instansi_id: number;
+  instansi_name: string;
+  layanan_id: number;
+  layanan_name: string;
+  jawaban: string;
+  status: number;
+  aduan: string;
+}
+
+export interface PengaduanFormType {
+  instansi_id: number;
+  layanan_id: number;
+  status: number;
+  aduan: string;
+  judul: string;
+  image: string;
+}
+
 export interface JenisLayananType {
   id: number;
   active_offline: boolean;
@@ -198,4 +233,14 @@ export interface CardStepProps {
   title: string;
   isLastStep: boolean;
   isActive: boolean;
+}
+
+export interface AlurAntrianType {
+  id: number;
+  desc: string;
+}
+
+export interface AlurPermohonanType {
+  id: number;
+  desc: string;
 }

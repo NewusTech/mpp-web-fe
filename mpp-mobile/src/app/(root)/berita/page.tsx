@@ -5,7 +5,6 @@ import fetchNews from "@/components/fetching/berita/berita";
 import { Berita, Instansi } from "@/types/type";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
 import {
   Select,
   SelectContent,
@@ -19,6 +18,7 @@ import SearchComponent from "@/components/others/searchComponent/searchComponent
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
+export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
   const [news, setNews] = useState<Berita[]>();

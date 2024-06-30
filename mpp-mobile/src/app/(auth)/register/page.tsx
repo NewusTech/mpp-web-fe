@@ -113,7 +113,6 @@ export default function RegisterScreen() {
       );
 
       const result = await response.json();
-      console.log(result, "ini response");
 
       if (response.ok) {
         toast.success("Berhasil membuat akun, silahkan login", {

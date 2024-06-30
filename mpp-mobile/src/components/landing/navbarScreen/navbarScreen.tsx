@@ -218,16 +218,16 @@ export default function NavbarScreen() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <Link
-                  href={`/profile/${decoded?.userId}`}
+                  href={`/profile`}
                   className={`${
-                    pathName === `/profile/${decoded?.userId}`
+                    pathName === `/profile`
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
                   <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
                     <CircleUserRound
                       className={`${
-                        pathName === `/profile/${decoded?.userId}`
+                        pathName === `/profile`
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
                       } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
@@ -235,7 +235,7 @@ export default function NavbarScreen() {
 
                     <p
                       className={`${
-                        pathName === `/profile/${decoded?.userId}`
+                        pathName === `/profile`
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
                       } text-[16px] group-hover:text-secondary-700`}>

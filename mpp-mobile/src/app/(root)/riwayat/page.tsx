@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/table";
 import CardHistoryAntrian from "@/components/histories/cardHistoryAntrian/cardHistoryAntrian";
 import PaginationComponent from "@/components/pagination/paginationComponent";
+import { PermohonanDataType } from "@/types/type";
 
 interface PermissionType {
   id: number;
@@ -33,14 +34,6 @@ interface PermissionType {
   instansi_id: number;
   instansi_name: string;
   instansi_image: string;
-}
-
-interface HistoryPermissiontype {
-  data: PermissionType[];
-}
-
-interface HistoryAntriantype {
-  data: AntrianType[];
 }
 
 interface AntrianType {
@@ -84,33 +77,6 @@ const antrians = {
     },
   ],
 };
-
-interface HistoryPermohonanType {
-  data: PermohonanType[];
-}
-
-interface PermohonanType {
-  layanan: string;
-  noPermohonan: string;
-  instansi: string;
-  tanggal: string;
-  status: string;
-  pesan: string;
-  tanggalSelesai: string;
-}
-
-interface PermohonanDataType {
-  id: number;
-  instansi_name: string;
-  layanan_name: string;
-  noPermohonan: string;
-  instansi: string;
-  tanggal: string;
-  status: number;
-  pesan: string;
-  tanggalSelesai: string;
-  createdAt: string;
-}
 
 const permohonans = {
   data: [
@@ -174,7 +140,7 @@ export default function RiwayatPage() {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [antrianPage, setAntrianPage] = useState<number>(1);
   const [permohonanPage, setPermohonanPage] = useState<number>(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 8;
   const token = Cookies.get("Authorization");
 
   useEffect(() => {
@@ -199,12 +165,10 @@ export default function RiwayatPage() {
 
   const currentAntrians = paginate(antrians.data, antrianPage, itemsPerPage);
   const currentPermohonans = paginate(
-    historyData,
+    historyData || [],
     permohonanPage,
     itemsPerPage
   );
-
-  console.log(currentPermohonans, ">>");
 
   return (
     <div className="flex flex-col justify-center bg-primary-100 pt-[56px] md:mt-[12px] md:mb-0 pb-[60px] md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
