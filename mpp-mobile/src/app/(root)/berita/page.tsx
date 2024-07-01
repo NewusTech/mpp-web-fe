@@ -60,7 +60,7 @@ export default function BeritaPage() {
   useEffect(() => {
     if (selectedInstansiId !== null && news) {
       const filtered = news.filter(
-        (berita) => berita.id === selectedInstansiId
+        (berita) => berita.instansi_id === selectedInstansiId
       );
       setFilteredNews(filtered);
     } else {

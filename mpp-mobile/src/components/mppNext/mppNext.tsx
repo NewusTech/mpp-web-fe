@@ -147,17 +147,18 @@ export default function MppNext({
               facilities.map((facility: FacilityType, i: number) => {
                 return (
                   <AccordionItem key={i} className="mb-2" value={`item-${i}`}>
-                    <AccordionTrigger className="md:h-[60px]">
+                    <AccordionTrigger className="md:h-full">
                       {facility.title}
                     </AccordionTrigger>
                     <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
-                      <div className="md:w-full md:h-full">
+                      <div className="w-full md:h-4/5">
                         <Image
                           src={facility.image}
-                          className="md:w-full md:h-full object-cover"
+                          className="w-full h-full object-cover rounded-xl"
                           alt="permohonan & antrian"
-                          width={960}
-                          height={190}
+                          layout="intrinsic"
+                          width={660}
+                          height={390}
                         />
                       </div>
                     </AccordionContent>

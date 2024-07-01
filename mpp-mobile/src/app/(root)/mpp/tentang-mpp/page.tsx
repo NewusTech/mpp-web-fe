@@ -68,7 +68,7 @@ export default function MppPage() {
           </h4>
 
           <div className="flex flex-col w-full mt-[16px] md:px-12 gap-y-6">
-            <div className="flex flex-col w-full h-full bg-white shadow-xl rounded-2xl gap-[32px] md:pb-5">
+            <div className="flex flex-col w-full h-full pb-8 bg-white shadow-xl rounded-2xl gap-[32px] md:pb-5">
               <div className="flex justify-center pt-[16px]">
                 <h4 className="text-[16px] md:text-[26px] text-secondary-700 font-semibold">
                   Booking Antrian
@@ -84,19 +84,20 @@ export default function MppPage() {
                     isLastStep={index === alurAntrian.length - 1}
                     isActive={alur.id === currentAlur}
                     status={statusAntrian}
+                    total={alurAntrian.length}
                   />
                 ))}
               </div>
             </div>
 
-            <div className="flex flex-col w-full h-full bg-white shadow-xl rounded-2xl gap-[32px] mt-[16px] md:mt-0">
+            <div className="flex flex-col w-full h-full pb-8 bg-white shadow-xl rounded-2xl gap-[32px] mt-[16px] md:mt-0">
               <div className="flex justify-center pt-[16px]">
                 <h4 className="text-[16px] md:text-[26px] text-primary-700 font-semibold">
                   Permohonan Layanan
                 </h4>
               </div>
 
-              <div className="flex flex-col w-full md:flex-row md:flex-wrap justify-start px-8">
+              <div className="flex flex-col w-full md:grid md:grid-cols-5 justify-start gap-y-5 px-8">
                 {alurPermohonan?.map(
                   (alur: AlurPermohonanType, index: number) => (
                     <AlurMpp
@@ -106,6 +107,7 @@ export default function MppPage() {
                       isLastStep={index === alurPermohonan.length - 1}
                       isActive={alur.id === currentAlur}
                       status={statusPermohonan}
+                      total={alurPermohonan.length}
                     />
                   )
                 )}

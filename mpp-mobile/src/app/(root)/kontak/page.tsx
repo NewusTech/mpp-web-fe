@@ -1,22 +1,58 @@
-import React from "react";
+"use client";
+
+import fetchContact from "@/components/fetching/contact/contact";
+import { ContactType } from "@/types/type";
+import { Loader } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 export const dynamic = "force-dynamic";
 
 export default function KontakPage() {
+  const [kontak, setKontak] = useState<ContactType>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchKontak = async () => {
+    setIsLoading(true);
+    try {
+      const contact = await fetchContact();
+
+      setKontak(contact.data);
+    } catch (error) {
+      toast("Gagal mendapatkan data!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchKontak();
+  }, []);
+
+  let iframeSrc = "https://www.google.com/maps?q=";
+  if (kontak?.latitude && kontak?.longitude) {
+    iframeSrc +=
+      kontak.latitude + "," + kontak.longitude + "&hl=es;z=14&output=embed";
+  }
+
   return (
     <section className="bg-neutral-50 mx-9 mb-8 md:mb-0 md:mx-[70px] rounded-xl mt-6">
       <div className="flex flex-col md:flex-row items-center md:p-8 md:gap-x-9">
-        <div className="w-full md:w-4/5">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4391.5424857987655!2d105.5255487769218!3d-5.048226681011157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40915ca6ae3e81%3A0x228c93122a17d429!2sKANTOR%20BUPATI%20LAMPUNG%20TIMUR!5e0!3m2!1sid!2sid!4v1719561240009!5m2!1sid!2sid"
-            width="600"
-            height="450"
-            style={{ border: "0" }}
-            className="border-0 w-full rounded-xl"
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade">
-            Sukadana Ilir, Kec. Sukadana, Kabupaten Lampung Timur, Lampung 34194
-          </iframe>
+        <div className="w-full md:w-4/5 flex items-center justify-center">
+          {isLoading ? (
+            <Loader className="animate-spin w-32 h-32" />
+          ) : (
+            <iframe
+              src={iframeSrc}
+              width="600"
+              height="450"
+              style={{ border: "0" }}
+              className="border-0 w-full rounded-xl"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade">
+              {kontak?.alamat}
+            </iframe>
+          )}
         </div>
 
         <div className="flex flex-col p-5 gap-y-6 md:p-0 md:mt-0">
@@ -31,8 +67,7 @@ export default function KontakPage() {
               </h4>
 
               <p className="text-[12px] md:text-[16px] text-neutral-900 font-light">
-                Sukadana Ilir, Kec. Sukadana, Kabupaten Lampung Timur, Lampung
-                34194
+                {kontak?.alamat}
               </p>
             </div>
 
@@ -42,7 +77,7 @@ export default function KontakPage() {
               </h4>
 
               <p className="text-[12px] md:text-[16px] text-neutral-900 font-light">
-                mpplampungtimur@gmail.go.id
+                {kontak?.email}
               </p>
             </div>
 
@@ -52,7 +87,7 @@ export default function KontakPage() {
               </h4>
 
               <p className="text-[12px] md:text-[16px] text-neutral-900 font-light">
-                08123456789
+                {kontak?.telp}
               </p>
             </div>
           </div>
