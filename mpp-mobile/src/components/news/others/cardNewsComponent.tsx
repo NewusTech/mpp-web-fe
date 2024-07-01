@@ -12,12 +12,13 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
     <div className="flex flex-col items-center p-5 bg-neutral-50 max-w-[350px] justify-center md:max-w-[500px] md:h-[380px] rounded-xl gap-[16px]">
       <Link
         href={`/berita/${news.slug}`}
-        className="flex flex-col w-full h-[200px] md:h-[180px] rounded-xl">
+        className="flex relative flex-col w-full h-[200px] md:h-[450px] rounded-xl">
         <Image
           src={news.image}
           className="w-full h-full object-cover rounded-xl"
           width={100}
-          height={167}
+          height={900}
+          layout="fill"
           alt="Lampung Timur"
         />
       </Link>

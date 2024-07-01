@@ -15,10 +15,10 @@ export default function NewsDetailScreen({
   return (
     <div className="flex flex-col items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-8 mx-[35px] md:mx-0 pt-3 pb-8 md:mb-0 md:pb-[150px] bg-primary-100">
       <div className="flex flex-col md:px-[150px] items-center gap-6">
-        <div className="flex w-full h-full md:h-[550px] self-center">
+        <div className="flex w-full md:grid md:grid-cols-1 h-full md:h-[550px] self-center">
           <Image
             src={berita.image}
-            className="flex w-full h-full object-cover md:rounded-xl"
+            className="w-full h-full object-cover md:rounded-xl"
             alt="Berita"
             width={290}
             height={210}

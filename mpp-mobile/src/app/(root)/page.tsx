@@ -47,11 +47,11 @@ function Home() {
 
   const fetchAll = async (search: string) => {
     try {
-      const news = await fetchNews(page, 3);
+      const news = await fetchNews(page, 4);
 
       const layanan = await fetchInstansi(search, page, 8);
 
-      const fasilitas = await facilitiesFetch();
+      const fasilitas = await facilitiesFetch(1, 8);
 
       const dashboard = await fetchInformasi();
 
@@ -61,7 +61,7 @@ function Home() {
 
       const alurMpp = await fetchAlurMpp();
 
-      const app = await fetchAppSupport(1000000);
+      const app = await fetchAppSupport(1, 6);
 
       setBerita(news);
       setLayanan(layanan);
@@ -96,7 +96,7 @@ function Home() {
   const slug = berita?.data[berita.data.length - 1].slug;
   const desc = berita?.data[berita.data.length - 1].desc;
   const title = berita?.data[berita.data.length - 1].title;
-  const instansi = berita?.data[berita.data.length - 1].Instansi.name;
+  const instansi = berita?.data[berita.data.length - 1].Instansi?.name;
 
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
@@ -158,14 +158,14 @@ function Home() {
           <div className="hidden md:block md:w-full md:flex-col">
             <div className="md:flex md:flex-rows md:w-full md:gap-[32px]">
               {slug && (
-                <Link href={`/berita/${slug}`} className="md:w-6/12">
+                <Link href={`/berita/${slug}`} className="md:w-6/12 md:h-full">
                   {image && (
                     <Image
-                      className="md:w-full md:h-[410px] md:rounded-2xl"
+                      className="md:w-full md:h-full md:object-cover md:rounded-2xl"
                       src={image}
                       alt="Berita"
                       width={960}
-                      height={410}
+                      height={570}
                     />
                   )}
                 </Link>
@@ -201,7 +201,7 @@ function Home() {
           </div>
 
           <div className="flex flex-col px-5 md:px-0 w-full items-center md:mt-6">
-            <div className="flex flex-col w-full md:grid md:grid-cols-3 gap-[16px] md:justify-center md:gap-5">
+            <div className="flex flex-col w-full md:grid md:grid-cols-4 gap-[16px] md:justify-center md:gap-5">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}

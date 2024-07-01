@@ -1,4 +1,5 @@
-import React from "react";
+import { AlurAntrianType, AlurPermohonanType } from "@/types/type";
+import React, { useState } from "react";
 
 export interface CardStepProp {
   title: number;
@@ -6,6 +7,7 @@ export interface CardStepProp {
   isActive: boolean;
   desc: string;
   status: boolean;
+  total: number;
 }
 
 export default function AlurMpp({
@@ -14,65 +16,82 @@ export default function AlurMpp({
   isActive,
   desc,
   status,
+  total,
 }: CardStepProp) {
   let bgcolor = "";
   let textcolor = "";
-  let arrowbgcolor = "";
+  let borderColor = "";
   let arrowtextcolor = "";
 
   if (status === true) {
     bgcolor = "bg-primary-700";
     textcolor = "text-primary-700";
-    arrowbgcolor = "text-secondary-700";
-    arrowtextcolor = "text-secondary-700";
+    borderColor = "border-primary-700";
+    arrowtextcolor = "bg-secondary-700";
   } else {
     bgcolor = "bg-secondary-700";
     textcolor = "text-secondary-700";
-    arrowbgcolor = "text-primary-700";
-    arrowtextcolor = "text-primary-700";
+    borderColor = "border-secondary-700";
+    arrowtextcolor = "bg-primary-700";
   }
 
   const isTitleFive = title === 5;
 
-  return (
-    <div className="flex flex-col md:flex-row md:pb-8">
-      <div className="grid grid-rows-2 w-[220px] place-items-center md:grid-rows-none md:flex md:flex-col md:gap-[30px]">
-        <div
-          className={`flex justify-center items-center ${bgcolor} rounded-[50%] w-[50px] h-[50px] space-y-2`}>
-          <p className="text-[16px] text-neutral-50 font-bold">{title}</p>
-        </div>
+  const isTitleFour = title === 4;
 
-        <div className="flex justify-center items-center">
-          <p className="text-center text-[10px] text-neutral-800">{desc}</p>
-        </div>
+  const isTotal = total === 6;
+
+  const isTotalLess = total === 4;
+
+  return (
+    <div className="flex flex-col">
+      <div
+        className={`flex ${
+          isTitleFive ? "flex-col" : "flex-row"
+        } items-center`}>
+        {(isTotal && title === 6) || (isTotalLess && title === 4) ? (
+          <div
+            className={`${
+              isTitleFive ? "w-[100px]" : "w-[200px]"
+            } flex items-center justify-start pl-16`}>
+            <div
+              className={`h-10 w-10 p-4 rounded-full flex items-center justify-center border ${borderColor} ${bgcolor}`}>
+              <p className={"text-neutral-50"}>{title}</p>
+            </div>
+          </div>
+        ) : (
+          <div
+            className={`${
+              isTitleFive ? "w-[100px]" : "w-[400px]"
+            } flex items-center justify-center`}>
+            <div
+              className={`h-10 w-10 p-4 rounded-full flex items-center justify-center border ${borderColor} ${bgcolor}`}>
+              <p className={"text-neutral-50"}>{title}</p>
+            </div>
+          </div>
+        )}
+
+        {!isLastStep && (
+          <div
+            className={`${
+              isTitleFive ? "" : "w-full h-[1px]"
+            } ${arrowtextcolor}`}></div>
+        )}
       </div>
 
-      {!isLastStep && (
-        <div className={`relative flex mt-6 ${isTitleFive ? "w-0" : "w-6/12"}`}>
-          {!isTitleFive && (
-            <div className={`w-6/12 h-0.5 ${arrowbgcolor} relative`}>
-              <svg
-                className={`absolute right-0 transform translate-x-2 -translate-y-1/2 ${arrowtextcolor}`}
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          )}
-
-          {isTitleFive && (
-            <div
-              className={`w-0 h-full border-none ${arrowbgcolor} absolute left-6`}></div>
-          )}
+      {(isTotal && title === 6) || (isTotalLess && title === 4) ? (
+        <div
+          className={`mt-4 w-[150px] ${
+            isTitleFour ? "pl-4" : ""
+          } flex items-center justify-center`}>
+          <p className={`${isTitleFive ? "pl-16" : ""} text-start`}>{desc}</p>
+        </div>
+      ) : (
+        <div
+          className={`mt-4 w-[150px] ${
+            isTitleFive ? "pl-20" : ""
+          } flex items-center justify-center`}>
+          <p className={`text-center`}>{desc}</p>
         </div>
       )}
     </div>

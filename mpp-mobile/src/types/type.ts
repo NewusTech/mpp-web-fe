@@ -4,6 +4,7 @@ export type Berita = {
   slug: string;
   desc: string;
   image: string;
+  instansi_id: number;
   url: string;
   createdAt: string;
   Instansi: {
@@ -11,6 +12,14 @@ export type Berita = {
     name: string;
   };
 };
+
+export interface ContactType {
+  alamat: string;
+  email: string;
+  telp: string;
+  latitude: string;
+  longitude: string;
+}
 
 export interface PermohonanDataType {
   id: number;
