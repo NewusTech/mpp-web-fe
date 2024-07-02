@@ -30,6 +30,8 @@ export default function ProfilePage() {
     fetchProfiles();
   }, []);
 
+  console.log(profile, "ini profile");
+
   let gender = "";
 
   if (profile?.gender === 1) {

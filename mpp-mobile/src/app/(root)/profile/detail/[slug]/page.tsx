@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { useDispatch } from "react-redux";
@@ -23,6 +23,7 @@ import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
+import { CircleX } from "lucide-react";
 
 const genders = [
   {
@@ -130,7 +131,7 @@ export default function ProfileEditPage({
   const [searchDesa, setSearchDesa] = useState<string>("");
   const debounceSearchKecamatan = useDebounce(searchKecamatan);
   const debounceSearchDesa = useDebounce(searchDesa);
-  const [detail, setDetail] = useState<UpdateUserType | undefined>({
+  const [detail, setDetail] = useState<UpdateUserType>({
     name: "",
     email: "",
     telepon: "",
@@ -144,7 +145,18 @@ export default function ProfileEditPage({
     rt: "",
     rw: "",
     alamat: "",
+    filektp: "",
+    filekk: "",
+    fileijazahlain: "",
   });
+  const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
+  const [fileKkImage, setFileKkImage] = useState<File | null>(null);
+  const [fileIjazahImage, setFileIjazahImage] = useState<File | null>(null);
+  const [previewKTPImage, setPreviewKTPImage] = useState<string>("");
+  const [previewKKImage, setPreviewKKImage] = useState<string>("");
+  const [previewIjazahImage, setPreviewIjazahImage] = useState<string>("");
+  const [changeOpacity, setChangeOpacity] = useState(false);
+  const dropRef = useRef<HTMLDivElement>(null);
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
@@ -221,14 +233,77 @@ export default function ProfileEditPage({
 
   const router = useRouter();
 
+  const handleFileKTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFileKtpImage(file);
+      setDetail({
+        ...detail,
+        filektp: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewKTPImage(fileUrl);
+    }
+  };
+
+  const handleFileKKChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFileKkImage(file);
+      setDetail({
+        ...detail,
+        filekk: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewKKImage(fileUrl);
+    }
+  };
+
+  const handleFileIjazahChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFileIjazahImage(file);
+      setDetail({
+        ...detail,
+        fileijazahlain: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewIjazahImage(fileUrl);
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", detail?.name || "");
+    formData.append("email", detail?.email || "");
+    formData.append("telepon", detail?.telepon || "");
+    formData.append("nik", detail?.nik || "");
+    formData.append("gender", String(detail?.gender) || "");
+    formData.append("agama", String(detail?.agama) || "");
+    formData.append("pendidikan", String(detail?.pendidikan) || "");
+    formData.append("pekerjaan", detail?.pekerjaan || "");
+    formData.append("kecamatan_id", String(detail?.kecamatan_id) || "");
+    formData.append("desa_id", String(detail?.desa_id) || "");
+    formData.append("rt", detail?.rt || "");
+    formData.append("rw", detail?.rw || "");
+    formData.append("alamat", detail?.alamat || "");
+    if (fileKtpImage) {
+      formData.append("filektp", fileKtpImage);
+    }
+    if (fileKkImage) {
+      formData.append("filekk", fileKkImage);
+    }
+    if (fileIjazahImage) {
+      formData.append("fileijazahlain", fileIjazahImage);
+    }
+
     try {
       if (detail) {
-        dispatch(updateProfileUser(detail, params.slug));
+        dispatch(updateProfileUser(formData, params.slug));
         await fetchUser();
         toast.success("Berhasil memperbarui informasi data diri!");
-        router.push(`/profile/${detail.id}`);
+        router.push(`/profile`);
       }
     } catch (error) {
       toast("Gagal mengupdate data!");
@@ -287,6 +362,79 @@ export default function ProfileEditPage({
       }));
     }
   }, [selectedPendidikan]);
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(false);
+  };
+
+  const handleDropKTP = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setFileKtpImage(file);
+      setDetail({
+        ...detail,
+        filektp: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewKTPImage(fileUrl);
+    }
+  };
+
+  const handleDropKK = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setFileKkImage(file);
+      setDetail({
+        ...detail,
+        filekk: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewKKImage(fileUrl);
+    }
+  };
+
+  const handleDropIjazah = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setFileIjazahImage(file);
+      setDetail({
+        ...detail,
+        fileijazahlain: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewIjazahImage(fileUrl);
+    }
+  };
+
+  const handleRemoveKTP = () => {
+    setFileKtpImage(null);
+    setPreviewKTPImage("");
+    setDetail({ ...detail, filektp: "" });
+  };
+
+  const handleRemoveKK = () => {
+    setFileKkImage(null);
+    setPreviewKKImage("");
+    setDetail({ ...detail, filekk: "" });
+  };
+
+  const handleRemoveIjazah = () => {
+    setFileIjazahImage(null);
+    setPreviewIjazahImage("");
+    setDetail({ ...detail, fileijazahlain: "" });
+  };
 
   return (
     <div className="flex items-center justify-center pb-[36px] bg-primary-100 mt-[24px] md:mt-0 md:pt-6 md:mb-0 md:pb-[120px]">
@@ -398,7 +546,6 @@ export default function ProfileEditPage({
                 </Select>
               </div>
             </div>
-
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
@@ -455,7 +602,6 @@ export default function ProfileEditPage({
                 </Select>
               </div>
             </div>
-
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
@@ -483,7 +629,6 @@ export default function ProfileEditPage({
                 />
               </div>
             </div>
-
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
@@ -576,7 +721,6 @@ export default function ProfileEditPage({
                 </Select>
               </div>
             </div>
-
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
@@ -604,7 +748,6 @@ export default function ProfileEditPage({
                 />
               </div>
             </div>
-
             <div className="flex flex-col w-full">
               <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                 ALamat
@@ -619,7 +762,163 @@ export default function ProfileEditPage({
               />
             </div>
 
-            <div className="flex justify-center items-end self-end md:w-full md:self-center my-[16px] md:pb-[30px]">
+            <div className="flex flex-col w-full">
+              <h3 className="text-primary-800 font-semibold text-[20px] mt-6">
+                Dokumen Pendukung
+              </h3>
+
+              <div className="flex flex-col mt-6">
+                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                  Kartu Tanda Penduduk (KTP)
+                </Label>
+
+                <div
+                  ref={dropRef}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDropKTP}
+                  className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                    changeOpacity ? "opacity-50" : "opacity-100"
+                  }`}>
+                  {previewKTPImage ? (
+                    <div className="relative max-w-full max-h-full">
+                      <img
+                        src={previewKTPImage}
+                        alt="Preview"
+                        className="max-h-full rounded-xl p-2 max-w-full object-contain"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={handleRemoveKTP}
+                        className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
+                        <CircleX />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        id="file-input"
+                        name="filektp"
+                        accept="image/*"
+                        onChange={handleFileKTPChange}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="file-input"
+                        className="text-[16px] text-neutral-600 font-light cursor-pointer">
+                        {detail.filektp
+                          ? detail.filektp
+                          : "Drag and drop file here or click to select file"}
+                      </label>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col w-full h-full mt-6">
+                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                  Kartu Keluarga (KK)
+                </Label>
+
+                <div
+                  ref={dropRef}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDropKK}
+                  className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                    changeOpacity ? "opacity-50" : "opacity-100"
+                  }`}>
+                  {previewKKImage ? (
+                    <div className="relative max-w-full max-h-full">
+                      <img
+                        src={previewKKImage}
+                        alt="Preview"
+                        className="max-h-full rounded-xl p-2 max-w-full object-contain"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={handleRemoveKK}
+                        className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
+                        <CircleX />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        id="file-input"
+                        name="filekk"
+                        accept="image/*"
+                        onChange={handleFileKKChange}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="file-input"
+                        className="text-[16px] text-neutral-600 font-light cursor-pointer">
+                        {detail.filekk
+                          ? detail.filekk
+                          : "Drag and drop file here or click to select file"}
+                      </label>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col w-full h-full mt-6">
+                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                  Ijazah Terakhir
+                </Label>
+
+                <div
+                  ref={dropRef}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDropIjazah}
+                  className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                    changeOpacity ? "opacity-50" : "opacity-100"
+                  }`}>
+                  {previewIjazahImage ? (
+                    <div className="relative max-w-full max-h-full">
+                      <img
+                        src={previewIjazahImage}
+                        alt="Preview"
+                        className="max-h-full rounded-xl p-2 max-w-full object-contain"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={handleRemoveIjazah}
+                        className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
+                        <CircleX />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        id="file-input"
+                        name="fileijazahlain"
+                        accept="image/*"
+                        onChange={handleFileIjazahChange}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="file-input"
+                        className="text-[16px] text-neutral-600 font-light cursor-pointer">
+                        {detail.fileijazahlain
+                          ? detail.fileijazahlain
+                          : "Drag and drop file here or click to select file"}
+                      </label>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center items-end self-end md:w-full md:self-center my-[16px] md:pb-[30px] mt-12">
               <Button
                 className="w-[90px] md:w-[290px] h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                 type="submit"

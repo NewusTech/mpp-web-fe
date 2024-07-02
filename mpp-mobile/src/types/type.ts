@@ -192,6 +192,9 @@ export interface UpdateUserType {
   rt?: string;
   rw?: string;
   alamat?: string;
+  filektp: string;
+  filekk: string;
+  fileijazahlain: string;
   slug?: string;
 }
 
