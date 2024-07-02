@@ -1,3 +1,4 @@
+import { UpdateUserType } from "@/types/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
@@ -13,10 +14,6 @@ interface UserData {
   rt?: string;
   rw?: string;
   alamat?: string;
-}
-
-interface UpdateProfileState {
-  data: UserData;
 }
 
 const initialState = {
@@ -43,7 +40,7 @@ export const UpdateProfileSlice = createSlice({
   },
 });
 
-export function updateProfileUser(profileUser: UserData, slug: string) {
+export function updateProfileUser(profileUser: any, slug: string) {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
@@ -51,10 +48,10 @@ export function updateProfileUser(profileUser: UserData, slug: string) {
         {
           method: "PUT",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${Cookies.get("Authorization")}`,
           },
-          body: JSON.stringify(profileUser),
+          body: profileUser,
         }
       );
 
