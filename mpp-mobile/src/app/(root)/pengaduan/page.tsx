@@ -281,7 +281,7 @@ export default function PengaduanScreen() {
   }, []);
 
   return (
-    <div className="flex flex-col bg-primary-100 mt-3 mx-[35px] md:mx-[170px] md:mb-5 pb-[124px]">
+    <div className="flex flex-col bg-primary-100 mt-3 mx-[35px] md:mx-[70px] md:mb-5 pb-[124px]">
       <div>
         <h1 className="text-[20px] md:text-[26px] text-primary-800 font-bold">
           Pengaduan Layanan
@@ -506,20 +506,22 @@ export default function PengaduanScreen() {
                 <Table className="flex flex-col w-full">
                   <TableHeader className="flex w-full">
                     <TableRow className="flex flex-row w-full">
-                      <TableHead className="w-1/2 bg-primary-400">No</TableHead>
-                      <TableHead className="w-full bg-primary-400">
+                      <TableHead className="w-1/12 bg-primary-400">
+                        No
+                      </TableHead>
+                      <TableHead className="w-10/12 bg-primary-400">
                         Instansi
                       </TableHead>
-                      <TableHead className="w-full bg-primary-400">
+                      <TableHead className="w-10/12 bg-primary-400">
                         Layanan
                       </TableHead>
                       <TableHead className="w-full bg-primary-400">
                         Judul Pengaduan
                       </TableHead>
-                      <TableHead className="w-2/3 bg-primary-400">
+                      <TableHead className="w-5/12 bg-primary-400">
                         Status
                       </TableHead>
-                      <TableHead className="w-1/2 bg-primary-400">
+                      <TableHead className="w-2/12 bg-primary-400">
                         Aksi
                       </TableHead>
                     </TableRow>
@@ -530,17 +532,17 @@ export default function PengaduanScreen() {
                         (pengaduan: PengaduanType, i: number) => {
                           return (
                             <TableRow key={i}>
-                              <TableCell className="w-1/2">{i + 1}</TableCell>
-                              <TableCell className="w-full">
+                              <TableCell className="w-1/12">{i + 1}</TableCell>
+                              <TableCell className="w-10/12">
                                 {pengaduan.instansi_id}
                               </TableCell>
-                              <TableCell className="w-full">
+                              <TableCell className="w-10/12">
                                 {pengaduan.layanan_id}
                               </TableCell>
                               <TableCell className="w-full">
                                 {pengaduan.judul}
                               </TableCell>
-                              <TableCell className="w-2/3">
+                              <TableCell className="w-5/12">
                                 {pengaduan.status === 0
                                   ? "Belum diproses"
                                   : pengaduan.status === 1
@@ -549,7 +551,7 @@ export default function PengaduanScreen() {
                                   ? "Sudah ditindak lanjuti"
                                   : "Selesai"}
                               </TableCell>
-                              <TableCell className="w-1/2">
+                              <TableCell className="w-2/12">
                                 <Dialog>
                                   <DialogTrigger>
                                     <div className="w-[48px] h-[18px] rounded-xl text-[8px] bg-secondary-700 hover:bg-secondary-600">

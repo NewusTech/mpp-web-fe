@@ -248,7 +248,7 @@ export default function RiwayatPage() {
                             <TableHead className="w-full">Instansi</TableHead>
                             <TableHead className="w-1/2">Tanggal</TableHead>
                             <TableHead className="w-1/2">Status</TableHead>
-                            <TableHead className="w-1"></TableHead>
+                            <TableHead className="w-3/12">Aksi</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>

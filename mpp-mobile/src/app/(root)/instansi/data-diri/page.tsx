@@ -352,7 +352,7 @@ export default function DataDiriPage() {
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">
                       <ProfileEditInput
-                        name="name"
+                        names="name"
                         types="text"
                         value={detail?.name || ""}
                         change={changeUser}
@@ -409,7 +409,7 @@ export default function DataDiriPage() {
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full mb-4">
                       <ProfileEditInput
-                        name="nik"
+                        names="nik"
                         types="number"
                         value={detail?.nik || ""}
                         change={changeUser}
@@ -426,7 +426,7 @@ export default function DataDiriPage() {
                       </Label>
 
                       <Select
-                        name="gender"
+                        name="agama"
                         value={
                           selectedAgama ? String(selectedAgama) : undefined
                         }
@@ -466,7 +466,7 @@ export default function DataDiriPage() {
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full mb-4">
                       <ProfileEditInput
-                        name="telepon"
+                        names="telepon"
                         types="number"
                         value={detail?.telepon || ""}
                         change={changeUser}
@@ -483,7 +483,7 @@ export default function DataDiriPage() {
                       </Label>
 
                       <Select
-                        name="gender"
+                        name="pendidikan"
                         value={
                           selectedPendidikan
                             ? String(selectedPendidikan)
@@ -525,7 +525,7 @@ export default function DataDiriPage() {
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full mb-4">
                       <ProfileEditInput
-                        name="email"
+                        names="email"
                         types="text"
                         value={detail?.email || ""}
                         change={changeUser}
@@ -538,7 +538,7 @@ export default function DataDiriPage() {
 
                     <div className="flex flex-col w-full mb-4">
                       <ProfileEditInput
-                        name="pekerjaan"
+                        names="pekerjaan"
                         types="text"
                         value={detail?.pekerjaan || ""}
                         change={changeUser}
@@ -652,7 +652,7 @@ export default function DataDiriPage() {
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full mb-4">
                       <ProfileEditInput
-                        name="rt"
+                        names="rt"
                         types="number"
                         value={detail?.rt || ""}
                         change={changeUser}
@@ -665,7 +665,7 @@ export default function DataDiriPage() {
 
                     <div className="flex flex-col w-full mb-4">
                       <ProfileEditInput
-                        name="rw"
+                        names="rw"
                         types="number"
                         value={detail?.rw || ""}
                         change={changeUser}

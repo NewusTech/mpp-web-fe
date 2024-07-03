@@ -40,7 +40,7 @@ export const UpdateProfileSlice = createSlice({
   },
 });
 
-export function updateProfileUser(profileUser: any, slug: string) {
+export function updateProfileUser(profileUser: UpdateUserType, slug: string) {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
@@ -51,7 +51,8 @@ export function updateProfileUser(profileUser: any, slug: string) {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${Cookies.get("Authorization")}`,
           },
-          body: profileUser,
+          body: JSON.stringify(profileUser),
+          cache: "no-store",
         }
       );
 

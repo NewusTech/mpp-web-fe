@@ -3,7 +3,7 @@ import { Label } from "@radix-ui/react-label";
 import React from "react";
 
 export default function ProfileEditInput({
-  name,
+  names,
   labelStyle,
   classStyle,
   labelName,
@@ -12,7 +12,7 @@ export default function ProfileEditInput({
   placeholder,
   types,
 }: {
-  name: string;
+  names: string;
   labelStyle: string;
   classStyle: string;
   labelName: string;
@@ -26,7 +26,7 @@ export default function ProfileEditInput({
       <Label className={`${labelStyle}`}>{labelName}</Label>
 
       <Input
-        name={name}
+        name={names}
         type={types}
         className={`${classStyle}`}
         onChange={change}

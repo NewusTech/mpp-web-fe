@@ -8,6 +8,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProfileNewType } from "@/types/type";
+import { Label } from "@radix-ui/react-label";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const token = Cookies.get("Authorization");
@@ -250,6 +252,66 @@ export default function ProfilePage() {
                 <label className="text-[12px] md:text-[14px] text-neutral-900">
                   {profile?.alamat}
                 </label>
+              </div>
+
+              <div className="flex flex-col w-full">
+                <h3 className="text-primary-800 font-semibold text-[20px] mt-6">
+                  Dokumen Pendukung
+                </h3>
+
+                <div className="flex flex-col mt-6">
+                  <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                    Kartu Tanda Penduduk (KTP)
+                  </Label>
+
+                  {profile?.filektp && (
+                    <div className="w-full h-full">
+                      <Image
+                        src={profile.filektp}
+                        className="w-full h-full object-cover"
+                        alt="KTP"
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col mt-6">
+                  <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                    Kartu Keluarga(KK)
+                  </Label>
+
+                  {profile?.filekk && (
+                    <div className="w-full h-full">
+                      <Image
+                        src={profile.filekk}
+                        className="w-full h-full object-cover"
+                        alt="KK"
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col mt-6">
+                  <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                    Ijazah Terakhir
+                  </Label>
+
+                  {profile?.fileijazahlain && (
+                    <div className="w-full h-full">
+                      <Image
+                        src={profile.fileijazahlain}
+                        className="w-full h-full object-cover"
+                        alt="Ijazah"
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
