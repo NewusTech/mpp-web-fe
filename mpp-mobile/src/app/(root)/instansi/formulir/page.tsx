@@ -42,14 +42,12 @@ const steps = [
 const currentStep = 3;
 
 export default function FormulirPage() {
-  const permohonan = useSelector((state: RootState) => state.permohonan);
   const dispatch = useDispatch();
   const [form, setForm] = useState<LayananType>();
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log(permohonan, "ini dari persist");
+  const [instansiId, setInstansiId] = useState<number | null>(null);
 
   const fetchInputForm = async (id: number) => {
     const result: FormType = await ByLayanan(id);
@@ -58,8 +56,17 @@ export default function FormulirPage() {
   };
 
   useEffect(() => {
-    fetchInputForm(permohonan.id);
-  }, [permohonan.id]);
+    const instanceid = localStorage.getItem("instanceId");
+    if (instanceid) {
+      setInstansiId(Number(instanceid));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (instansiId !== null) {
+      fetchInputForm(instansiId);
+    }
+  }, [instansiId]);
 
   const change = (
     e: React.ChangeEvent<

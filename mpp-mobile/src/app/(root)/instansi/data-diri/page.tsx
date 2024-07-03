@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Dispatch } from "redux";
+import Cookies from "js-cookie";
 import {
   Select,
   SelectContent,
@@ -153,6 +154,7 @@ export default function DataDiriPage() {
   });
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const router = useRouter();
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
@@ -232,13 +234,41 @@ export default function DataDiriPage() {
     setIsLoading(true);
     try {
       if (detail) {
-        dispatch(updateProfileUser(detail, detail?.slug as string));
-        await fetchUser();
-        toast.success("Berhasil memperbarui informasi data diri!");
-        router.push(`/instansi/formulir`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${detail?.slug}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("Authorization")}`,
+            },
+            body: JSON.stringify(detail),
+            cache: "no-store",
+          }
+        );
+
+        if (response.ok) {
+          toast.success("Berhasil memperbarui informasi data diri!");
+          await fetchUser();
+          setFormErrors({});
+          router.push(`/instansi/formulir`);
+        } else {
+          const responseData = await response.json();
+          if (responseData.status === 400 && responseData.data) {
+            const errors: { [key: string]: string } = {};
+            responseData.data.forEach(
+              (error: { message: string; field: string }) => {
+                errors[error.field] = error.message;
+              }
+            );
+            setFormErrors(errors);
+          } else {
+            toast.error("Gagal mengupdate profile!");
+          }
+        }
       }
     } catch (error) {
-      toast("Gagal mengupdate data!");
+      toast("Tidak bisa mengupdate profile!");
     } finally {
       setIsLoading(false);
     }
@@ -361,6 +391,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {formErrors["name"] && (
+                        <p className="text-error-700 text-[12px] mt-1 text-center">
+                          {formErrors["name"]}
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">

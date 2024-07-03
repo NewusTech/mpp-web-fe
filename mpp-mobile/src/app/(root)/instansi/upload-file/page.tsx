@@ -12,6 +12,13 @@ import Image from "next/legacy/image";
 import { toast } from "sonner";
 import { LayananType } from "@/types/type";
 import { Loader } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const steps = [
   { id: 1, title: "1" },
@@ -27,7 +34,6 @@ type DataInputItem = {
 };
 
 export default function UploadFilePage() {
-  const permohonan = useSelector((state: RootState) => state.permohonan);
   const [dataFile, setDataFile] = useState<LayananType | null>(null);
   const [docValues, setDocValues] = useState<Record<string, File | null>>({});
   const router = useRouter();
@@ -36,6 +42,8 @@ export default function UploadFilePage() {
   const [dataInput, setDataInput] = useState<any[]>([]);
   const [fileName, setFileName] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const storedInstanceId = localStorage.getItem("instanceId");
@@ -153,6 +161,19 @@ export default function UploadFilePage() {
     }
   };
 
+  const handleViewFile = (file: File | null) => {
+    if (file) {
+      setPreviewFile(file);
+      setIsModalOpen(true);
+    }
+  };
+
+  let fileURL = "";
+
+  if (previewFile) {
+    fileURL = URL.createObjectURL(previewFile);
+  }
+
   return (
     <div className="flex justify-center bg-primary-100 mt-[24px] md:mx-[250px] md:mb-0 md:pb-[362px]">
       <div className="flex flex-col md:w-full items-center gap-[12px]">
@@ -186,7 +207,7 @@ export default function UploadFilePage() {
                 {dataFile.Layananforms.map((el) => (
                   <div
                     key={el.id}
-                    className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-primary-700 px-[16px]">
+                    className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-primary-700 px-4">
                     <div className="flex flex-col w-[152px] md:w-full justify-center gap-[9px]">
                       <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                         {el.field}
@@ -195,7 +216,7 @@ export default function UploadFilePage() {
                         {dataFile.desc}
                       </p>
                     </div>
-                    <div className="flex self-center">
+                    <div className="flex self-center md:w-full md:justify-end">
                       <input
                         id={`fileInput-${el.id}`}
                         type="file"
@@ -209,9 +230,42 @@ export default function UploadFilePage() {
                       />
                       <label
                         htmlFor={`fileInput-${el.id}`}
-                        className="flex items-center w-[80px] md:w-[230px] h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
+                        className="flex items-center w-[80px] md:w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
                         {fileName[el.id.toString()] || "Upload"}
                       </label>
+
+                      <Dialog>
+                        <DialogTrigger>
+                          <div
+                            onClick={() =>
+                              handleViewFile(
+                                docValues[el.id.toString()] || null
+                              )
+                            }
+                            className="flex items-center justify-center md:w-full text-primary-700 hover:border-b hover:border-neutral-300 ml-4 mr-2">
+                            Lihat File
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent className="flex flex-col justify-between w-full bg-neutral-50">
+                          <div className="fixed inset-0 flex items-center justify-center bg-neutral-900 bg-opacity-50 z-50">
+                            <div className="bg-primary-100 rounded-xl shadow-lg max-w-full">
+                              {previewFile?.type.startsWith("image/") ? (
+                                <div className="w-full h-full p-4 rounded-xl">
+                                  <Image
+                                    src={fileURL}
+                                    alt="File preview"
+                                    className="w-full h-full object-cover rounded-xl"
+                                    width={500}
+                                    height={500}
+                                  />
+                                </div>
+                              ) : (
+                                <iframe src={fileURL} className="w-full h-64" />
+                              )}
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                   </div>
                 ))}

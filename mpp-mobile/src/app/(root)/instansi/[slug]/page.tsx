@@ -2,6 +2,12 @@
 
 import Image from "next/legacy/image";
 import React, { useEffect, useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface detailType {
   name?: string;
@@ -11,6 +17,21 @@ interface detailType {
   image?: string;
   pj?: string;
   nip_pj?: string;
+  Layanans?: LayanansType[];
+}
+
+interface LayanansType {
+  dasarhukum?: string;
+  desc?: string;
+  syarat?: string;
+}
+
+function splitByNumberedItems(text: string) {
+  let splitText = [""];
+  if (text) {
+    splitText = text.split(/(?=\d+\.\s)/).map((item: string) => item.trim());
+    return splitText;
+  }
 }
 
 export default function InstansiDetail({
@@ -125,6 +146,35 @@ export default function InstansiDetail({
             {detailins?.desc}
           </p>
         </div>
+      </div>
+
+      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-xl mx-[35px] md:mx-[70px] md:px-[70px] my-[24px] md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-[36px]">
+        <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold mb-8">
+          Informasi Layanan
+        </h5>
+
+        <Accordion type="single" collapsible>
+          <AccordionItem className="w-full h-full mb-2" value={`item-1`}>
+            <AccordionTrigger>Persyaratan</AccordionTrigger>
+            <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+              {detailins?.Layanans && detailins.Layanans[0].syarat}
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem className="w-full h-full mb-2" value={`item-2`}>
+            <AccordionTrigger>Dasar Hukum</AccordionTrigger>
+            <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+              {detailins?.Layanans && detailins.Layanans[0].dasarhukum}
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem className="w-full h-full mb-2" value={`item-3`}>
+            <AccordionTrigger>Pelayanan</AccordionTrigger>
+            <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+              {detailins?.Layanans && detailins.Layanans[0].desc}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );

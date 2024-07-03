@@ -3,7 +3,12 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
@@ -75,12 +80,28 @@ export default function PermohonanLayananFirstScreen({
     setSelectedService(selected);
   };
 
-  let content = [];
+  let syarat = [];
+
+  if (selectedService) {
+    const text = selectedService.syarat;
+    const result = splitByNumberedItems(text);
+    syarat.push(result);
+  }
+
+  let hukum = [];
+
+  if (selectedService) {
+    const text = selectedService.dasarhukum;
+    const result = splitByNumberedItems(text);
+    hukum.push(result);
+  }
+
+  let pelayanan = [];
 
   if (selectedService) {
     const text = selectedService.desc;
     const result = splitByNumberedItems(text);
-    content.push(result);
+    pelayanan.push(result);
   }
 
   const isButtonDisabled = () => {
@@ -161,23 +182,68 @@ export default function PermohonanLayananFirstScreen({
       </div>
 
       <div className="flex flex-col bg-neutral-50 rounded-xl self-start w-full h-full gap-[16px] mt-5 p-[64px]">
-        <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold">
+        <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold mb-8">
           Informasi Layanan
         </h5>
 
-        {selectedService && (
-          <div className="list-disc list-inside ml-[8px]">
-            {content[0]?.map((item: string, i: number) => {
-              return (
-                <div
-                  key={i}
-                  className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                  {item}
+        <Accordion type="single" collapsible>
+          <AccordionItem className="w-full h-full mb-2" value={`item-1`}>
+            <AccordionTrigger>Persyaratan</AccordionTrigger>
+            <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+              {selectedService && (
+                <div className="list-disc list-inside">
+                  {syarat[0]?.map((item: string, i: number) => {
+                    return (
+                      <div
+                        key={i}
+                        className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
+                        {item}
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
-        )}
+              )}
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem className="w-full h-full mb-2" value={`item-2`}>
+            <AccordionTrigger>Dasar Hukum</AccordionTrigger>
+            <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+              {selectedService && (
+                <div className="list-disc list-inside">
+                  {hukum[0]?.map((item: string, i: number) => {
+                    return (
+                      <div
+                        key={i}
+                        className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
+                        {item}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem className="w-full h-full mb-2" value={`item-3`}>
+            <AccordionTrigger>Pelayanan</AccordionTrigger>
+            <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
+              {selectedService && (
+                <div className="list-disc list-inside">
+                  {pelayanan[0]?.map((item: string, i: number) => {
+                    return (
+                      <div
+                        key={i}
+                        className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
+                        {item}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );
