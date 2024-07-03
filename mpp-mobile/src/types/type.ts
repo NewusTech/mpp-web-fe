@@ -66,6 +66,8 @@ export interface JenisLayananType {
   slug: string;
   status: boolean;
   desc: string;
+  dasarhukum: string;
+  syarat: string;
 }
 
 export interface Layanantype {
