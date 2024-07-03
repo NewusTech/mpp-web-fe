@@ -24,6 +24,7 @@ import desaFetch from "@/components/fetching/desa/desa";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
 import { CircleX } from "lucide-react";
+import Cookies from "js-cookie";
 
 const genders = [
   {
@@ -158,6 +159,7 @@ export default function ProfileEditPage({
   const [changeOpacity, setChangeOpacity] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
     try {
@@ -272,10 +274,16 @@ export default function ProfileEditPage({
     }
   };
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const handleUpdateUser = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!detail?.name) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("name", detail?.name || "");
+    formData.append("name", detail?.name);
     formData.append("email", detail?.email || "");
     formData.append("telepon", detail?.telepon || "");
     formData.append("nik", detail?.nik || "");
@@ -298,15 +306,69 @@ export default function ProfileEditPage({
       formData.append("fileijazahlain", fileIjazahImage);
     }
 
+    const entries = Array.from(formData.entries());
+    entries.forEach(([key, value]) => {
+      console.log(key, value);
+    });
+
     try {
-      if (detail) {
-        dispatch(updateProfileUser(formData, params.slug));
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
+        {
+          method: "PUT",
+          headers: {
+            // "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          body: formData,
+          cache: "no-store",
+        }
+      );
+
+      const result = await response.json();
+
+      console.log(result, "ini hasil");
+
+      if (response.ok) {
+        toast.success("Berhasil mengupdate profile!");
+        // router.push("/profile");
+        // setDetail({
+        //   name: "",
+        //   email: "",
+        //   telepon: "",
+        //   nik: "",
+        //   gender: "",
+        //   agama: "",
+        //   pendidikan: "",
+        //   pekerjaan: "",
+        //   kecamatan_id: "",
+        //   desa_id: "",
+        //   rt: "",
+        //   rw: "",
+        //   alamat: "",
+        //   filektp: "",
+        //   filekk: "",
+        //   fileijazahlain: "",
+        // });
         await fetchUser();
-        toast.success("Berhasil memperbarui informasi data diri!");
-        router.push(`/profile`);
+        setFormErrors({});
+        // router.push("/profile");
+      } else {
+        const responseData = await response.json();
+        if (responseData.status === 400 && responseData.data) {
+          const errors: { [key: string]: string } = {};
+          responseData.data.forEach(
+            (error: { message: string; field: string }) => {
+              errors[error.field] = error.message;
+            }
+          );
+          setFormErrors(errors);
+        } else {
+          toast.error("Gagal mengupdate profile!");
+        }
       }
     } catch (error) {
-      toast("Gagal mengupdate data!");
+      toast("Tidak bisa mengupdate profile!");
     }
   };
 
@@ -446,11 +508,11 @@ export default function ProfileEditPage({
         </div>
 
         <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-[16px] md:pt-[32px]">
-          <form onSubmit={onSubmit} className="flex flex-col w-full">
+          <form onSubmit={handleUpdateUser} className="flex flex-col w-full">
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full md:mb-4">
                 <ProfileEditInput
-                  name="name"
+                  names="name"
                   types="text"
                   value={detail?.name || ""}
                   change={changeUser}
@@ -459,6 +521,12 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["name"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["name"]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
@@ -494,13 +562,19 @@ export default function ProfileEditPage({
                     )}
                   </SelectContent>
                 </Select>
+
+                {formErrors["gender"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["gender"]}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  name="nik"
+                  names="nik"
                   types="number"
                   value={detail?.nik || ""}
                   change={changeUser}
@@ -509,6 +583,12 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["nik"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["nik"]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
@@ -517,7 +597,7 @@ export default function ProfileEditPage({
                 </Label>
 
                 <Select
-                  name="gender"
+                  name="agama"
                   value={selectedAgama ? String(selectedAgama) : undefined}
                   onValueChange={(value) => {
                     setSelectedAgama(Number(value));
@@ -544,12 +624,18 @@ export default function ProfileEditPage({
                     )}
                   </SelectContent>
                 </Select>
+
+                {formErrors["agama"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["agama"]}
+                  </p>
+                )}
               </div>
             </div>
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  name="telepon"
+                  names="telepon"
                   types="number"
                   value={detail?.telepon || ""}
                   change={changeUser}
@@ -558,6 +644,12 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["telepon"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["telepon"]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
@@ -566,7 +658,7 @@ export default function ProfileEditPage({
                 </Label>
 
                 <Select
-                  name="gender"
+                  name="pendidikan"
                   value={
                     selectedPendidikan ? String(selectedPendidikan) : undefined
                   }
@@ -600,12 +692,19 @@ export default function ProfileEditPage({
                     )}
                   </SelectContent>
                 </Select>
+
+                {formErrors["pendidikan"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["pendidikan"]}
+                  </p>
+                )}
               </div>
             </div>
+
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  name="email"
+                  names="email"
                   types="text"
                   value={detail?.email || ""}
                   change={changeUser}
@@ -614,11 +713,17 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["email"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["email"]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  name="pekerjaan"
+                  names="pekerjaan"
                   types="text"
                   value={detail?.pekerjaan || ""}
                   change={changeUser}
@@ -627,6 +732,12 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["pekerjaan"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["pekerjaan"]}
+                  </p>
+                )}
               </div>
             </div>
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
@@ -677,6 +788,12 @@ export default function ProfileEditPage({
                     </div>
                   </SelectContent>
                 </Select>
+
+                {formErrors["kecamatan_id"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["kecamatan_id"]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4w-full">
@@ -719,12 +836,19 @@ export default function ProfileEditPage({
                     </div>
                   </SelectContent>
                 </Select>
+
+                {formErrors["desa_id"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["desa_id"]}
+                  </p>
+                )}
               </div>
             </div>
+
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  name="rt"
+                  names="rt"
                   types="number"
                   value={detail?.rt || ""}
                   change={changeUser}
@@ -733,11 +857,17 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["rt"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["rt"]}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  name="rw"
+                  names="rw"
                   types="number"
                   value={detail?.rw || ""}
                   change={changeUser}
@@ -746,6 +876,12 @@ export default function ProfileEditPage({
                   classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
+
+                {formErrors["rw"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["rw"]}
+                  </p>
+                )}
               </div>
             </div>
             <div className="flex flex-col w-full">
@@ -760,6 +896,12 @@ export default function ProfileEditPage({
                 onChange={changeUser}
                 className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
               />
+
+              {formErrors["alamat"] && (
+                <p className="text-error-700 text-[12px] mt-1 text-center">
+                  {formErrors["alamat"]}
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col w-full">
@@ -814,6 +956,12 @@ export default function ProfileEditPage({
                       </label>
                     </>
                   )}
+
+                  {formErrors["filektp"] && (
+                    <p className="text-error-700 text-[12px] mt-1 text-center">
+                      {formErrors["filektp"]}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -864,6 +1012,12 @@ export default function ProfileEditPage({
                       </label>
                     </>
                   )}
+
+                  {formErrors["filekk"] && (
+                    <p className="text-error-700 text-[12px] mt-1 text-center">
+                      {formErrors["filekk"]}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -913,6 +1067,12 @@ export default function ProfileEditPage({
                           : "Drag and drop file here or click to select file"}
                       </label>
                     </>
+                  )}
+
+                  {formErrors["fileijazahlain"] && (
+                    <p className="text-error-700 text-[12px] mt-1 text-center">
+                      {formErrors["fileijazahlain"]}
+                    </p>
                   )}
                 </div>
               </div>

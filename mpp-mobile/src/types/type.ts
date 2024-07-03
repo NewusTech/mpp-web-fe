@@ -175,6 +175,9 @@ export interface ProfileNewType {
   rw: string;
   alamat: string;
   slug: string;
+  filektp?: string;
+  filekk?: string;
+  fileijazahlain?: string;
 }
 
 export interface UpdateUserType {
@@ -192,9 +195,9 @@ export interface UpdateUserType {
   rt?: string;
   rw?: string;
   alamat?: string;
-  filektp: string;
-  filekk: string;
-  fileijazahlain: string;
+  filektp?: string;
+  filekk?: string;
+  fileijazahlain?: string;
   slug?: string;
 }
 
@@ -255,4 +258,17 @@ export interface AlurAntrianType {
 export interface AlurPermohonanType {
   id: number;
   desc: string;
+}
+
+export interface RiwayatPermohonanType {
+  id: number;
+  userinfo_id: number;
+  name: string;
+  status: number;
+  layanan_id: number;
+  layanan_name: string;
+  layanan_image: string;
+  instansi_id: number;
+  instansi_name: string;
+  instansi_image: string;
 }
