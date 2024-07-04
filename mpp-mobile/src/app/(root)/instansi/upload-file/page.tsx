@@ -11,7 +11,7 @@ import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
 import { toast } from "sonner";
 import { LayananType } from "@/types/type";
-import { Loader } from "lucide-react";
+import { ChevronLeft, Loader } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { truncateTitle } from "@/utils/formatTitle";
 
 const steps = [
   { id: 1, title: "1" },
@@ -81,6 +82,8 @@ export default function UploadFilePage() {
       fetchFile(instansiId);
     }
   }, [instansiId]);
+
+  console.log(dataFile, "ini data file");
 
   const handleDocChange = (id: string, file: File | null) => {
     setDocValues((prevValues) => ({
@@ -174,11 +177,21 @@ export default function UploadFilePage() {
     fileURL = URL.createObjectURL(previewFile);
   }
 
+  let truncate = "";
+
+  if (dataFile?.desc) {
+    truncate = truncateTitle(dataFile?.desc, 20);
+  }
+
   return (
-    <div className="flex justify-center bg-primary-100 mt-[24px] md:mx-[250px] md:mb-0 md:pb-[362px]">
+    <div className="flex justify-center bg-primary-100 mt-6 mx-6 md:mx-[250px] md:mb-0 md:pb-[362px]">
       <div className="flex flex-col md:w-full items-center gap-[12px]">
-        <div className="flex flex-col md:w-full md:justify-between md:flex-row mb-[16px]">
-          <div className="flex flex-col justify-center">
+        <div className="flex flex-col w-full md:justify-between md:flex-row mb-[16px]">
+          <div className="flex flex-row justify-between md:justify-center items-center">
+            <button onClick={() => router.back()}>
+              <ChevronLeft className="w-[40px] h-[40px] text-neutral-800 mr-4" />
+            </button>
+
             <h4 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
               Permohonan Layanan
             </h4>
@@ -198,25 +211,25 @@ export default function UploadFilePage() {
           </div>
         </div>
 
-        <div className="flex flex-col md:w-full">
-          <div className="flex flex-col md:w-full">
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full">
             {dataFile?.Layananforms ? (
               <form
                 onSubmit={handleSubmit}
-                className="flex flex-col items-center md:w-full">
+                className="flex flex-col items-center w-full">
                 {dataFile.Layananforms.map((el) => (
                   <div
                     key={el.id}
-                    className="flex flex-row justify-between w-[290px] md:w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-primary-700 px-4">
-                    <div className="flex flex-col w-[152px] md:w-full justify-center gap-[9px]">
+                    className="flex flex-row justify-between w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-primary-700 px-4">
+                    <div className="flex flex-col w-full justify-center gap-[9px]">
                       <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                         {el.field}
                       </h6>
                       <p className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
-                        {dataFile.desc}
+                        {truncate}
                       </p>
                     </div>
-                    <div className="flex self-center md:w-full md:justify-end">
+                    <div className="flex self-center w-full md:justify-end">
                       <input
                         id={`fileInput-${el.id}`}
                         type="file"
@@ -230,7 +243,7 @@ export default function UploadFilePage() {
                       />
                       <label
                         htmlFor={`fileInput-${el.id}`}
-                        className="flex items-center w-[80px] md:w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
+                        className="flex items-center w-full md:w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
                         {fileName[el.id.toString()] || "Upload"}
                       </label>
 
@@ -242,7 +255,7 @@ export default function UploadFilePage() {
                                 docValues[el.id.toString()] || null
                               )
                             }
-                            className="flex items-center justify-center md:w-full text-primary-700 hover:border-b hover:border-neutral-300 ml-4 mr-2">
+                            className="flex items-center justify-center w-full text-primary-700 hover:border-b hover:border-neutral-300 ml-4 mr-2">
                             Lihat File
                           </div>
                         </DialogTrigger>

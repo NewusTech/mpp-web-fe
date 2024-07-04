@@ -61,7 +61,7 @@ export default function BookingAntrianPage({
       <div className="flex w-full justify-center bg-primary-100 px-[35px] md:px-[150px] mt-[24px] mb-[170px] md:mb-0 md:pb-[130px]">
         <div className="flex w-full h-full md:w-full flex-col items-center">
           <div className="md:w-full">
-            <h5 className="text-[20px] md:text-[32px] font-semibold text-primary-800">
+            <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
               Booking Antrian
             </h5>
           </div>
@@ -138,7 +138,7 @@ export default function BookingAntrianPage({
                 />
               </div>
 
-              <div className="flex md:self-center mb-[32px] md:gap-5 md:pb-8 mt-[16px]">
+              <div className="flex md:self-center mb-[32px] gap-3 md:gap-5 md:pb-8 mt-[16px]">
                 <Link
                   href="/instansi/booking-antrian/booking-result"
                   className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-[90px] md:w-full h-[30px] md:h-[40px] bg-secondary-700 hover:bg-secondary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]"

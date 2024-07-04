@@ -1,5 +1,6 @@
 import { formatLongDate } from "@/helpers/logout/formatted";
 import { Berita } from "@/types/type";
+import { truncateTitle } from "@/utils/formatTitle";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/legacy/image";
 
@@ -8,11 +9,13 @@ import Link from "next/link";
 export default function CardNewsComponent({ news }: { news: Berita }) {
   const date = formatLongDate(news?.createdAt);
 
+  const truncate = truncateTitle(news.title);
+
   return (
-    <div className="flex flex-col items-center p-5 bg-neutral-50 max-w-[350px] justify-center md:max-w-[500px] md:h-[380px] rounded-xl gap-[16px]">
+    <div className="flex flex-col items-center p-5 bg-neutral-50 max-w-[350px] justify-center md:max-w-full md:h-[380px] rounded-xl gap-[16px]">
       <Link
         href={`/berita/${news.slug}`}
-        className="flex relative flex-col w-full h-[200px] md:h-[450px] rounded-xl">
+        className="flex relative flex-col w-full h-[200px] md:h-[650px] rounded-xl">
         <Image
           src={news.image}
           className="w-full h-full object-cover rounded-xl"
@@ -41,7 +44,7 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
           href={`/berita/${news.slug}`}
           className="flex flex-row md:self-start">
           <p className="text-[14px] w-full flex flex-row text-neutral-900 font-semibold">
-            {news.title}
+            {truncate}
           </p>
 
           <ArrowUpRight className="w-6 h-6 text-neutral-900" />

@@ -64,8 +64,8 @@ export default function NavbarScreen() {
 
   return (
     <div
-      className={`flex relative py-[32px] justify-between mx-[70px] md:mx-0 z-10 md:px-[70px] ${navbarColor}`}>
-      <Link href="/" className="flex flex-row w-3/12 h-[64px]">
+      className={`flex relative py-[32px] justify-between mx-16 md:mx-0 z-10 md:px-16 ${navbarColor}`}>
+      <Link href="/" className="flex flex-row w-5/12 h-[64px]">
         <Image src={logo} alt="Lampung Timur" className="w-full h-full" />
 
         <div className="flex flex-col justify-center w-full h-full leading-none">
@@ -81,11 +81,11 @@ export default function NavbarScreen() {
         </div>
       </Link>
 
-      <div className="flex flex-row justify-center items-center w-[733px] h-[64px]">
-        <div className="flex flex-row items-center">
+      <div className="flex flex-row justify-end items-center w-full">
+        <div className="flex flex-row items-center gap-x-8">
           <Link
             href="/"
-            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
+            className={`text-center w-full text-[20px] text-primary-800 ${
               pathName === "/"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"
@@ -93,7 +93,7 @@ export default function NavbarScreen() {
             Beranda
           </Link>
 
-          <div className="w-[111.5px] ml-6 mr-0">
+          <div className="w-full">
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="flex flex-row gap-x-5 justify-center items-center group">
@@ -167,7 +167,7 @@ export default function NavbarScreen() {
 
           <Link
             href="/instansi"
-            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
+            className={`text-center w-full text-[20px] text-primary-800 ${
               pathName === "/instansi"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"
@@ -177,7 +177,7 @@ export default function NavbarScreen() {
 
           <Link
             href="/berita"
-            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
+            className={`text-center w-full text-[20px] text-primary-800 ${
               pathName === "/berita"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"
@@ -187,7 +187,7 @@ export default function NavbarScreen() {
 
           <Link
             href="/kontak"
-            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
+            className={`text-center w-full text-[20px] text-primary-800 ${
               pathName === "/kontak"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"
@@ -197,7 +197,7 @@ export default function NavbarScreen() {
 
           <Link
             href="/statistik"
-            className={`text-center w-[111.5px] text-[20px] text-primary-800 ${
+            className={`text-center w-full text-[20px] text-primary-800 ${
               pathName === "/statistik"
                 ? "text-secondary-700 hover:text-primary-800"
                 : "text-primary-800 hover:text-secondary-700"

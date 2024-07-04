@@ -32,8 +32,6 @@ export default function ProfilePage() {
     fetchProfiles();
   }, []);
 
-  console.log(profile, "ini profile");
-
   let gender = "";
 
   if (profile?.gender === 1) {
@@ -101,7 +99,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full mb-[24px] pt-[24px] md:pb-[70px] bg-primary-100">
+    <div className="flex items-center justify-center w-full mb-[24px] pt-[24px] md:pb-28 bg-primary-100">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
         <div className="flex self-start mb-[32px]">
           <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
@@ -259,58 +257,60 @@ export default function ProfilePage() {
                   Dokumen Pendukung
                 </h3>
 
-                <div className="flex flex-col mt-6">
-                  <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                    Kartu Tanda Penduduk (KTP)
-                  </Label>
+                <div className="grid grid-cols-2">
+                  <div className="flex flex-col mt-6">
+                    <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                      Kartu Tanda Penduduk (KTP)
+                    </Label>
 
-                  {profile?.filektp && (
-                    <div className="w-full h-full">
-                      <Image
-                        src={profile.filektp}
-                        className="w-full h-full object-cover"
-                        alt="KTP"
-                        width={100}
-                        height={100}
-                      />
-                    </div>
-                  )}
-                </div>
+                    {profile?.filektp && (
+                      <div className="w-6/12 h-full">
+                        <Image
+                          src={profile.filektp}
+                          className="w-full h-full object-cover rounded-xl"
+                          alt="KTP"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex flex-col mt-6">
-                  <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                    Kartu Keluarga(KK)
-                  </Label>
+                  <div className="flex flex-col mt-6">
+                    <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                      Kartu Keluarga(KK)
+                    </Label>
 
-                  {profile?.filekk && (
-                    <div className="w-full h-full">
-                      <Image
-                        src={profile.filekk}
-                        className="w-full h-full object-cover"
-                        alt="KK"
-                        width={100}
-                        height={100}
-                      />
-                    </div>
-                  )}
-                </div>
+                    {profile?.filekk && (
+                      <div className="w-6/12 h-full">
+                        <Image
+                          src={profile.filekk}
+                          className="w-full h-full object-cover rounded-xl"
+                          alt="KK"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex flex-col mt-6">
-                  <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                    Ijazah Terakhir
-                  </Label>
+                  <div className="flex flex-col mt-6">
+                    <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                      Ijazah Terakhir
+                    </Label>
 
-                  {profile?.fileijazahlain && (
-                    <div className="w-full h-full">
-                      <Image
-                        src={profile.fileijazahlain}
-                        className="w-full h-full object-cover"
-                        alt="Ijazah"
-                        width={100}
-                        height={100}
-                      />
-                    </div>
-                  )}
+                    {profile?.fileijazahsd && (
+                      <div className="w-6/12 h-full">
+                        <Image
+                          src={profile.fileijazahsd}
+                          className="w-full h-full object-cover rounded-xl"
+                          alt="Ijazah"
+                          width={100}
+                          height={100}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

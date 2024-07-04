@@ -86,8 +86,6 @@ export default function RegisterScreen() {
     }
   }, [selectedKecamatan, debounceSearchDesa]);
 
-  console.log(kecamatan, "ini kecamatan");
-
   useEffect(() => {
     const token = Cookies.get("Authorization");
 
@@ -158,20 +156,20 @@ export default function RegisterScreen() {
   }, [selectedDesa]);
 
   return (
-    <section className="md:container md:mx-auto flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:min-w-full md:h-screen">
-      <div className="flex flex-col gap-[4px] md:w-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-[300px] my-[45px] md:my-0 md:px-[60px]">
+    <section className="flex justify-center md:px-36 items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:h-screen">
+      <div className="flex flex-col gap-[4px] md:w-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-0 my-[45px] md:my-0 md:px-[60px]">
         <div className="flex flex-col pt-[32px]">
-          <h6 className="text-primary-800 text-[16px] md:text-[28px] font-semibold mb-[4px]">
+          <h6 className="text-primary-800 text-[16px] md:text-[24px] font-semibold mb-[4px]">
             DAFTAR
           </h6>
 
           <div className="flex flex-row items-start justify-start gap-1">
-            <p className="flex flex-row gap-1 font-normal text-[12px] md:text-[16px] text-neutral-800">
+            <p className="flex flex-row gap-1 font-normal text-[12px] md:text-[14px] text-neutral-800">
               Sudah Punya akun? Silahkan
             </p>
             <Link
               href="/login"
-              className="text-[12px] md:text-[16px] font-bold text-primary-800 border-b border-b-primary-800">
+              className="text-[12px] md:text-[14px] font-bold text-primary-800 border-b border-b-primary-800">
               Masuk
             </Link>
           </div>
@@ -181,7 +179,7 @@ export default function RegisterScreen() {
           <form onSubmit={onSubmit} className="flex flex-col md:w-full">
             <div className="flex flex-col md:w-full md:flex-none md:grid md:grid-cols-2">
               <div className="flex flex-col">
-                <h5 className="text-[12px] md:text-[18px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
+                <h5 className="text-[12px] md:text-[16px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
                   Data Diri
                 </h5>
 
@@ -242,7 +240,7 @@ export default function RegisterScreen() {
                     <Label className="text-[12px] text-primary-800 font-semibold">
                       Kata Sandi
                     </Label>
-                    <div className="flex items-center mt-1 justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal border border-neutral-700 placeholder:text-[14px] placeholder:text-neutral-700">
+                    <div className="flex items-center mt-1 justify-between rounded-[50px] bg-neutral-50 text-[14px] w-full h-[40px] font-normal border border-neutral-700 placeholder:text-[14px] placeholder:text-neutral-700">
                       <Input
                         name="password"
                         type={!seen ? "text" : "password"}
@@ -268,7 +266,7 @@ export default function RegisterScreen() {
               </div>
 
               <div className="mt-[16px] md:mt-0 md:pl-4">
-                <h3 className="text-[12px] md:text-[18px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
+                <h3 className="text-[12px] md:text-[16px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
                   Alamat
                 </h3>
 
@@ -291,7 +289,7 @@ export default function RegisterScreen() {
                       <SelectTrigger
                         className={`${
                           !selectedKecamatan ? "opacity-70" : ""
-                        } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                        } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                         <SelectValue
                           placeholder="Pilih Kecamatan"
                           className={
@@ -335,7 +333,7 @@ export default function RegisterScreen() {
                       <SelectTrigger
                         className={`${
                           !selectedDesa ? "opacity-70" : ""
-                        } border border-neutral-700 mt-1 rounded-[50px] bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                        } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                         <SelectValue
                           placeholder="Pilih Desa"
                           className={

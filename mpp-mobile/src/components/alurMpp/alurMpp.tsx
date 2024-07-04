@@ -53,7 +53,9 @@ export default function AlurMpp({
           <div
             className={`${
               isTitleFive ? "w-[100px]" : "w-[200px]"
-            } flex items-center justify-start pl-16`}>
+            } flex items-center justify-start ${
+              isTitleFour ? "pl-16" : "pl-11"
+            }`}>
             <div
               className={`h-10 w-10 p-4 rounded-full flex items-center justify-center border ${borderColor} ${bgcolor}`}>
               <p className={"text-neutral-50"}>{title}</p>
@@ -63,7 +65,9 @@ export default function AlurMpp({
           <div
             className={`${
               isTitleFive ? "w-[100px]" : "w-[400px]"
-            } flex items-center justify-center`}>
+            } flex items-center ${
+              isTitleFive ? "justify-start" : "justify-center"
+            }`}>
             <div
               className={`h-10 w-10 p-4 rounded-full flex items-center justify-center border ${borderColor} ${bgcolor}`}>
               <p className={"text-neutral-50"}>{title}</p>
@@ -83,13 +87,15 @@ export default function AlurMpp({
         <div
           className={`mt-4 w-[150px] ${
             isTitleFour ? "pl-4" : ""
-          } flex items-center justify-center`}>
+          } flex items-center ${
+            isTotal ? "justify-start pl-10" : "justify-center"
+          } `}>
           <p className={`${isTitleFive ? "pl-16" : ""} text-start`}>{desc}</p>
         </div>
       ) : (
         <div
           className={`mt-4 w-[150px] ${
-            isTitleFive ? "pl-20" : ""
+            isTitleFive ? "pl-18" : ""
           } flex items-center justify-center`}>
           <p className={`text-center`}>{desc}</p>
         </div>

@@ -21,7 +21,13 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
         href="/"
         className="flex justify-center self-center w-full py-4 gap-x-4 bg-neutral-50 flex-row md:hidden">
         <div className="w-2/12">
-          <Image src={logo} alt="Lampung Timur" className="w-full h-full" />
+          <Image
+            src={logo}
+            alt="Lampung Timur"
+            className="w-full h-full object-cover"
+            width={100}
+            height={100}
+          />
         </div>
 
         <div className="flex flex-col self-center justify-center w-6/12 h-full leading-none">
@@ -59,7 +65,7 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
           }}>
           {carousel.map((image, index) => (
             <SwiperSlide key={index}>
-              <div className="w-full h-[300px] md:h-[650px]">
+              <div className="w-screen h-[300px] md:h-[600px]">
                 <Image
                   src={image.image}
                   className="w-full h-full object-cover"
