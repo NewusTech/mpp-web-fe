@@ -128,7 +128,7 @@ export default function SurveySkmPage() {
     <div className="flex items-center justify-center bg-primary-100 w-full pt-12 md:pt-6 pb-[380px] md:pb-[150px]">
       <div className="flex flex-col items-center">
         <div className="md:flex md:justify-start md:self-start">
-          <h3 className="text-[16px] md:text-start md:text-[32px] font-semibold text-primary-800">
+          <h3 className="text-[16px] md:text-start md:text-[26px] font-semibold text-primary-800">
             Survey Kepuasan Masyarakat (SKM)
           </h3>
         </div>

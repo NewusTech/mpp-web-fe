@@ -34,7 +34,6 @@ import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
-  const [beritaSlug, SetBeritaSlug] = useState<Berita>();
   const [layanan, setLayanan] = useState<MyInstansi>();
   const [facilities, setFacilities] = useState<FacilityType[]>();
   const [infoLanding, setInfoLanding] = useState<InfoLandingType | undefined>();
@@ -47,9 +46,9 @@ function Home() {
 
   const fetchAll = async (search: string) => {
     try {
-      const news = await fetchNews(page, 4);
+      const news = await fetchNews(page, 3);
 
-      const layanan = await fetchInstansi(search, page, 8);
+      const layanan = await fetchInstansi(search, page, 10);
 
       const fasilitas = await facilitiesFetch(1, 8);
 
@@ -119,11 +118,11 @@ function Home() {
 
         <div className="mx-5 md:mx-8 bg-primary-200 rounded-xl p-5 md:p-8 mt-5">
           <div className="flex w-full flex-col justify-center items-center">
-            <h4 className="text-primary-800 text-[20px] md:text-[32px] text-center font-bold md:mb-[32px]">
+            <h4 className="text-primary-800 text-[20px] md:text-[26px] text-center font-bold md:mb-[32px]">
               Instansi Layanan MPP
             </h4>
 
-            <div className="flex flex-col w-full flex-wrap justify-center md:flex-row items-center gap-5 my-[16px]">
+            <div className="flex flex-col w-full flex-wrap justify-center md:flex-none md:grid md:grid-cols-5 items-center gap-5 my-[16px]">
               {photos && (
                 <>
                   {layanan?.data?.map((el: Instansi, i: number) => {
@@ -135,7 +134,7 @@ function Home() {
 
             <Link
               href="/instansi"
-              className="flex justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
+              className="flex justify-center items-center rounded-[50px] w-2/12 h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
               <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
                 Lihat Semua Instansi
               </p>
@@ -151,7 +150,7 @@ function Home() {
         />
 
         <div className="flex flex-col bg-primary-200 items-center mt-5 mx-5 md:mx-8 py-5 rounded-xl md:p-8">
-          <h3 className="text-primary-800 text-[26px] md:text-[32px] font-semibold mb-[16px] md:mb-[36px]">
+          <h3 className="text-primary-800 text-[26px] md:text-[26px] font-semibold mb-[16px] md:mb-[36px]">
             Berita
           </h3>
 
@@ -176,7 +175,7 @@ function Home() {
                   href={`/berita/${slug}`}
                   className="md:flex md:flex-col md:w-6/12 md:gap-[16px]">
                   <div className="md:flex md:flex-col md:gap-[8px]">
-                    <h3 className="md:text-neutral-900 md:text-start md:text-[30px] md:font-semibold">
+                    <h3 className="md:text-neutral-900 md:text-start md:text-[26px] md:font-semibold">
                       {title}
                     </h3>
 
@@ -185,7 +184,7 @@ function Home() {
                         {instansi}
                       </p>
                       <ul>
-                        <li className="list-disc md:text-[16px] text-neutral-800 font-normal ml-6">
+                        <li className="list-disc md:text-[12px] text-neutral-800 font-normal ml-6">
                           {date}
                         </li>
                       </ul>
@@ -201,7 +200,7 @@ function Home() {
           </div>
 
           <div className="flex flex-col px-5 md:px-0 w-full items-center md:mt-6">
-            <div className="flex flex-col w-full md:grid md:grid-cols-4 gap-[16px] md:justify-center md:gap-5">
+            <div className="flex flex-col w-full md:grid md:grid-cols-3 gap-[16px] md:justify-center md:gap-5">
               {berita?.data?.map((news: Berita, i: number) => {
                 return <CardNewsComponent key={i} news={news} />;
               })}

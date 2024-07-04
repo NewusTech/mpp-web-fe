@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { useDispatch } from "react-redux";
@@ -112,7 +112,6 @@ export default function ProfileEditPage({
 }: {
   params: { slug: string };
 }) {
-  const dispatch: Dispatch<any> = useDispatch();
   const [selectedKecamatan, setSelectedKecamatan] = useState<number | null>(
     null
   );
@@ -148,7 +147,7 @@ export default function ProfileEditPage({
     alamat: "",
     filektp: "",
     filekk: "",
-    fileijazahlain: "",
+    fileijazahsd: "",
   });
   const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
   const [fileKkImage, setFileKkImage] = useState<File | null>(null);
@@ -235,6 +234,12 @@ export default function ProfileEditPage({
 
   const router = useRouter();
 
+  const changeUser = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setDetail({ ...detail, [e.target.name]: e.target.value });
+  };
+
   const handleFileKTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -267,7 +272,7 @@ export default function ProfileEditPage({
       setFileIjazahImage(file);
       setDetail({
         ...detail,
-        fileijazahlain: file.name,
+        fileijazahsd: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
       setPreviewIjazahImage(fileUrl);
@@ -277,25 +282,8 @@ export default function ProfileEditPage({
   const handleUpdateUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!detail?.name) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-
     const formData = new FormData();
-    formData.append("name", detail?.name);
-    formData.append("email", detail?.email || "");
-    formData.append("telepon", detail?.telepon || "");
-    formData.append("nik", detail?.nik || "");
-    formData.append("gender", String(detail?.gender) || "");
-    formData.append("agama", String(detail?.agama) || "");
-    formData.append("pendidikan", String(detail?.pendidikan) || "");
-    formData.append("pekerjaan", detail?.pekerjaan || "");
-    formData.append("kecamatan_id", String(detail?.kecamatan_id) || "");
-    formData.append("desa_id", String(detail?.desa_id) || "");
-    formData.append("rt", detail?.rt || "");
-    formData.append("rw", detail?.rw || "");
-    formData.append("alamat", detail?.alamat || "");
+
     if (fileKtpImage) {
       formData.append("filektp", fileKtpImage);
     }
@@ -303,81 +291,83 @@ export default function ProfileEditPage({
       formData.append("filekk", fileKkImage);
     }
     if (fileIjazahImage) {
-      formData.append("fileijazahlain", fileIjazahImage);
+      formData.append("fileijazahsd", fileIjazahImage);
     }
 
-    const entries = Array.from(formData.entries());
-    entries.forEach(([key, value]) => {
-      console.log(key, value);
-    });
+    const detailData = {
+      name: detail.name || "",
+      email: detail.email || "",
+      telepon: detail.telepon || "",
+      nik: detail.nik || "",
+      gender: String(detail.gender) || "",
+      agama: String(detail.agama) || "",
+      pendidikan: String(detail.pendidikan) || "",
+      pekerjaan: detail.pekerjaan || "",
+      kecamatan_id: String(detail.kecamatan_id) || "",
+      desa_id: String(detail.desa_id) || "",
+      rt: detail.rt || "",
+      rw: detail.rw || "",
+      alamat: detail.alamat || "",
+    };
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
-        {
-          method: "PUT",
-          headers: {
-            // "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${Cookies.get("Authorization")}`,
-          },
-          body: formData,
-          cache: "no-store",
-        }
-      );
+      const [response1, response2] = await Promise.all([
+        fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${Cookies.get("Authorization")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(detailData),
+            cache: "no-store",
+          }
+        ),
+        // Second API call for file uploads
+        fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatedocs/${params.slug}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${Cookies.get("Authorization")}`,
+            },
+            body: formData,
+            cache: "no-store",
+          }
+        ),
+      ]);
 
-      const result = await response.json();
+      const responseData1 = await response1.json();
+      const responseData2 = await response2.json();
 
-      console.log(result, "ini hasil");
-
-      if (response.ok) {
+      if (response1.ok && response2.ok) {
         toast.success("Berhasil mengupdate profile!");
-        // router.push("/profile");
-        // setDetail({
-        //   name: "",
-        //   email: "",
-        //   telepon: "",
-        //   nik: "",
-        //   gender: "",
-        //   agama: "",
-        //   pendidikan: "",
-        //   pekerjaan: "",
-        //   kecamatan_id: "",
-        //   desa_id: "",
-        //   rt: "",
-        //   rw: "",
-        //   alamat: "",
-        //   filektp: "",
-        //   filekk: "",
-        //   fileijazahlain: "",
-        // });
         await fetchUser();
         setFormErrors({});
-        // router.push("/profile");
+        router.push("/profile");
       } else {
-        const responseData = await response.json();
-        if (responseData.status === 400 && responseData.data) {
-          const errors: { [key: string]: string } = {};
-          responseData.data.forEach(
-            (error: { message: string; field: string }) => {
-              errors[error.field] = error.message;
-            }
-          );
-          setFormErrors(errors);
-        } else {
-          toast.error("Gagal mengupdate profile!");
+        if (!response1.ok) {
+          if (responseData1.status === 400 && responseData1.data) {
+            const errors: { [key: string]: string } = {};
+            responseData1.data.forEach(
+              (error: { message: string; field: string }) => {
+                errors[error.field] = error.message;
+              }
+            );
+            setFormErrors(errors);
+          } else {
+            toast.error("Gagal mengupdate profile!");
+          }
+        }
+
+        if (!response2.ok) {
+          toast.error("Gagal mengupload file!");
         }
       }
     } catch (error) {
       toast("Tidak bisa mengupdate profile!");
     }
-  };
-
-  const changeUser = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setDetail({ ...detail, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
@@ -473,7 +463,7 @@ export default function ProfileEditPage({
       setFileIjazahImage(file);
       setDetail({
         ...detail,
-        fileijazahlain: file.name,
+        fileijazahsd: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
       setPreviewIjazahImage(fileUrl);
@@ -495,7 +485,7 @@ export default function ProfileEditPage({
   const handleRemoveIjazah = () => {
     setFileIjazahImage(null);
     setPreviewIjazahImage("");
-    setDetail({ ...detail, fileijazahlain: "" });
+    setDetail({ ...detail, fileijazahsd: "" });
   };
 
   return (
@@ -909,11 +899,10 @@ export default function ProfileEditPage({
                 Dokumen Pendukung
               </h3>
 
-              <div className="flex flex-col mt-6">
-                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+              <div className="flex flex-col w-full">
+                <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                   Kartu Tanda Penduduk (KTP)
                 </Label>
-
                 <div
                   ref={dropRef}
                   onDragOver={handleDragOver}
@@ -922,14 +911,13 @@ export default function ProfileEditPage({
                   className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
                     changeOpacity ? "opacity-50" : "opacity-100"
                   }`}>
-                  {previewKTPImage ? (
+                  {previewKTPImage || detail.filektp ? (
                     <div className="relative max-w-full max-h-full">
                       <img
-                        src={previewKTPImage}
+                        src={previewKTPImage || detail.filektp}
                         alt="Preview"
                         className="max-h-full rounded-xl p-2 max-w-full object-contain"
                       />
-
                       <button
                         type="button"
                         onClick={handleRemoveKTP}
@@ -941,14 +929,14 @@ export default function ProfileEditPage({
                     <>
                       <input
                         type="file"
-                        id="file-input"
+                        id="file-input-ktp"
                         name="filektp"
                         accept="image/*"
                         onChange={handleFileKTPChange}
                         className="hidden"
                       />
                       <label
-                        htmlFor="file-input"
+                        htmlFor="file-input-ktp"
                         className="text-[16px] text-neutral-600 font-light cursor-pointer">
                         {detail.filektp
                           ? detail.filektp
@@ -956,7 +944,6 @@ export default function ProfileEditPage({
                       </label>
                     </>
                   )}
-
                   {formErrors["filektp"] && (
                     <p className="text-error-700 text-[12px] mt-1 text-center">
                       {formErrors["filektp"]}
@@ -969,7 +956,6 @@ export default function ProfileEditPage({
                 <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
                   Kartu Keluarga (KK)
                 </Label>
-
                 <div
                   ref={dropRef}
                   onDragOver={handleDragOver}
@@ -978,14 +964,13 @@ export default function ProfileEditPage({
                   className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
                     changeOpacity ? "opacity-50" : "opacity-100"
                   }`}>
-                  {previewKKImage ? (
+                  {previewKKImage || detail.filekk ? (
                     <div className="relative max-w-full max-h-full">
                       <img
-                        src={previewKKImage}
+                        src={previewKKImage || detail.filekk}
                         alt="Preview"
                         className="max-h-full rounded-xl p-2 max-w-full object-contain"
                       />
-
                       <button
                         type="button"
                         onClick={handleRemoveKK}
@@ -997,14 +982,14 @@ export default function ProfileEditPage({
                     <>
                       <input
                         type="file"
-                        id="file-input"
+                        id="file-input-kk"
                         name="filekk"
                         accept="image/*"
                         onChange={handleFileKKChange}
                         className="hidden"
                       />
                       <label
-                        htmlFor="file-input"
+                        htmlFor="file-input-kk"
                         className="text-[16px] text-neutral-600 font-light cursor-pointer">
                         {detail.filekk
                           ? detail.filekk
@@ -1012,7 +997,6 @@ export default function ProfileEditPage({
                       </label>
                     </>
                   )}
-
                   {formErrors["filekk"] && (
                     <p className="text-error-700 text-[12px] mt-1 text-center">
                       {formErrors["filekk"]}
@@ -1025,7 +1009,6 @@ export default function ProfileEditPage({
                 <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
                   Ijazah Terakhir
                 </Label>
-
                 <div
                   ref={dropRef}
                   onDragOver={handleDragOver}
@@ -1034,14 +1017,13 @@ export default function ProfileEditPage({
                   className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
                     changeOpacity ? "opacity-50" : "opacity-100"
                   }`}>
-                  {previewIjazahImage ? (
+                  {previewIjazahImage || detail.fileijazahsd ? (
                     <div className="relative max-w-full max-h-full">
                       <img
-                        src={previewIjazahImage}
+                        src={previewIjazahImage || detail.fileijazahsd}
                         alt="Preview"
                         className="max-h-full rounded-xl p-2 max-w-full object-contain"
                       />
-
                       <button
                         type="button"
                         onClick={handleRemoveIjazah}
@@ -1053,25 +1035,24 @@ export default function ProfileEditPage({
                     <>
                       <input
                         type="file"
-                        id="file-input"
-                        name="fileijazahlain"
+                        id="file-input-ijazah"
+                        name="fileijazahsd"
                         accept="image/*"
                         onChange={handleFileIjazahChange}
                         className="hidden"
                       />
                       <label
-                        htmlFor="file-input"
+                        htmlFor="file-input-ijazah"
                         className="text-[16px] text-neutral-600 font-light cursor-pointer">
-                        {detail.fileijazahlain
-                          ? detail.fileijazahlain
+                        {detail.fileijazahsd
+                          ? detail.fileijazahsd
                           : "Drag and drop file here or click to select file"}
                       </label>
                     </>
                   )}
-
-                  {formErrors["fileijazahlain"] && (
+                  {formErrors["fileijazahsd"] && (
                     <p className="text-error-700 text-[12px] mt-1 text-center">
-                      {formErrors["fileijazahlain"]}
+                      {formErrors["fileijazahsd"]}
                     </p>
                   )}
                 </div>

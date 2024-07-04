@@ -171,7 +171,7 @@ export default function RiwayatPage() {
   );
 
   return (
-    <div className="flex flex-col justify-center bg-primary-100 pt-[56px] md:mt-[12px] md:mb-0 pb-[60px] md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
+    <div className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-[12px] md:mb-0 pb-[60px] md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
       <div className="flex self-start md:mb-[36px]">
         <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
           History

@@ -32,8 +32,8 @@ export default function CardLayananComponent({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full md:w-[300px] outline outline-2 outline-neutral-700 bg-neutral-50 shadow-xl rounded-2xl">
-      <div className="flex flex-col items-center justify-center w-[270px] h-[296px]">
+    <div className="flex flex-col items-center justify-center w-full md:w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-xl rounded-2xl">
+      <div className="flex flex-col items-center justify-center w-10/12 h-[296px]">
         <Link
           href={`/instansi/${layanan.slug}`}
           className="h-[135px] w-full flex items-center justify-center">
@@ -46,9 +46,9 @@ export default function CardLayananComponent({
           />
         </Link>
 
-        <div className="flex flex-col justify-center pb-35px] mt-[8px] w-full">
+        <div className="flex flex-col justify-center pb-6 mt-[8px] w-full">
           <Link href={`/instansi/${layanan.slug}`}>
-            <h6 className="text-[16px] text-center text-primary-800 font-semibold">
+            <h6 className="text-[14px] text-center text-primary-800 font-semibold">
               {layanan.name}
             </h6>
           </Link>
@@ -64,7 +64,7 @@ export default function CardLayananComponent({
         </div>
       </div>
 
-      <div className="flex flex-row text-center items-center justify-center w-full md:w-[300px] h-[50px] gap-[1px]">
+      <div className="flex flex-row text-center items-center justify-center w-full md:w-full h-[50px] gap-[1px]">
         {!token ? (
           <Dialog>
             <DialogTrigger asChild>
@@ -103,7 +103,7 @@ export default function CardLayananComponent({
         ) : (
           <Link
             href={`/instansi/booking-antrian/${layanan.id}`}
-            className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
+            className="flex items-center justify-center font-semibold px-1 text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-lg text-neutral-50">
             Booking Antrian
           </Link>
         )}
@@ -146,7 +146,7 @@ export default function CardLayananComponent({
         ) : (
           <Link
             href={`/instansi/permohonan-layanan/${layanan.id}`}
-            className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
+            className="flex items-center justify-center font-semibold text-wrap px-1 text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-lg text-neutral-50">
             Permohonan Layanan
           </Link>
         )}

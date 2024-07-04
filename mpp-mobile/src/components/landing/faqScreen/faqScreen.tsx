@@ -36,7 +36,7 @@ export default function FAQScreen() {
   return (
     <div className="flex w-full flex-col items-center mt-8">
       <div className="flex flex-col items-center gap-[8px]">
-        <h3 className="text-primary-800 md:text-[32px] font-semibold text-[16px]">
+        <h3 className="text-primary-800 md:text-[26px] font-semibold text-[16px]">
           FAQ MPP
         </h3>
 

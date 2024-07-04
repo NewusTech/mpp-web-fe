@@ -35,7 +35,7 @@ export default function KontakPage() {
   }
 
   return (
-    <section className="bg-neutral-50 mx-9 mb-8 md:mb-0 md:mx-[70px] rounded-xl mt-6">
+    <section className="bg-neutral-50 mx-9 mb-8 md:mb-28 md:mx-[70px] rounded-xl mt-4">
       <div className="flex flex-col md:flex-row items-center md:p-8 md:gap-x-9">
         <div className="w-full md:w-4/5 flex items-center justify-center">
           {isLoading ? (

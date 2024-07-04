@@ -15,7 +15,7 @@ export default function LayananPage() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const debounceSearch = useDebounce(search);
-  const itemsPerPage = 12;
+  const itemsPerPage = 15;
   const limitData = 1000000;
 
   const fetchLayanan = async (search: string) => {
@@ -49,7 +49,7 @@ export default function LayananPage() {
 
   return (
     <div className="w-full flex flex-col bg-primary-100 items-center px-[35px] pt-[24px] mb-[46px] md:mb-0 md:pb-[200px] md:px-[70px]">
-      <h4 className="text-primary-800 text-[16px] md:text-[32px] mb-[32px] font-semibold">
+      <h4 className="text-primary-800 text-[16px] md:text-[26px] mb-[32px] font-semibold">
         Layanan Mal Pelayanan Publik
       </h4>
 
@@ -61,7 +61,7 @@ export default function LayananPage() {
         <div className="flex w-full flex-col md:w-full md:justify-center gap-[16px]">
           {instansi.length > 0 ? (
             <>
-              <div className="flex w-full flex-col md:w-full md:flex-wrap md:justify-center md:gap-[16px] md:flex-row gap-[16px]">
+              <div className="flex w-full flex-col md:flex-none md:grid md:grid-cols-5 md:flex-wrap md:justify-center md:gap-[16px] md:flex-row gap-[16px]">
                 {currentDataInstansi.map((layanan: Layanantype, i: number) => {
                   return <CardLayananComponent key={i} layanan={layanan} />;
                 })}

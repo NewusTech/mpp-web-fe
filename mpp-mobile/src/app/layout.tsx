@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import lambang from "@/../../public/assets/Lambang_Kabupaten_Lampung_Timur (1).png";
+import lambang from "@/../../public/assets/DesignLogoMpp.svg";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mal Pelayanan Publik Lampung Timur",
-  description: "Mal Pelayanan Publik Lampung Timur",
+  title: "Mal Pelayanan Publik Kabupaten Lampung Timur",
+  description: "Mal Pelayanan Publik Kabupaten Lampung Timur",
   icons: {
     icon: {
       url: `${lambang.src}`,

@@ -16,7 +16,7 @@ export default function ProfileEditInput({
   labelStyle: string;
   classStyle: string;
   labelName: string;
-  change: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  change: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   placeholder: string;
   types: string;

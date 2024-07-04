@@ -39,9 +39,9 @@ export interface PengaduanType {
   judul: string;
   image: string;
   instansi_id: number;
-  instansi_name: string;
+  Instansi: { name: string };
   layanan_id: number;
-  layanan_name: string;
+  Layanan: { name: string };
   jawaban: string;
   status: number;
   aduan: string;
@@ -179,7 +179,7 @@ export interface ProfileNewType {
   slug: string;
   filektp?: string;
   filekk?: string;
-  fileijazahlain?: string;
+  fileijazahsd?: string;
 }
 
 export interface UpdateUserType {
@@ -199,7 +199,7 @@ export interface UpdateUserType {
   alamat?: string;
   filektp?: string;
   filekk?: string;
-  fileijazahlain?: string;
+  fileijazahsd?: string;
   slug?: string;
 }
 

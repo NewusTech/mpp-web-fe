@@ -15,10 +15,10 @@ export default function NewsDetailScreen({
   return (
     <div className="flex flex-col items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-8 mx-[35px] md:mx-0 pt-3 pb-8 md:mb-0 md:pb-[150px] bg-primary-100">
       <div className="flex flex-col md:px-[150px] items-center gap-6">
-        <div className="flex w-full md:grid md:grid-cols-1 h-full md:h-[550px] self-center">
+        <div className="w-full grid grid-cols-1 h-full md:h-[550px] self-center">
           <Image
             src={berita.image}
-            className="w-full h-full object-cover md:rounded-xl"
+            className="w-full h-full object-cover rounded-xl"
             alt="Berita"
             width={290}
             height={210}
@@ -60,7 +60,7 @@ export default function NewsDetailScreen({
         <div className="flex-1 w-full h-full border border-neutral-700 ml-4"></div>
       </div>
 
-      <div className="flex flex-col md:px-[70px] mt-3 md:mt-5 md:flex-row md:flex-wrap md:w-full md:justify-center md:gap-x-6">
+      <div className="flex flex-col md:px-[70px] mt-3 md:mt-5 md:grid md:grid-cols-3 md:flex-row md:flex-wrap md:w-full md:justify-start md:gap-x-6">
         {latestNews.map((berita: Berita, i: number) => (
           <CardNewsComponent key={i} news={berita} />
         ))}

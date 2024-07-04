@@ -3,7 +3,7 @@ import React from "react";
 
 export default function BookingResult() {
   return (
-    <div className="bg-primary-100 md:mb-0 md:pb-[230px]">
+    <div className="bg-primary-100 md:mb-0 md:pb-[150px]">
       <BookingAntrianQRCodeScreen />
     </div>
   );

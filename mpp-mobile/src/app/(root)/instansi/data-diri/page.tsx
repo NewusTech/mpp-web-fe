@@ -343,11 +343,11 @@ export default function DataDiriPage() {
   };
 
   return (
-    <div className="bg-primary-100 md:mt-[56px] md:mb-0 md:pb-8">
-      <div className="flex items-center justify-center bg-primary-100 mx-[35px] md:mx-[250px] mt-[24px] mb-[30px] md:mb-0 md:pb-[30px]">
-        <div className="flex flex-col md:w-full items-center gap-[16px] md:mb-8">
-          <div className="flex flex-col md:flex-row md:justify-between md:w-full gap-[24px] md:mb-6">
-            <div className="flex flex-row justify-center">
+    <div className="bg-primary-100 md:mt-6 md:mb-0 md:pb-12">
+      <div className="flex items-center justify-center bg-primary-100 mx-7 md:mx-[150px] mt-6 mb-7 md:mb-0 md:pb-7">
+        <div className="flex flex-col w-full items-center gap-4 md:mb-8">
+          <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start w-full gap-6 md:mb-6">
+            <div className="flex flex-row justify-between md:justify-center items-center">
               <button onClick={() => router.back()}>
                 <ChevronLeft className="w-[40px] h-[40px] text-neutral-800 mr-4" />
               </button>
@@ -371,13 +371,13 @@ export default function DataDiriPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full border border-neutral-700 bg-white rounded-2xl shadow-lg">
-            <div className="flex flex-col mt-[22px] px-[21px] md:px-[90px]">
+          <div className="flex flex-col w-full border border-neutral-700 bg-white pb-6 md:pb-0 rounded-2xl shadow-lg">
+            <div className="flex flex-col mt-5 px-5 md:px-20">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Data Diri
               </h5>
 
-              <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-[16px] md:pt-[32px]">
+              <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
                 <form onSubmit={onSubmit} className="flex flex-col w-full">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">

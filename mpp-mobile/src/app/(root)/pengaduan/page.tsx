@@ -80,6 +80,8 @@ export default function PengaduanScreen() {
     fetchPengaduanList(1, limitData);
   }, []);
 
+  console.log(pengaduanlists, ">>> pengaduanlists");
+
   const paginate = (
     items: PengaduanType[],
     pageNumber: number,
@@ -283,7 +285,7 @@ export default function PengaduanScreen() {
   return (
     <div className="flex flex-col bg-primary-100 mt-3 mx-[35px] md:mx-[70px] md:mb-5 pb-[124px]">
       <div>
-        <h1 className="text-[20px] md:text-[26px] text-primary-800 font-bold">
+        <h1 className="text-[20px] md:text-[26px] text-primary-800 font-semibold">
           Pengaduan Layanan
         </h1>
 
@@ -534,10 +536,10 @@ export default function PengaduanScreen() {
                             <TableRow key={i}>
                               <TableCell className="w-1/12">{i + 1}</TableCell>
                               <TableCell className="w-10/12">
-                                {pengaduan.instansi_id}
+                                {pengaduan.Instansi.name}
                               </TableCell>
                               <TableCell className="w-10/12">
-                                {pengaduan.layanan_id}
+                                {pengaduan.Layanan.name}
                               </TableCell>
                               <TableCell className="w-full">
                                 {pengaduan.judul}

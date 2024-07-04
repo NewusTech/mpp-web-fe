@@ -4,14 +4,18 @@ import ByLayanan from "@/components/fetching/layanan/formInputByLayanan/ByLayana
 import LayoutInput from "@/components/layoutForms/layoutForm";
 import Steps from "@/components/steps/steps";
 import { Button } from "@/components/ui/button";
-import { setDataInput } from "@/store/action/actionPermohonanLayanan";
+import {
+  setDataInput,
+  updateCheckboxData,
+} from "@/store/action/actionPermohonanLayanan";
 import { RootState } from "@/store/store";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/legacy/image";
-import { Loader } from "lucide-react";
+import { ChevronLeft, Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type LayananFormType = {
   id: number;
@@ -48,6 +52,10 @@ export default function FormulirPage() {
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [instansiId, setInstansiId] = useState<number | null>(null);
+  const [checkboxValues, setCheckboxValues] = useState<{
+    [key: number]: number[];
+  }>({});
+  const router = useRouter();
 
   const fetchInputForm = async (id: number) => {
     const result: FormType = await ByLayanan(id);
@@ -80,27 +88,67 @@ export default function FormulirPage() {
     }));
   };
 
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    layananform_id: number
+  ) => {
+    const { value, checked } = e.target;
+    setCheckboxValues((prevValues) => {
+      const currentValues = prevValues[layananform_id] || [];
+      if (checked) {
+        return {
+          ...prevValues,
+          [layananform_id]: [...currentValues, Number(value)],
+        };
+      } else {
+        return {
+          ...prevValues,
+          [layananform_id]: currentValues.filter(
+            (val) => val !== Number(value)
+          ),
+        };
+      }
+    });
+  };
+
   const handleClick = () => {
     setIsLoading(true);
     let wadah: { layananform_id: number; data: string }[] = [];
+    let checkboxWadah: { layananform_id: number; data: number[] }[] = [];
 
     form?.Layananforms.map((el: any) => {
-      wadah.push({
-        layananform_id: el.id,
-        data: formValues[el.field] || "",
-      });
+      if (el.tipedata === "checkbox") {
+        checkboxWadah.push({
+          layananform_id: el.id,
+          data: checkboxValues[el.id] || [],
+        });
+      } else {
+        wadah.push({
+          layananform_id: el.id,
+          data: formValues[el.field] || "",
+        });
+      }
       setChangeOpacity(true);
     });
 
     dispatch(setDataInput(wadah));
+    checkboxWadah.forEach((item) => {
+      dispatch(updateCheckboxData(item));
+    });
   };
+
+  console.log(form?.Layananforms, "ini layanan");
 
   return (
     <div className="bg-primary-100 pt-2 md:mt-[48px] md:mb-0 md:pb-[150px]">
       <div className="flex items-center justify-center bg-primary-100 mt-[14px] md:mt-[48px] mx-[35px] md:mx-[250px] mb-[35px] md:mb-0 md:pb-[80px]">
-        <div className="flex flex-col md:w-full gap-[16px]">
+        <div className="flex flex-col w-full gap-[16px]">
           <div className="flex flex-col md:flex-row md:justify-between gap-[24px] md:gap-0">
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-row justify-between md:justify-center items-center">
+              <button onClick={() => router.back()}>
+                <ChevronLeft className="w-[40px] h-[40px] text-neutral-800 mr-4" />
+              </button>
+
               <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
                 Permohonan Layanan
               </h5>
@@ -128,23 +176,55 @@ export default function FormulirPage() {
 
               {form?.Layananforms ? (
                 <div className="flex flex-col w-full md:w-full mt-[32px]">
-                  <div className="flex flex-col w-full md:w-full mb-[8px] gap-3">
+                  <div className="flex flex-col w-full md:w-full mb-[8px] gap-y-5">
                     {form?.Layananforms?.map(
                       (el: LayananFormType, i: number) => {
-                        return (
-                          <div key={i} className="space-y-2 w-full">
-                            <LayoutInput
-                              typeForm={el.tipedata}
-                              labelName={el.field}
-                              change={change}
-                              nameForm={el.field}
-                              valueForm={formValues[el.field] || ""}
-                              placeholder="Kirim Jawaban!"
-                              opacity={changeOpacity}
-                              dataRadio={el.datajson}
-                            />
-                          </div>
-                        );
+                        if (el.tipedata === "checkbox") {
+                          return (
+                            <div key={i} className="space-y-2 w-full">
+                              <label className="text-neutral-900 text-[16px] font-normal">
+                                {el.field}
+                              </label>
+                              <div className="grid grid-cols-2">
+                                {el.datajson.map((data) => (
+                                  <div
+                                    key={data.id}
+                                    className="flex items-center">
+                                    <input
+                                      type="checkbox"
+                                      name={el.field}
+                                      value={data.id}
+                                      checked={
+                                        checkboxValues[el.id]?.includes(
+                                          data.id
+                                        ) || false
+                                      }
+                                      onChange={(e) =>
+                                        handleCheckboxChange(e, el.id)
+                                      }
+                                    />
+                                    <label className="ml-2">{data.key}</label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div key={i} className="space-y-2 w-full">
+                              <LayoutInput
+                                typeForm={el.tipedata}
+                                labelName={el.field}
+                                change={change}
+                                nameForm={el.field}
+                                valueForm={formValues[el.field] || ""}
+                                placeholder="Kirim Jawaban!"
+                                opacity={changeOpacity}
+                                dataRadio={el.datajson}
+                              />
+                            </div>
+                          );
+                        }
                       }
                     )}
                   </div>

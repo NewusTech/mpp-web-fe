@@ -93,7 +93,7 @@ export default function LayoutInput({
   if (typeForm === "radio") {
     return (
       <>
-        <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+        <Label className="text-[16px] text-neutral-900 font-normal mb-[8px]">
           {labelName}
         </Label>
 
@@ -113,7 +113,7 @@ export default function LayoutInput({
                   className="flex w-[15px] border border-neutral-700 h-[15px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
                 />
 
-                <Label className="text-neutral-700 text-[14px] font-normal">
+                <Label className="text-neutral-900 text-[14px] font-normal">
                   {data.key}
                 </Label>
               </div>

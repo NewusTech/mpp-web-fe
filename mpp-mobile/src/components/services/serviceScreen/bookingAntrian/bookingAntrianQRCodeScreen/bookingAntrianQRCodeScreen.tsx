@@ -56,7 +56,7 @@ export default function BookingAntrianQRCodeScreen() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-[16px] pb-8">
+        <div className="flex flex-col gap-[16px] mx-12 pb-8">
           <h5 className="text-[14px] md:text-[20px] font-semibold">
             Persyaratan yang harus dibawa
           </h5>
