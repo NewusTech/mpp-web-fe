@@ -35,9 +35,9 @@ export default function KontakPage() {
   }
 
   return (
-    <section className="bg-neutral-50 mx-9 mb-8 md:mb-28 md:mx-[70px] rounded-xl mt-4">
+    <section className="bg-neutral-50 mx-9 mb-32 md:mb-28 md:mx-[70px] rounded-xl mt-4">
       <div className="flex flex-col md:flex-row items-center md:p-8 md:gap-x-9">
-        <div className="w-full md:w-4/5 flex items-center justify-center">
+        <div className="w-full p-6 md:p-0 md:w-4/5 flex items-center justify-center">
           {isLoading ? (
             <Loader className="animate-spin w-32 h-32" />
           ) : (
@@ -56,7 +56,7 @@ export default function KontakPage() {
         </div>
 
         <div className="flex flex-col p-5 gap-y-6 md:p-0 md:mt-0">
-          <h3 className="text-[24px] md:text-[32px] text-primary-800 font-bold">
+          <h3 className="text-[20px] md:text-[26px] text-primary-800 font-bold">
             Kontak Kami
           </h3>
 

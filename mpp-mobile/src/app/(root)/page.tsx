@@ -102,7 +102,7 @@ function Home() {
   });
 
   return (
-    <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px]">
+    <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20">
       <div className="bg-primary-50">
         {carousel && <HeroScreen carousel={carousel} />}
 
@@ -134,7 +134,7 @@ function Home() {
 
             <Link
               href="/instansi"
-              className="flex justify-center items-center rounded-[50px] w-2/12 h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
+              className="flex justify-center items-center rounded-[50px] w-5/12 md:w-3/12 h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
               <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
                 Lihat Semua Instansi
               </p>
@@ -175,7 +175,7 @@ function Home() {
                   href={`/berita/${slug}`}
                   className="md:flex md:flex-col md:w-6/12 md:gap-[16px]">
                   <div className="md:flex md:flex-col md:gap-[8px]">
-                    <h3 className="md:text-neutral-900 md:text-start md:text-[26px] md:font-semibold">
+                    <h3 className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold">
                       {title}
                     </h3>
 
@@ -206,10 +206,10 @@ function Home() {
               })}
             </div>
 
-            <div className="md:flex md:justify-center">
+            <div className="w-5/12 md:w-3/12 flex justify-center">
               <Link
                 href="/berita"
-                className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-[153px] h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
+                className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-full h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
                 <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
                   Lihat Semua Berita
                 </p>

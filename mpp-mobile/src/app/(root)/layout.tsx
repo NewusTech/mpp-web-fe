@@ -2,6 +2,7 @@
 import FooterScreen from "@/components/landing/footerScreen/footerScreen";
 import NavbarScreen from "@/components/landing/navbarScreen/navbarScreen";
 import HamburgerMenu from "@/components/landing/others/hamburgerMenu/hamburgerMenu";
+import NavbarMobile from "@/components/landing/others/navbarMobile/navbarMobile";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import { store } from "@/store/store";
 import { Poppins } from "next/font/google";
@@ -27,7 +28,7 @@ export default function AuthLayout({
       {!isMobile ? (
         <Provider store={store}>
           <NavbarScreen />
-          <div className="flex-1 overflow-y-auto bg-primary-100">
+          <div className="flex-1 overflow-y-auto pt-28 bg-primary-100">
             {children}
           </div>
           <Toaster position="top-center" />
@@ -37,13 +38,13 @@ export default function AuthLayout({
         </Provider>
       ) : (
         <Provider store={store}>
-          <HamburgerMenu />
+          <NavbarMobile />
           <div className="flex-1 overflow-y-auto w-full bg-primary-100">
             {children}
           </div>
           <Toaster position="top-center" />
-          <div className="bottom-0 w-full bg-primary-50">
-            <FooterScreen />
+          <div className="bottom-0 fixed w-full bg-primary-100 shadow-xl">
+            <HamburgerMenu />
           </div>
         </Provider>
       )}

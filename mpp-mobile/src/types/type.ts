@@ -13,6 +13,13 @@ export type Berita = {
   };
 };
 
+export interface AntrianFormType {
+  instansi_id: number;
+  layanan_id: number;
+  tanggal: string;
+  waktu: string;
+}
+
 export interface ContactType {
   alamat: string;
   email: string;
@@ -32,6 +39,22 @@ export interface PermohonanDataType {
   pesan: string;
   tanggalSelesai: string;
   createdAt: string;
+}
+
+export interface AntrianDataType {
+  id: number;
+  code: number;
+  instansi_id: number;
+  layanan_id: number;
+  userinfo_id: number;
+  status: boolean;
+  qrcode: string;
+  audio: string;
+  tanggal: string;
+  waktu: string;
+  Instansi: {
+    name: string;
+  };
 }
 
 export interface PengaduanType {

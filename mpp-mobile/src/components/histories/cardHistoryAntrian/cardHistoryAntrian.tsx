@@ -1,17 +1,11 @@
-import { Download } from "lucide-react";
-import PopPermohonanComponent from "../others/popPermohonanComponent/popPermohonanComponent";
+import { AntrianDataType } from "@/types/type";
 import PopAntrianComponent from "../others/popAntrianComponent/popAntrianComponent";
 
-interface AntrianType {
-  antrian: {
-    noAntrian: string;
-    instansi: string;
-    waktu?: string;
-    tanggal: string;
-  };
-}
-
-export default function CardHistoryAntrian({ antrian }: AntrianType) {
+export default function CardHistoryAntrian({
+  antrian,
+}: {
+  antrian: AntrianDataType;
+}) {
   return (
     <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-xl w-full mb-4">
       <div className="flex flex-col justify-center m-4 gap-2 h-full">
@@ -21,7 +15,7 @@ export default function CardHistoryAntrian({ antrian }: AntrianType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.noAntrian}
+            : {antrian.id}
           </p>
         </div>
 
@@ -31,7 +25,7 @@ export default function CardHistoryAntrian({ antrian }: AntrianType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.instansi}
+            : {antrian.Instansi.name}
           </p>
         </div>
 

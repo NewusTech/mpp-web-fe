@@ -8,11 +8,10 @@ import {
   setDataInput,
   updateCheckboxData,
 } from "@/store/action/actionPermohonanLayanan";
-import { RootState } from "@/store/store";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Image from "next/legacy/image";
 import { ChevronLeft, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";

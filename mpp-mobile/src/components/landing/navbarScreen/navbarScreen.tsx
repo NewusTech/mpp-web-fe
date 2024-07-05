@@ -64,7 +64,7 @@ export default function NavbarScreen() {
 
   return (
     <div
-      className={`flex relative py-[32px] justify-between mx-16 md:mx-0 z-10 md:px-16 ${navbarColor}`}>
+      className={`flex w-full fixed py-6 justify-between mx-16 md:mx-0 z-10 md:px-16 ${navbarColor}`}>
       <Link href="/" className="flex flex-row w-5/12 h-[64px]">
         <Image src={logo} alt="Lampung Timur" className="w-full h-full" />
 

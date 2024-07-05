@@ -1,26 +1,23 @@
+"use client";
+
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Download } from "lucide-react";
 import PopUpAntrianComponent from "../popUpAntrianComponent/popUpAntrianComponent";
+import { AntrianDataType } from "@/types/type";
 
-interface AntrianType {
-  antrian: {
-    noAntrian: string;
-    instansi: string;
-    waktu?: string;
-    tanggal: string;
-  };
-}
-
-export default function PopAntrianComponent({ antrian }: AntrianType) {
+export default function PopAntrianComponent({
+  antrian,
+}: {
+  antrian: AntrianDataType;
+}) {
   return (
     <Dialog>
       <DialogTrigger>
-        <Download className="text-[#656565] w-[15px] h-[15px]" />
-      </DialogTrigger>
-      <DialogContent className="flex flex-col w-[290px] h-[290px]">
-        <div>
-          <PopUpAntrianComponent antrian={antrian} />
+        <div className="bg-primary-700 rounded-full py-1 px-5 text-neutral-50 text-[12px] cursor-pointer">
+          Lihat
         </div>
+      </DialogTrigger>
+      <DialogContent className="flex flex-col justify-center items-center w-10/12 md:w-6/12">
+        <PopUpAntrianComponent antrian={antrian} />
       </DialogContent>
     </Dialog>
   );

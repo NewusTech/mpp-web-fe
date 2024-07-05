@@ -9,9 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AntrianFormType } from "@/types/type";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function BookingAntrianPage({
   params,
@@ -23,6 +26,13 @@ export default function BookingAntrianPage({
   const [tanggal, setTanggal] = useState<string | null>(null);
   const [jam, setJam] = useState<string | null>(null);
   const [changeOpacity, setChangeOpacity] = useState(false);
+  const [antrian, setAntrian] = useState<AntrianFormType>({
+    instansi_id: Number(params.id),
+    layanan_id: 0,
+    tanggal: "",
+    waktu: "",
+  });
+  const router = useRouter();
 
   const fetchLayanan = async (id: number) => {
     try {
@@ -38,18 +48,69 @@ export default function BookingAntrianPage({
     fetchLayanan(params.id);
   }, [params.id]);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          body: JSON.stringify(antrian),
+          cache: "no-store",
+        }
+      );
+
+      const result = await response.json();
+
+      console.log(result, "ini result booking antrian");
+
+      if (response.ok) {
+        toast.success("Berhasil membooking antrian!");
+        setAntrian({
+          instansi_id: 0,
+          layanan_id: 0,
+          tanggal: "",
+          waktu: "",
+        });
+        setChangeOpacity(false);
+        // router.push(`/instansi/booking-antrian/booking-result`);
+      } else {
+        toast("Gagal booking antrian!");
+      }
+    } catch (error) {
+      toast("Gagal booking antrian!");
+    }
+  };
+
   const handleSelectChangeDinas = (value: string) => {
     setSelected(value);
+    setAntrian((prevAntrian) => ({
+      ...prevAntrian,
+      layanan_id: Number(value),
+    }));
   };
 
   const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTanggal(e.target.value);
     setChangeOpacity(true);
+    setAntrian((prevAntrian) => ({
+      ...prevAntrian,
+      waktu: e.target.value,
+    }));
   };
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setJam(e.target.value);
     setChangeOpacity(true);
+    setAntrian((prevAntrian) => ({
+      ...prevAntrian,
+      tanggal: e.target.value,
+    }));
   };
 
   const isButtonDisabled = () => {
@@ -67,7 +128,9 @@ export default function BookingAntrianPage({
           </div>
 
           <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-white rounded-2xl shadow-lg">
-            <form className="flex flex-col w-full md:px-[105px]">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col w-full md:px-[105px]">
               <div className="flex flex-col w-full items-center mt-8 mb-[10px] md:mb-[20px] mx-[1px] md:mt-[62px]">
                 <Select
                   name="layanan_id"
@@ -121,7 +184,7 @@ export default function BookingAntrianPage({
               <div className="flex flex-col items-center my-[10px] md:my-[20px] mx-[1px]">
                 <input
                   type="time"
-                  name="jam"
+                  name="waktu"
                   className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
                   ${
                     changeOpacity
@@ -150,9 +213,7 @@ export default function BookingAntrianPage({
                   type="submit"
                   disabled={isButtonDisabled()}
                   className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-[90px] md:w-full h-[30px] md:h-[40px] bg-primary-700 hover:bg-primary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
-                  <Link href={`/instansi/booking-antrian/booking-result`}>
-                    Pilih
-                  </Link>
+                  Pilih
                 </Button>
               </div>
             </form>

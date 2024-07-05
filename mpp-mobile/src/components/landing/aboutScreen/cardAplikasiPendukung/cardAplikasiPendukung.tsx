@@ -4,8 +4,8 @@ import { AppType } from "@/types/type";
 
 export default function CardAplikasiPendukung({ app }: { app: AppType }) {
   return (
-    <div className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-3 p-4 gap-x-4 rounded-xl">
-      <div className="w-full md:h-full overflow-auto flex items-center justify-center rounded-full bg-primary-700">
+    <div className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-3 p-4 gap-x-4 rounded-xl shadow-xl">
+      <div className="w-full md:h-full flex items-center justify-center rounded-full bg-primary-700 p-2">
         <Image
           src={app.image}
           width={100}
@@ -15,10 +15,10 @@ export default function CardAplikasiPendukung({ app }: { app: AppType }) {
         />
       </div>
 
-      <div className="flex flex-col col-span-2 justify-center mt-3 md:mt-0 w-full md:w-full">
-        <p className="font-semibold text-primary-700 text-[20px]">{app.name}</p>
+      <div className="flex flex-col col-span-2 justify-center mt-3 md:mt-0 w-full">
+        <p className="font-semibold text-primary-700 text-[18px]">{app.name}</p>
 
-        <p className="text-primary-700 truncate text-[16px]">{app.desc}</p>
+        <p className="text-primary-700 truncate text-[14px]">{app.desc}</p>
       </div>
     </div>
   );

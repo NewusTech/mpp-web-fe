@@ -108,28 +108,28 @@ export default function SurveySKMPage() {
   };
 
   return (
-    <div className="flex items-center justify-center md:w-full bg-primary-100 mt-[50px] md:mt-0 md:pt-6 mx-[20px] mb-[27px] md:mb-0 md:pb-[150px]">
+    <section className="flex items-center justify-center md:w-full bg-primary-100 mt-6 md:mt-0 md:pt-6 mx-5 mb-6 md:mb-0 md:pb-[150px]">
       <div className="flex flex-col md:w-full items-center md:mx-[230px]">
-        <div className="flex flex-col md:w-full bg-white rounded-2xl shadow-lg px-[16px]">
-          <div className="flex justify-center my-[22px] mb-[16px]">
+        <div className="flex flex-col md:w-full bg-neutral-50 rounded-2xl shadow-lg px-4">
+          <div className="flex justify-center my-[22px] mb-4">
             <h6 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
               Survey Kepuasan Masyarakat
             </h6>
           </div>
 
-          <div className="flex flex-col md:w-full my-[16px] rounded-2xl">
+          <div className="flex flex-col md:w-full my-4 rounded-2xl">
             {surveis &&
             surveis.Surveyforms &&
             surveis?.Surveyforms?.length > 0 ? (
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col md:w-full place-items-center">
-                <div className="flex flex-col md:w-full rounded-2xl mb-[12px] gap-6">
+                <div className="flex flex-col md:w-full rounded-2xl mb-3 gap-6">
                   {surveis?.Surveyforms?.map((el: any, i: number) => {
                     return (
                       <div key={i}>
-                        <div className="flex flex-col px-[14px] md:mt-4">
-                          <Label className="flex text-center md:self-center font-normal text-primary-800 text-[12px] md:text-[14px] mb-[16px] md:mb-8">
+                        <div className="flex flex-col justify-center md:mt-4">
+                          <Label className="flex text-center md:self-center font-normal text-primary-800 text-[12px] md:text-[14px] mb-4 md:mb-8">
                             {el.field}
                           </Label>
 
@@ -188,9 +188,9 @@ export default function SurveySKMPage() {
                   />
                 </div>
 
-                <div className="flex self-center justify-center items-end mb-[22px] mt-[32px]">
+                <div className="flex self-center justify-center items-end mb-[22px] mt-8">
                   <Button
-                    className="w-[90px] h-[30px] text-[12px] text-neutral-50 font-light"
+                    className="w-full h-[30px] text-[12px] text-neutral-50 font-light"
                     type="submit"
                     variant="link"
                     disabled={isButtonDisabled()}>
@@ -199,7 +199,7 @@ export default function SurveySKMPage() {
                 </div>
               </form>
             ) : (
-              <div className="container mx-auto flex flex-col md:w-full justify-center items-center w-full h-full">
+              <div className="container mx-auto flex flex-col justify-center items-center w-full h-full">
                 <Image src={backHome} width={400} height={400} alt="sad" />
                 <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
                   Data tidak ditemukan!
@@ -209,6 +209,6 @@ export default function SurveySKMPage() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

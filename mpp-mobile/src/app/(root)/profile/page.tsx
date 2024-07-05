@@ -99,19 +99,23 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex items-center justify-center w-full mb-[24px] pt-[24px] md:pb-28 bg-primary-100">
-      <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
-        <div className="flex self-start mb-[32px]">
+    <section className="flex items-center justify-center w-full mb-32 pt-6 md:pb-16 bg-primary-100">
+      <div className="flex flex-col items-center w-full mx-8 md:mx-[200px]">
+        <div className="flex self-start mb-6">
           <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
             Profile
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg md:px-[75px] md:pt-[32px]">
-          <div className="flex flex-col px-[16px] pt-[16px]">
-            <div className="grid grid-rows-7 gap-2">
+        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-lg md:px-[75px] md:pt-8">
+          <div className="flex flex-col px-4 pt-4">
+            <div className="md:grid md:grid-rows-7 gap-2">
+              <h3 className="text-primary-800 font-semibold text-[20px]">
+                Data Diri
+              </h3>
+
               <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
+                <div className="flex flex-col w-full mb-2 pt-4 md:pt-0">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
                     Nama Lengkap
                   </label>
@@ -252,12 +256,12 @@ export default function ProfilePage() {
                 </label>
               </div>
 
-              <div className="flex flex-col w-full">
-                <h3 className="text-primary-800 font-semibold text-[20px] mt-6">
+              <div className="flex flex-col w-full mt-6 md:mt-0 mb-6 md:mb-0">
+                <h3 className="text-primary-800 font-semibold text-[20px] md:mt-6">
                   Dokumen Pendukung
                 </h3>
 
-                <div className="grid grid-cols-2">
+                <div className="md:grid md:grid-cols-2">
                   <div className="flex flex-col mt-6">
                     <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
                       Kartu Tanda Penduduk (KTP)
@@ -317,9 +321,9 @@ export default function ProfilePage() {
 
             <Link
               href={`/profile/detail/${profile?.slug}`}
-              className="h-[40px] flex justify-center rounded-[50px] items-end md:items-center self-end md:self-center mb-[32px] md:mt-[32px]">
+              className="h-[40px] w-4/12 flex justify-center rounded-[50px] items-end md:items-center self-end md:self-center mb-8 md:mt-8">
               <Button
-                className="w-[90px] md:w-[290px] border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
+                className="w-full md:w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
                 type="submit"
                 variant="secondary">
                 Edit
@@ -328,6 +332,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
