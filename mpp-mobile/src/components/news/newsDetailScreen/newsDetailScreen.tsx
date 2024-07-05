@@ -13,7 +13,7 @@ export default function NewsDetailScreen({
   const date = formatLongDate(berita.createdAt);
 
   return (
-    <div className="flex flex-col items-center justify-center md:justify-start md:items-start mt-[24px] md:mt-8 mx-[35px] md:mx-0 pt-3 pb-8 md:mb-0 md:pb-[150px] bg-primary-100">
+    <section className="flex flex-col items-center justify-center md:justify-start md:items-start mt-6 md:mt-8 mx-[35px] md:mx-0 pt-3 pb-32 md:mb-0 md:pb-[150px] bg-primary-100">
       <div className="flex flex-col md:px-[150px] items-center gap-6">
         <div className="w-full grid grid-cols-1 h-full md:h-[550px] self-center">
           <Image
@@ -25,8 +25,8 @@ export default function NewsDetailScreen({
           />
         </div>
 
-        <div className="flex flex-col gap-[16px]">
-          <div className="flex flex-col gap-[8px]">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
             <h6 className="text-[16px] md:text-[26px] text-neutral-900 font-semibold">
               {berita.title}
             </h6>
@@ -52,8 +52,8 @@ export default function NewsDetailScreen({
         </div>
       </div>
 
-      <div className="flex w-full items-center md:px-[70px] mt-[35px]">
-        <h6 className="text-[16px] md:text-[28px] text-neutral-900">
+      <div className="flex w-full items-center md:px-[70px] mt-8">
+        <h6 className="text-[16px] md:text-[26px] text-neutral-900">
           Berita Lainnya
         </h6>
 
@@ -65,6 +65,6 @@ export default function NewsDetailScreen({
           <CardNewsComponent key={i} news={berita} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }

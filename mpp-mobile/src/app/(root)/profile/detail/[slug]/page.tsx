@@ -23,7 +23,7 @@ import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
-import { CircleX } from "lucide-react";
+import { Trash } from "lucide-react";
 import Cookies from "js-cookie";
 
 const genders = [
@@ -489,15 +489,15 @@ export default function ProfileEditPage({
   };
 
   return (
-    <div className="flex items-center justify-center pb-[36px] bg-primary-100 mt-[24px] md:mt-0 md:pt-6 md:mb-0 md:pb-[120px]">
+    <section className="flex items-center justify-center pb-32 bg-primary-100 mt-6 md:mt-0 md:pt-6 md:mb-0 md:pb-[120px]">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
-        <div className="flex self-start mb-[32px]">
+        <div className="flex self-start mb-8">
           <h5 className="text-[20px] md:text-[26px] font-bold text-primary-800">
             Edit Profile
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-[16px] md:pt-[32px]">
+        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-4 md:pt-[8">
           <form onSubmit={handleUpdateUser} className="flex flex-col w-full">
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full md:mb-4">
@@ -508,7 +508,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="Nama Lengkap"
                   placeholder="Nama Lengkap"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -533,7 +533,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedGender ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Jenis Kelamin"
                       className={selectedGender ? "" : "placeholder:opacity-50"}
@@ -570,7 +570,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="NIK"
                   placeholder="NIK"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -595,7 +595,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedAgama ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Jenis Kelamin"
                       className={selectedAgama ? "" : "placeholder:opacity-50"}
@@ -631,7 +631,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="Nomor Telepon"
                   placeholder="Nomor Telepon"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -658,7 +658,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedPendidikan ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Jenis Kelamin"
                       className={
@@ -700,7 +700,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="Email"
                   placeholder="Email"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -719,7 +719,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="Pekerjaan"
                   placeholder="Pekerjaan"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -748,7 +748,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedKecamatan ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Kecamatan"
                       className={
@@ -798,7 +798,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedDesa ? "opacity-70" : ""
-                    } border border-neutral-700 mt-1 rounded-[50px] bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                    } border border-neutral-700 mt-1 rounded-[50px] bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Desa"
                       className={selectedDesa ? "" : "placeholder:opacity-50"}
@@ -844,7 +844,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="RT"
                   placeholder="RT"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -863,7 +863,7 @@ export default function ProfileEditPage({
                   change={changeUser}
                   labelName="RW"
                   placeholder="RW"
-                  classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
@@ -921,8 +921,8 @@ export default function ProfileEditPage({
                       <button
                         type="button"
                         onClick={handleRemoveKTP}
-                        className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
-                        <CircleX />
+                        className="absolute bg-none -top-1 -right-6 md:-top-1 md:-right-5 text-neutral-800 p-1">
+                        <Trash />
                       </button>
                     </div>
                   ) : (
@@ -974,8 +974,8 @@ export default function ProfileEditPage({
                       <button
                         type="button"
                         onClick={handleRemoveKK}
-                        className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
-                        <CircleX />
+                        className="absolute bg-none -top-1 -right-6 md:-top-1 md:-right-5 text-neutral-800 p-1">
+                        <Trash />
                       </button>
                     </div>
                   ) : (
@@ -1027,8 +1027,8 @@ export default function ProfileEditPage({
                       <button
                         type="button"
                         onClick={handleRemoveIjazah}
-                        className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
-                        <CircleX />
+                        className="absolute bg-none -top-1 -right-6 md:-top-1 md:-right-5 text-neutral-800 p-1">
+                        <Trash />
                       </button>
                     </div>
                   ) : (
@@ -1059,9 +1059,9 @@ export default function ProfileEditPage({
               </div>
             </div>
 
-            <div className="flex justify-center items-end self-end md:w-full md:self-center my-[16px] md:pb-[30px] mt-12">
+            <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
               <Button
-                className="w-[90px] md:w-[290px] h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                 type="submit"
                 variant="success">
                 Simpan
@@ -1070,6 +1070,6 @@ export default function ProfileEditPage({
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

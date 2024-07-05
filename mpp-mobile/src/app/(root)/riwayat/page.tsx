@@ -21,20 +21,8 @@ import {
 } from "@/components/ui/table";
 import CardHistoryAntrian from "@/components/histories/cardHistoryAntrian/cardHistoryAntrian";
 import PaginationComponent from "@/components/pagination/paginationComponent";
-import { PermohonanDataType } from "@/types/type";
-
-interface PermissionType {
-  id: number;
-  userinfo_id: number;
-  name: string;
-  status: number;
-  layanan_id: number;
-  layanan_name: string;
-  layanan_image: string;
-  instansi_id: number;
-  instansi_name: string;
-  instansi_image: string;
-}
+import { AntrianDataType, PermohonanDataType } from "@/types/type";
+import { fetchRiwayatAntrian } from "@/store/action/actionHistoryAntrian";
 
 interface AntrianType {
   noAntrian: string;
@@ -137,6 +125,9 @@ export default function RiwayatPage() {
   const historyData = useSelector(
     (state: RootState) => state.historyPermohonan.data
   );
+  const historyAntrianData = useSelector(
+    (state: RootState) => state.historyAntrian.data
+  );
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [antrianPage, setAntrianPage] = useState<number>(1);
   const [permohonanPage, setPermohonanPage] = useState<number>(1);
@@ -148,6 +139,7 @@ export default function RiwayatPage() {
       redirect("/login");
     }
     dispatch(fetchRiwayatPermohonan());
+    dispatch(fetchRiwayatAntrian());
 
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 678);
@@ -163,16 +155,22 @@ export default function RiwayatPage() {
     return items.slice(startIndex, startIndex + itemsPerPage);
   };
 
-  const currentAntrians = paginate(antrians.data, antrianPage, itemsPerPage);
+  const currentAntrians = paginate(
+    historyAntrianData || [],
+    antrianPage,
+    itemsPerPage
+  );
   const currentPermohonans = paginate(
     historyData || [],
     permohonanPage,
     itemsPerPage
   );
 
+  console.log(historyAntrianData, "ini antrian");
+
   return (
-    <div className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-[12px] md:mb-0 pb-[60px] md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
-      <div className="flex self-start md:mb-[36px]">
+    <section className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-3 md:mb-0 pb-32 md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
+      <div className="flex self-start md:mb-9">
         <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
           History
         </h5>
@@ -184,7 +182,7 @@ export default function RiwayatPage() {
           className="flex flex-col w-full gap-[10px]">
           {isDesktop ? (
             <div className="md:flex md:w-full md:mt-[26px]">
-              <TabsList className="md:flex md:justify-start md:items-start md:gap-[40px]">
+              <TabsList className="md:flex md:justify-start md:items-start md:gap-10">
                 <TabsTrigger value="antrian">Antrian</TabsTrigger>
                 <TabsTrigger value="permohonan">Permohonan</TabsTrigger>
               </TabsList>
@@ -202,7 +200,7 @@ export default function RiwayatPage() {
             {isDesktop ? (
               <>
                 <TabsContent value="antrian">
-                  {antrians && antrians.data.length > 0 ? (
+                  {currentAntrians && currentAntrians.length > 0 ? (
                     <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
                       <TableHeader className="md:flex md:w-full">
                         <TableRow className="md:flex md:flex-row md:w-full">
@@ -210,12 +208,12 @@ export default function RiwayatPage() {
                           <TableHead className="w-full">Instansi</TableHead>
                           <TableHead className="w-1/2">Waktu</TableHead>
                           <TableHead className="w-1/2">Tanggal</TableHead>
-                          <TableHead className="w-1"></TableHead>
+                          <TableHead className="w-3/12">Aksi</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {antrians?.data?.map(
-                          (antrian: AntrianType, i: number) => {
+                        {currentAntrians?.map(
+                          (antrian: AntrianDataType, i: number) => {
                             return (
                               <TableAntrianComponent
                                 key={i}
@@ -288,7 +286,7 @@ export default function RiwayatPage() {
                   {currentAntrians && currentAntrians.length > 0 ? (
                     <>
                       {currentAntrians?.map(
-                        (antrian: AntrianType, i: number) => {
+                        (antrian: AntrianDataType, i: number) => {
                           return (
                             <div key={i}>
                               <CardHistoryAntrian antrian={antrian} />
@@ -346,6 +344,6 @@ export default function RiwayatPage() {
           </div>
         </Tabs>
       </div>
-    </div>
+    </section>
   );
 }

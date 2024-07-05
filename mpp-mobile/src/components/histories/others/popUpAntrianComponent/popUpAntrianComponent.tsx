@@ -1,43 +1,57 @@
 import { Button } from "@/components/ui/button";
 import qrcode from "@/../public/assets/png-transparent-qr-code-information-qr-code-android-qrcode-text-rectangle-monochrome-thumbnail.png";
 import Image from "next/legacy/image";
+import { AntrianDataType } from "@/types/type";
 
-interface AntrianType {
-  antrian: {
-    noAntrian: string;
-    instansi: string;
-    waktu?: string;
-    tanggal: string;
-  };
-}
-
-export default function PopUpAntrianComponent({ antrian }: AntrianType) {
+export default function PopUpAntrianComponent({
+  antrian,
+}: {
+  antrian: AntrianDataType;
+}) {
   return (
-    <div className="flex flex-col w-[290px] h-[290px] bg-[#FFFFFF] shadow-lg rounded-xl mt-[8px] gap-[16px]">
-      <div className="flex flex-col w-[135px] h-[198px] mx-[77.5px] mt-[18px] gap-[8px]">
-        <div className="flex justify-between w-[135px] h-[14px]">
-          <p className="text-[10px] font-extralight">{antrian.tanggal}</p>
+    <div className="flex flex-col justify-center items-center px-10 py-4 w-full h-4/6 bg-neutral-50 shadow-lg rounded-xl mt-2 gap-4">
+      <div className="flex flex-col justify-center items-center mt-[18px] gap-2">
+        <div className="flex justify-between w-full h-full">
+          <p className="text-[14px] font-extralight">{antrian.tanggal}</p>
 
-          <p className="text-[10px] font-extralight">{antrian.waktu}</p>
+          <p className="text-[14px] font-extralight">{antrian.waktu}</p>
         </div>
 
-        <div className="flex flex-col justify-center items-center w-[135px] h-[176px] gap-[8px]">
-          <Image src={qrcode} className="w-[135px] h-[128px]" alt="QR CODE" />
+        <div className="flex flex-col justify-center items-center w-full h-full gap-2">
+          <div className="w-full h-full rounded-xl">
+            <Image
+              src={antrian.qrcode}
+              className="w-full h-full object-contain rounded-xl"
+              width={200}
+              height={200}
+              alt="QR CODE"
+            />
+          </div>
 
-          <div className="flex flex-col w-[250px] h-[40px] justify-center items-center md:mt-3">
-            <h5 className="text-[14px] font-bold">{antrian.noAntrian}</h5>
+          <div className="flex flex-col w-full h-[40px] justify-center items-center md:mt-3">
+            <h5 className="text-[14px] font-bold">{antrian.id}</h5>
 
             <h5 className="text-[14px] font-normal md:text-center">
-              Loket {antrian.instansi}
+              {antrian.Instansi.name}
             </h5>
           </div>
         </div>
       </div>
 
-      <div className="h-[40px] flex self-center justify-center items-center md:pt-4">
-        <Button className="w-[160px] h-[40px]" type="submit" variant="link">
+      <div className="w-8/12 h-[40px] flex self-center justify-center items-center md:pt-4">
+        <Button className="w-full h-[40px]" type="submit" variant="link">
           Print
         </Button>
+      </div>
+
+      <div className="flex flex-col w-full mt-6 gap-y-3">
+        <h3 className="text-neutral-900 font-semibold text-[14px]">
+          Persyaratan yang harus dibawa
+        </h3>
+
+        <ul className="gap-y-2">
+          <li className="list-disc pl-4">Kartu Tanda Pengenal</li>
+        </ul>
       </div>
     </div>
   );

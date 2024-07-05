@@ -33,10 +33,10 @@ export default function CardLayananComponent({
 
   return (
     <div className="flex flex-col items-center justify-center w-full md:w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-xl rounded-2xl">
-      <div className="flex flex-col items-center justify-center w-10/12 h-[296px]">
+      <div className="flex flex-row md:flex-col items-center justify-center p-4 md:p-0 w-full md:w-10/12 md:h-[296px]">
         <Link
           href={`/instansi/${layanan.slug}`}
-          className="h-[135px] w-full flex items-center justify-center">
+          className="h-full md:h-[135px] w-full flex items-center justify-center">
           <Image
             src={layanan?.image || ""}
             className="h-full object-contain"
@@ -46,19 +46,19 @@ export default function CardLayananComponent({
           />
         </Link>
 
-        <div className="flex flex-col justify-center pb-6 mt-[8px] w-full">
+        <div className="flex flex-col justify-start md:justify-center pb-6 mt-[8px] w-full">
           <Link href={`/instansi/${layanan.slug}`}>
-            <h6 className="text-[14px] text-center text-primary-800 font-semibold">
+            <h6 className="text-[14px] text-start md:text-center text-primary-800 font-semibold">
               {layanan.name}
             </h6>
           </Link>
 
-          <p className="text-[12px] text-center text-neutral-700 font-normal">
+          <p className="text-[12px] text-start md:text-center text-neutral-700 font-normal">
             Jumlah Layanan : {layanan.jmlLayanan}
           </p>
 
           <div
-            className={`${bgStatus} flex justify-center items-center w-1/4 h-[20px] rounded-[50px] mt-4 self-center`}>
+            className={`${bgStatus} flex justify-center items-center w-1/4 h-[20px] rounded-[50px] mt-4 md:self-center`}>
             <p className="text-[10px] text-neutral-50">{textStatus}</p>
           </div>
         </div>

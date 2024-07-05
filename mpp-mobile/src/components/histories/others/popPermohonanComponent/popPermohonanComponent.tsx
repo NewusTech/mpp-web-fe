@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -5,10 +7,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PopUpPermohonanComponent from "../popUpPermohonanComponent/popUpPermohonanComponent";
 import { PermohonanDataType } from "@/types/type";
+import Link from "next/link";
 
 export default function PopPermohonanComponent({
   permohonan,
@@ -26,10 +28,37 @@ export default function PopPermohonanComponent({
   } else {
     permohonanStatus = "Ditolak";
   }
+
+  const isConditionMet = (permohonan: PermohonanDataType["status"]) => {
+    return permohonan !== 3;
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!isConditionMet(permohonan.status)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger>
-        <Download className="text-neutral-800 w-[15px] h-[15px]" />
+        {isConditionMet(permohonan.status) ? (
+          <div>
+            <Link
+              href={`riwayat/${permohonan.id}`}
+              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+              Lihat
+            </Link>
+          </div>
+        ) : (
+          <div
+            onClick={handleClick}
+            aria-disabled="true"
+            className="bg-gray-400 rounded-full py-1 px-5 text-neutral-50 text-[12px] cursor-not-allowed">
+            Lihat
+          </div>
+        )}
       </DialogTrigger>
       <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-white rounded-2xl">
         <DialogHeader>

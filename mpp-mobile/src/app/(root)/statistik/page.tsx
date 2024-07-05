@@ -178,10 +178,10 @@ export default function StatisticsPage() {
   };
 
   return (
-    <div className="flex items-center md:w-full justify-center pt-[24px] bg-primary-100 pb-[70px] md:pb-[120px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
+    <div className="flex items-center md:w-full justify-center pt-6 bg-primary-100 pb-32 md:pb-[120px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
       <div className="flex flex-col md:w-full gap-[10px] md:mx-[70px]">
-        <div className="flex flex-col items-center md:flex-none md:grid md:grid-cols-2 md:w-full gap-[16px]">
-          <div className="flex flex-col bg-white w-[290px] md:w-full shadow-xl rounded-2xl relative">
+        <div className="flex flex-col items-center md:flex-none md:grid md:grid-cols-2 md:w-full gap-4">
+          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-xl rounded-2xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
               <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Antrian Online
@@ -204,18 +204,18 @@ export default function StatisticsPage() {
               options={chartOptions}
             />
 
-            <div className="flex flex-row self-center w-[242px] md:w-full justify-between pb-[10.5px] px-[12px] md:px-[48px]">
+            <div className="flex flex-row self-center w-10/12 md:w-full justify-between pb-[10.5px] px-[12px] md:px-12">
               {renderYearStats()}
             </div>
           </div>
 
-          <div className="flex flex-col bg-white w-[290px] md:w-full shadow-xl rounded-2xl relative">
+          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-xl rounded-2xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
               <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Permohonan Layanan
               </h5>
 
-              <p className="text-[10px] md:text-[12px] text-[#656565] font-light">
+              <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
                 Grafik Tahunan
               </p>
             </div>
@@ -232,21 +232,21 @@ export default function StatisticsPage() {
               options={chartOptions}
             />
 
-            <div className="flex flex-row self-center w-[242px] md:w-full justify-between pb-[10.5px] px-[12px] md:px-[48px]">
+            <div className="flex flex-row self-center w-10/12 md:w-full justify-between pb-[10.5px] px-3 md:px-12">
               {renderYearStats()}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col bg-white shadow-md rounded-2xl mt-[16px] mx-[35px] md:px-[75px] md:mx-0">
-          <div className="flex flex-col md:flex-row justify-between items-center mx-[10px] mt-[16px] md:px-[30px]">
+        <div className="flex flex-col bg-neutral-50 shadow-md rounded-2xl mt-4 mx-[35px] md:px-[75px] md:mx-0">
+          <div className="flex flex-col md:flex-row justify-between items-center mx-[10px] mt-4 md:px-[30px]">
             <h4 className="text-[16px] text-primary-900 font-semibold">
               Grafik Bulanan Tahun 2024
             </h4>
 
-            <div className="flex items-center w-[258px] h-[40px] justify-between border border-[#C4C4C4] rounded-[50px] pl-[10px] py-[10px] my-[16px]">
+            <div className="flex items-center w-10/12 md:w-3/12 h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
               <Select onValueChange={handleMonthChange}>
-                <SelectTrigger className="w-[258px] rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                   <SelectValue
                     placeholder="Bulan"
                     className="text-neutral-800"
@@ -263,7 +263,7 @@ export default function StatisticsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full mt-[10px] px-[16px] md:px-[30px] pb-[16px] md:pb-[50px] gap-[22px]">
+          <div className="flex flex-col w-full mt-[10px] px-4 md:px-[30px] pb-6 md:pb-[50px] gap-[22px]">
             {!isWideScreen ? (
               <>
                 {currentDataGrafik.map((data: DataStatistik, i: number) => {
@@ -282,7 +282,7 @@ export default function StatisticsPage() {
                 <Table className="flex flex-col w-full">
                   <TableHeader className="flex w-full">
                     <TableRow className="flex flex-row w-full">
-                      <TableHead className="w-full bg-[#F0F0F0]">
+                      <TableHead className="w-full bg-neutral-300">
                         Instansi
                       </TableHead>
                       <TableHead className="w-1/5">Total</TableHead>

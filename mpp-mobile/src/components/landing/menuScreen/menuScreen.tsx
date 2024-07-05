@@ -1,18 +1,17 @@
 "use client";
+
 import {
   LogIn,
   Send,
   X,
-  Home,
-  LayoutDashboard,
-  Landmark,
   Mailbox,
   ClipboardList,
   BarChartBig,
   History,
   CircleUserRound,
+  Building,
+  Smartphone,
 } from "lucide-react";
-
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { DrawerClose } from "@/components/ui/drawer";
@@ -55,119 +54,102 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
   };
 
   return (
-    <div className="grid grid-rows-2 bg-primary-700 min-w-[360px] h-[57px]">
-      <DrawerClose className="flex justify-end items-center h-[3.5em] px-[35px]">
+    <div className="flex flex-col justify-end items-end self-end bg-primary-700 min-w-[360px] h-full">
+      <DrawerClose className="flex justify-end items-center h-[3.5em] px-2">
         <div>
           <div onClick={closeMenu}>
-            <X className="text-neutral-50 w-[24px] h-[24px]" />
+            <X className={`text-neutral-50 w-8 h-w-8`} />
           </div>
         </div>
       </DrawerClose>
 
-      <div className="grid grid-rows-9 h-[25em] bg-white w-screen mt-[28px] place-item-center] p-[16px] gap-[4px]">
-        <Link href="/" onClick={closeMenu} className="flex flex-row gap-[16px]">
-          <Home className="text-primary-800 w-[20px] h-[20px]" />
-
-          <p className="text-primary-800 text-[14px]">Beranda</p>
-        </Link>
-
-        <Link
-          href="/mpp/tentang-mpp"
-          onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <LayoutDashboard className="text-primary-800 w-[20px] h-[20px]" />
-
-          <p className="text-primary-800 text-[14px]">Tentang MPP</p>
-        </Link>
-
+      <div className="grid grid-rows-9 bg-primary-700 w-10/12 place-content-end pb-6 gap-y-6">
         <Link
           href="/mpp/fasilitas"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <LayoutDashboard className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row group justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Fasilitas
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Fasilitas</p>
+          <Building className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href="/mpp/aplikasi-pendukung"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <LayoutDashboard className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Aplikasi Pendukung
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Aplikasi Pendukung</p>
-        </Link>
-
-        <Link
-          href="/instansi"
-          onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <Landmark className="text-primary-800 w-[20px] h-[20px]" />
-
-          <p className="text-primary-800 text-[14px]">Instansi</p>
+          <Smartphone className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href="/berita"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <Mailbox className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Berita
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Berita</p>
+          <Mailbox className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href="/survey"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <ClipboardList className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            SKM
+          </p>
 
-          <p className="text-primary-800 text-[14px]">SKM</p>
+          <ClipboardList className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href="/statistik"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <BarChartBig className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Statistik
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Statistik</p>
+          <BarChartBig className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href="/pengaduan"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <Send className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Pengaduan
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Pengaduan</p>
-        </Link>
-
-        <Link
-          href="/kontak"
-          onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <Send className="text-primary-800 w-[20px] h-[20px]" />
-
-          <p className="text-primary-800 text-[14px]">Kontak</p>
+          <Send className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href="/riwayat"
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <History className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Riwayat
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Riwayat</p>
+          <History className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         <Link
           href={`/profile/`}
           onClick={closeMenu}
-          className="flex flex-row gap-[16px]">
-          <CircleUserRound className="text-primary-800 w-[20px] h-[20px]" />
+          className="flex flex-row justify-end group gap-x-4 px-6">
+          <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+            Profile
+          </p>
 
-          <p className="text-primary-800 text-[14px]">Profile</p>
+          <CircleUserRound className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         {decoded ? (
@@ -176,10 +158,12 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
           <Link
             onClick={closeMenu}
             href="/login"
-            className="flex flex-row gap-[16px]">
-            <LogIn className="text-primary-800 w-[20px] h-[20px]" />
+            className="flex flex-row justify-end group gap-x-4 px-6">
+            <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
+              Login
+            </p>
 
-            <p className="text-primary-800 text-[14px]">Login</p>
+            <LogIn className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
           </Link>
         )}
       </div>

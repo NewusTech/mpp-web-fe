@@ -1,5 +1,6 @@
+"use client";
+
 import { TableCell, TableRow } from "@/components/ui/table";
-import PopPermohonanComponent from "../popPermohonanComponent/popPermohonanComponent";
 import formatDate from "@/helpers/logout/formatted";
 import { PermohonanDataType } from "@/types/type";
 import Link from "next/link";
@@ -34,17 +35,21 @@ export default function TablePermohonanComponent({
       <TableCell className="w-1/2">{permohonanStatus}</TableCell>
       <TableCell className="w-3/12">
         {permohonan.status !== 3 ? (
-          <Link
-            href={`riwayat/${permohonan.id}`}
-            className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
-            Lihat
-          </Link>
+          <div>
+            <Link
+              href={`riwayat/${permohonan.id}`}
+              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+              Lihat
+            </Link>
+          </div>
         ) : (
-          <button
-            disabled
-            className="bg-gray-400 rounded-full px-5 text-neutral-50 text-[12px] cursor-not-allowed">
-            Lihat
-          </button>
+          <div>
+            <button
+              disabled
+              className="bg-gray-400 rounded-full py-1 px-5 text-neutral-50 text-[12px] cursor-not-allowed">
+              Lihat
+            </button>
+          </div>
         )}
       </TableCell>
     </TableRow>

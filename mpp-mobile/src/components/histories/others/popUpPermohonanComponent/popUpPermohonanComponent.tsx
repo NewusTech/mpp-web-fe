@@ -1,5 +1,8 @@
+"use client";
+
 import formatDate from "@/helpers/logout/formatted";
 import { PermohonanDataType } from "@/types/type";
+import Link from "next/link";
 
 export default function PopUpPermohonanComponent({
   permohonan,
@@ -47,10 +50,12 @@ export default function PopUpPermohonanComponent({
           </div>
         </div>
 
-        <p className="text-[12px] text-warning-700 font-normal mt-[12px]">
+        <Link
+          href="/survey"
+          className="text-[12px] border-b border-warning-700 text-warning-700 font-normal mt-[12px]">
           Silahkan mengisi survey kepuasan masyarakat (SKM) terlebih dahulu agar
           dapat mengunduh hasil permohonan.
-        </p>
+        </Link>
       </div>
     </div>
   );

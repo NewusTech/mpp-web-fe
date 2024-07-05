@@ -3,6 +3,7 @@ import surveySlice from "./action/actionSurvei";
 import PermohonanSlice from "./action/actionPermohonanLayanan";
 import UpdateProfileSlice from "./action/actionUpdateProfile";
 import HistoryPermohonanSlice from "./action/actionHistoryPermohonan";
+import HistoryAntrianSlice from "./action/actionHistoryAntrian";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     permohonan: PermohonanSlice,
     updateProfile: UpdateProfileSlice,
     historyPermohonan: HistoryPermohonanSlice,
+    historyAntrian: HistoryAntrianSlice,
   },
 });
 

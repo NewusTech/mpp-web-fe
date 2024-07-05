@@ -106,7 +106,7 @@ export default function BeritaPage() {
   );
 
   return (
-    <div className="flex flex-col items-center pt-[24px] px-9 bg-primary-100 pb-[60px] md:pb-[200px] md:px-[70px] md:pt-[24px]">
+    <section className="flex flex-col items-center pt-6 px-9 bg-primary-100 pb-32 md:pb-48 md:px-[70px]">
       <h3 className="text-primary-800 font-semibold text-[16px] md:text-[32px] mb-[32px]">
         Berita
       </h3>
@@ -177,6 +177,6 @@ export default function BeritaPage() {
           </p>
         </div>
       )}
-    </div>
+    </section>
   );
 }

@@ -1,13 +1,33 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 
-const initialState = {
+interface PermissionType {
+  id: number;
+  code: number;
+  instansi_id: number;
+  layanan_id: number;
+  userinfo_id: number;
+  status: boolean;
+  qrcode: string;
+  audio: string;
+  tanggal: string;
+  waktu: string;
+  Instansi: {
+    name: string;
+  };
+}
+
+interface HistoryPermissiontype {
+  data: PermissionType[];
+}
+
+const initialState: HistoryPermissiontype = {
   data: [],
 };
 
 export const HistoryAntrianSlice = createSlice({
-  name: "riwayatAntrian",
+  name: "riwayatPermohonan",
   initialState,
   reducers: {
     setHistoryAntrian: (state, action) => {
@@ -22,7 +42,7 @@ export function fetchRiwayatAntrian() {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/getforuser`,
         {
           method: "GET",
           headers: {
@@ -32,8 +52,12 @@ export function fetchRiwayatAntrian() {
           cache: "no-store",
         }
       );
-    } catch {
-      toast("Tidak berhasil mendapatkan riwayat antrian!");
+
+      const result = await response.json();
+
+      dispatch(setHistoryAntrian(result.data));
+    } catch (error) {
+      toast("Tidak berhasil mendapatkan riwayat permohonan!");
     }
   };
 }

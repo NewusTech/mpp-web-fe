@@ -157,7 +157,7 @@ export default function RegisterScreen() {
 
   return (
     <section className="flex justify-center md:px-36 items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:h-screen">
-      <div className="flex flex-col gap-[4px] md:w-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-0 my-[45px] md:my-0 md:px-[60px]">
+      <div className="flex flex-col gap-[4px] w-full rounded-2xl bg-primary-200 px-[32px] mx-[32px] md:mx-0 my-[45px] md:my-0 md:px-[60px]">
         <div className="flex flex-col pt-[32px]">
           <h6 className="text-primary-800 text-[16px] md:text-[24px] font-semibold mb-[4px]">
             DAFTAR

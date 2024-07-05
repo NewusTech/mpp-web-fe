@@ -1,6 +1,4 @@
-import { Download } from "lucide-react";
-import PopPermohonanComponent from "../others/popPermohonanComponent/popPermohonanComponent";
-import PopAntrianComponent from "../others/popAntrianComponent/popAntrianComponent";
+import Link from "next/link";
 import formatDate from "@/helpers/logout/formatted";
 
 interface PermohonanType {
@@ -67,7 +65,23 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
       </div>
 
       <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
-        <PopPermohonanComponent permohonan={permohonan} />
+        {permohonan.status !== 3 ? (
+          <div>
+            <Link
+              href={`riwayat/${permohonan.id}`}
+              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+              Lihat
+            </Link>
+          </div>
+        ) : (
+          <div>
+            <button
+              disabled
+              className="bg-gray-400 rounded-full py-1 px-5 text-neutral-50 text-[12px] cursor-not-allowed">
+              Lihat
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

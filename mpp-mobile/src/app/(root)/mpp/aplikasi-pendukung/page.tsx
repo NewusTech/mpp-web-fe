@@ -38,7 +38,7 @@ export default function AplikasiPendukung() {
   const supportApps = paginate(apps || [], currentPage, itemsPerPage);
 
   return (
-    <div className="flex flex-col justify-between pt-8 md:px-28 mx-8 md:mx-0 md:gap-y-8">
+    <section className="flex flex-col justify-between pt-8 mb-36 md:mb-0 md:px-28 mx-8 md:mx-0 md:gap-y-8">
       <div className="flex flex-col md:flex-row md:grid md:grid-cols-3 flex-wrap gap-x-2 gap-y-4">
         {supportApps &&
           supportApps?.map((app: AppType, i: number) => {
@@ -52,6 +52,6 @@ export default function AplikasiPendukung() {
         currentPage={currentPage}
         onPageChange={setCurrentPage}
       />
-    </div>
+    </section>
   );
 }
