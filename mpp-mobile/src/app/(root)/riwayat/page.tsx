@@ -166,8 +166,6 @@ export default function RiwayatPage() {
     itemsPerPage
   );
 
-  console.log(historyAntrianData, "ini antrian");
-
   return (
     <section className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-3 md:mb-0 pb-32 md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
       <div className="flex self-start md:mb-9">

@@ -23,6 +23,7 @@ import Steps from "@/components/steps/steps";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { JenisLayananType } from "@/types/type";
 import { Loader } from "lucide-react";
+import parse from "html-react-parser";
 
 const steps = [
   { id: 1, title: "1" },
@@ -197,7 +198,7 @@ export default function PermohonanLayananFirstScreen({
                       <div
                         key={i}
                         className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                        {item}
+                        {parse(item)}
                       </div>
                     );
                   })}
@@ -216,7 +217,7 @@ export default function PermohonanLayananFirstScreen({
                       <div
                         key={i}
                         className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                        {item}
+                        {parse(item)}
                       </div>
                     );
                   })}
@@ -235,7 +236,7 @@ export default function PermohonanLayananFirstScreen({
                       <div
                         key={i}
                         className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                        {item}
+                        {parse(item)}
                       </div>
                     );
                   })}

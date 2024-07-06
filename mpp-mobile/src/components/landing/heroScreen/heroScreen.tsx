@@ -31,7 +31,7 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
           }}>
           {carousel.map((image, index) => (
             <SwiperSlide key={index}>
-              <div className="w-screen h-[300px] md:h-[600px]">
+              <div className="w-screen min-h-[300px] md:min-h-[650px]">
                 <Image
                   src={image.image}
                   className="w-full h-full object-cover"

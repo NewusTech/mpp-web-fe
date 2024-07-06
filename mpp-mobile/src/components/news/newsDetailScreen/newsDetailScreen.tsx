@@ -60,7 +60,7 @@ export default function NewsDetailScreen({
         <div className="flex-1 w-full h-full border border-neutral-700 ml-4"></div>
       </div>
 
-      <div className="flex flex-col md:px-[70px] mt-3 md:mt-5 md:grid md:grid-cols-3 md:flex-row md:flex-wrap md:w-full md:justify-start md:gap-x-6">
+      <div className="flex flex-col md:px-[70px] mt-3 md:mt-5 md:grid md:grid-cols-3 md:flex-row md:flex-wrap md:w-full md:justify-start gap-y-3 md:gap-x-6">
         {latestNews.map((berita: Berita, i: number) => (
           <CardNewsComponent key={i} news={berita} />
         ))}

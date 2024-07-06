@@ -80,8 +80,6 @@ export default function PengaduanScreen() {
     fetchPengaduanList(1, limitData);
   }, []);
 
-  console.log(pengaduanlists, ">>> pengaduanlists");
-
   const paginate = (
     items: PengaduanType[],
     pageNumber: number,
@@ -290,24 +288,24 @@ export default function PengaduanScreen() {
         </h1>
 
         <div className="w-full mt-4">
-          <div className="md:flex md:justify-end md:mb-[24px]">
+          <div className="md:flex md:justify-end md:mb-6">
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <div
                   onClick={() => setIsOpen(true)}
-                  className="w-[170px] flex items-center justify-center bg-primary-700 hover:bg-primary-800 rounded-[50px] h-[40px] text-neutral-50 outline outline-1 outline-neutral-500">
+                  className="w-6/12 md:w-2/12 flex items-center justify-center bg-primary-700 hover:bg-primary-800 rounded-[50px] h-[40px] text-neutral-50 outline outline-1 outline-neutral-500">
                   <h2 className="text-[14px] text-center w-full font-normal">
                     Ajukan Pegaduan
                   </h2>
                 </div>
               </DialogTrigger>
-              <DialogContent className="flex flex-col justify-between w-[300px] md:w-[620px] bg-white rounded-2xl px-[16px]">
+              <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-2xl">
                 <form
                   onSubmit={handlePengaduan}
                   className="flex flex-col w-full">
-                  <div className="flex flex-col w-full px-[16px] md:px-[105px]">
-                    <div className="flex flex-col w-full mb-[10px] md:mb-1 mx-[1px] mt-[62px]">
-                      <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                  <div className="flex flex-col w-full px-4 md:px-[105px]">
+                    <div className="flex flex-col w-full mb-[10px] md:mb-1 mx-[1px] mt-6">
+                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
                         Pilih Instansi
                       </Label>
 
@@ -351,8 +349,8 @@ export default function PengaduanScreen() {
                       </Select>
                     </div>
 
-                    <div className="flex flex-col mx-[1px] mt-4">
-                      <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                    <div className="flex flex-col mx-[1px] md:mt-4">
+                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
                         Pilih Layanan
                       </Label>
 
@@ -390,7 +388,7 @@ export default function PengaduanScreen() {
                     </div>
 
                     <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">
-                      <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
                         Judul Pengajuan
                       </Label>
 
@@ -400,12 +398,12 @@ export default function PengaduanScreen() {
                         value={pengaduan.judul}
                         onChange={handleChange}
                         placeholder="Judul Pengajuan"
-                        className={`w-full pl-4 h-[40px] border border-neutral-500 rounded-[50px] pr-2 placeholder:text-[12px] focus:outline-none appearance-none`}
+                        className={`w-full pl-4 h-[40px] border border-neutral-700 rounded-[50px] pr-2 placeholder:text-[12px] focus:outline-none appearance-none`}
                       />
                     </div>
 
                     <div className="flex flex-col mx-[1px]">
-                      <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
                         Aduan
                       </Label>
 
@@ -413,7 +411,7 @@ export default function PengaduanScreen() {
                         name="aduan"
                         value={pengaduan.aduan}
                         onChange={handleChange}
-                        className="w-full text-[14px] border border-neutral-500 placeholder:opacity-[40%]"
+                        className="w-full text-[14px] border border-neutral-700 placeholder:opacity-[40%]"
                         placeholder="Aduan"
                       />
 
@@ -425,7 +423,7 @@ export default function PengaduanScreen() {
                     </div>
 
                     <div className="flex flex-col my-[10px] md:mt-3 mx-[1px]">
-                      <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
                         Dokumen
                       </Label>
 
@@ -434,7 +432,7 @@ export default function PengaduanScreen() {
                         onDragOver={handleDragOver}
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
-                        className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                        className={`w-full h-[100px] border-2 border-dashed border-neutral-700 rounded-xl mt-1 flex flex-col items-center justify-center ${
                           changeOpacity ? "opacity-50" : "opacity-100"
                         }`}>
                         {previewImage ? (
@@ -464,7 +462,7 @@ export default function PengaduanScreen() {
                             />
                             <label
                               htmlFor="file-input"
-                              className="text-[16px] text-neutral-600 font-light cursor-pointer">
+                              className="text-[16px] text-center text-neutral-600 font-light cursor-pointer">
                               {pengaduan.image
                                 ? pengaduan.image
                                 : "Drag and drop file here or click to select file"}
@@ -560,7 +558,7 @@ export default function PengaduanScreen() {
                                       Lihat
                                     </div>
                                   </DialogTrigger>
-                                  <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-white rounded-2xl">
+                                  <DialogContent className="flex flex-col justify-between md:w-6/12 bg-neutral-50 rounded-2xl">
                                     <div className="flex flex-col mx-[32px] my-[32px]">
                                       <div className="flex flex-col gap-[14px]">
                                         <div className="flex flex-col gap-[8px]">

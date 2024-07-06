@@ -263,7 +263,7 @@ export default function ProfilePage() {
 
                 <div className="md:grid md:grid-cols-2">
                   <div className="flex flex-col mt-6">
-                    <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                    <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
                       Kartu Tanda Penduduk (KTP)
                     </Label>
 
@@ -281,7 +281,7 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="flex flex-col mt-6">
-                    <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                    <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
                       Kartu Keluarga(KK)
                     </Label>
 
@@ -299,7 +299,7 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="flex flex-col mt-6">
-                    <Label className="text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                    <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
                       Ijazah Terakhir
                     </Label>
 

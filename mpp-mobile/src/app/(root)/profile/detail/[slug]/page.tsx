@@ -4,9 +4,6 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import fetchProfile from "@/components/fetching/profile/profile";
-import { useDispatch } from "react-redux";
-import { updateProfileUser } from "@/store/action/actionUpdateProfile";
-import { Dispatch } from "redux";
 import { toast } from "sonner";
 import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
@@ -497,8 +494,14 @@ export default function ProfileEditPage({
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-4 md:pt-[8">
-          <form onSubmit={handleUpdateUser} className="flex flex-col w-full">
+        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-4 md:pt-[8]">
+          <h3 className="text-primary-800 font-semibold text-[20px]">
+            Data Diri
+          </h3>
+
+          <form
+            onSubmit={handleUpdateUser}
+            className="flex flex-col w-full mt-2 md:mt-4">
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full md:mb-4">
                 <ProfileEditInput
@@ -895,7 +898,7 @@ export default function ProfileEditPage({
             </div>
 
             <div className="flex flex-col w-full">
-              <h3 className="text-primary-800 font-semibold text-[20px] mt-6">
+              <h3 className="text-primary-800 font-semibold text-[20px] mt-6 mb-3">
                 Dokumen Pendukung
               </h3>
 
@@ -903,29 +906,18 @@ export default function ProfileEditPage({
                 <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                   Kartu Tanda Penduduk (KTP)
                 </Label>
-                <div
-                  ref={dropRef}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDropKTP}
-                  className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                    changeOpacity ? "opacity-50" : "opacity-100"
-                  }`}>
-                  {previewKTPImage || detail.filektp ? (
-                    <div className="relative max-w-full max-h-full">
-                      <img
-                        src={previewKTPImage || detail.filektp}
-                        alt="Preview"
-                        className="max-h-full rounded-xl p-2 max-w-full object-contain"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveKTP}
-                        className="absolute bg-none -top-1 -right-6 md:-top-1 md:-right-5 text-neutral-800 p-1">
-                        <Trash />
-                      </button>
-                    </div>
-                  ) : (
+
+                <div className="flex flex-col md:flex-row w-full">
+                  <div
+                    ref={dropRef}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropKTP}
+                    className={`w-full ${
+                      detail.filektp || previewKTPImage ? "md:w-8/12" : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                      changeOpacity ? "opacity-50" : "opacity-100"
+                    }`}>
                     <>
                       <input
                         type="file"
@@ -937,17 +929,34 @@ export default function ProfileEditPage({
                       />
                       <label
                         htmlFor="file-input-ktp"
-                        className="text-[16px] text-neutral-600 font-light cursor-pointer">
-                        {detail.filektp
-                          ? detail.filektp
-                          : "Drag and drop file here or click to select file"}
+                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                        Drag and drop file here or click to select file
                       </label>
                     </>
-                  )}
-                  {formErrors["filektp"] && (
-                    <p className="text-error-700 text-[12px] mt-1 text-center">
-                      {formErrors["filektp"]}
-                    </p>
+
+                    {formErrors["filektp"] && (
+                      <p className="text-error-700 text-[12px] mt-1 text-center">
+                        {formErrors["filektp"]}
+                      </p>
+                    )}
+                  </div>
+
+                  {(previewKTPImage || detail.filektp) && (
+                    <div className="relative md:ml-4 w-full mt-1">
+                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                        <img
+                          src={previewKTPImage || detail.filektp}
+                          alt="Preview"
+                          className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveKTP}
+                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                          <Trash />
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
@@ -956,29 +965,17 @@ export default function ProfileEditPage({
                 <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
                   Kartu Keluarga (KK)
                 </Label>
-                <div
-                  ref={dropRef}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDropKK}
-                  className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                    changeOpacity ? "opacity-50" : "opacity-100"
-                  }`}>
-                  {previewKKImage || detail.filekk ? (
-                    <div className="relative max-w-full max-h-full">
-                      <img
-                        src={previewKKImage || detail.filekk}
-                        alt="Preview"
-                        className="max-h-full rounded-xl p-2 max-w-full object-contain"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveKK}
-                        className="absolute bg-none -top-1 -right-6 md:-top-1 md:-right-5 text-neutral-800 p-1">
-                        <Trash />
-                      </button>
-                    </div>
-                  ) : (
+                <div className="flex flex-col md:flex-row w-full">
+                  <div
+                    ref={dropRef}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropKK}
+                    className={`w-full ${
+                      detail.filekk || previewKKImage ? "md:w-8/12" : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                      changeOpacity ? "opacity-50" : "opacity-100"
+                    }`}>
                     <>
                       <input
                         type="file"
@@ -990,17 +987,34 @@ export default function ProfileEditPage({
                       />
                       <label
                         htmlFor="file-input-kk"
-                        className="text-[16px] text-neutral-600 font-light cursor-pointer">
-                        {detail.filekk
-                          ? detail.filekk
-                          : "Drag and drop file here or click to select file"}
+                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                        Drag and drop file here or click to select file
                       </label>
                     </>
-                  )}
-                  {formErrors["filekk"] && (
-                    <p className="text-error-700 text-[12px] mt-1 text-center">
-                      {formErrors["filekk"]}
-                    </p>
+
+                    {formErrors["filekk"] && (
+                      <p className="text-error-700 text-[12px] mt-1 text-center">
+                        {formErrors["filekk"]}
+                      </p>
+                    )}
+                  </div>
+
+                  {(previewKKImage || detail.filekk) && (
+                    <div className="relative md:ml-4 w-full mt-1">
+                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                        <img
+                          src={previewKKImage || detail.filekk}
+                          alt="Preview"
+                          className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveKK}
+                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                          <Trash />
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
@@ -1009,29 +1023,20 @@ export default function ProfileEditPage({
                 <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
                   Ijazah Terakhir
                 </Label>
-                <div
-                  ref={dropRef}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDropIjazah}
-                  className={`w-full h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                    changeOpacity ? "opacity-50" : "opacity-100"
-                  }`}>
-                  {previewIjazahImage || detail.fileijazahsd ? (
-                    <div className="relative max-w-full max-h-full">
-                      <img
-                        src={previewIjazahImage || detail.fileijazahsd}
-                        alt="Preview"
-                        className="max-h-full rounded-xl p-2 max-w-full object-contain"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleRemoveIjazah}
-                        className="absolute bg-none -top-1 -right-6 md:-top-1 md:-right-5 text-neutral-800 p-1">
-                        <Trash />
-                      </button>
-                    </div>
-                  ) : (
+
+                <div className="flex flex-col md:flex-row w-full">
+                  <div
+                    ref={dropRef}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropIjazah}
+                    className={`w-full ${
+                      detail.fileijazahsd || previewIjazahImage
+                        ? "md:w-8/12"
+                        : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                      changeOpacity ? "opacity-50" : "opacity-100"
+                    }`}>
                     <>
                       <input
                         type="file"
@@ -1043,17 +1048,34 @@ export default function ProfileEditPage({
                       />
                       <label
                         htmlFor="file-input-ijazah"
-                        className="text-[16px] text-neutral-600 font-light cursor-pointer">
-                        {detail.fileijazahsd
-                          ? detail.fileijazahsd
-                          : "Drag and drop file here or click to select file"}
+                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                        Drag and drop file here or click to select file
                       </label>
                     </>
-                  )}
-                  {formErrors["fileijazahsd"] && (
-                    <p className="text-error-700 text-[12px] mt-1 text-center">
-                      {formErrors["fileijazahsd"]}
-                    </p>
+
+                    {formErrors["fileijazahsd"] && (
+                      <p className="text-error-700 text-[12px] mt-1 text-center">
+                        {formErrors["fileijazahsd"]}
+                      </p>
+                    )}
+                  </div>
+
+                  {(previewIjazahImage || detail.fileijazahsd) && (
+                    <div className="relative md:ml-4 w-full mt-1">
+                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                        <img
+                          src={previewIjazahImage || detail.fileijazahsd}
+                          alt="Preview"
+                          className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveIjazah}
+                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                          <Trash />
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
