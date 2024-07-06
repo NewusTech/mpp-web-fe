@@ -10,6 +10,7 @@ import {
 import AlurMpp from "@/components/alurMpp/alurMpp";
 import fetchAlurAntrian from "@/components/fetching/alurAntrian.tsx/alurAntrian";
 import fetchAlurPermohonan from "@/components/fetching/alurPermohonan/alurPermohonan";
+import parse from "html-react-parser";
 
 const currentAlur = 1;
 const statusAntrian = true;
@@ -46,9 +47,9 @@ export default function MppPage() {
               VISI
             </h4>
 
-            <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
-              {visimisi.visi}
-            </p>
+            <div className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
+              {parse(visimisi.visi)}
+            </div>
           </div>
 
           <div className="flex flex-col text-center gap-4 md:gap-[40px]">
@@ -57,7 +58,7 @@ export default function MppPage() {
             </h4>
 
             <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
-              {visimisi.misi}
+              {parse(visimisi.misi)}
             </p>
           </div>
         </div>

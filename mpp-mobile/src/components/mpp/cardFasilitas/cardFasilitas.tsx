@@ -1,5 +1,4 @@
 import React from "react";
-import image from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Image from "next/legacy/image";
 import { FacilityType } from "@/types/type";
 
@@ -9,13 +8,13 @@ export default function CardFasilitas({
   fasilitas: FacilityType;
 }) {
   return (
-    <div className="flex flex-col bg-neutral-50 rounded-xl">
+    <div className="flex flex-col w-full bg-neutral-50 rounded-xl">
       <div className="w-full h-full">
         <Image
           src={fasilitas.image}
-          className="w-full h-full object-cover rounded-t-xl"
+          className="w-full h-full object-fit rounded-t-xl"
           alt={fasilitas.title}
-          width={367}
+          width={430}
           height={367}
         />
       </div>

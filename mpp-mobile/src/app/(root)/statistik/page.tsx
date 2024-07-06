@@ -244,22 +244,28 @@ export default function StatisticsPage() {
               Grafik Bulanan Tahun 2024
             </h4>
 
-            <div className="flex items-center w-10/12 md:w-3/12 h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
-              <Select onValueChange={handleMonthChange}>
-                <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
-                  <SelectValue
-                    placeholder="Bulan"
-                    className="text-neutral-800"
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {months.map((month: string, i: number) => (
-                    <SelectItem key={i} value={(i + 1).toString()}>
-                      {month}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex flex-row justify-center items-center w-4/12 gap-x-4">
+              <button className="text-neutral-700">Bulan</button>
+
+              <button className="text-neutral-700">Tahun</button>
+
+              <div className="flex items-center w-10/12 md:w-full h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
+                <Select onValueChange={handleMonthChange}>
+                  <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                    <SelectValue
+                      placeholder="Bulan"
+                      className="text-neutral-800"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {months.map((month: string, i: number) => (
+                      <SelectItem key={i} value={(i + 1).toString()}>
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 

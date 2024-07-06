@@ -197,7 +197,7 @@ export default function SurveySkmPage() {
               </Select>
             </div>
 
-            <div className="flex flex-col items-center my-[10px] md:my-10 mx-[1px]">
+            <div className="flex flex-col items-center bg-none my-[10px] md:my-10 mx-[1px]">
               <input
                 type="date"
                 name="tanggal"

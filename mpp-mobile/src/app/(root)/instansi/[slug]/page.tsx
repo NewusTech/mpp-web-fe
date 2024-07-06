@@ -72,14 +72,14 @@ export default function InstansiDetail({
   }, [params.slug]);
 
   return (
-    <div className="bg-primary-100 md:h-full md:pb-[200px]">
+    <div className="bg-primary-100 md:h-full pb-32">
       <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-xl mx-[35px] md:mx-[70px] md:px-[70px] my-[24px] md:mt-[36px] md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-[36px]">
         <div className="md:flex md:flex-row md:w-full">
-          <div className="flex flex-col items-center w-full md:w-10/12 h-[500px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-2xl rounded-2xl">
+          <div className="flex flex-col items-center w-full md:w-10/12 min-h-[500px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-2xl rounded-2xl">
             <div className="flex items-center justify-center w-full">
               <Image
                 src={detailins?.image || ""}
-                className="=w-full h-full object-contain"
+                className="w-full h-full object-contain"
                 alt="Lampung Timur"
                 width={108}
                 height={144}
@@ -187,6 +187,7 @@ export default function InstansiDetail({
             detailins?.Layanans?.map((item: LayanansType, i: number) => {
               return (
                 <AccordionItem
+                  key={i}
                   className="w-full h-full mb-2"
                   value={`item-${i}`}>
                   <AccordionTrigger>{item.name}</AccordionTrigger>
@@ -226,12 +227,12 @@ export default function InstansiDetail({
                     <div className="mt-6">
                       {activeTab === "Persyaratan" && (
                         <div>
-                          <h5 className="text-neutral-900 font-semibold text-[20px] mb-6">
+                          <h5 className="text-neutral-900 font-semibold text-[14px] md:text-[20px] mb-2 md:mb-6">
                             Persyaratan
                           </h5>
 
                           <ul>
-                            <li className="text-neutral-900 font-normal text-[16px] list-disc ml-6">
+                            <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
                               {item.syarat}
                             </li>
                           </ul>
@@ -240,12 +241,12 @@ export default function InstansiDetail({
 
                       {activeTab === "Dasar Hukum" && (
                         <div>
-                          <h5 className="text-neutral-900 font-semibold text-[20px]">
+                          <h5 className="text-neutral-900 font-semibold text-[14px] md:text-[20px] mb-2 md:mb-6">
                             Dasar Hukum
                           </h5>
 
                           <ul>
-                            <li className="text-neutral-900 font-normal text-[16px] list-disc ml-6">
+                            <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
                               {item.dasarhukum}
                             </li>
                           </ul>
@@ -254,12 +255,12 @@ export default function InstansiDetail({
 
                       {activeTab === "Pelayanan" && (
                         <div>
-                          <h5 className="text-neutral-900 font-semibold text-[20px]">
+                          <h5 className="text-neutral-900 font-semibold text-[14px] md:text-[20px] mb-2 md:mb-6">
                             Pelayanan
                           </h5>
 
                           <ul>
-                            <li className="text-neutral-900 font-normal text-[16px] list-disc ml-6">
+                            <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
                               {item.desc}
                             </li>
                           </ul>

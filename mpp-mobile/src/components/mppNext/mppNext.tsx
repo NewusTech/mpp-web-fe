@@ -88,16 +88,18 @@ export default function MppNext({
               />
             </div>
 
-            <p className="md:text-[12px] my-4">
+            <p className="md:text-[12px] text-center my-4">
               "Permudah urusan Anda! Ajukan permohonan layanan dan booking
               antrian online sekarang."
             </p>
 
-            <div className="flex flex-col px-6 md:justify-between w-full items-center gap-y-2 self-center">
-              <Button variant="success" className="w-full text-neutral-50 px-5">
+            <div className="flex flex-col md:justify-between w-full items-center gap-y-2 self-center">
+              <Button
+                variant="success"
+                className="w-10/12 text-neutral-50 px-5">
                 <Link
                   href={"/instansi"}
-                  className="w-full flex justify-between items-center">
+                  className="w-full flex justify-center items-center gap-x-4">
                   <Landmark className="w-5" />
 
                   <p className="text-[16px]">Permohonan Layanan</p>
@@ -106,10 +108,10 @@ export default function MppNext({
 
               <Button
                 variant="secondary"
-                className="bg-secondary-700 px-5 hover:bg-secondary-600 text-neutral-50 w-4/5">
+                className="bg-secondary-700 px-5 hover:bg-secondary-600 text-neutral-50 w-8/12">
                 <Link
                   href={"/instansi"}
-                  className="w-full flex justify-between items-center">
+                  className="w-full flex justify-center items-center gap-x-4">
                   <Ticket className="w-5" />
 
                   <p className="text-[16px]">Booking Antrian</p>
@@ -131,7 +133,7 @@ export default function MppNext({
               />
             </div>
 
-            <p className="md:text-[12px] my-4">
+            <p className="md:text-[12px] text-center my-4">
               Tingkatkan pelayanan publik di web, sampaikan keluhan Anda di sini
               untuk pelayanan yang lebih baik.
             </p>
@@ -142,7 +144,7 @@ export default function MppNext({
                 className="bg-secondary-700 px-6 hover:bg-secondary-600 text-neutral-50 w-10/12">
                 <Link
                   href={"/pengaduan"}
-                  className="w-full flex justify-between items-center">
+                  className="w-full flex justify-center items-center gap-x-6">
                   <Send className="w-5" />
 
                   <p className="text-[16px]">Pengaduan</p>
