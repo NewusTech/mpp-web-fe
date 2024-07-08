@@ -133,7 +133,7 @@ export default function SurveySkmPage() {
           </h3>
         </div>
 
-        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-8 bg-neutral-50 rounded-2xl shadow-lg">
+        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-8 bg-neutral-50 rounded-2xl shadow-md">
           <div className="flex flex-col w-full px-6 md:px-[105px]">
             <div className="flex flex-col w-full items-center mb-[10px] md:mb-10 mx-[1px] mt-[62px]">
               <Select
@@ -166,7 +166,7 @@ export default function SurveySkmPage() {
               </Select>
             </div>
 
-            <div className="flex flex-col items-center mx-[1px] mt-[8px]">
+            <div className="flex flex-col items-center mx-[1px] mt-2">
               <Select
                 name="layanan_id"
                 onValueChange={handleSelectChangeLayanan}
@@ -203,7 +203,7 @@ export default function SurveySkmPage() {
                 name="tanggal"
                 value={date}
                 onChange={handleChangeDate}
-                className={`w-full pl-4 h-10 rounded-none border-b bg-none border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                className={`w-full pl-4 h-10 rounded-none border-b bg-transparent border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
                   ${
                     changeOpacity
                       ? "text-neutral-900"

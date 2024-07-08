@@ -90,7 +90,9 @@ export default function LoginScreen() {
   return (
     <section className="md:container md:mx-auto flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:min-w-full">
       <div className="flex flex-col w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-2xl bg-primary-200 mx-8 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
-        <div className="flex flex-col items-center justify-center w-full">
+        <Link
+          href={"/"}
+          className="flex flex-col items-center justify-center w-full">
           <Image
             src={logo}
             alt="Lampung Timur"
@@ -110,7 +112,7 @@ export default function LoginScreen() {
               Kabupaten Lampung Timur
             </h3>
           </div>
-        </div>
+        </Link>
 
         <div className="flex flex-col w-full justify-center mt-[32px] md:mt-[48px]">
           <Form {...form}>

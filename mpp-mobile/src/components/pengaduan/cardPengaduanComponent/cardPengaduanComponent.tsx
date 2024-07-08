@@ -8,14 +8,16 @@ export default function CardPengaduanComponent({
 }: {
   pengaduan: PengaduanType;
 }) {
+  console.log(pengaduan, "ini pengaduan");
+
   return (
-    <div className="bg-primary-100 rounded-2xl shadow-xl px-[16px] py-[29px] mt-[16px]">
+    <div className="bg-primary-100 rounded-2xl shadow-md px-[16px] py-[29px] mt-[16px]">
       <div className="grid grid-rows-3">
         <div className="grid grid-cols-2 w-full h-[40px]">
           <p className="text-[12px] text-primary-800 font-semibold">Layanan</p>
 
           <p className="text-[12px] text-primary-800 font-normal">
-            : Pembuatan KTP dan Kartu Keluarga
+            : {pengaduan.Layanan.name}
           </p>
         </div>
 
@@ -25,14 +27,23 @@ export default function CardPengaduanComponent({
           </p>
 
           <p className="text-[12px] text-primary-800 font-normal">
-            : Nik Tidak Ditemukan
+            : {pengaduan.judul}
           </p>
         </div>
 
         <div className="grid grid-cols-2 w-full h-[40px]">
           <p className="text-[12px] text-primary-800 font-semibold">Status</p>
 
-          <p className="text-[12px] text-primary-800 font-normal">: Terkirim</p>
+          <p className="text-[12px] text-primary-800 font-normal">
+            :{" "}
+            {pengaduan.status === 0
+              ? "Belum diproses"
+              : pengaduan.status === 1
+              ? "Sedang ditindak lanjuti"
+              : pengaduan.status === 2
+              ? "Sudah ditindak lanjuti"
+              : "Selesai"}
+          </p>
         </div>
       </div>
 
@@ -52,7 +63,7 @@ export default function CardPengaduanComponent({
                   </p>
 
                   <p className="text-[16px] text-neutral-900 font-normal">
-                    {pengaduan.instansi_id}
+                    {pengaduan.Instansi.name}
                   </p>
                 </div>
 
@@ -62,7 +73,7 @@ export default function CardPengaduanComponent({
                   </p>
 
                   <p className="text-[16px] text-neutral-900 font-normal">
-                    {pengaduan.layanan_id}
+                    {pengaduan.Layanan.name}
                   </p>
                 </div>
 
@@ -91,12 +102,12 @@ export default function CardPengaduanComponent({
                     Dokumen
                   </p>
 
-                  <div className="md:w-1/2 md:h-1/2">
+                  <div className="w-full h-full md:w-1/2 md:h-1/2">
                     {pengaduan.image && (
                       <Image
-                        className="w-full h-full object-cover rounded-xl"
-                        width={100}
-                        height={100}
+                        className="md:w-full md:h-full object-contain md:object-cover rounded-xl"
+                        width={150}
+                        height={150}
                         src={pengaduan.image}
                         alt={pengaduan.judul}
                       />

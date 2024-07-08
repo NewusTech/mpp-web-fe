@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Raleway } from "next/font/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -23,7 +24,9 @@ import { Label } from "@radix-ui/react-label";
 import RegisterInput from "@/components/others/registerInput/registerInput";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { DesaType, KecamatanType } from "@/types/type";
+import { DesaType, KecamatanType, TermType } from "@/types/type";
+import parse from "html-react-parser";
+import { truncateTitle } from "@/utils/formatTitle";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -56,6 +59,62 @@ export default function RegisterScreen() {
   const debounceSearchKecamatan = useDebounce(searchKecamatan);
   const debounceSearchDesa = useDebounce(searchDesa);
   const [isLoading, setIsLoading] = useState(false);
+  const [term, setTerm] = useState<TermType>();
+  const [isChecked, setIsChecked] = useState(false);
+  const [formValid, setFormValid] = useState(false);
+
+  const validateForm = () => {
+    if (
+      newUser.name &&
+      newUser.nik &&
+      newUser.telepon &&
+      newUser.email &&
+      newUser.password &&
+      selectedKecamatan &&
+      selectedDesa &&
+      newUser.rt &&
+      newUser.rw &&
+      newUser.alamat &&
+      isChecked
+    ) {
+      setFormValid(true);
+    } else {
+      setFormValid(false);
+    }
+  };
+
+  useEffect(() => {
+    validateForm();
+  }, [newUser, selectedKecamatan, selectedDesa, isChecked]);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(event.target.checked);
+  };
+
+  const fetchTerm = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/termcond/get`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+        }
+      );
+
+      const result = await response.json();
+
+      setTerm(result.data);
+    } catch (error) {
+      toast("Gagal Memuat Data!");
+    }
+  };
+
+  useEffect(() => {
+    fetchTerm();
+  }, []);
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
     try {
@@ -154,6 +213,11 @@ export default function RegisterScreen() {
       }));
     }
   }, [selectedDesa]);
+
+  let termText = "";
+  if (term?.desc) {
+    termText = truncateTitle(term?.desc, 75);
+  }
 
   return (
     <section className="flex justify-center md:px-36 items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:h-screen">
@@ -395,7 +459,7 @@ export default function RegisterScreen() {
 
                   <div className="w-full">
                     <Label className="text-[12px] text-primary-800 font-semibold">
-                      ALamat
+                      Alamat
                     </Label>
 
                     <Textarea
@@ -410,11 +474,32 @@ export default function RegisterScreen() {
               </div>
             </div>
 
+            <div className="mt-4 flex flex-row gap-x-2">
+              <Dialog>
+                <DialogTrigger>
+                  <input
+                    type="checkbox"
+                    name="term"
+                    className="w-4 h-4"
+                    onChange={handleCheckboxChange}
+                  />
+                </DialogTrigger>
+                <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-6 justify-center items-center w-10/12 md:w-6/12">
+                  {term?.desc && parse(term.desc)}
+                </DialogContent>
+              </Dialog>
+
+              <div className="text-neutral-900 font-normal text-[12px]">
+                {term?.desc && parse(termText)}
+              </div>
+            </div>
+
             <div className="flex justify-center items-end my-[32px]">
               <Button
                 type="submit"
                 className="md:w-[120px] md:h-[40px] md:text-[14px] md:font-semibold"
-                variant="neutral">
+                variant="neutral"
+                disabled={!formValid || isLoading}>
                 {isLoading ? <Loader className="animate-spin" /> : "Daftar"}
               </Button>
             </div>

@@ -20,6 +20,28 @@ export interface AntrianFormType {
   waktu: string;
 }
 
+export interface AntrianBookingType {
+  id: number;
+  code: string;
+  instansi_id: number;
+  layanan_id: number;
+  userinfo_id: number;
+  status: boolean;
+  qrcode: string;
+  audio: string;
+  tanggal: string;
+  waktu: string;
+  createdAt: string;
+  updatedAt: string;
+  Instansi: {
+    name: string;
+  };
+  Layanan: {
+    name: string;
+    syarat: string;
+  };
+}
+
 export interface ContactType {
   alamat: string;
   email: string;
@@ -93,6 +115,11 @@ export interface JenisLayananType {
   syarat: string;
 }
 
+export interface TermType {
+  id: number;
+  desc: string;
+}
+
 export interface Layanantype {
   id: number;
   name: string;
@@ -100,6 +127,7 @@ export interface Layanantype {
   slug: string;
   jmlLayanan: number;
   active_offline: boolean;
+  status: boolean;
 }
 
 export interface faqType {
@@ -121,6 +149,7 @@ export type Instansi = {
   slug: string;
   jmlLayanan: number;
   active_offline: boolean;
+  status: boolean;
 };
 
 export type MyInstansi = {

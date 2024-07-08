@@ -23,7 +23,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
   }
 
   return (
-    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-xl w-full">
+    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-md w-full">
       <div className="flex flex-col justify-center m-4 gap-2 h-full">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
@@ -59,7 +59,14 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           <h6 className="text-[14px] font-semibold text-primary-800">Status</h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.status}
+            :{" "}
+            {permohonan.status === 0
+              ? "Belum diproses"
+              : permohonan.status === 1
+              ? "Sedang ditindak lanjuti"
+              : permohonan.status === 2
+              ? "Sudah ditindak lanjuti"
+              : "Selesai"}
           </p>
         </div>
       </div>

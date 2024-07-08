@@ -131,7 +131,7 @@ export default function RiwayatPage() {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [antrianPage, setAntrianPage] = useState<number>(1);
   const [permohonanPage, setPermohonanPage] = useState<number>(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 10;
   const token = Cookies.get("Authorization");
 
   useEffect(() => {
@@ -166,6 +166,8 @@ export default function RiwayatPage() {
     itemsPerPage
   );
 
+  console.log(historyAntrianData.length);
+
   return (
     <section className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-3 md:mb-0 pb-32 md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
       <div className="flex self-start md:mb-9">
@@ -174,7 +176,7 @@ export default function RiwayatPage() {
         </h5>
       </div>
 
-      <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:pb-[50px] md:rounded-2xl md:shadow-xl">
+      <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:pb-[50px] md:rounded-2xl md:shadow-md">
         <Tabs
           defaultValue="antrian"
           className="flex flex-col w-full gap-[10px]">

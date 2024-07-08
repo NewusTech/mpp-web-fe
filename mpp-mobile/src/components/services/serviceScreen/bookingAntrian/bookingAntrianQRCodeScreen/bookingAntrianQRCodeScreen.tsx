@@ -2,25 +2,27 @@ import { Button } from "@/components/ui/button";
 import qrcode from "@/../public/assets/png-transparent-qr-code-information-qr-code-android-qrcode-text-rectangle-monochrome-thumbnail.png";
 import Image from "next/legacy/image";
 
-export default function BookingAntrianQRCodeScreen() {
+export default function BookingAntrianQRCodeScreen({ id }: { id: number }) {
+  console.log(id, "ini id");
+
   return (
     <div className="flex items-center w-full justify-center bg-primary-100 md:mt-8 mt-[24px] md:pb-8">
       <div className="flex flex-col w-full mx-[35px] md:mx-[70px] gap-[12px]">
-        <div className="flex flex-col mb-8 md:mb-10 md:mx-[470px]">
-          <div className="flex flex-col gap-2">
-            <h4 className="text-[12px] md:text-[26px] font-bold md:font-semibold">
-              Nama Instansi
-            </h4>
+        <div className="flex flex-col md:justify-center md:items-center md:self-center mb-8 md:mb-10 md:w-6/12">
+          <div className="flex flex-col items-center w-full bg-neutral-50 shadow-md rounded-xl py-6">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <h4 className="text-[16px] md:text-[20px] font-semibold">
+                Nama Instansi
+              </h4>
 
-            <h5 className="text-[16px] md:text-[20px] font-extralight">
-              Jenis Layanan Permohonan
-            </h5>
-          </div>
+              <h5 className="text-[12px] md:text-[16px] font-extralight">
+                Jenis Layanan Permohonan
+              </h5>
+            </div>
 
-          <div className="flex flex-col items-center bg-neutral-50 shadow-lg rounded-xl mt-[32px] pb-6">
-            <div className="flex flex-col mt-[11px] mb-[16px]">
-              <div className="flex flex-col mt-[11px] mb-2">
-                <div className="flex justify-between mb-[8px]">
+            <div className="flex flex-col mt-3 mb-4">
+              <div className="flex flex-col w-full mt-3 mb-2">
+                <div className="flex justify-between mb-2">
                   <p className="text-[10px] md:text-[16px] font-extralight">
                     24/06/2024
                   </p>
@@ -30,17 +32,21 @@ export default function BookingAntrianQRCodeScreen() {
                   </p>
                 </div>
 
-                <Image
-                  src={qrcode}
-                  className="w-[150px] md:w-[175px] h-[135px] md:h-[165px]"
-                  alt="QR CODE"
-                  width={135}
-                  height={128}
-                />
+                <div className="w-full h-full rounded-xl flex items-center justify-center">
+                  <Image
+                    src={qrcode}
+                    className="w-full h-full object-contain rounded-xl"
+                    alt="QR CODE"
+                    width={200}
+                    height={200}
+                  />
+                </div>
               </div>
 
               <div className="flex flex-col justify-center items-center">
-                <h5 className="text-[14px] md:text-[20px] font-bold">A101</h5>
+                <h5 className="text-[14px] md:text-[20px] font-semibold">
+                  A101
+                </h5>
 
                 <h5 className="text-[14px] md:text-[20px] font-normal">
                   Dinas Kesehatan
@@ -56,7 +62,7 @@ export default function BookingAntrianQRCodeScreen() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-[16px] mx-12 pb-8">
+        <div className="flex flex-col gap-[16px] md:mx-12 pb-8">
           <h5 className="text-[14px] md:text-[20px] font-semibold">
             Persyaratan yang harus dibawa
           </h5>
