@@ -108,9 +108,9 @@ export default function SurveySKMPage() {
   };
 
   return (
-    <section className="flex items-center justify-center md:w-full bg-primary-100 mt-6 md:mt-0 md:pt-6 mx-5 mb-6 md:mb-0 md:pb-[150px]">
+    <section className="flex items-center justify-center md:w-full bg-primary-100 mt-6 md:mt-0 md:pt-6 mb-6 pb-32 md:mb-0 md:pb-[150px]">
       <div className="flex flex-col md:w-full items-center md:mx-[230px]">
-        <div className="flex flex-col md:w-full bg-neutral-50 rounded-2xl shadow-lg px-4">
+        <div className="flex flex-col w-10/12 md:w-full bg-neutral-50 rounded-2xl shadow-lg px-4">
           <div className="flex justify-center my-[22px] mb-4">
             <h6 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
               Survey Kepuasan Masyarakat
@@ -172,7 +172,7 @@ export default function SurveySKMPage() {
                   })}
                 </div>
 
-                <div className="w-full px-5 mt-5">
+                <div className="w-full md:px-5 mt-5">
                   <Label className="text-[12px] font-normal text-primary-800">
                     Kritik dan Saran
                   </Label>
@@ -184,7 +184,7 @@ export default function SurveySKMPage() {
                       setKritissaran(e.target.value)
                     }
                     placeholder="Masukkan Kritik dan Saran"
-                    className="mt-5 h-[150px] border border-neutral-700 placeholder:opacity-35"
+                    className="mt-5 w-full h-[150px] border border-neutral-700 placeholder:opacity-35"
                   />
                 </div>
 

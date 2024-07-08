@@ -10,7 +10,7 @@ export default function AboutScreen({
       <div className="flex flex-col justify-center bg-primary-200 py-5 md:py-8 rounded-xl">
         <div className="grid grid-cols-2 md:grid-cols-4 mx-4 gap-1 md:gap-x-5">
           <div className="flex w-full">
-            <div className="grid grid-rows-2 place-items-center items-center p-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-lg md:w-full md:h-[215px]">
+            <div className="grid grid-rows-2 place-items-center items-center p-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-primary-700 self-end font-semibold md:text-[26px]">
                 {infoLanding.instansiCount}
               </h5>
@@ -22,7 +22,7 @@ export default function AboutScreen({
           </div>
 
           <div className="flex w-full">
-            <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-lg md:w-full md:h-[215px]">
+            <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-secondary-700 self-end font-semibold md:text-[26px]">
                 {infoLanding.layananCount}
               </h5>
@@ -34,7 +34,7 @@ export default function AboutScreen({
           </div>
 
           <div className="flex w-full">
-            <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-lg md:w-full md:h-[215px]">
+            <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-primary-700 self-end font-semibold md:text-[26px]">
                 18
               </h5>
@@ -46,7 +46,7 @@ export default function AboutScreen({
           </div>
 
           <div className="flex w-full">
-            <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-lg md:w-full md:h-[215px]">
+            <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-secondary-700 self-end font-semibold md:text-[26px]">
                 {infoLanding.permohonanCountToday}
               </h5>

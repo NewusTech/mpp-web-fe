@@ -43,7 +43,7 @@ export default function AuthLayout({
             {children}
           </div>
           <Toaster position="top-center" />
-          <div className="bottom-0 fixed w-full bg-primary-100 shadow-xl">
+          <div className="bottom-0 fixed w-full bg-primary-100 shadow-md">
             <HamburgerMenu />
           </div>
         </Provider>

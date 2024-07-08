@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AntrianFormType } from "@/types/type";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -78,7 +79,9 @@ export default function BookingAntrianPage({
           waktu: "",
         });
         setChangeOpacity(false);
-        // router.push(`/instansi/booking-antrian/booking-result`);
+        router.push(
+          `/instansi/booking-antrian/booking-result/${result.data.id}`
+        );
       } else {
         toast("Gagal booking antrian!");
       }
@@ -127,7 +130,7 @@ export default function BookingAntrianPage({
             </h5>
           </div>
 
-          <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-white rounded-2xl shadow-lg">
+          <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-white rounded-2xl shadow-md">
             <form
               onSubmit={handleSubmit}
               className="flex flex-col w-full md:px-[105px]">
@@ -165,7 +168,7 @@ export default function BookingAntrianPage({
                 <input
                   type="date"
                   name="tanggal"
-                  className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                  className={`w-full pl-4 h-[40px] rounded-none bg-transparent border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
                   ${
                     changeOpacity
                       ? "text-neutral-900"
@@ -185,7 +188,7 @@ export default function BookingAntrianPage({
                 <input
                   type="time"
                   name="waktu"
-                  className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                  className={`w-full pl-4 h-[40px] bg-transparent rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
                   ${
                     changeOpacity
                       ? "text-neutral-900"
@@ -201,18 +204,58 @@ export default function BookingAntrianPage({
                 />
               </div>
 
-              <div className="flex md:self-center mb-[32px] gap-3 md:gap-5 md:pb-8 mt-[16px]">
-                <Link
-                  href="/instansi/booking-antrian/booking-result"
-                  className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-[90px] md:w-full h-[30px] md:h-[40px] bg-secondary-700 hover:bg-secondary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]"
-                  type="submit">
-                  Cek Antrian
-                </Link>
+              <div className="flex md:self-center md:justify-center md:items-center w-full mb-8 gap-3 md:pb-8 mt-4">
+                <Dialog>
+                  <DialogTrigger asChild className="w-full md:w-4/12">
+                    <div className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-full h-[30px] md:h-[40px] bg-secondary-700 hover:bg-secondary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
+                      Cek Antrian
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col justify-center items-center bg-neutral-200 rounded-xl w-10/12 md:w-6/12 p-4 md:p-8">
+                    <div className="flex flex-col w-full">
+                      <h2 className="text-[26px] font-semibold text-primary-800">
+                        Nama Instansi
+                      </h2>
+
+                      <div className="grid grid-cols-3 w-full items-center justify-center gap-2 mt-6">
+                        <div className="grid grid-rows-2 min-h-[120px] place-items-center bg-primary-700 rounded-xl p-2">
+                          <h4 className="text-neutral-50 text-center text-[16px] md:text-[20px] font-semibold">
+                            Total Antrian
+                          </h4>
+
+                          <p className="text-neutral-50 font-normal text-[24px]">
+                            20
+                          </p>
+                        </div>
+
+                        <div className="grid grid-rows-2 min-h-[120px] place-items-center bg-primary-700 rounded-xl p-2">
+                          <h4 className="text-neutral-50 text-center text-[16px] md:text-[20px] font-semibold">
+                            Antrian Ke-
+                          </h4>
+
+                          <p className="text-neutral-50 font-normal text-[24px]">
+                            20
+                          </p>
+                        </div>
+
+                        <div className="grid grid-rows-2 min-h-[120px] place-items-center bg-primary-700 rounded-xl p-2">
+                          <h4 className="text-neutral-50 text-center text-[16px] md:text-[20px] font-semibold">
+                            Selesai
+                          </h4>
+
+                          <p className="text-neutral-50 font-normal text-[24px]">
+                            20
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
 
                 <Button
                   type="submit"
                   disabled={isButtonDisabled()}
-                  className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-[90px] md:w-full h-[30px] md:h-[40px] bg-primary-700 hover:bg-primary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
+                  className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-full md:w-4/12 h-[30px] md:h-[40px] bg-primary-700 hover:bg-primary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
                   Pilih
                 </Button>
               </div>

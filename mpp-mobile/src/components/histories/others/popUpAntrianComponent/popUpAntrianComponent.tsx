@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import qrcode from "@/../public/assets/png-transparent-qr-code-information-qr-code-android-qrcode-text-rectangle-monochrome-thumbnail.png";
 import Image from "next/legacy/image";
 import { AntrianDataType } from "@/types/type";
 
@@ -9,7 +8,7 @@ export default function PopUpAntrianComponent({
   antrian: AntrianDataType;
 }) {
   return (
-    <div className="flex flex-col justify-center items-center px-10 py-4 w-full h-4/6 bg-neutral-50 shadow-lg rounded-xl mt-2 gap-4">
+    <div className="flex flex-col justify-center items-center px-10 py-4 w-full h-4/6 bg-neutral-50 shadow-md rounded-xl mt-2 gap-4">
       <div className="flex flex-col justify-center items-center mt-[18px] gap-2">
         <div className="flex justify-between w-full h-full">
           <p className="text-[14px] font-extralight">{antrian.tanggal}</p>

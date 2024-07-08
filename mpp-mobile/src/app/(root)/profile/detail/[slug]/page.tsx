@@ -494,7 +494,7 @@ export default function ProfileEditPage({
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-lg px-[15px] md:px-[75px] pt-4 md:pt-[8]">
+        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">
           <h3 className="text-primary-800 font-semibold text-[20px]">
             Data Diri
           </h3>

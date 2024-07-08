@@ -7,8 +7,8 @@ export default function CardHistoryAntrian({
   antrian: AntrianDataType;
 }) {
   return (
-    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-xl w-full mb-4">
-      <div className="flex flex-col justify-center m-4 gap-2 h-full">
+    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-lg w-full mb-4">
+      <div className="flex flex-col justify-center m-4 gap-2 w-full h-full pl-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
             Nomor Antrian

@@ -181,7 +181,7 @@ export default function StatisticsPage() {
     <div className="flex items-center md:w-full justify-center pt-6 bg-primary-100 pb-32 md:pb-[120px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
       <div className="flex flex-col md:w-full gap-[10px] md:mx-[70px]">
         <div className="flex flex-col items-center md:flex-none md:grid md:grid-cols-2 md:w-full gap-4">
-          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-xl rounded-2xl relative">
+          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-md rounded-2xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
               <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Antrian Online
@@ -209,7 +209,7 @@ export default function StatisticsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-xl rounded-2xl relative">
+          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-md rounded-2xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
               <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Permohonan Layanan

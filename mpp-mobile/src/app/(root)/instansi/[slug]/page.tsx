@@ -8,8 +8,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import loginDong from "@/../../public/assets/undraw_back_home_nl-5-c.svg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import { LogIn } from "lucide-react";
+import wrapText from "@/utils/formatText";
+import parse from "html-react-parser";
 
 interface detailType {
   id?: number;
@@ -25,6 +38,8 @@ interface detailType {
   nip_pj?: string;
   jmlLayanan?: number;
   Layanans?: LayanansType[];
+  status: boolean;
+  slug: string;
 }
 
 interface LayanansType {
@@ -34,14 +49,6 @@ interface LayanansType {
   syarat?: string;
 }
 
-function splitByNumberedItems(text: string) {
-  let splitText = [""];
-  if (text) {
-    splitText = text.split(/(?=\d+\.\s)/).map((item: string) => item.trim());
-    return splitText;
-  }
-}
-
 export default function InstansiDetail({
   params,
 }: {
@@ -49,6 +56,8 @@ export default function InstansiDetail({
 }) {
   const [detailins, setDetailIns] = useState<detailType>();
   const [activeTab, setActiveTab] = useState("Persyaratan");
+  // const token = Cookies.get("Authorization");
+  const [token, setToken] = useState<string | undefined>(undefined);
 
   const fetchDetail = async (slug: string) => {
     const response = await fetch(
@@ -69,48 +78,55 @@ export default function InstansiDetail({
 
   useEffect(() => {
     fetchDetail(params.slug);
+    setToken(Cookies.get("Authorization"));
   }, [params.slug]);
+
+  const email = wrapText(detailins?.email || "", 15);
+
+  console.log(detailins, "ini detail");
 
   return (
     <div className="bg-primary-100 md:h-full pb-32">
-      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-xl mx-[35px] md:mx-[70px] md:px-[70px] my-[24px] md:mt-[36px] md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-[36px]">
+      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-8 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
         <div className="md:flex md:flex-row md:w-full">
-          <div className="flex flex-col items-center w-full md:w-10/12 min-h-[500px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-2xl rounded-2xl">
-            <div className="flex items-center justify-center w-full">
-              <Image
-                src={detailins?.image || ""}
-                className="w-full h-full object-contain"
-                alt="Lampung Timur"
-                width={108}
-                height={144}
-              />
-            </div>
+          <div className="flex flex-col items-center w-full md:w-10/12 min-h-[400px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-2xl rounded-2xl">
+            {detailins?.image && (
+              <div className="flex items-center justify-center w-full">
+                <Image
+                  src={detailins?.image}
+                  className="w-full h-full object-contain"
+                  alt={detailins?.name || ""}
+                  width={230}
+                  height={230}
+                />
+              </div>
+            )}
 
-            <div className="grid grid-rows-1 w-full mt-8 place-items-center mb-[40px] px-3">
-              <h6 className="text-[16px] text-center text-neutral-50 font-normal">
+            <div className="grid grid-rows-1 w-full mt-8 place-items-center mb-10 px-3">
+              <h6 className="text-[20px] text-center text-neutral-50 font-normal">
                 {detailins?.name}
               </h6>
             </div>
           </div>
 
-          <div className="grid grid-rows-6 mt-[32px] md:ml-[70px]">
-            <div className="grid grid-cols-2 items-center mb-[15px]">
+          <div className="grid grid-rows-6 mt-8 md:ml-[70px]">
+            <div className="grid grid-cols-2 items-center mb-4">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Alamat
               </h6>
 
-              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-[8px]">
-                {detailins?.alamat}
+              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
+                {detailins?.alamat || "-"}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-[15px]">
+            <div className="grid grid-cols-2 items-center mb-4">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Kontak
               </h6>
 
-              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-[8px]">
-                {detailins?.telp}
+              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
+                {detailins?.telp || "-"}
               </p>
             </div>
 
@@ -119,54 +135,143 @@ export default function InstansiDetail({
                 Email
               </h6>
 
-              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-[8px]">
-                {detailins?.email}
+              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
+                {email || "-"}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-[15px]">
+            <div className="grid grid-cols-2 items-center mb-4">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Jam Operasional
               </h6>
 
-              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-[8px]">
+              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
                 {detailins?.jam_buka} - {detailins?.jam_tutup}
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-[15px]">
+            <div className="grid grid-cols-2 items-center mb-4">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Jumlah Layanan
               </h6>
 
-              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-[8px]">
-                {detailins?.jmlLayanan}
+              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
+                {detailins?.jmlLayanan || "-"}
               </p>
             </div>
 
             <div className="flex flex-row md:justify-between w-full items-center gap-x-4 self-center">
-              <Button
-                variant="secondary"
-                className="bg-secondary-700 px-5 hover:bg-secondary-600 text-neutral-50 w-6/12">
-                <Link
-                  href={`/instansi/booking-antrian/${detailins?.id}`}
-                  className="w-full flex justify-center items-center">
-                  Booking Antrian
-                </Link>
-              </Button>
+              {!token ? (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div className="bg-secondary-700 text-[12px] md:text-[16px] px-5 flex items-center justify-center hover:bg-secondary-600 text-neutral-50 w-full h-[40px] rounded-full">
+                      booking Antrian
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center p-6">
+                    <DialogHeader>
+                      <div className="bg-neutral-50 w-full">
+                        <Image
+                          src={loginDong}
+                          alt="Login Dong"
+                          width={200}
+                          height={200}
+                        />
 
-              <Button variant="success" className="w-6/12 text-neutral-50 px-5">
-                <Link
-                  href={`/instansi/permohonan-layanan/${detailins?.id}`}
-                  className="w-full flex justify-center items-center">
-                  Permohonan Layanan
-                </Link>
-              </Button>
+                        <p className="text-[14px] text-neutral-900 font-semibold mt-2">
+                          Maaf, Anda tidak mempunyai akses!
+                        </p>
+                      </div>
+                    </DialogHeader>
+                    <DialogFooter className="w-full">
+                      <div className="flex flex-row w-full gap-2 items-center justify-center mt-4">
+                        <LogIn className="text-primary-800 w-[15px] h-[15px]" />
+
+                        <Link href={"/login"} className="text-primary-800">
+                          Login
+                        </Link>
+                      </div>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <>
+                  {detailins?.status === true ? (
+                    <Button className="w-full flex justify-center font-normal items-center rounded-full bg-secondary-700 hover:bg-secondary-600 text-neutral-50 p-3">
+                      <Link href={`/instansi/booking-antrian/${detailins?.id}`}>
+                        Booking Antrian
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled
+                      className="w-full flex justify-center font-normal items-center rounded-full bg-secondary-700 hover:bg-secondary-600 text-neutral-50 p-3">
+                      <Link href={`/instansi/${detailins?.slug}`}>
+                        Booking Antrian
+                      </Link>
+                    </Button>
+                  )}
+                </>
+              )}
+
+              {!token ? (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <div className="bg-primary-700 px-5 text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
+                      Permohonan Layanan
+                    </div>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center p-6">
+                    <DialogHeader>
+                      <div className="bg-neutral-50 w-full">
+                        <Image
+                          src={loginDong}
+                          alt="Login Dong"
+                          width={200}
+                          height={200}
+                        />
+
+                        <p className="text-[14px] text-neutral-900 font-semibold mt-2">
+                          Maaf, Anda tidak mempunyai akses!
+                        </p>
+                      </div>
+                    </DialogHeader>
+                    <DialogFooter className="w-full">
+                      <div className="flex flex-row w-full gap-2 items-center justify-center mt-4">
+                        <LogIn className="text-primary-800 w-[15px] h-[15px]" />
+
+                        <Link href={"/login"} className="text-primary-800">
+                          Login
+                        </Link>
+                      </div>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              ) : (
+                <>
+                  {detailins?.status === true ? (
+                    <Button className="w-full flex justify-center items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
+                      <Link
+                        href={`/instansi/permohonan-layanan/${detailins?.id}`}>
+                        Permohonan Layanan
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled
+                      className="w-full flex justify-center items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
+                      <Link href={`/instansi/${detailins?.slug}`}>
+                        Permohonan Layanan
+                      </Link>
+                    </Button>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col mt-[32px] w-full">
+        <div className="flex flex-col mt-8 w-full">
           <h6 className="text-[14px] md:text-[20px] text-primary-800 font-semibold">
             Informasi Instansi
           </h6>
@@ -177,7 +282,7 @@ export default function InstansiDetail({
         </div>
       </div>
 
-      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-xl mx-[35px] md:mx-[70px] md:px-[70px] my-[24px] md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-[36px]">
+      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
         <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold mb-8">
           Informasi Layanan
         </h5>
@@ -233,7 +338,7 @@ export default function InstansiDetail({
 
                           <ul>
                             <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
-                              {item.syarat}
+                              {item.syarat && parse(item?.syarat)}
                             </li>
                           </ul>
                         </div>
@@ -247,7 +352,7 @@ export default function InstansiDetail({
 
                           <ul>
                             <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
-                              {item.dasarhukum}
+                              {item.dasarhukum && parse(item?.dasarhukum)}
                             </li>
                           </ul>
                         </div>
@@ -261,7 +366,7 @@ export default function InstansiDetail({
 
                           <ul>
                             <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
-                              {item.desc}
+                              {item.desc && parse(item?.desc)}
                             </li>
                           </ul>
                         </div>

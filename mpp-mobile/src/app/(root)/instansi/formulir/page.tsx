@@ -136,10 +136,8 @@ export default function FormulirPage() {
     });
   };
 
-  console.log(form?.Layananforms, "ini layanan");
-
   return (
-    <div className="bg-primary-100 pt-2 md:mt-[48px] md:mb-0 md:pb-[150px]">
+    <div className="bg-primary-100 pt-2 md:mt-[48px] md:mb-0 pb-32 md:pb-[150px]">
       <div className="flex items-center justify-center bg-primary-100 mt-[14px] md:mt-[48px] mx-[35px] md:mx-[250px] mb-[35px] md:mb-0 md:pb-[80px]">
         <div className="flex flex-col w-full gap-[16px]">
           <div className="flex flex-col md:flex-row md:justify-between gap-[24px] md:gap-0">
@@ -167,7 +165,7 @@ export default function FormulirPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg mt-[20px]">
+          <div className="flex flex-col w-full bg-white rounded-2xl shadow-md mt-[20px]">
             <div className="flex flex-col md:w-full mt-[22px] px-[21px] md:px-[75px] md:py-[32px]">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Formulir

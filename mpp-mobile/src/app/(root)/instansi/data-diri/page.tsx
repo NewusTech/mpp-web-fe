@@ -343,7 +343,7 @@ export default function DataDiriPage() {
   };
 
   return (
-    <div className="bg-primary-100 md:mt-6 md:mb-0 md:pb-12">
+    <div className="bg-primary-100 md:mt-6 md:mb-0 pb-32 md:pb-12">
       <div className="flex items-center justify-center bg-primary-100 mx-7 md:mx-[150px] mt-6 mb-7 md:mb-0 md:pb-7">
         <div className="flex flex-col w-full items-center gap-4 md:mb-8">
           <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start w-full gap-6 md:mb-6">
@@ -371,13 +371,13 @@ export default function DataDiriPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full border border-neutral-700 bg-white pb-6 md:pb-0 rounded-2xl shadow-lg">
+          <div className="flex flex-col w-full border border-neutral-700 bg-white pb-6 md:pb-0 rounded-2xl shadow-md">
             <div className="flex flex-col mt-5 px-5 md:px-20">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Data Diri
               </h5>
 
-              <div className="flex flex-col w-full bg-white rounded-2xl shadow-lg px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
+              <div className="flex flex-col w-full bg-white rounded-2xl shadow-md px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
                 <form onSubmit={onSubmit} className="flex flex-col w-full">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">

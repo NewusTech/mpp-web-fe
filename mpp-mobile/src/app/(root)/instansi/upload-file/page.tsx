@@ -75,8 +75,6 @@ export default function UploadFilePage() {
     }
   }, [instansiId]);
 
-  console.log(dataFile, "ini data file");
-
   const handleDocChange = (id: string, file: File | null) => {
     setDocValues((prevValues) => ({
       ...prevValues,
@@ -176,7 +174,7 @@ export default function UploadFilePage() {
   }
 
   return (
-    <div className="flex justify-center bg-primary-100 mt-6 mx-6 md:mx-[250px] md:mb-0 md:pb-[362px]">
+    <div className="flex justify-center bg-primary-100 mt-6 mx-6 md:mx-[250px] md:mb-0 pb-32 md:pb-[362px]">
       <div className="flex flex-col md:w-full items-center gap-[12px]">
         <div className="flex flex-col w-full md:justify-between md:flex-row mb-[16px]">
           <div className="flex flex-row justify-between md:justify-center items-center">
@@ -253,7 +251,7 @@ export default function UploadFilePage() {
                         </DialogTrigger>
                         <DialogContent className="flex flex-col justify-between w-full bg-neutral-50">
                           <div className="fixed inset-0 flex items-center justify-center bg-neutral-900 bg-opacity-50 z-50">
-                            <div className="bg-primary-100 rounded-xl shadow-lg max-w-full">
+                            <div className="bg-primary-100 rounded-xl shadow-md max-w-full">
                               {previewFile?.type.startsWith("image/") ? (
                                 <div className="w-full h-full p-4 rounded-xl">
                                   <Image

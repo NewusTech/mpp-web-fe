@@ -4,7 +4,7 @@ import { AppType } from "@/types/type";
 
 export default function CardAplikasiPendukung({ app }: { app: AppType }) {
   return (
-    <div className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-3 place-items-center p-4 gap-x-4 rounded-xl shadow-xl">
+    <div className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-3 place-items-center p-4 gap-x-4 rounded-xl shadow-md">
       <div className="max-w-max md:h-full flex items-center justify-center rounded-full bg-primary-700 p-2">
         <Image
           src={app.image}

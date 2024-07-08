@@ -47,7 +47,7 @@ export default function MppPage() {
               VISI
             </h4>
 
-            <div className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
+            <div className="text-[14px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
               {parse(visimisi.visi)}
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function MppPage() {
               MISI
             </h4>
 
-            <p className="text-[10px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
+            <p className="text-[14px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
               {parse(visimisi.misi)}
             </p>
           </div>
@@ -70,7 +70,7 @@ export default function MppPage() {
 
           {/* <div className="flex flex-col w-full mt-4 md:px-12 gap-y-6"> */}
           <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-6 md:gap-x-6">
-            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-xl rounded-2xl gap-8 md:pb-5">
+            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-md rounded-2xl gap-8 md:pb-5">
               <div className="flex justify-center pt-4">
                 <h4 className="text-[16px] md:text-[26px] text-secondary-700 font-semibold">
                   Booking Antrian
@@ -93,7 +93,7 @@ export default function MppPage() {
               </div>
             </div>
 
-            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-xl rounded-2xl gap-8 mt-4 md:mt-0">
+            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-md rounded-2xl gap-8 mt-4 md:mt-0">
               <div className="flex justify-center pt-4">
                 <h4 className="text-[16px] md:text-[26px] text-primary-700 font-semibold">
                   Permohonan Layanan

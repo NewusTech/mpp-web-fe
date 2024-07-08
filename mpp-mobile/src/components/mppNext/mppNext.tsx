@@ -59,7 +59,7 @@ export default function MppNext({
             </h4>
           </div>
 
-          <div className="p-4 md:h-full">
+          <div className="p-4 w-full md:h-full">
             {alur && (
               <Image
                 src={alur?.image}
@@ -80,10 +80,10 @@ export default function MppNext({
               Pemohonan Layanan & Antrian Online
             </h3>
 
-            <div className="w-full h-full">
+            <div className="w-6/12 h-full flex justify-center items-center self-center">
               <Image
                 src={image}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
                 alt="permohonan & antrian"
               />
             </div>
@@ -108,7 +108,7 @@ export default function MppNext({
 
               <Button
                 variant="secondary"
-                className="bg-secondary-700 px-5 hover:bg-secondary-600 text-neutral-50 w-8/12">
+                className="bg-secondary-700 hover:bg-secondary-600 text-neutral-50 w-10/12 px-5">
                 <Link
                   href={"/instansi"}
                   className="w-full flex justify-center items-center gap-x-4">
@@ -125,10 +125,10 @@ export default function MppNext({
               Pengaduan
             </h3>
 
-            <div className="w-full h-full">
+            <div className="w-6/12 h-full flex items-center justify-center self-center">
               <Image
                 src={image}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
                 alt="permohonan & antrian"
               />
             </div>
@@ -168,7 +168,7 @@ export default function MppNext({
                       {facility.title}
                     </AccordionTrigger>
                     <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
-                      <div className="w-full md:h-4/5">
+                      <div className="w-full md:h-4/5 flex justify-center items-center">
                         <Image
                           src={facility.image}
                           className="w-full h-full object-cover rounded-xl"
@@ -187,7 +187,7 @@ export default function MppNext({
           <div className="flex self-end h-full">
             <Link
               href={"/mpp/fasilitas"}
-              className="self-end border-b text-[16px] text-primary-800">
+              className="self-end border-b text-[12px] md:text-[16px] text-primary-800">
               Lihat Selengkapnya...
             </Link>
           </div>
@@ -195,7 +195,7 @@ export default function MppNext({
       </div>
 
       <div className="flex flex-col bg-primary-200 rounded-xl p-6 md:p-8">
-        <h3 className="text-[26px] text-center md:text-start md:text-[26px] mb-5 text-primary-800 font-semibold">
+        <h3 className="text-[20px] text-center md:text-start md:text-[26px] mb-5 text-primary-800 font-semibold">
           Aplikasi Pendukung Mal Pelayanan Publik
         </h3>
 

@@ -134,8 +134,8 @@ function Home() {
 
             <Link
               href="/instansi"
-              className="flex justify-center items-center rounded-[50px] w-5/12 md:w-3/12 h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
-              <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
+              className="flex justify-center items-center rounded-[50px] w-5/12 md:w-3/12 h-[40px] bg-neutral-50 group hover:bg-primary-700 shadow-md border border-neutral-500 mt-[16px]">
+              <p className="text-center text-[12px] text-primary-700 group-hover:text-neutral-50 font-light">
                 Lihat Semua Instansi
               </p>
             </Link>
@@ -150,12 +150,12 @@ function Home() {
         />
 
         <div className="flex flex-col bg-primary-200 items-center mt-5 mx-5 md:mx-8 py-5 rounded-xl md:p-8">
-          <h3 className="text-primary-800 text-[26px] md:text-[26px] font-semibold mb-[16px] md:mb-[36px]">
+          <h3 className="text-primary-800 text-[20px] md:text-[26px] font-semibold mb-4 md:mb-9">
             Berita
           </h3>
 
           <div className="hidden md:block md:w-full md:flex-col">
-            <div className="md:flex md:flex-rows md:w-full md:gap-[32px]">
+            <div className="md:flex md:flex-rows md:w-full md:gap-8">
               {slug && (
                 <Link href={`/berita/${slug}`} className="md:w-6/12 md:h-full">
                   {image && (
@@ -209,8 +209,8 @@ function Home() {
             <div className="w-5/12 md:w-3/12 flex justify-center">
               <Link
                 href="/berita"
-                className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-full h-[40px] bg-neutral-50 hover:bg-primary-700 shadow-lg border border-neutral-500 mt-[16px]">
-                <p className="text-center text-[12px] text-primary-700 hover:text-neutral-50 font-light">
+                className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-full h-[40px] bg-neutral-50 group hover:bg-primary-700 shadow-md border border-neutral-500 mt-[16px]">
+                <p className="text-center text-[12px] text-primary-700 group-hover:text-neutral-50 font-light">
                   Lihat Semua Berita
                 </p>
               </Link>

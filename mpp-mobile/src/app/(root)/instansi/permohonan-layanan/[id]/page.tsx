@@ -115,7 +115,7 @@ export default function PermohonanLayananFirstScreen({
 
   return (
     <div className="flex flex-col items-center justify-center mt-6 md:mt-4 mx-6 md:mx-[70px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
-      <div className="flex flex-col w-full items-center bg-neutral-50 rounded-xl shadow-lg py-4 md:py-9 md:px-16 gap-[16px]">
+      <div className="flex flex-col w-full items-center bg-neutral-50 rounded-xl shadow-md py-4 md:py-9 md:px-16 gap-[16px]">
         <div className="flex flex-col md:w-full">
           <div className="flex flex-col md:flex-row md:justify-between w-[300px] md:w-full h-[50px] md:h-6 gap-[24px]">
             <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">

@@ -495,11 +495,22 @@ export default function PengaduanScreen() {
             {!isWideScreen ? (
               <>
                 {pengaduanlists &&
-                  pengaduanlists.map((pengaduan: PengaduanType, i: number) => {
-                    return (
-                      <CardPengaduanComponent key={i} pengaduan={pengaduan} />
-                    );
-                  })}
+                  pengaduanPaginate?.map(
+                    (pengaduan: PengaduanType, i: number) => {
+                      return (
+                        <CardPengaduanComponent key={i} pengaduan={pengaduan} />
+                      );
+                    }
+                  )}
+
+                <div className="md:flex md:justify-end">
+                  <PaginationComponent
+                    totalItems={pengaduanlists?.length || 0}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={pengaduanPage}
+                    onPageChange={setPengaduanPage}
+                  />
+                </div>
               </>
             ) : (
               <>

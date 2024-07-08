@@ -10,10 +10,23 @@ import Link from "next/link";
 import { ProfileNewType } from "@/types/type";
 import { Label } from "@radix-ui/react-label";
 import Image from "next/image";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 export default function ProfilePage() {
   const token = Cookies.get("Authorization");
   const [profile, setProfile] = useState<ProfileNewType>();
+  const [modalImage, setModalImage] = useState<string>();
+
+  const handleImageClick = (image: string) => {
+    setModalImage(image);
+  };
 
   const fetchProfiles = async () => {
     try {
@@ -107,7 +120,7 @@ export default function ProfilePage() {
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-lg md:px-[75px] md:pt-8">
+        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md md:px-[75px] md:pt-8">
           <div className="flex flex-col px-4 pt-4">
             <div className="md:grid md:grid-rows-7 gap-2">
               <h3 className="text-primary-800 font-semibold text-[20px]">
@@ -268,14 +281,36 @@ export default function ProfilePage() {
                     </Label>
 
                     {profile?.filektp && (
-                      <div className="w-6/12 h-full">
-                        <Image
-                          src={profile.filektp}
-                          className="w-full h-full object-cover rounded-xl"
-                          alt="KTP"
-                          width={100}
-                          height={100}
-                        />
+                      <div className="w-full h-full cursor-pointer">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <div
+                              onClick={() =>
+                                handleImageClick(profile?.filektp || "")
+                              }>
+                              <Image
+                                src={profile.filektp}
+                                className="w-6/12 h-full object-cover rounded-xl"
+                                alt="KTP"
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <div className="min-w-[400px] md:min-w-[800px]">
+                              <Image
+                                src={modalImage || ""}
+                                className="w-full h-full object-cover rounded-xl"
+                                alt="Preview"
+                                width={500}
+                                height={500}
+                              />
+                            </div>
+
+                            <DialogClose />
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     )}
                   </div>
@@ -286,14 +321,36 @@ export default function ProfilePage() {
                     </Label>
 
                     {profile?.filekk && (
-                      <div className="w-6/12 h-full">
-                        <Image
-                          src={profile.filekk}
-                          className="w-full h-full object-cover rounded-xl"
-                          alt="KK"
-                          width={100}
-                          height={100}
-                        />
+                      <div className="w-full h-full cursor-pointer">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <div
+                              onClick={() =>
+                                handleImageClick(profile?.filekk || "")
+                              }>
+                              <Image
+                                src={profile.filekk}
+                                className="w-6/12 h-full object-cover rounded-xl"
+                                alt="KK"
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <div className="min-w-[400px] md:min-w-[800px]">
+                              <Image
+                                src={modalImage || ""}
+                                className="w-full h-full object-cover rounded-xl"
+                                alt="Preview"
+                                width={500}
+                                height={500}
+                              />
+                            </div>
+
+                            <DialogClose />
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     )}
                   </div>
@@ -304,14 +361,36 @@ export default function ProfilePage() {
                     </Label>
 
                     {profile?.fileijazahsd && (
-                      <div className="w-6/12 h-full">
-                        <Image
-                          src={profile.fileijazahsd}
-                          className="w-full h-full object-cover rounded-xl"
-                          alt="Ijazah"
-                          width={100}
-                          height={100}
-                        />
+                      <div className="w-full h-full cursor-pointer">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <div
+                              onClick={() =>
+                                handleImageClick(profile?.fileijazahsd || "")
+                              }>
+                              <Image
+                                src={profile.fileijazahsd}
+                                className="w-6/12 h-full object-cover rounded-xl"
+                                alt="Ijazah Terakhir"
+                                width={100}
+                                height={100}
+                              />
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <div className="min-w-[400px] md:min-w-[800px]">
+                              <Image
+                                src={modalImage || ""}
+                                className="w-full h-full object-cover rounded-xl"
+                                alt="Preview"
+                                width={500}
+                                height={500}
+                              />
+                            </div>
+
+                            <DialogClose />
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     )}
                   </div>

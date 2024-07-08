@@ -97,11 +97,26 @@ export default function NavbarScreen() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="flex flex-row gap-x-5 justify-center items-center group">
-                  <h3 className="text-center text-[20px] text-primary-800 group-hover:text-secondary-700">
+                  <h3
+                    className={`text-center text-[20px] ${
+                      pathName === "/mpp/tentang-mpp" ||
+                      pathName === "/mpp/fasilitas" ||
+                      pathName === "/mpp/aplikasi-pendukung"
+                        ? "text-secondary-700 group-hover:text-primary-800"
+                        : "text-primary-800 group-hover:text-secondary-700"
+                    }`}>
                     MPP
                   </h3>
 
-                  <ChevronDown className="w-[24px] h-[24px] text-primary-800 group-hover:text-secondary-700" />
+                  <ChevronDown
+                    className={`w-[24px] h-[24px] ${
+                      pathName === "/mpp/tentang-mpp" ||
+                      pathName === "/mpp/fasilitas" ||
+                      pathName === "/mpp/aplikasi-pendukung"
+                        ? "text-secondary-700 group-hover:text-primary-800"
+                        : "text-primary-800 group-hover:text-secondary-700"
+                    }`}
+                  />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -112,13 +127,13 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${
                         pathName === `/mpp/tentang-mpp`
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
-                      } text-[16px] group-hover:text-secondary-700`}>
+                      } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Tentang MPP
                     </p>
                   </DropdownMenuItem>
@@ -131,13 +146,13 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${
                         pathName === "/mpp/fasilitas"
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
-                      } text-[16px] group-hover:text-secondary-700`}>
+                      } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Fasilitas
                     </p>
                   </DropdownMenuItem>
@@ -150,13 +165,13 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${
                         pathName === "/mpp/aplikasi-pendukung"
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
-                      } text-[16px] group-hover:text-secondary-700`}>
+                      } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Aplikasi Pendukung
                     </p>
                   </DropdownMenuItem>
@@ -211,9 +226,27 @@ export default function NavbarScreen() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="flex flex-row justify-center ml-[10px] group">
-                  <CircleUserRound className="w-[24px] h-[24px] text-primary-800 group-hover:text-secondary-700" />
+                  <CircleUserRound
+                    className={`w-[24px] h-[24px] ${
+                      pathName === "/profile" ||
+                      pathName === "/survey" ||
+                      pathName === "/pengaduan" ||
+                      pathName === "/riwayat"
+                        ? "text-secondary-700 group-hover:text-primary-800"
+                        : "text-primary-800 group-hover:text-secondary-700"
+                    }`}
+                  />
 
-                  <ChevronDown className="w-[24px] h-[24px] text-primary-800 group-hover:text-secondary-700" />
+                  <ChevronDown
+                    className={`w-[24px] h-[24px] ${
+                      pathName === "/profile" ||
+                      pathName === "/survey" ||
+                      pathName === "/pengaduan" ||
+                      pathName === "/riwayat"
+                        ? "text-secondary-700 group-hover:text-primary-800"
+                        : "text-primary-800 group-hover:text-secondary-700"
+                    }`}
+                  />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -224,7 +257,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <CircleUserRound
                       className={`${
                         pathName === `/profile`
@@ -251,7 +284,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <ClipboardList
                       className={`${
                         pathName === "/survey"
@@ -278,7 +311,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <Send
                       className={`${
                         pathName === "/pengaduan"
@@ -305,7 +338,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group">
+                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <History
                       className={`${
                         pathName === "/riwayat"
@@ -331,7 +364,7 @@ export default function NavbarScreen() {
           ) : (
             <Link
               href="/login"
-              className="md:w-full md:text-[16px] md:px-[24px] md:py-[6px] md:bg-secondary-700 md:text-neutral-50 md:rounded-[50px] md:hover:bg-secondary-700">
+              className="md:w-full md:ml-4 md:text-[16px] md:px-[24px] md:py-[6px] md:bg-secondary-700 md:text-neutral-50 md:rounded-[50px] md:hover:bg-secondary-700 cursor-pointer">
               Masuk
             </Link>
           )}
