@@ -34,7 +34,7 @@ import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import fetchPengaduanLists from "@/components/fetching/pengaduan/pengaduan";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/image";
@@ -65,6 +65,13 @@ export default function PengaduanScreen() {
   const limitData = 1000000;
   const router = useRouter();
   const dropRef = useRef<HTMLDivElement>(null);
+  const token = Cookies.get("Authorization");
+
+  useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
+  }, []);
 
   const fetchPengaduanList = async (page: number, limit: number) => {
     try {
@@ -79,6 +86,8 @@ export default function PengaduanScreen() {
   useEffect(() => {
     fetchPengaduanList(1, limitData);
   }, []);
+
+  console.log(pengaduanlists, "ini pengaduanlists");
 
   const paginate = (
     items: PengaduanType[],

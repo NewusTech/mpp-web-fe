@@ -371,13 +371,13 @@ export default function DataDiriPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full border border-neutral-700 bg-white pb-6 md:pb-0 rounded-2xl shadow-md">
+          <div className="flex flex-col w-full border border-neutral-700 bg-neutral-50 pb-6 md:pb-0 rounded-2xl shadow-md">
             <div className="flex flex-col mt-5 px-5 md:px-20">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Data Diri
               </h5>
 
-              <div className="flex flex-col w-full bg-white rounded-2xl shadow-md px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
+              <div className="flex flex-col w-full px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
                 <form onSubmit={onSubmit} className="flex flex-col w-full">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">
@@ -415,7 +415,7 @@ export default function DataDiriPage() {
                         <SelectTrigger
                           className={`${
                             !selectedGender ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                           <SelectValue
                             placeholder="Pilih Jenis Kelamin"
                             className={
@@ -472,7 +472,7 @@ export default function DataDiriPage() {
                         <SelectTrigger
                           className={`${
                             !selectedAgama ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                           <SelectValue
                             placeholder="Pilih Jenis Kelamin"
                             className={
@@ -531,7 +531,7 @@ export default function DataDiriPage() {
                         <SelectTrigger
                           className={`${
                             !selectedPendidikan ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                           <SelectValue
                             placeholder="Pilih Jenis Kelamin"
                             className={
@@ -606,7 +606,7 @@ export default function DataDiriPage() {
                         <SelectTrigger
                           className={`${
                             !selectedKecamatan ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                           <SelectValue
                             placeholder="Pilih Kecamatan"
                             className={
@@ -652,7 +652,7 @@ export default function DataDiriPage() {
                         <SelectTrigger
                           className={`${
                             !selectedDesa ? "opacity-70" : ""
-                          } border border-neutral-700 mt-1 rounded-[50px] bg-white md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                           <SelectValue
                             placeholder="Pilih Desa"
                             className={

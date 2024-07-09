@@ -34,10 +34,10 @@ export default function CardLayananComponent({
 
   return (
     <div className="flex flex-col items-center justify-center w-full md:w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-md rounded-2xl">
-      <div className="flex flex-row md:flex-col items-center justify-center p-4 md:p-0 w-full md:w-10/12 md:h-[296px]">
+      <div className="flex flex-row md:flex-col items-center justify-center p-4 md:p-0 w-full md:w-10/12 md:min-h-[270px]">
         <Link
           href={`/instansi/${layanan.slug}`}
-          className="h-full md:h-[135px] w-full flex items-center justify-center">
+          className="h-full md:min-h-[135px] w-full flex items-center justify-center">
           <Image
             src={layanan?.image || ""}
             className="h-full object-contain"
@@ -47,7 +47,7 @@ export default function CardLayananComponent({
           />
         </Link>
 
-        <div className="flex flex-col justify-start md:justify-center pb-6 mt-[8px] w-full">
+        <div className="flex flex-col justify-start md:justify-center pb-2 mt-2 w-full">
           <Link href={`/instansi/${layanan.slug}`}>
             <h6 className="text-[14px] text-start md:text-center text-primary-800 font-semibold">
               {layanan.name}
@@ -70,7 +70,7 @@ export default function CardLayananComponent({
           <Dialog>
             <DialogTrigger asChild>
               <div className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-md text-neutral-50">
-                booking Antrian
+                Booking Antrian
               </div>
             </DialogTrigger>
             <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center py-4">

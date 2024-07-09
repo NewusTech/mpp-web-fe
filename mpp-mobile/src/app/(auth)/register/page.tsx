@@ -62,6 +62,7 @@ export default function RegisterScreen() {
   const [term, setTerm] = useState<TermType>();
   const [isChecked, setIsChecked] = useState(false);
   const [formValid, setFormValid] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const validateForm = () => {
     if (
@@ -89,6 +90,7 @@ export default function RegisterScreen() {
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
+    setIsDialogOpen(event.target.checked);
   };
 
   const fetchTerm = async () => {
@@ -475,12 +477,13 @@ export default function RegisterScreen() {
             </div>
 
             <div className="mt-4 flex flex-row gap-x-2">
-              <Dialog>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger>
                   <input
                     type="checkbox"
                     name="term"
                     className="w-4 h-4"
+                    checked={isChecked}
                     onChange={handleCheckboxChange}
                   />
                 </DialogTrigger>
@@ -489,7 +492,7 @@ export default function RegisterScreen() {
                 </DialogContent>
               </Dialog>
 
-              <div className="text-neutral-900 font-normal text-[12px]">
+              <div className="text-neutral-900 overflow-y-auto font-normal text-[12px]">
                 {term?.desc && parse(termText)}
               </div>
             </div>

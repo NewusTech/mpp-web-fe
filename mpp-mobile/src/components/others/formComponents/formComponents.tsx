@@ -71,11 +71,9 @@ export default function FormComponents({
                 type="text"
                 className={`${classStyle}`}
                 placeholder={placeholder}
-                required
                 {...field}
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
@@ -145,7 +143,6 @@ export default function FormComponents({
                 {...field}
               />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />

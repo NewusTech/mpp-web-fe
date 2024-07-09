@@ -81,11 +81,11 @@ export default function BookingResult({ params }: { params: { id: number } }) {
 
                 <div className="flex flex-col justify-center items-center">
                   <h5 className="text-[14px] md:text-[20px] font-semibold">
-                    {antrian?.id}
+                    No. Antrian: {antrian?.id}
                   </h5>
 
                   <h5 className="text-[14px] md:text-[20px] font-normal">
-                    {antrian?.Instansi.name}
+                    Loket: {antrian?.Instansi.name}
                   </h5>
                 </div>
               </div>

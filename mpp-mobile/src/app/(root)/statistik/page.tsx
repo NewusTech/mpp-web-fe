@@ -1,8 +1,6 @@
 "use client";
 
 import statistikFetch from "@/components/fetching/statistiks/statistik";
-import Cookies from "js-cookie";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -55,8 +53,6 @@ export default function StatisticsPage() {
   const itemsPerPage = 10;
   const limitData = 1000000;
 
-  const token = Cookies.get("Authorization");
-
   const fetchStatistik = async (month: string) => {
     try {
       const result = await statistikFetch(limitData, month);
@@ -83,12 +79,6 @@ export default function StatisticsPage() {
     statistiData,
     itemsPerPage
   );
-
-  useEffect(() => {
-    if (!token) {
-      redirect("/login");
-    }
-  }, []);
 
   const months = [
     "Januari",
