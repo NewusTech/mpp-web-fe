@@ -114,38 +114,47 @@ export default function LoginScreen() {
           </div>
         </Link>
 
-        <div className="flex flex-col w-full justify-center mt-[32px] md:mt-[48px]">
+        <div className="flex flex-col w-full justify-center mt-8 md:mt-12">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-2">
-              <div className="flex flex-col gap-[8px]">
-                <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal border border-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
-                  <FormComponents
-                    form={form.control}
-                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
-                    labelStyle="text-[12px] text-neutral-900 font-semibold"
-                    placeholder="NIK"
-                    label="login"
-                    type="text"
-                    name="nik"
-                  />
+              className="flex flex-col gap-2 w-full">
+              <div className="flex flex-col gap-y-4">
+                <div className="flex rounded-[50px] bg-neutral-50 text-[14px] w-full h-[40px] font-normal border border-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
+                  <div className="w-full">
+                    <FormComponents
+                      form={form.control}
+                      classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      placeholder="NIK"
+                      label="login"
+                      type="text"
+                      name="nik"
+                    />
+                  </div>
 
                   <div className="p-2">
                     <UserRound className="text-primary-700 w-[20px] h-[20px] cursor-pointer" />
                   </div>
                 </div>
+                {form.formState.errors.nik && (
+                  <p className="text-destructive text-[14px] text-error-700 mb-1">
+                    {form.formState.errors.nik.message}
+                  </p>
+                )}
 
-                <div className="flex justify-between rounded-[50px] bg-white text-[14px] w-full h-[40px] font-normal border border-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
-                  <FormComponents
-                    form={form.control}
-                    classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] md:mr-[80px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
-                    labelStyle="text-[12px] text-neutral-900 font-semibold"
-                    placeholder="Password"
-                    label="login"
-                    type={!seen ? "text" : "password"}
-                    name="password"
-                  />
+                <div className="flex rounded-[50px] bg-neutral-50 text-[14px] w-full h-[40px] font-normal border border-primary-700 placeholder:text-[14px] placeholder:text-neutral-700">
+                  <div className="w-full">
+                    <FormComponents
+                      form={form.control}
+                      classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      placeholder="Password"
+                      label="login"
+                      type={!seen ? "text" : "password"}
+                      name="password"
+                    />
+                  </div>
 
                   <div onClick={() => setSeen(!seen)} className="p-2">
                     {seen ? (
@@ -155,6 +164,11 @@ export default function LoginScreen() {
                     )}
                   </div>
                 </div>
+                {form.formState.errors.password && (
+                  <p className="text-destructive text-[14px] text-error-700 mb-1">
+                    {form.formState.errors.password.message}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col md:flex-row md:gap-1 items-end justify-end mt-[8px] md:mt-[24px]">

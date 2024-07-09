@@ -60,7 +60,7 @@ export default function PopPermohonanComponent({
           </div>
         )}
       </DialogTrigger>
-      <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-white rounded-2xl">
+      <DialogContent className="flex flex-col justify-between w-[325px] md:w-[620px] bg-neutral-50 rounded-2xl">
         <DialogHeader>
           <DialogTitle className="flex w-full">
             <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row md:justify-between md:w-full mx-[32px] my-[10px] md:pt-5">

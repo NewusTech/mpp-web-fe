@@ -335,15 +335,16 @@ export default function ProfileEditPage({
         ),
       ]);
 
-      const responseData1 = await response1.json();
-      const responseData2 = await response2.json();
-
       if (response1.ok && response2.ok) {
         toast.success("Berhasil mengupdate profile!");
         await fetchUser();
         setFormErrors({});
         router.push("/profile");
       } else {
+        const responseData1 = await response1.json();
+
+        const responseData2 = await response2.json();
+
         if (!response1.ok) {
           if (responseData1.status === 400 && responseData1.data) {
             const errors: { [key: string]: string } = {};
@@ -354,12 +355,22 @@ export default function ProfileEditPage({
             );
             setFormErrors(errors);
           } else {
-            toast.error("Gagal mengupdate profile!");
+            toast.error("Gagal mengupdate profile 1!");
           }
         }
 
         if (!response2.ok) {
-          toast.error("Gagal mengupload file!");
+          if (responseData2.status === 400 && responseData2.data) {
+            const errors: { [key: string]: string } = {};
+            responseData2.data.forEach(
+              (error: { message: string; field: string }) => {
+                errors[error.field] = error.message;
+              }
+            );
+            setFormErrors(errors);
+          } else {
+            toast.error("Gagal mengupdate profile 2!");
+          }
         }
       }
     } catch (error) {
@@ -536,7 +547,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedGender ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Jenis Kelamin"
                       className={selectedGender ? "" : "placeholder:opacity-50"}
@@ -598,7 +609,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedAgama ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Jenis Kelamin"
                       className={selectedAgama ? "" : "placeholder:opacity-50"}
@@ -661,7 +672,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedPendidikan ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Jenis Kelamin"
                       className={
@@ -751,7 +762,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedKecamatan ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Kecamatan"
                       className={
@@ -801,7 +812,7 @@ export default function ProfileEditPage({
                   <SelectTrigger
                     className={`${
                       !selectedDesa ? "opacity-70" : ""
-                    } border border-neutral-700 mt-1 rounded-[50px] bg-white md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
                       placeholder="Pilih Desa"
                       className={selectedDesa ? "" : "placeholder:opacity-50"}

@@ -130,7 +130,7 @@ export default function BookingAntrianPage({
             </h5>
           </div>
 
-          <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-white rounded-2xl shadow-md">
+          <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-neutral-50 rounded-2xl shadow-md">
             <form
               onSubmit={handleSubmit}
               className="flex flex-col w-full md:px-[105px]">
@@ -168,7 +168,7 @@ export default function BookingAntrianPage({
                 <input
                   type="date"
                   name="tanggal"
-                  className={`w-full pl-4 h-[40px] rounded-none bg-transparent border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                  className={`w-full pl-4 h-[40px] rounded-none bg-transparent border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
@@ -179,7 +179,7 @@ export default function BookingAntrianPage({
                   style={{
                     WebkitAppearance: "none",
                     MozAppearance: "none",
-                    appearance: "none",
+                    // appearance: "none",
                   }}
                 />
               </div>
@@ -207,7 +207,7 @@ export default function BookingAntrianPage({
               <div className="flex md:self-center md:justify-center md:items-center w-full mb-8 gap-3 md:pb-8 mt-4">
                 <Dialog>
                   <DialogTrigger asChild className="w-full md:w-4/12">
-                    <div className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-full h-[30px] md:h-[40px] bg-secondary-700 hover:bg-secondary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
+                    <div className="text-[12px] flex items-center justify-center border-none text-center text-neutral-50 w-full h-[30px] md:h-[40px] bg-secondary-700 hover:bg-secondary-600 rounded-[50px] font-normal md:py-[11px] md:px-[50px]">
                       Cek Antrian
                     </div>
                   </DialogTrigger>
@@ -255,7 +255,7 @@ export default function BookingAntrianPage({
                 <Button
                   type="submit"
                   disabled={isButtonDisabled()}
-                  className="text-[12px] flex items-center justify-center text-center text-neutral-50 w-full md:w-4/12 h-[30px] md:h-[40px] bg-primary-700 hover:bg-primary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
+                  className="text-[12px] flex items-center justify-center border-none text-center text-neutral-50 w-full md:w-4/12 h-[30px] md:h-[40px] bg-primary-700 hover:bg-primary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
                   Pilih
                 </Button>
               </div>

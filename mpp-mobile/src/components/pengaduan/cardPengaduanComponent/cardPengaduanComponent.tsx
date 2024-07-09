@@ -54,7 +54,7 @@ export default function CardPengaduanComponent({
               Lihat
             </div>
           </DialogTrigger>
-          <DialogContent className="flex flex-col justify-between w-10/12 bg-white rounded-2xl">
+          <DialogContent className="flex flex-col justify-between w-10/12 bg-neutral-50 rounded-2xl">
             <div className="flex flex-col mx-[32px] my-[32px]">
               <div className="flex flex-col gap-[14px]">
                 <div className="flex flex-col gap-[8px]">

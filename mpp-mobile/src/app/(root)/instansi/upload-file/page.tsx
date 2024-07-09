@@ -210,7 +210,7 @@ export default function UploadFilePage() {
                 {dataFile.Layananforms.map((el) => (
                   <div
                     key={el.id}
-                    className="flex flex-row justify-between w-full h-[80px] rounded-2xl mb-[8px] bg-white border border-primary-700 px-4">
+                    className="flex flex-row justify-between w-full h-[80px] rounded-2xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
                     <div className="flex flex-col w-full justify-center gap-[9px]">
                       <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                         {el.field}

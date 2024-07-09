@@ -7,6 +7,7 @@ export default async function fetchPengaduanLists(page = 1, limit = 1000000) {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${Cookies.get("Authorization")}`,
       },
       cache: "no-store",
     }

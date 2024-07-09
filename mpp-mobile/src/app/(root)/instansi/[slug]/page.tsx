@@ -11,7 +11,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTrigger,
@@ -88,10 +87,10 @@ export default function InstansiDetail({
   return (
     <div className="bg-primary-100 md:h-full pb-32">
       <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-8 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
-        <div className="md:flex md:flex-row md:w-full">
-          <div className="flex flex-col items-center w-full md:w-10/12 min-h-[400px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-2xl rounded-2xl">
+        <div className="md:flex md:flex-row w-full">
+          <div className="flex flex-col items-center w-full md:w-10/12 min-h-[400px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-md rounded-xl">
             {detailins?.image && (
-              <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center w-full h-full">
                 <Image
                   src={detailins?.image}
                   className="w-full h-full object-contain"
@@ -102,7 +101,7 @@ export default function InstansiDetail({
               </div>
             )}
 
-            <div className="grid grid-rows-1 w-full mt-8 place-items-center mb-10 px-3">
+            <div className="grid grid-rows-1 w-full mt-2 place-items-center mb-10 px-3">
               <h6 className="text-[20px] text-center text-neutral-50 font-normal">
                 {detailins?.name}
               </h6>

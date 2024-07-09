@@ -165,7 +165,7 @@ export default function FormulirPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full bg-white rounded-2xl shadow-md mt-[20px]">
+          <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md mt-[20px]">
             <div className="flex flex-col md:w-full mt-[22px] px-[21px] md:px-[75px] md:py-[32px]">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Formulir
