@@ -111,6 +111,9 @@ export default function PermohonanLayananFirstScreen({
 
   const handleButtonClick = () => {
     setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
   };
 
   return (
@@ -173,7 +176,7 @@ export default function PermohonanLayananFirstScreen({
             className="w-[120px] md:w-1/4 text-[14px] text-neutral-50 font-normal"
             type="submit"
             variant="success"
-            disabled={isButtonDisabled()}
+            disabled={isLoading || isButtonDisabled()}
             onClick={handleButtonClick}>
             <Link href="/instansi/data-diri">
               {isLoading ? <Loader className="animate-spin" /> : "Lanjut"}

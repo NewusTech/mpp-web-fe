@@ -20,89 +20,17 @@ import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
-import { Trash } from "lucide-react";
+import { Loader, Trash } from "lucide-react";
 import Cookies from "js-cookie";
-
-const genders = [
-  {
-    id: 1,
-    value: "Laki-laki",
-  },
-  {
-    id: 2,
-    value: "Perempuan",
-  },
-];
-
-const agamas = [
-  {
-    id: 1,
-    value: "Islam",
-  },
-  {
-    id: 2,
-    value: "Kristen",
-  },
-  {
-    id: 3,
-    value: "Katolik",
-  },
-  {
-    id: 4,
-    value: "Hindu",
-  },
-  {
-    id: 5,
-    value: "Buddha",
-  },
-  {
-    id: 6,
-    value: "Konghucu",
-  },
-];
-
-const pendidikans = [
-  {
-    id: 1,
-    value: "Tidak Sekolah",
-  },
-  {
-    id: 2,
-    value: "SD",
-  },
-  {
-    id: 3,
-    value: "SMP",
-  },
-  {
-    id: 4,
-    value: "SMA",
-  },
-  {
-    id: 5,
-    value: "Diploma 1",
-  },
-  {
-    id: 6,
-    value: "Diploma 2",
-  },
-  {
-    id: 7,
-    value: "Diploma 3",
-  },
-  {
-    id: 8,
-    value: "Strata 1 / Diploma 4",
-  },
-  {
-    id: 9,
-    value: "Strata 2",
-  },
-  {
-    id: 10,
-    value: "Strata 3",
-  },
-];
+import {
+  agamas,
+  genders,
+  golonganDarahs,
+  pendidikans,
+  statusKawins,
+} from "@/data/data";
+import { z } from "zod";
+import { schemaUpdateDiri } from "@/lib/zodSchema";
 
 export default function ProfileEditPage({
   params,
@@ -118,12 +46,16 @@ export default function ProfileEditPage({
   const [selectedPendidikan, setSelectedPendidikan] = useState<number | null>(
     null
   );
+  const [selectedDarah, setSelectedDarah] = useState<number | null>(null);
+  const [selectedKawin, setSelectedKawin] = useState<number | null>(null);
   const [kecamatan, setKecamatan] = useState<KecamatanType[]>();
   const [desa, setDesa] = useState<DesaType[]>([]);
   const [gender, setGender] = useState<{ id: number; value: string }[]>();
   const [agama, setAgama] = useState<{ id: number; value: string }[]>();
   const [pendidikan, setPendidikan] =
     useState<{ id: number; value: string }[]>();
+  const [darah, setDarah] = useState<{ id: number; value: string }[]>();
+  const [kawin, setKawin] = useState<{ id: number; value: string }[]>();
   const [searchKecamatan, setSearchKecamatan] = useState<string>("");
   const [searchDesa, setSearchDesa] = useState<string>("");
   const debounceSearchKecamatan = useDebounce(searchKecamatan);
@@ -134,6 +66,8 @@ export default function ProfileEditPage({
     telepon: "",
     nik: "",
     gender: "",
+    goldar: "",
+    status_kawin: "",
     agama: "",
     pendidikan: "",
     pekerjaan: "",
@@ -145,17 +79,67 @@ export default function ProfileEditPage({
     filektp: "",
     filekk: "",
     fileijazahsd: "",
+    foto: "",
+    aktalahir: "",
   });
   const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
   const [fileKkImage, setFileKkImage] = useState<File | null>(null);
   const [fileIjazahImage, setFileIjazahImage] = useState<File | null>(null);
+  const [fotos, setFotos] = useState<File | null>(null);
+  const [aktalahirImage, setAktalahirImage] = useState<File | null>(null);
   const [previewKTPImage, setPreviewKTPImage] = useState<string>("");
   const [previewKKImage, setPreviewKKImage] = useState<string>("");
   const [previewIjazahImage, setPreviewIjazahImage] = useState<string>("");
+  const [previewFotos, setPreviewFotos] = useState<string>("");
+  const [previewAktalahir, setPreviewAktalahir] = useState<string>("");
   const [changeOpacity, setChangeOpacity] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<any>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [formValid, setFormValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateForm = async () => {
+    try {
+      await schemaUpdateDiri.parseAsync({
+        ...detail,
+        kecamatan_id: String(selectedKecamatan),
+        desa_id: String(selectedDesa),
+        gender: String(selectedGender),
+        goldar: String(selectedDarah),
+        status_kawin: String(selectedKawin),
+        agama: String(selectedAgama),
+        pendidikan: String(selectedPendidikan),
+      });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const formattedErrors = error.format();
+        setErrors(formattedErrors);
+      }
+      setIsLoading(false);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (hasSubmitted) {
+      validateForm();
+    }
+  }, [
+    detail,
+    selectedKecamatan,
+    selectedDesa,
+    selectedGender,
+    selectedDarah,
+    selectedKawin,
+    selectedAgama,
+    selectedPendidikan,
+    hasSubmitted,
+  ]);
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
     try {
@@ -213,6 +197,14 @@ export default function ProfileEditPage({
         setSelectedPendidikan(result.data.pendidikan);
       }
 
+      if (result.data.status_kawin) {
+        setSelectedKawin(result.data.status_kawin);
+      }
+
+      if (result.data.goldar) {
+        setSelectedDarah(result.data.goldar);
+      }
+
       setIsDataFetched(true);
     } catch (error) {
       toast("Gagal mendapatkan data!");
@@ -227,6 +219,8 @@ export default function ProfileEditPage({
     setGender(genders);
     setAgama(agamas);
     setPendidikan(pendidikans);
+    setKawin(statusKawins);
+    setDarah(golonganDarahs);
   }, []);
 
   const router = useRouter();
@@ -276,6 +270,32 @@ export default function ProfileEditPage({
     }
   };
 
+  const handleFotosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFotos(file);
+      setDetail({
+        ...detail,
+        foto: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewFotos(fileUrl);
+    }
+  };
+
+  const handleAktaLahirChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAktalahirImage(file);
+      setDetail({
+        ...detail,
+        aktalahir: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewAktalahir(fileUrl);
+    }
+  };
+
   const handleUpdateUser = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -290,6 +310,12 @@ export default function ProfileEditPage({
     if (fileIjazahImage) {
       formData.append("fileijazahsd", fileIjazahImage);
     }
+    if (fotos) {
+      formData.append("foto", fotos);
+    }
+    if (aktalahirImage) {
+      formData.append("aktalahir", aktalahirImage);
+    }
 
     const detailData = {
       name: detail.name || "",
@@ -297,6 +323,8 @@ export default function ProfileEditPage({
       telepon: detail.telepon || "",
       nik: detail.nik || "",
       gender: String(detail.gender) || "",
+      goldar: Number(detail.goldar) || "",
+      status_kawin: Number(detail.status_kawin) || "",
       agama: String(detail.agama) || "",
       pendidikan: String(detail.pendidikan) || "",
       pekerjaan: detail.pekerjaan || "",
@@ -307,76 +335,90 @@ export default function ProfileEditPage({
       alamat: detail.alamat || "",
     };
 
-    try {
-      const [response1, response2] = await Promise.all([
-        fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${Cookies.get("Authorization")}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(detailData),
-            cache: "no-store",
+    setHasSubmitted(true);
+
+    const isValid = await validateForm();
+
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        const [response1, response2] = await Promise.all([
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${Cookies.get("Authorization")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(detailData),
+              cache: "no-store",
+            }
+          ),
+          // Second API call for file uploads
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatedocs/${params.slug}`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${Cookies.get("Authorization")}`,
+              },
+              body: formData,
+              cache: "no-store",
+            }
+          ),
+        ]);
+
+        if (response1.ok && response2.ok) {
+          toast.success("Berhasil mengupdate profile!");
+          await fetchUser();
+          setFormErrors({});
+          router.push("/profile");
+        } else {
+          const responseData1 = await response1.json();
+
+          const responseData2 = await response2.json();
+
+          if (!response1.ok) {
+            if (responseData1.status === 400 && responseData1.data) {
+              const errors: { [key: string]: string } = {};
+              responseData1.data.forEach(
+                (error: { message: string; field: string }) => {
+                  errors[error.field] = error.message;
+                }
+              );
+              setFormErrors(errors);
+            } else {
+              toast.error("Gagal mengupdate profile 1!");
+            }
           }
-        ),
-        // Second API call for file uploads
-        fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatedocs/${params.slug}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${Cookies.get("Authorization")}`,
-            },
-            body: formData,
-            cache: "no-store",
-          }
-        ),
-      ]);
 
-      if (response1.ok && response2.ok) {
-        toast.success("Berhasil mengupdate profile!");
-        await fetchUser();
-        setFormErrors({});
-        router.push("/profile");
-      } else {
-        const responseData1 = await response1.json();
-
-        const responseData2 = await response2.json();
-
-        if (!response1.ok) {
-          if (responseData1.status === 400 && responseData1.data) {
-            const errors: { [key: string]: string } = {};
-            responseData1.data.forEach(
-              (error: { message: string; field: string }) => {
-                errors[error.field] = error.message;
-              }
-            );
-            setFormErrors(errors);
-          } else {
-            toast.error("Gagal mengupdate profile 1!");
+          if (!response2.ok) {
+            if (responseData2.status === 400 && responseData2.data) {
+              const errors: { [key: string]: string } = {};
+              responseData2.data.forEach(
+                (error: { message: string; field: string }) => {
+                  errors[error.field] = error.message;
+                }
+              );
+              setFormErrors(errors);
+            } else {
+              toast.error("Gagal mengupdate profile 2!");
+            }
           }
         }
-
-        if (!response2.ok) {
-          if (responseData2.status === 400 && responseData2.data) {
-            const errors: { [key: string]: string } = {};
-            responseData2.data.forEach(
-              (error: { message: string; field: string }) => {
-                errors[error.field] = error.message;
-              }
-            );
-            setFormErrors(errors);
-          } else {
-            toast.error("Gagal mengupdate profile 2!");
-          }
-        }
+      } catch (error) {
+        toast("Tidak bisa mengupdate profile!");
+      } finally {
+        setIsLoading(false);
+        setHasSubmitted(false);
       }
-    } catch (error) {
-      toast("Tidak bisa mengupdate profile!");
     }
   };
+
+  useEffect(() => {
+    setFormValid(Object.keys(errors).length === 0);
+  }, [errors]);
 
   useEffect(() => {
     if (selectedKecamatan !== null) {
@@ -397,31 +439,29 @@ export default function ProfileEditPage({
   }, [selectedDesa]);
 
   useEffect(() => {
-    if (selectedGender !== null) {
+    if (
+      selectedGender !== null ||
+      selectedPendidikan !== null ||
+      selectedAgama !== null ||
+      selectedKawin !== null ||
+      selectedDarah !== null
+    ) {
       setDetail((prevDetail) => ({
         ...prevDetail,
         gender: String(selectedGender),
-      }));
-    }
-  }, [selectedGender]);
-
-  useEffect(() => {
-    if (selectedAgama !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        agama: String(selectedAgama),
-      }));
-    }
-  }, [selectedAgama]);
-
-  useEffect(() => {
-    if (selectedPendidikan !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
         pendidikan: String(selectedPendidikan),
+        agama: String(selectedAgama),
+        status_kawin: String(selectedKawin),
+        goldar: String(selectedDarah),
       }));
     }
-  }, [selectedPendidikan]);
+  }, [
+    selectedGender,
+    selectedPendidikan,
+    selectedAgama,
+    selectedKawin,
+    selectedDarah,
+  ]);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -478,6 +518,36 @@ export default function ProfileEditPage({
     }
   };
 
+  const handleDropFoto = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setFotos(file);
+      setDetail({
+        ...detail,
+        foto: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewFotos(fileUrl);
+    }
+  };
+
+  const handleDropAktaLahir = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setChangeOpacity(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setAktalahirImage(file);
+      setDetail({
+        ...detail,
+        aktalahir: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewAktalahir(fileUrl);
+    }
+  };
+
   const handleRemoveKTP = () => {
     setFileKtpImage(null);
     setPreviewKTPImage("");
@@ -494,6 +564,18 @@ export default function ProfileEditPage({
     setFileIjazahImage(null);
     setPreviewIjazahImage("");
     setDetail({ ...detail, fileijazahsd: "" });
+  };
+
+  const handleRemoveFoto = () => {
+    setFotos(null);
+    setPreviewFotos("");
+    setDetail({ ...detail, foto: "" });
+  };
+
+  const handleRemoveAktaLahir = () => {
+    setAktalahirImage(null);
+    setPreviewAktalahir("");
+    setDetail({ ...detail, aktalahir: "" });
   };
 
   return (
@@ -531,9 +613,211 @@ export default function ProfileEditPage({
                     {formErrors["name"]}
                   </p>
                 )}
+
+                {hasSubmitted && errors?.name?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.name._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
+                <Label className="text-[12px] text-neutral-900 font-semibold">
+                  Golongan Darah
+                </Label>
+
+                <Select
+                  name="goldar"
+                  value={selectedDarah ? String(selectedDarah) : undefined}
+                  onValueChange={(value) => {
+                    setSelectedDarah(Number(value));
+                  }}>
+                  <SelectTrigger
+                    className={`${
+                      !selectedDarah ? "opacity-70" : ""
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue
+                      placeholder="Pilih Golongan Darah"
+                      className={selectedDarah ? "" : "placeholder:opacity-50"}
+                    />
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    {golonganDarahs?.map(
+                      (darah: { id: number; value: string }, i: number) => (
+                        <SelectItem
+                          className="pr-none mt-2"
+                          key={i}
+                          value={String(darah.id)}>
+                          {darah.value}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+
+                {formErrors["goldar"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["goldar"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.goldar?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.goldar._errors[0]}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
+                <ProfileEditInput
+                  names="nik"
+                  types="number"
+                  value={detail?.nik || ""}
+                  change={changeUser}
+                  labelName="NIK"
+                  placeholder="NIK"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  labelStyle="text-[12px] text-neutral-900 font-semibold"
+                />
+
+                {formErrors["nik"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["nik"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.nik?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.nik._errors[0]}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col w-full mb-4">
+                <Label className="text-[12px] text-neutral-900 font-semibold">
+                  Agama
+                </Label>
+
+                <Select
+                  name="agama"
+                  value={selectedAgama ? String(selectedAgama) : undefined}
+                  onValueChange={(value) => {
+                    setSelectedAgama(Number(value));
+                  }}>
+                  <SelectTrigger
+                    className={`${
+                      !selectedAgama ? "opacity-70" : ""
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue
+                      placeholder="Pilih Agama"
+                      className={selectedAgama ? "" : "placeholder:opacity-50"}
+                    />
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    {agamas?.map(
+                      (agama: { id: number; value: string }, i: number) => (
+                        <SelectItem
+                          className="pr-none mt-2"
+                          key={i}
+                          value={String(agama.id)}>
+                          {agama.value}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+
+                {formErrors["agama"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["agama"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.agama?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.agama._errors[0]}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
+                <ProfileEditInput
+                  names="telepon"
+                  types="number"
+                  value={detail?.telepon || ""}
+                  change={changeUser}
+                  labelName="Nomor Telepon"
+                  placeholder="Nomor Telepon"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  labelStyle="text-[12px] text-neutral-900 font-semibold"
+                />
+
+                {formErrors["telepon"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["telepon"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.telepon?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.telepon._errors[0]}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col w-full mb-4">
+                <Label className="text-[12px] text-neutral-900 font-semibold">
+                  Status Perkawinan
+                </Label>
+
+                <Select
+                  name="status_kawin"
+                  value={selectedKawin ? String(selectedKawin) : undefined}
+                  onValueChange={(value) => {
+                    setSelectedKawin(Number(value));
+                  }}>
+                  <SelectTrigger
+                    className={`${
+                      !selectedKawin ? "opacity-70" : ""
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue
+                      placeholder="Pilih Status Perkawinan"
+                      className={selectedKawin ? "" : "placeholder:opacity-50"}
+                    />
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    {statusKawins?.map(
+                      (kawin: { id: number; value: string }, i: number) => (
+                        <SelectItem
+                          className="pr-none mt-2"
+                          key={i}
+                          value={String(kawin.id)}>
+                          {kawin.value}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+
+                {formErrors["status_kawin"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["status_kawin"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.status_kawin?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.status_kawin._errors[0]}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full md:mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
                   Jenis Kelamin
                 </Label>
@@ -572,87 +856,11 @@ export default function ProfileEditPage({
                     {formErrors["gender"]}
                   </p>
                 )}
-              </div>
-            </div>
 
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="nik"
-                  types="number"
-                  value={detail?.nik || ""}
-                  change={changeUser}
-                  labelName="NIK"
-                  placeholder="NIK"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {formErrors["nik"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["nik"]}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Agama
-                </Label>
-
-                <Select
-                  name="agama"
-                  value={selectedAgama ? String(selectedAgama) : undefined}
-                  onValueChange={(value) => {
-                    setSelectedAgama(Number(value));
-                  }}>
-                  <SelectTrigger
-                    className={`${
-                      !selectedAgama ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Jenis Kelamin"
-                      className={selectedAgama ? "" : "placeholder:opacity-50"}
-                    />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {agamas?.map(
-                      (agama: { id: number; value: string }, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(agama.id)}>
-                          {agama.value}
-                        </SelectItem>
-                      )
-                    )}
-                  </SelectContent>
-                </Select>
-
-                {formErrors["agama"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["agama"]}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="telepon"
-                  types="number"
-                  value={detail?.telepon || ""}
-                  change={changeUser}
-                  labelName="Nomor Telepon"
-                  placeholder="Nomor Telepon"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {formErrors["telepon"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["telepon"]}
-                  </p>
+                {hasSubmitted && errors?.gender?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.gender._errors[0]}
+                  </div>
                 )}
               </div>
 
@@ -674,7 +882,7 @@ export default function ProfileEditPage({
                       !selectedPendidikan ? "opacity-70" : ""
                     } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
-                      placeholder="Pilih Jenis Kelamin"
+                      placeholder="Pilih Pendidikan Terakhir"
                       className={
                         selectedPendidikan ? "" : "placeholder:opacity-50"
                       }
@@ -702,6 +910,12 @@ export default function ProfileEditPage({
                     {formErrors["pendidikan"]}
                   </p>
                 )}
+
+                {hasSubmitted && errors?.pendidikan?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.pendidikan._errors[0]}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -723,6 +937,12 @@ export default function ProfileEditPage({
                     {formErrors["email"]}
                   </p>
                 )}
+
+                {hasSubmitted && errors?.email?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.email._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
@@ -741,6 +961,12 @@ export default function ProfileEditPage({
                   <p className="text-error-700 text-[12px] mt-1 text-center">
                     {formErrors["pekerjaan"]}
                   </p>
+                )}
+
+                {hasSubmitted && errors?.pekerjaan?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.pekerjaan._errors[0]}
+                  </div>
                 )}
               </div>
             </div>
@@ -798,6 +1024,12 @@ export default function ProfileEditPage({
                     {formErrors["kecamatan_id"]}
                   </p>
                 )}
+
+                {hasSubmitted && errors?.kecamatan_id?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.kecamatan_id._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4w-full">
@@ -846,6 +1078,12 @@ export default function ProfileEditPage({
                     {formErrors["desa_id"]}
                   </p>
                 )}
+
+                {hasSubmitted && errors?.desa_id?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.desa_id._errors[0]}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -867,6 +1105,12 @@ export default function ProfileEditPage({
                     {formErrors["rt"]}
                   </p>
                 )}
+
+                {hasSubmitted && errors?.rt?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.rt._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col w-full mb-4">
@@ -885,6 +1129,12 @@ export default function ProfileEditPage({
                   <p className="text-error-700 text-[12px] mt-1 text-center">
                     {formErrors["rw"]}
                   </p>
+                )}
+
+                {hasSubmitted && errors?.rw?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.rw._errors[0]}
+                  </div>
                 )}
               </div>
             </div>
@@ -905,6 +1155,12 @@ export default function ProfileEditPage({
                 <p className="text-error-700 text-[12px] mt-1 text-center">
                   {formErrors["alamat"]}
                 </p>
+              )}
+
+              {hasSubmitted && errors?.alamat?._errors && (
+                <div className="text-error-700 text-[12px] md:text-[14px]">
+                  {errors.alamat._errors[0]}
+                </div>
               )}
             </div>
 
@@ -1090,14 +1346,135 @@ export default function ProfileEditPage({
                   )}
                 </div>
               </div>
+
+              <div className="flex flex-col w-full h-full mt-6">
+                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                  Pas Foto
+                </Label>
+
+                <div className="flex flex-col md:flex-row w-full">
+                  <div
+                    ref={dropRef}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropFoto}
+                    className={`w-full ${
+                      detail.foto || previewFotos ? "md:w-8/12" : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                      changeOpacity ? "opacity-50" : "opacity-100"
+                    }`}>
+                    <>
+                      <input
+                        type="file"
+                        id="file-input-foto"
+                        name="foto"
+                        accept="image/*"
+                        onChange={handleFotosChange}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="file-input-foto"
+                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                        Drag and drop file here or click to select file
+                      </label>
+                    </>
+
+                    {formErrors["foto"] && (
+                      <p className="text-error-700 text-[12px] mt-1 text-center">
+                        {formErrors["foto"]}
+                      </p>
+                    )}
+                  </div>
+
+                  {(previewFotos || detail.foto) && (
+                    <div className="relative md:ml-4 w-full mt-1">
+                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                        <img
+                          src={previewFotos || detail.foto}
+                          alt="Preview"
+                          className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveFoto}
+                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                          <Trash />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex flex-col w-full h-full mt-6">
+                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                  Akte Lahir
+                </Label>
+
+                <div className="flex flex-col md:flex-row w-full">
+                  <div
+                    ref={dropRef}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDropAktaLahir}
+                    className={`w-full ${
+                      detail.aktalahir || previewAktalahir
+                        ? "md:w-8/12"
+                        : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
+                      changeOpacity ? "opacity-50" : "opacity-100"
+                    }`}>
+                    <>
+                      <input
+                        type="file"
+                        id="file-input-akta"
+                        name="aktalahir"
+                        accept="image/*"
+                        onChange={handleAktaLahirChange}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="file-input-akta"
+                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                        Drag and drop file here or click to select file
+                      </label>
+                    </>
+
+                    {formErrors["aktalahir"] && (
+                      <p className="text-error-700 text-[12px] mt-1 text-center">
+                        {formErrors["aktalahir"]}
+                      </p>
+                    )}
+                  </div>
+
+                  {(previewAktalahir || detail.aktalahir) && (
+                    <div className="relative md:ml-4 w-full mt-1">
+                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                        <img
+                          src={previewAktalahir || detail.aktalahir}
+                          alt="Preview"
+                          className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemoveAktaLahir}
+                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                          <Trash />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
               <Button
                 className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                 type="submit"
-                variant="success">
-                Simpan
+                variant="success"
+                disabled={!formValid || isLoading}>
+                {isLoading ? <Loader className="animate-spin" /> : "Simpan"}
               </Button>
             </div>
           </form>

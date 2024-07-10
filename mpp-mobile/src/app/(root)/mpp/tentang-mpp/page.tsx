@@ -57,9 +57,9 @@ export default function MppPage() {
               MISI
             </h4>
 
-            <p className="text-[14px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
+            <div className="text-[14px] md:text-[16px] md:px-[25px] text-neutral-800 text-center">
               {parse(visimisi.misi)}
-            </p>
+            </div>
           </div>
         </div>
 

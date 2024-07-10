@@ -3,8 +3,6 @@ import qrcode from "@/../public/assets/png-transparent-qr-code-information-qr-co
 import Image from "next/legacy/image";
 
 export default function BookingAntrianQRCodeScreen({ id }: { id: number }) {
-  console.log(id, "ini id");
-
   return (
     <div className="flex items-center w-full justify-center bg-primary-100 md:mt-8 mt-[24px] md:pb-8">
       <div className="flex flex-col w-full mx-[35px] md:mx-[70px] gap-[12px]">

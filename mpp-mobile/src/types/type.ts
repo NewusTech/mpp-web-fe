@@ -90,6 +90,7 @@ export interface PengaduanType {
   jawaban: string;
   status: number;
   aduan: string;
+  createdAt: string;
 }
 
 export interface PengaduanFormType {
@@ -120,6 +121,20 @@ export interface TermType {
   desc: string;
 }
 
+export interface ErrorType {
+  name: string;
+  nik: string;
+  telepon: string;
+  email: string;
+  password: string;
+  kecamatan_id: string;
+  desa_id: string;
+  rt: string;
+  rw: string;
+  alamat: string;
+  term: string;
+}
+
 export interface Layanantype {
   id: number;
   name: string;
@@ -127,7 +142,9 @@ export interface Layanantype {
   slug: string;
   jmlLayanan: number;
   active_offline: boolean;
+  active_online: boolean;
   status: boolean;
+  alamat: string;
 }
 
 export interface faqType {
@@ -149,7 +166,9 @@ export type Instansi = {
   slug: string;
   jmlLayanan: number;
   active_offline: boolean;
+  active_online: boolean;
   status: boolean;
+  alamat: string;
 };
 
 export type MyInstansi = {
@@ -220,6 +239,8 @@ export interface ProfileNewType {
   telepon: string;
   nik: string;
   gender?: number;
+  goldar?: number;
+  status_kawin?: number;
   agama?: number;
   pendidikan?: number;
   pekerjaan?: string;
@@ -240,6 +261,8 @@ export interface UpdateUserType {
   nik?: string;
   gender?: string;
   agama?: string;
+  goldar?: string;
+  status_kawin?: string;
   pendidikan?: string;
   pekerjaan?: string;
   telepon?: string;
@@ -253,6 +276,8 @@ export interface UpdateUserType {
   filekk?: string;
   fileijazahsd?: string;
   slug?: string;
+  foto?: string;
+  aktalahir?: string;
 }
 
 export interface KecamatanType {

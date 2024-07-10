@@ -26,87 +26,34 @@ import ProfileEditInput from "@/components/others/profileEditIput/profileEditInp
 import { Label } from "@radix-ui/react-label";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { Textarea } from "@/components/ui/textarea";
+import { z } from "zod";
+import { schemaDataDiri } from "@/lib/zodSchema";
+import {
+  agamas,
+  genders,
+  golonganDarahs,
+  pendidikans,
+  statusKawins,
+} from "@/data/data";
 
-const genders = [
-  {
-    id: 1,
-    value: "Laki-laki",
-  },
-  {
-    id: 2,
-    value: "Perempuan",
-  },
-];
-
-const agamas = [
-  {
-    id: 1,
-    value: "Islam",
-  },
-  {
-    id: 2,
-    value: "Kristen",
-  },
-  {
-    id: 3,
-    value: "Katolik",
-  },
-  {
-    id: 4,
-    value: "Hindu",
-  },
-  {
-    id: 5,
-    value: "Buddha",
-  },
-  {
-    id: 6,
-    value: "Konghucu",
-  },
-];
-
-const pendidikans = [
-  {
-    id: 1,
-    value: "Tidak Sekolah",
-  },
-  {
-    id: 2,
-    value: "SD",
-  },
-  {
-    id: 3,
-    value: "SMP",
-  },
-  {
-    id: 4,
-    value: "SMA",
-  },
-  {
-    id: 5,
-    value: "Diploma 1",
-  },
-  {
-    id: 6,
-    value: "Diploma 2",
-  },
-  {
-    id: 7,
-    value: "Diploma 3",
-  },
-  {
-    id: 8,
-    value: "Strata 1 / Diploma 4",
-  },
-  {
-    id: 9,
-    value: "Strata 2",
-  },
-  {
-    id: 10,
-    value: "Strata 3",
-  },
-];
+const schema = z.object({
+  name: z.string().refine((val) => val !== "", "Nama Lengkap harus diisi"),
+  email: z.string().email("Email tidak valid"),
+  telepon: z
+    .string()
+    .min(12, "Nomor telepon harus terdiri dari minimal 12 digit")
+    .max(13, "Nomor telepon harus terdiri dari maksimal 13 digit"),
+  nik: z.string().length(16, "NIK harus terdiri dari 16 karakter"),
+  gender: z.string({ message: "Pilih Jenis Kelamin" }),
+  agama: z.string({ message: "Pilih Agama" }),
+  pendidikan: z.string({ message: "Pilih Pendidikan" }),
+  pekerjaan: z.string({ message: "Harap isi pekerjaanmu saat ini!" }),
+  kecamatan_id: z.string({ message: "Pilih Asal Kecamatan" }),
+  desa_id: z.string({ message: "Pilih Asal Desa" }),
+  rt: z.string().refine((val) => val !== "", "RT harus diisi"),
+  rw: z.string().refine((val) => val !== "", "RW harus diisi"),
+  alamat: z.string().refine((val) => val !== "", "Alamat harus diisi"),
+});
 
 const steps = [
   { id: 1, title: "1" },
@@ -127,12 +74,16 @@ export default function DataDiriPage() {
   const [selectedPendidikan, setSelectedPendidikan] = useState<number | null>(
     null
   );
+  const [selectedDarah, setSelectedDarah] = useState<number | null>(null);
+  const [selectedKawin, setSelectedKawin] = useState<number | null>(null);
   const [kecamatan, setKecamatan] = useState<KecamatanType[]>();
   const [desa, setDesa] = useState<DesaType[]>([]);
   const [gender, setGender] = useState<{ id: number; value: string }[]>();
   const [agama, setAgama] = useState<{ id: number; value: string }[]>();
   const [pendidikan, setPendidikan] =
     useState<{ id: number; value: string }[]>();
+  const [darah, setDarah] = useState<{ id: number; value: string }[]>();
+  const [kawin, setKawin] = useState<{ id: number; value: string }[]>();
   const [searchKecamatan, setSearchKecamatan] = useState<string>("");
   const [searchDesa, setSearchDesa] = useState<string>("");
   const debounceSearchKecamatan = useDebounce(searchKecamatan);
@@ -143,6 +94,8 @@ export default function DataDiriPage() {
     telepon: "",
     nik: "",
     gender: "",
+    goldar: "",
+    status_kawin: "",
     agama: "",
     pendidikan: "",
     pekerjaan: "",
@@ -155,7 +108,48 @@ export default function DataDiriPage() {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<any>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [formValid, setFormValid] = useState(false);
   const router = useRouter();
+
+  const validateForm = async () => {
+    try {
+      await schemaDataDiri.parseAsync({
+        ...detail,
+        kecamatan_id: String(selectedKecamatan),
+        desa_id: String(selectedDesa),
+        gender: String(selectedGender),
+        agama: String(selectedAgama),
+        pendidikan: String(selectedPendidikan),
+        goldar: String(selectedDarah),
+        status_kawin: String(selectedKawin),
+      });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const formattedErrors = error.format();
+        setErrors(formattedErrors);
+      }
+      setIsLoading(false);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (hasSubmitted) {
+      validateForm();
+    }
+  }, [
+    detail,
+    selectedKecamatan,
+    selectedDesa,
+    selectedAgama,
+    selectedGender,
+    selectedPendidikan,
+    hasSubmitted,
+  ]);
 
   const fetchDatakecamatan = async (search: string, limit: number) => {
     try {
@@ -213,6 +207,14 @@ export default function DataDiriPage() {
         setSelectedPendidikan(result.data.pendidikan);
       }
 
+      if (result.data.goldar) {
+        setSelectedDarah(result.data.goldar);
+      }
+
+      if (result.data.status_kawin) {
+        setSelectedKawin(result.data.status_kawin);
+      }
+
       setIsDataFetched(true);
     } catch (error) {
       toast("Gagal mendapatkan data!");
@@ -227,52 +229,69 @@ export default function DataDiriPage() {
     setGender(genders);
     setAgama(agamas);
     setPendidikan(pendidikans);
+    setKawin(statusKawins);
+    setDarah(golonganDarahs);
   }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      if (detail) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${detail?.slug}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${Cookies.get("Authorization")}`,
-            },
-            body: JSON.stringify(detail),
-            cache: "no-store",
-          }
-        );
+    setHasSubmitted(true);
 
-        if (response.ok) {
-          toast.success("Berhasil memperbarui informasi data diri!");
-          await fetchUser();
-          setFormErrors({});
-          router.push(`/instansi/formulir`);
-        } else {
+    const isValid = await validateForm();
+
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        if (detail) {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${detail?.slug}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Cookies.get("Authorization")}`,
+              },
+              body: JSON.stringify({
+                ...detail,
+                kecamatan_id: String(selectedKecamatan),
+              }),
+              cache: "no-store",
+            }
+          );
+
           const responseData = await response.json();
-          if (responseData.status === 400 && responseData.data) {
-            const errors: { [key: string]: string } = {};
-            responseData.data.forEach(
-              (error: { message: string; field: string }) => {
-                errors[error.field] = error.message;
-              }
-            );
-            setFormErrors(errors);
+
+          if (response.ok) {
+            toast.success("Berhasil memperbarui informasi data diri!");
+            await fetchUser();
+            setFormErrors({});
+            router.push(`/instansi/formulir`);
           } else {
-            toast.error("Gagal mengupdate profile!");
+            if (responseData.status === 400 && responseData.data) {
+              const errors: { [key: string]: string } = {};
+              responseData.data.forEach(
+                (error: { message: string; field: string }) => {
+                  errors[error.field] = error.message;
+                }
+              );
+              setFormErrors(errors);
+            } else {
+              toast.error("Gagal mengupdate profile!");
+            }
           }
         }
+      } catch (error) {
+        toast("Tidak bisa mengupdate profile!");
+      } finally {
+        setIsLoading(false);
+        setHasSubmitted(false);
       }
-    } catch (error) {
-      toast("Tidak bisa mengupdate profile!");
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setFormValid(Object.keys(errors).length === 0);
+  }, [errors]);
 
   const changeUser = (
     e: React.ChangeEvent<
@@ -301,46 +320,29 @@ export default function DataDiriPage() {
   }, [selectedDesa]);
 
   useEffect(() => {
-    if (selectedGender !== null) {
+    if (
+      selectedGender !== null ||
+      selectedAgama !== null ||
+      selectedPendidikan !== null ||
+      selectedDarah !== null ||
+      selectedKawin !== null
+    ) {
       setDetail((prevDetail) => ({
         ...prevDetail,
         gender: String(selectedGender),
-      }));
-    }
-  }, [selectedGender]);
-
-  useEffect(() => {
-    if (selectedAgama !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
         agama: String(selectedAgama),
-      }));
-    }
-  }, [selectedAgama]);
-
-  useEffect(() => {
-    if (selectedPendidikan !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
         pendidikan: String(selectedPendidikan),
+        goldar: String(selectedDarah),
+        status_kawin: String(selectedKawin),
       }));
     }
-  }, [selectedPendidikan]);
-
-  const isButtonDisabled = () => {
-    return (
-      !detail?.name ||
-      !detail?.nik ||
-      !detail?.telepon ||
-      !detail?.email ||
-      !detail?.alamat ||
-      selectedGender === null ||
-      selectedAgama === null ||
-      selectedPendidikan === null ||
-      selectedKecamatan === null ||
-      selectedDesa === null
-    );
-  };
+  }, [
+    selectedGender,
+    selectedAgama,
+    selectedPendidikan,
+    selectedDarah,
+    selectedKawin,
+  ]);
 
   return (
     <div className="bg-primary-100 md:mt-6 md:mb-0 pb-32 md:pb-12">
@@ -397,9 +399,203 @@ export default function DataDiriPage() {
                           {formErrors["name"]}
                         </p>
                       )}
+
+                      {hasSubmitted && errors?.name?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.name._errors[0]}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
+                      <Label className="text-[12px] text-neutral-900 font-semibold">
+                        Golongan Darah
+                      </Label>
+
+                      <Select
+                        name="goldar"
+                        value={
+                          selectedDarah ? String(selectedDarah) : undefined
+                        }
+                        onValueChange={(value) => {
+                          setSelectedDarah(Number(value));
+                        }}>
+                        <SelectTrigger
+                          className={`${
+                            !selectedDarah ? "opacity-70" : ""
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          <SelectValue
+                            placeholder="Pilih Golongan Darah"
+                            className={
+                              selectedDarah ? "" : "placeholder:opacity-50"
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                          {golonganDarahs?.map(
+                            (
+                              darah: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                key={i}
+                                value={String(darah.id)}>
+                                {darah.value}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+
+                      {hasSubmitted && errors?.goldar?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.goldar._errors[0]}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                    <div className="flex flex-col w-full mb-4">
+                      <ProfileEditInput
+                        names="nik"
+                        types="number"
+                        value={detail?.nik || ""}
+                        change={changeUser}
+                        labelName="NIK"
+                        placeholder="NIK"
+                        classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      />
+
+                      {hasSubmitted && errors?.nik?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.nik._errors[0]}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col w-full mb-4">
+                      <Label className="text-[12px] text-neutral-900 font-semibold">
+                        Agama
+                      </Label>
+
+                      <Select
+                        name="agama"
+                        value={
+                          selectedAgama ? String(selectedAgama) : undefined
+                        }
+                        onValueChange={(value) => {
+                          setSelectedAgama(Number(value));
+                        }}>
+                        <SelectTrigger
+                          className={`${
+                            !selectedAgama ? "opacity-70" : ""
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          <SelectValue
+                            placeholder="Pilih Agama"
+                            className={
+                              selectedAgama ? "" : "placeholder:opacity-50"
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                          {agamas?.map(
+                            (
+                              agama: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                key={i}
+                                value={String(agama.id)}>
+                                {agama.value}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+
+                      {hasSubmitted && errors?.agama?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.agama._errors[0]}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                    <div className="flex flex-col w-full mb-4">
+                      <ProfileEditInput
+                        names="telepon"
+                        types="number"
+                        value={detail?.telepon || ""}
+                        change={changeUser}
+                        labelName="Nomor Telepon"
+                        placeholder="Nomor Telepon"
+                        classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                        labelStyle="text-[12px] text-neutral-900 font-semibold"
+                      />
+
+                      {hasSubmitted && errors?.telepon?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.telepon._errors[0]}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col w-full mb-4">
+                      <Label className="text-[12px] text-neutral-900 font-semibold">
+                        Status Perkawinan
+                      </Label>
+
+                      <Select
+                        name="status_kawin"
+                        value={
+                          selectedKawin ? String(selectedKawin) : undefined
+                        }
+                        onValueChange={(value) => {
+                          setSelectedKawin(Number(value));
+                        }}>
+                        <SelectTrigger
+                          className={`${
+                            !selectedKawin ? "opacity-70" : ""
+                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                          <SelectValue
+                            placeholder="Pilih Status Perkawinan"
+                            className={
+                              selectedKawin ? "" : "placeholder:opacity-50"
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent className="w-full">
+                          {statusKawins?.map(
+                            (
+                              kawin: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                key={i}
+                                value={String(kawin.id)}>
+                                {kawin.value}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+
+                      {hasSubmitted && errors?.status_kawin?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.status_kawin._errors[0]}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                    <div className="flex flex-col w-full md:mb-4">
                       <Label className="text-[12px] text-neutral-900 font-semibold">
                         Jenis Kelamin
                       </Label>
@@ -439,83 +635,17 @@ export default function DataDiriPage() {
                           )}
                         </SelectContent>
                       </Select>
-                    </div>
-                  </div>
 
-                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-                    <div className="flex flex-col w-full mb-4">
-                      <ProfileEditInput
-                        names="nik"
-                        types="number"
-                        value={detail?.nik || ""}
-                        change={changeUser}
-                        labelName="NIK"
-                        placeholder="NIK"
-                        classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                        labelStyle="text-[12px] text-neutral-900 font-semibold"
-                      />
+                      {hasSubmitted && errors?.gender?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.gender._errors[0]}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
                       <Label className="text-[12px] text-neutral-900 font-semibold">
-                        Agama
-                      </Label>
-
-                      <Select
-                        name="agama"
-                        value={
-                          selectedAgama ? String(selectedAgama) : undefined
-                        }
-                        onValueChange={(value) => {
-                          setSelectedAgama(Number(value));
-                        }}>
-                        <SelectTrigger
-                          className={`${
-                            !selectedAgama ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
-                          <SelectValue
-                            placeholder="Pilih Jenis Kelamin"
-                            className={
-                              selectedAgama ? "" : "placeholder:opacity-50"
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent className="w-full">
-                          {agamas?.map(
-                            (
-                              agama: { id: number; value: string },
-                              i: number
-                            ) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(agama.id)}>
-                                {agama.value}
-                              </SelectItem>
-                            )
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-                    <div className="flex flex-col w-full mb-4">
-                      <ProfileEditInput
-                        names="telepon"
-                        types="number"
-                        value={detail?.telepon || ""}
-                        change={changeUser}
-                        labelName="Nomor Telepon"
-                        placeholder="Nomor Telepon"
-                        classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                        labelStyle="text-[12px] text-neutral-900 font-semibold"
-                      />
-                    </div>
-
-                    <div className="flex flex-col w-full mb-4">
-                      <Label className="text-[12px] text-neutral-900 font-semibold">
-                        Pendidikan
+                        Pendidikan Terakhir
                       </Label>
 
                       <Select
@@ -533,7 +663,7 @@ export default function DataDiriPage() {
                             !selectedPendidikan ? "opacity-70" : ""
                           } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
                           <SelectValue
-                            placeholder="Pilih Jenis Kelamin"
+                            placeholder="Pilih Pendidikan Terakhir"
                             className={
                               selectedPendidikan ? "" : "placeholder:opacity-50"
                             }
@@ -555,6 +685,12 @@ export default function DataDiriPage() {
                           )}
                         </SelectContent>
                       </Select>
+
+                      {hasSubmitted && errors?.pendidikan?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.pendidikan._errors[0]}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -570,6 +706,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {hasSubmitted && errors?.email?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.email._errors[0]}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -583,6 +725,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {hasSubmitted && errors?.pekerjaan?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.pekerjaan._errors[0]}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -601,7 +749,7 @@ export default function DataDiriPage() {
                         }
                         onValueChange={(value) => {
                           setSelectedKecamatan(Number(value));
-                          setSelectedDesa(null);
+                          // setSelectedDesa(null);
                         }}>
                         <SelectTrigger
                           className={`${
@@ -636,6 +784,12 @@ export default function DataDiriPage() {
                           </div>
                         </SelectContent>
                       </Select>
+
+                      {hasSubmitted && errors?.kecamatan_id?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.kecamatan_id._errors[0]}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4w-full">
@@ -682,6 +836,12 @@ export default function DataDiriPage() {
                           </div>
                         </SelectContent>
                       </Select>
+
+                      {hasSubmitted && errors?.desa_id?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.desa_id._errors[0]}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -697,6 +857,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {hasSubmitted && errors?.rt?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.rt._errors[0]}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -710,6 +876,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {hasSubmitted && errors?.rw?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.rw._errors[0]}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -725,6 +897,12 @@ export default function DataDiriPage() {
                       onChange={changeUser}
                       className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
                     />
+
+                    {hasSubmitted && errors?.alamat?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.alamat._errors[0]}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-center items-end self-end md:w-full md:self-center my-[16px] md:pb-[30px]">
@@ -732,7 +910,7 @@ export default function DataDiriPage() {
                       className="w-[90px] md:w-[290px] h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                       type="submit"
                       variant="success"
-                      disabled={isButtonDisabled()}>
+                      disabled={!formValid || isLoading}>
                       {isLoading ? (
                         <Loader className="animate-spin" />
                       ) : (

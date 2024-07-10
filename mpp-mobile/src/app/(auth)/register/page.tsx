@@ -27,10 +27,12 @@ import { Input } from "@/components/ui/input";
 import { DesaType, KecamatanType, TermType } from "@/types/type";
 import parse from "html-react-parser";
 import { truncateTitle } from "@/utils/formatTitle";
+import { z } from "zod";
+import { schemaRegister } from "@/lib/zodSchema";
 
 const raleway = Raleway({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "700", "700", "800", "900"],
 });
 
 export default function RegisterScreen() {
@@ -63,30 +65,34 @@ export default function RegisterScreen() {
   const [isChecked, setIsChecked] = useState(false);
   const [formValid, setFormValid] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [errors, setErrors] = useState<any>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  const validateForm = () => {
-    if (
-      newUser.name &&
-      newUser.nik &&
-      newUser.telepon &&
-      newUser.email &&
-      newUser.password &&
-      selectedKecamatan &&
-      selectedDesa &&
-      newUser.rt &&
-      newUser.rw &&
-      newUser.alamat &&
-      isChecked
-    ) {
-      setFormValid(true);
-    } else {
-      setFormValid(false);
+  const validateForm = async () => {
+    try {
+      await schemaRegister.parseAsync({
+        ...newUser,
+        kecamatan_id: String(selectedKecamatan),
+        desa_id: String(selectedDesa),
+        term: isChecked,
+      });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const formattedErrors = error.format();
+        setErrors(formattedErrors);
+      }
+      setIsLoading(false);
+      return false;
     }
   };
 
   useEffect(() => {
-    validateForm();
-  }, [newUser, selectedKecamatan, selectedDesa, isChecked]);
+    if (hasSubmitted) {
+      validateForm();
+    }
+  }, [newUser, selectedKecamatan, selectedDesa, isChecked, hasSubmitted]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
@@ -157,38 +163,50 @@ export default function RegisterScreen() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...newUser, role_id: 5 }),
-          cache: "no-store",
+
+    setHasSubmitted(true);
+
+    const isValid = await validateForm();
+
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...newUser, role_id: 5 }),
+            cache: "no-store",
+          }
+        );
+
+        const result = await response.json();
+
+        if (response.ok) {
+          toast.success("Berhasil membuat akun, silahkan login", {
+            duration: 1000,
+          });
+          return router.push("/login");
+        } else {
+          toast.error(result.message || "Gagal membuat akun!");
         }
-      );
+      } catch (error: any) {
+        console.log(error);
 
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success("Berhasil membuat akun, silahkan login", {
-          duration: 1000,
-        });
-        return router.push("/login");
-      } else {
-        toast.error(result.message || "Gagal membuat akun!");
+        toast(error.message);
+      } finally {
+        setIsLoading(false);
+        setHasSubmitted(false);
       }
-    } catch (error: any) {
-      console.log(error);
-
-      toast(error.message);
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setFormValid(Object.keys(errors).length === 0 && isChecked);
+  }, [errors, isChecked]);
 
   const changeUser = (
     e: React.ChangeEvent<
@@ -261,6 +279,12 @@ export default function RegisterScreen() {
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                       labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
+
+                    {hasSubmitted && errors?.name?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.name._errors[0]}
+                      </div>
+                    )}
                   </div>
 
                   <div className="w-full">
@@ -274,6 +298,12 @@ export default function RegisterScreen() {
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                       labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
+
+                    {hasSubmitted && errors?.nik?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.nik._errors[0]}
+                      </div>
+                    )}
                   </div>
 
                   <div className="w-full">
@@ -287,6 +317,12 @@ export default function RegisterScreen() {
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                       labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
+
+                    {hasSubmitted && errors?.telepon?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.telepon._errors[0]}
+                      </div>
+                    )}
                   </div>
 
                   <div className="w-full">
@@ -300,6 +336,12 @@ export default function RegisterScreen() {
                       classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                       labelStyle="text-[12px] text-primary-800 font-semibold"
                     />
+
+                    {hasSubmitted && errors?.email?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.email._errors[0]}
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-col w-full">
@@ -327,6 +369,12 @@ export default function RegisterScreen() {
                         )}
                       </div>
                     </div>
+
+                    {hasSubmitted && errors?.password?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.password._errors[0]}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -385,6 +433,12 @@ export default function RegisterScreen() {
                         </div>
                       </SelectContent>
                     </Select>
+
+                    {hasSubmitted && errors.kecamatan_id?._errors[0] && (
+                      <p className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.kecamatan_id?._errors[0]}
+                      </p>
+                    )}
                   </div>
 
                   <div className="w-full">
@@ -429,6 +483,12 @@ export default function RegisterScreen() {
                         </div>
                       </SelectContent>
                     </Select>
+
+                    {hasSubmitted && errors.desa_id?._errors[0] && (
+                      <p className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.desa_id?._errors[0]}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex md:flex-row flex-col w-full md:justify-between gap-4">
@@ -443,6 +503,12 @@ export default function RegisterScreen() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-primary-800 font-semibold"
                       />
+
+                      {hasSubmitted && errors?.rt?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.rt._errors[0]}
+                        </div>
+                      )}
                     </div>
 
                     <div className="w-full md:w-1/2">
@@ -456,6 +522,12 @@ export default function RegisterScreen() {
                         classStyle="w-full pl-[16px] mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-primary-800 font-semibold"
                       />
+
+                      {hasSubmitted && errors?.rw?._errors && (
+                        <div className="text-error-700 text-[12px] md:text-[14px]">
+                          {errors.rw._errors[0]}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -471,6 +543,12 @@ export default function RegisterScreen() {
                       onChange={changeUser}
                       className="w-full rounded-3xl h-[74px] border border-neutral-700 md:h-[122px] text-[12px] placeholder:opacity-[70%]"
                     />
+
+                    {hasSubmitted && errors?.alamat?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.alamat._errors[0]}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

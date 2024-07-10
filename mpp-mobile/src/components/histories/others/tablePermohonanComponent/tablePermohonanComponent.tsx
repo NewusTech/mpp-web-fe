@@ -34,7 +34,7 @@ export default function TablePermohonanComponent({
       <TableCell className="w-1/2">{permohonanDate}</TableCell>
       <TableCell className="w-1/2">{permohonanStatus}</TableCell>
       <TableCell className="w-3/12">
-        {permohonan.status !== 3 ? (
+        {permohonan.status === 3 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}

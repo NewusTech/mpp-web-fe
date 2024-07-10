@@ -1,4 +1,5 @@
 "use client";
+
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Image from "next/legacy/image";

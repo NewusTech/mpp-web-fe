@@ -24,13 +24,6 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 import { AntrianDataType, PermohonanDataType } from "@/types/type";
 import { fetchRiwayatAntrian } from "@/store/action/actionHistoryAntrian";
 
-interface AntrianType {
-  noAntrian: string;
-  instansi: string;
-  waktu?: string;
-  tanggal: string;
-}
-
 const antrians = {
   data: [
     {
@@ -165,8 +158,6 @@ export default function RiwayatPage() {
     permohonanPage,
     itemsPerPage
   );
-
-  console.log(historyAntrianData.length);
 
   return (
     <section className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-3 md:mb-0 pb-32 md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
