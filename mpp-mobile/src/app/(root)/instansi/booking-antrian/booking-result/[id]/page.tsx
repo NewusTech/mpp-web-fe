@@ -2,31 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import qrcode from "@/../public/assets/png-transparent-qr-code-information-qr-code-android-qrcode-text-rectangle-monochrome-thumbnail.png";
 import Image from "next/legacy/image";
 import { AntrianBookingType } from "@/types/type";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import parse from "html-react-parser";
+import fetchGetBookingId from "@/components/fetching/getbookingid/getbookingid";
+import { Loader } from "lucide-react";
 
 export default function BookingResult({ params }: { params: { id: number } }) {
   const [antrian, setAntrian] = useState<AntrianBookingType>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchAntrian = async (id: number) => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/${id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("Authorization")}`,
-          },
-          cache: "no-store",
-        }
-      );
-
-      const result = await response.json();
+      const result = await fetchGetBookingId(id);
 
       setAntrian(result.data);
     } catch (error) {
@@ -37,6 +27,40 @@ export default function BookingResult({ params }: { params: { id: number } }) {
   useEffect(() => {
     fetchAntrian(params.id);
   }, [params.id]);
+
+  const downloadAntrian = async (id: number) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/pdf/${id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          cache: "no-store",
+        }
+      );
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Nomor Antrin.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      if (response.ok) {
+        toast("Berhasil download laporan");
+      }
+    } catch (error) {
+      toast("Gagal mendapatkan data!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="bg-primary-100 md:mb-0 pb-32 md:pb-[150px]">
@@ -91,8 +115,12 @@ export default function BookingResult({ params }: { params: { id: number } }) {
               </div>
 
               <div className="h-[40px] w-[160px] md:w-1/2 flex self-center justify-center items-center">
-                <Button type="submit" variant="error">
-                  Print
+                <Button
+                  onClick={() => downloadAntrian(antrian?.id ?? 0)}
+                  type="submit"
+                  variant="error"
+                  disabled={isLoading ? true : false}>
+                  {isLoading ? <Loader className="animate-spin" /> : "Print"}
                 </Button>
               </div>
             </div>

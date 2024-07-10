@@ -24,95 +24,6 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 import { AntrianDataType, PermohonanDataType } from "@/types/type";
 import { fetchRiwayatAntrian } from "@/store/action/actionHistoryAntrian";
 
-const antrians = {
-  data: [
-    {
-      noAntrian: "INV001",
-      instansi: "Dinas kesehatan",
-      tanggal: "22 Juni 2024",
-      waktu: "10.00 WIB",
-    },
-    {
-      noAntrian: "INV001",
-      instansi: "Dinas Sosial",
-      waktu: "09.00 WIB",
-      tanggal: "28 Juni 2024",
-    },
-    {
-      noAntrian: "INV001",
-      instansi: "Dinas koperasi",
-      waktu: "14.00 WIB",
-      tanggal: "24 Juni 2024",
-    },
-    {
-      noAntrian: "INV001",
-      instansi: "Dinas Lingkungan Hidup",
-      waktu: "11.00 WIB",
-      tanggal: "21 Juni 2024",
-    },
-    {
-      noAntrian: "INV001",
-      instansi: "Dinas pariwata, Kepemudaan, dan Olahraga",
-      waktu: "08.00 WIB",
-      tanggal: "25 Juni 2024",
-    },
-  ],
-};
-
-const permohonans = {
-  data: [
-    {
-      layanan: "Pembuatan KTP",
-      noPermohonan: "INV001",
-      instansi: "Dinas kesehatan",
-      tanggal: "22 Juni 2024",
-      status: "Sedang diproses",
-      pesan: "Menunggu konfirmasi dari Pemerintah",
-      tanggalSelesai: "24 Juni 2024",
-    },
-    {
-      layanan: "Pembuatan Kartu Keluarga",
-      noPermohonan: "INV001",
-      instansi: "Dinas Sosial",
-      waktu: "09.00 WIB",
-      tanggal: "28 Juni 2024",
-      status: "Selesai",
-      pesan: "Menunggu konfirmasi dari Pemerintah",
-      tanggalSelesai: "31 Juni 2024",
-    },
-    {
-      layanan: "Pembuatan SKCK",
-      noPermohonan: "INV001",
-      instansi: "Dinas koperasi",
-      waktu: "14.00 WIB",
-      tanggal: "24 Juni 2024",
-      status: "Gagal",
-      pesan: "Menunggu konfirmasi dari Pemerintah",
-      tanggalSelesai: "26 Juni 2024",
-    },
-    {
-      layanan: "Pembuatan Surat Pindah",
-      noPermohonan: "INV001",
-      instansi: "Dinas Lingkungan Hidup",
-      waktu: "11.00 WIB",
-      tanggal: "21 Juni 2024",
-      status: "Belum selesai",
-      pesan: "Menunggu konfirmasi dari Pemerintah",
-      tanggalSelesai: "23 Juni 2024",
-    },
-    {
-      layanan: "Pembuatan Surat Kematian",
-      noPermohonan: "INV001",
-      instansi: "Dinas pariwata, Kepemudaan, dan Olahraga",
-      waktu: "08.00 WIB",
-      tanggal: "25 Juni 2024",
-      status: "Gagal",
-      pesan: "Menunggu konfirmasi dari Pemerintah",
-      tanggalSelesai: "25 Juni 2024",
-    },
-  ],
-};
-
 export default function RiwayatPage() {
   const dispatch = useDispatch<AppDispatch>();
   const historyData = useSelector(
@@ -255,7 +166,7 @@ export default function RiwayatPage() {
                       </Table>
 
                       <PaginationComponent
-                        totalItems={permohonans.data.length}
+                        totalItems={historyData.length}
                         itemsPerPage={itemsPerPage}
                         currentPage={permohonanPage}
                         onPageChange={setPermohonanPage}
@@ -295,7 +206,7 @@ export default function RiwayatPage() {
                     </div>
                   )}
                   <PaginationComponent
-                    totalItems={antrians.data.length}
+                    totalItems={historyAntrianData.length}
                     itemsPerPage={itemsPerPage}
                     currentPage={antrianPage}
                     onPageChange={setAntrianPage}
@@ -324,7 +235,7 @@ export default function RiwayatPage() {
                     </div>
                   )}
                   <PaginationComponent
-                    totalItems={permohonans.data.length}
+                    totalItems={historyData.length}
                     itemsPerPage={itemsPerPage}
                     currentPage={permohonanPage}
                     onPageChange={setPermohonanPage}
