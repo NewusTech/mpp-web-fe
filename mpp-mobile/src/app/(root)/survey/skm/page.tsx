@@ -12,6 +12,9 @@ import { toast } from "sonner";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Image from "next/legacy/image";
 import { Textarea } from "@/components/ui/textarea";
+import { schemaSkm } from "@/lib/zodSchema";
+import z from "zod";
+import { Loader } from "lucide-react";
 
 type SurveiFormType = {
   id: number;
@@ -35,6 +38,33 @@ export default function SurveySKMPage() {
   const [kritissaran, setKritissaran] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const token = Cookies.get("Authorization");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<any>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [formValid, setFormValid] = useState(false);
+
+  const validateForm = async () => {
+    try {
+      await schemaSkm.parseAsync({
+        kritiksaran: kritissaran,
+      });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const formattedErrors = error.format();
+        setErrors(formattedErrors);
+      }
+      setIsLoading(false);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (hasSubmitted) {
+      validateForm();
+    }
+  }, [kritissaran, hasSubmitted]);
 
   const fetchSurvei = async (id: number) => {
     const response = await fetch(
@@ -67,6 +97,7 @@ export default function SurveySKMPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setHasSubmitted(true);
     const datainput = Object.keys(input).map((key) => ({
       surveyform_id: Number(key),
       nilai: input[key],
@@ -80,25 +111,41 @@ export default function SurveySKMPage() {
       kritiksaran: kritissaran,
     };
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/inputsurvey/create/${survei.layananId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-        cache: "no-store",
+    const isValid = await validateForm();
+
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/inputsurvey/create/${survei.layananId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(formData),
+            cache: "no-store",
+          }
+        );
+
+        await response.json();
+
+        toast("Terimakasih telah mengisi survei!", { duration: 2000 });
+        localStorage.clear();
+        router.push("/survey");
+      } catch (error) {
+        toast("Gagal mengisi survey!");
+      } finally {
+        setIsLoading(false);
+        setHasSubmitted(false);
       }
-    );
-
-    await response.json();
-
-    toast("Terimakasih telah mengisi survei!");
-    localStorage.clear();
-    router.push("/survey");
+    }
   };
+
+  useEffect(() => {
+    setFormValid(Object.keys(errors).length === 0);
+  }, [errors]);
 
   const isButtonDisabled = () => {
     return (
@@ -186,6 +233,12 @@ export default function SurveySKMPage() {
                     placeholder="Masukkan Kritik dan Saran"
                     className="mt-5 w-full h-[150px] border border-neutral-700 placeholder:opacity-35"
                   />
+
+                  {hasSubmitted && errors?.kritiksaran?._errors && (
+                    <div className="text-error-700 text-[12px] md:text-[14px]">
+                      {errors.kritiksaran._errors[0]}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex self-center justify-center items-end mb-[22px] mt-8">
@@ -193,8 +246,12 @@ export default function SurveySKMPage() {
                     className="w-full h-[30px] text-[12px] text-neutral-50 font-light"
                     type="submit"
                     variant="link"
-                    disabled={isButtonDisabled()}>
-                    Selesai
+                    disabled={isLoading || !formValid}>
+                    {isLoading ? (
+                      <Loader className="animate-spin" />
+                    ) : (
+                      "Selesai"
+                    )}
                   </Button>
                 </div>
               </form>

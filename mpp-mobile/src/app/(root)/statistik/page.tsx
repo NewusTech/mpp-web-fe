@@ -231,7 +231,7 @@ export default function StatisticsPage() {
         <div className="flex flex-col bg-neutral-50 shadow-md rounded-2xl mt-4 mx-[35px] md:px-[75px] md:mx-0">
           <div className="flex flex-col md:flex-row justify-between items-center mx-[10px] mt-4 md:px-[30px]">
             <h4 className="text-[16px] text-primary-900 font-semibold">
-              Grafik Bulanan Tahun 2024
+              Grafik Mal Pelayanan Publik
             </h4>
 
             <div className="flex flex-row justify-center items-center w-4/12 gap-x-4">

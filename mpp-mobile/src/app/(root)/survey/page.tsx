@@ -22,6 +22,7 @@ import {
 } from "@/store/action/actionSurvei";
 import { redirect } from "next/navigation";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
+import { Loader } from "lucide-react";
 
 type DataDinasType = {
   id: number;
@@ -51,6 +52,7 @@ export default function SurveySkmPage() {
   const [date, setDate] = useState("");
   const [changeOpacity, setChangeOpacity] = useState(false);
   const token = Cookies.get("Authorization");
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchDinas = async (search: string, page: number, limit: number) => {
     try {
@@ -120,8 +122,11 @@ export default function SurveySkmPage() {
     dispatch(setTanggal(e.target.value));
   };
 
-  const isButtonDisabled = () => {
-    return !selectedDinas || !selectedLayanan || !date;
+  const handleButtonClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
   };
 
   return (
@@ -223,8 +228,11 @@ export default function SurveySkmPage() {
                 className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
                 type="submit"
                 variant="warning"
-                disabled={isButtonDisabled()}>
-                <Link href="/survey/skm">Isi SKM</Link>
+                disabled={isLoading ? true : false}
+                onClick={handleButtonClick}>
+                <Link href="/survey/skm">
+                  {isLoading ? <Loader className="animate-spin" /> : "Isi SKM"}
+                </Link>
               </Button>
             </div>
           </div>

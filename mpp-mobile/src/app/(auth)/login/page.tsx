@@ -26,8 +26,8 @@ const formSchema = z.object({
     .min(16, { message: "NIK must be at least 16 characters" })
     .max(16, { message: "NIK must be less than 16 characters" }),
   password: z
-    .string({ message: "Password must be more than 2 characters" })
-    .min(2, { message: "Password must be more than 2 characters" }),
+    .string({ message: "Password must be more than 6 characters" })
+    .min(6, { message: "Password must be more than 6 characters" }),
 });
 
 export default function LoginScreen() {

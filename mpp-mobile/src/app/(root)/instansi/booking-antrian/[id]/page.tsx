@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AntrianFormType } from "@/types/type";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { schemaBooking } from "@/lib/zodSchema";
+import { z } from "zod";
+import { Loader } from "lucide-react";
 
 export default function BookingAntrianPage({
   params,
@@ -34,6 +36,33 @@ export default function BookingAntrianPage({
     waktu: "",
   });
   const router = useRouter();
+  const [errors, setErrors] = useState<any>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formValid, setFormValid] = useState(false);
+
+  const validateForm = async () => {
+    try {
+      await schemaBooking.parseAsync({
+        ...antrian,
+      });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const formattedErrors = error.format();
+        setErrors(formattedErrors);
+      }
+      setIsLoading(false);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (hasSubmitted) {
+      validateForm();
+    }
+  }, [antrian, hasSubmitted]);
 
   const fetchLayanan = async (id: number) => {
     try {
@@ -52,43 +81,55 @@ export default function BookingAntrianPage({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("Authorization")}`,
-          },
-          body: JSON.stringify(antrian),
-          cache: "no-store",
-        }
-      );
+    setHasSubmitted(true);
 
-      const result = await response.json();
+    const isValid = await validateForm();
 
-      console.log(result, "ini result booking antrian");
-
-      if (response.ok) {
-        toast.success("Berhasil membooking antrian!");
-        setAntrian({
-          instansi_id: 0,
-          layanan_id: 0,
-          tanggal: "",
-          waktu: "",
-        });
-        setChangeOpacity(false);
-        router.push(
-          `/instansi/booking-antrian/booking-result/${result.data.id}`
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/create`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${Cookies.get("Authorization")}`,
+            },
+            body: JSON.stringify(antrian),
+            cache: "no-store",
+          }
         );
-      } else {
+
+        const result = await response.json();
+
+        if (response.ok) {
+          toast.success("Berhasil membooking antrian!");
+          setAntrian({
+            instansi_id: 0,
+            layanan_id: 0,
+            tanggal: "",
+            waktu: "",
+          });
+          setChangeOpacity(false);
+          router.push(
+            `/instansi/booking-antrian/booking-result/${result.data.id}`
+          );
+        } else {
+          toast("Gagal booking antrian!");
+        }
+      } catch (error) {
         toast("Gagal booking antrian!");
+      } finally {
+        setIsLoading(false);
+        setHasSubmitted(false);
       }
-    } catch (error) {
-      toast("Gagal booking antrian!");
     }
   };
+
+  useEffect(() => {
+    setFormValid(Object.keys(errors).length === 0);
+  }, [errors]);
 
   const handleSelectChangeDinas = (value: string) => {
     setSelected(value);
@@ -114,10 +155,6 @@ export default function BookingAntrianPage({
       ...prevAntrian,
       tanggal: e.target.value,
     }));
-  };
-
-  const isButtonDisabled = () => {
-    return !selected || !tanggal || !jam;
   };
 
   return (
@@ -162,6 +199,12 @@ export default function BookingAntrianPage({
                     </div>
                   </SelectContent>
                 </Select>
+
+                {hasSubmitted && errors?.layanan_id?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.layanan_id._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col items-center my-[10px] md:mt-[14px] mx-[1px]">
@@ -182,6 +225,12 @@ export default function BookingAntrianPage({
                     // appearance: "none",
                   }}
                 />
+
+                {hasSubmitted && errors?.tanggal?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.tanggal._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col items-center my-[10px] md:my-[20px] mx-[1px]">
@@ -202,6 +251,12 @@ export default function BookingAntrianPage({
                     appearance: "none",
                   }}
                 />
+
+                {hasSubmitted && errors?.waktu?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.waktu._errors[0]}
+                  </div>
+                )}
               </div>
 
               <div className="flex md:self-center md:justify-center md:items-center w-full mb-8 gap-3 md:pb-8 mt-4">
@@ -254,9 +309,9 @@ export default function BookingAntrianPage({
 
                 <Button
                   type="submit"
-                  disabled={isButtonDisabled()}
+                  disabled={!formValid || isLoading}
                   className="text-[12px] flex items-center justify-center border-none text-center text-neutral-50 w-full md:w-4/12 h-[30px] md:h-[40px] bg-primary-700 hover:bg-primary-600 rounded-[50px] font-normal md:py-[11px] md:px-[99.5px]">
-                  Pilih
+                  {isLoading ? <Loader className="animate-spin" /> : "Pilih"}
                 </Button>
               </div>
             </form>

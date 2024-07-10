@@ -152,7 +152,7 @@ export default function CardLayananComponent({
           </Dialog>
         ) : (
           <>
-            {layanan.status === true ? (
+            {layanan.status === true && layanan.active_online === true ? (
               <Button className="flex items-center justify-center font-semibold text-wrap px-1 text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-md text-neutral-50">
                 <Link href={`/instansi/permohonan-layanan/${layanan.id}`}>
                   Permohonan Layanan

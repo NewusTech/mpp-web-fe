@@ -59,7 +59,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           <h6 className="text-[14px] font-semibold text-primary-800">Status</h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            :{" "}
+            :
             {permohonan.status === 0
               ? "Belum diproses"
               : permohonan.status === 1

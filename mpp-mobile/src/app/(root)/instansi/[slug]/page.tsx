@@ -82,8 +82,6 @@ export default function InstansiDetail({
 
   const email = wrapText(detailins?.email || "", 15);
 
-  console.log(detailins, "ini detail");
-
   return (
     <div className="bg-primary-100 md:h-full pb-32">
       <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-8 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">

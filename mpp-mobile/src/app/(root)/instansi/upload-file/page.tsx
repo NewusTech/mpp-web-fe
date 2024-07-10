@@ -12,6 +12,7 @@ import { LayananType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { truncateTitle } from "@/utils/formatTitle";
+import parse from "html-react-parser";
 
 const steps = [
   { id: 1, title: "1" },
@@ -174,7 +175,7 @@ export default function UploadFilePage() {
   }
 
   return (
-    <div className="flex justify-center bg-primary-100 mt-6 mx-6 md:mx-[250px] md:mb-0 pb-32 md:pb-[362px]">
+    <div className="flex justify-center bg-primary-100 mt-6 mx-6 md:mx-[130px] md:mb-0 pb-32 md:pb-[362px]">
       <div className="flex flex-col md:w-full items-center gap-[12px]">
         <div className="flex flex-col w-full md:justify-between md:flex-row mb-[16px]">
           <div className="flex flex-row justify-between md:justify-center items-center">
@@ -216,7 +217,7 @@ export default function UploadFilePage() {
                         {el.field}
                       </h6>
                       <p className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
-                        {truncate}
+                        {parse(truncate)}
                       </p>
                     </div>
                     <div className="flex self-center items-center w-full md:justify-end">
@@ -274,7 +275,10 @@ export default function UploadFilePage() {
                 ))}
 
                 <div className="h-[40px] w-[150px] md:w-full flex self-center justify-center items-end mb-[22px] mt-[16px] md:mt-[24px]">
-                  <Button type="submit" variant="success">
+                  <Button
+                    type="submit"
+                    variant="success"
+                    disabled={isLoading ? true : false}>
                     {isLoading ? <Loader className="animate-spin" /> : "Ajukan"}
                   </Button>
                 </div>

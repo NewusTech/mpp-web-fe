@@ -112,6 +112,9 @@ export default function FormulirPage() {
 
   const handleClick = () => {
     setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
     let wadah: { layananform_id: number; data: string }[] = [];
     let checkboxWadah: { layananform_id: number; data: number[] }[] = [];
 
@@ -230,6 +233,7 @@ export default function FormulirPage() {
                     <Button
                       type="submit"
                       variant="success"
+                      disabled={isLoading ? true : false}
                       onClick={handleClick}>
                       <Link href="/instansi/upload-file">
                         {isLoading ? (

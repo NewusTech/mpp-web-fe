@@ -76,6 +76,40 @@ export default function ProfilePage() {
       break;
   }
 
+  let statusKawin = "";
+
+  switch (profile?.status_kawin) {
+    case 1:
+      statusKawin = "Belum Kawin";
+      break;
+    case 2:
+      statusKawin = "Kawin";
+      break;
+    case 3:
+      statusKawin = "Cerai Hidup";
+      break;
+    case 4:
+      statusKawin = "Cerai Mati";
+      break;
+  }
+
+  let golonganDarah = "";
+
+  switch (profile?.goldar) {
+    case 1:
+      golonganDarah = "A";
+      break;
+    case 2:
+      golonganDarah = "B";
+      break;
+    case 3:
+      golonganDarah = "AB";
+      break;
+    case 4:
+      golonganDarah = "O";
+      break;
+  }
+
   let pendidikan = "";
 
   switch (profile?.pendidikan) {
@@ -140,11 +174,11 @@ export default function ProfilePage() {
 
                 <div className="flex flex-col w-full mb-2">
                   <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Jenis Kelamin
+                    Golongan Darah
                   </label>
 
                   <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {gender || "Harap Perbarui Data Diri Anda!"}
+                    {golonganDarah || "Harap Perbarui Data Diri Anda!"}
                   </label>
                 </div>
               </div>
@@ -179,6 +213,28 @@ export default function ProfilePage() {
 
                   <label className="text-[12px] md:text-[14px] text-neutral-900">
                     {profile?.telepon}
+                  </label>
+                </div>
+
+                <div className="flex flex-col w-full mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Status Perkawinan
+                  </label>
+
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {statusKawin || "Harap Perbarui Data Diri Anda!"}
+                  </label>
+                </div>
+              </div>
+
+              <div className="md:grid md:grid-cols-2">
+                <div className="flex flex-col w-full mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Jenis Kelamin
+                  </label>
+
+                  <label className="text-[12px] md:text-[14px] text-neutral-900">
+                    {gender || "Harap Perbarui Data Diri Anda!"}
                   </label>
                 </div>
 
