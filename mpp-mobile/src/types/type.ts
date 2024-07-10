@@ -52,7 +52,9 @@ export interface ContactType {
 
 export interface PermohonanDataType {
   id: number;
+  instansi_id: number;
   instansi_name: string;
+  layanan_id: number;
   layanan_name: string;
   noPermohonan: string;
   instansi: string;
@@ -61,6 +63,7 @@ export interface PermohonanDataType {
   pesan: string;
   tanggalSelesai: string;
   createdAt: string;
+  input_skm: boolean;
 }
 
 export interface AntrianDataType {

@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import formatDate from "@/helpers/logout/formatted";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function HasilPermohonan({
@@ -16,6 +16,7 @@ export default function HasilPermohonan({
   params: { id: number };
 }) {
   const [permohonan, setPermohonan] = useState<PermohonanDataType>();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const fetchRiwayatPermohonan = async (id: number) => {
@@ -67,6 +68,48 @@ export default function HasilPermohonan({
   } else {
     permohonanStatus = "Ditolak";
   }
+
+  const downloadPermohonan = async (
+    idLayanan: number,
+    idPermohonan: number
+  ) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/surat/${idLayanan}/${idPermohonan}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          cache: "no-store",
+        }
+      );
+
+      const blob = await response.blob();
+      console.log(blob, "ini blob");
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Surat Permohonan.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      if (response.ok) {
+        toast("Berhasil download laporan");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      toast("Gagal mendapatkan data!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  console.log(permohonan, "ini permohonan");
 
   return (
     <div className="flex flex-col mx-6 md:mx-20 bg-neutral-50 px-6 md:px-14 py-6 rounded-xl mt-6">
@@ -123,10 +166,10 @@ export default function HasilPermohonan({
           </div>
         </div>
 
-        {permohonan?.status === 3 ? (
+        {permohonan?.status === 3 && permohonan?.input_skm === false ? (
           <Link
             href={"/survey"}
-            className="text-[12px] text-warning-700 font-normal mt-[12px]">
+            className="text-[12px] animate-bounce underline text-warning-700 font-normal mt-[12px]">
             Silahkan mengisi survey kepuasan masyarakat (SKM) terlebih dahulu
             agar dapat mengunduh hasil permohonan.
           </Link>
@@ -141,15 +184,31 @@ export default function HasilPermohonan({
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
         <Button
           type="submit"
-          className="text-[12px] text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+          className="text-[12px] w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
           Lihat
         </Button>
 
-        <Button
-          type="submit"
-          className="text-[12px] text-neutral-50 font-normal">
-          Unduh
-        </Button>
+        {permohonan?.input_skm === false ? (
+          <Button
+            disabled
+            type="submit"
+            className="w-2/12 text-center bg-neutral-700 cursor-not-allowed text-neutral-50 rounded-full py-2 px-2">
+            Unduh
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="text-[12px] w-2/12 text-neutral-50 font-normal"
+            onClick={() =>
+              downloadPermohonan(
+                permohonan?.layanan_id ?? 0,
+                permohonan?.id ?? 0
+              )
+            }
+            disabled={isLoading ? true : false}>
+            {isLoading ? <Loader className="animate-spin" /> : "Unduh"}
+          </Button>
+        )}
       </div>
     </div>
   );
