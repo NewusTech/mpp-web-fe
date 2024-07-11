@@ -20,6 +20,7 @@ jobs:
     - uses: actions/checkout@v4
     - name : NVM use 22
       run : nvm use 22
+      working-directory: mpp-mobile
     - name: Use Node.js 
       uses: actions/setup-node@v3
       with:
