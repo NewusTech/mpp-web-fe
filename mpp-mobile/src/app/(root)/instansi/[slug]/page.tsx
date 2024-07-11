@@ -55,7 +55,6 @@ export default function InstansiDetail({
 }) {
   const [detailins, setDetailIns] = useState<detailType>();
   const [activeTab, setActiveTab] = useState("Persyaratan");
-  // const token = Cookies.get("Authorization");
   const [token, setToken] = useState<string | undefined>(undefined);
 
   const fetchDetail = async (slug: string) => {
@@ -81,14 +80,15 @@ export default function InstansiDetail({
   }, [params.slug]);
 
   const email = wrapText(detailins?.email || "", 15);
+  console.log(detailins, "detail");
 
   return (
     <div className="bg-primary-100 md:h-full pb-32">
-      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-8 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
-        <div className="md:flex md:flex-row w-full">
-          <div className="flex flex-col items-center w-full md:w-10/12 min-h-[400px] md:min-h-full justify-center md:mx-0 outline outline-1 outline-neutral-700 bg-primary-700 shadow-md rounded-xl">
+      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-4 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
+        <div className="flex md:items-center md:flex-row w-full">
+          <div className="flex flex-col items-center w-full md:w-10/12 h-full md:min-h-full justify-center md:mx-0 bg-neutral-50 shadow-lg rounded-xl">
             {detailins?.image && (
-              <div className="flex items-center justify-center w-full h-full">
+              <div className="flex items-center justify-center w-full h-full p-8 md:p-24">
                 <Image
                   src={detailins?.image}
                   className="w-full h-full object-contain"
@@ -99,15 +99,15 @@ export default function InstansiDetail({
               </div>
             )}
 
-            <div className="grid grid-rows-1 w-full mt-2 place-items-center mb-10 px-3">
+            <div className="grid grid-rows-1 w-full mt-2 bg-primary-700 place-items-center place-content-center rounded-b-xl py-5 px-3">
               <h6 className="text-[20px] text-center text-neutral-50 font-normal">
                 {detailins?.name}
               </h6>
             </div>
           </div>
 
-          <div className="grid grid-rows-6 mt-8 md:ml-[70px]">
-            <div className="grid grid-cols-2 items-center mb-4">
+          <div className="grid grid-rows-7 mt-8 md:ml-[70px]">
+            <div className="grid grid-cols-2 items-center mb-3">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Alamat
               </h6>
@@ -117,7 +117,7 @@ export default function InstansiDetail({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-4">
+            <div className="grid grid-cols-2 items-center mb-3">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Kontak
               </h6>
@@ -127,7 +127,7 @@ export default function InstansiDetail({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-[15px]">
+            <div className="grid grid-cols-2 items-center mb-3">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Email
               </h6>
@@ -137,7 +137,17 @@ export default function InstansiDetail({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-4">
+            <div className="grid grid-cols-2 items-center mb-3">
+              <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
+                Website
+              </h6>
+
+              <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
+                -
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 items-center mb-3">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Jam Operasional
               </h6>
@@ -147,7 +157,7 @@ export default function InstansiDetail({
               </p>
             </div>
 
-            <div className="grid grid-cols-2 items-center mb-4">
+            <div className="grid grid-cols-2 items-center mb-3">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Jumlah Layanan
               </h6>
@@ -162,7 +172,7 @@ export default function InstansiDetail({
                 <Dialog>
                   <DialogTrigger asChild>
                     <div className="bg-secondary-700 text-[12px] md:text-[16px] px-5 flex items-center justify-center hover:bg-secondary-600 text-neutral-50 w-full h-[40px] rounded-full">
-                      booking Antrian
+                      Booking Antrian
                     </div>
                   </DialogTrigger>
                   <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center p-6">
@@ -214,7 +224,7 @@ export default function InstansiDetail({
               {!token ? (
                 <Dialog>
                   <DialogTrigger asChild>
-                    <div className="bg-primary-700 px-5 text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
+                    <div className="bg-primary-700 px-5 font-semibold text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
                       Permohonan Layanan
                     </div>
                   </DialogTrigger>
@@ -247,7 +257,7 @@ export default function InstansiDetail({
               ) : (
                 <>
                   {detailins?.status === true ? (
-                    <Button className="w-full flex justify-center items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
+                    <Button className="w-full flex justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
                       <Link
                         href={`/instansi/permohonan-layanan/${detailins?.id}`}>
                         Permohonan Layanan
@@ -256,7 +266,7 @@ export default function InstansiDetail({
                   ) : (
                     <Button
                       disabled
-                      className="w-full flex justify-center items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
+                      className="w-full flex justify-center items-center font-normal rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
                       <Link href={`/instansi/${detailins?.slug}`}>
                         Permohonan Layanan
                       </Link>
@@ -266,16 +276,6 @@ export default function InstansiDetail({
               )}
             </div>
           </div>
-        </div>
-
-        <div className="flex flex-col mt-8 w-full">
-          <h6 className="text-[14px] md:text-[20px] text-primary-800 font-semibold">
-            Informasi Instansi
-          </h6>
-
-          <p className="text-[12px] md:text-[14px] font-normal text-neutral-900 mt-[16px] text-justify">
-            {detailins?.desc}
-          </p>
         </div>
       </div>
 
@@ -294,12 +294,12 @@ export default function InstansiDetail({
                   value={`item-${i}`}>
                   <AccordionTrigger>{item.name}</AccordionTrigger>
                   <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
-                    <div className="grid grid-cols-3 w-full md:w-6/12 p-2 mt-8 items-center justify-between border border-neutral-700 bg-neutral-50 rounded-full">
+                    <div className="grid grid-cols-3 w-full md:w-6/12 p-2 items-center justify-between border border-neutral-700 bg-neutral-50 rounded-full">
                       <button
-                        className={`p-2 ${
+                        className={`p-1 md:p-2 ${
                           activeTab === "Persyaratan"
-                            ? "bg-primary-700 text-neutral-50 text-[14px] rounded-full w-full"
-                            : "text-neutral-900"
+                            ? "bg-primary-700 text-neutral-50 text-[12px] rounded-full w-full"
+                            : "text-neutral-900 text-[12px]"
                         }`}
                         onClick={() => setActiveTab("Persyaratan")}>
                         Persyaratan
@@ -308,18 +308,18 @@ export default function InstansiDetail({
                       <button
                         className={`p-1 md:p-2 ${
                           activeTab === "Dasar Hukum"
-                            ? "bg-primary-700 text-neutral-50 text-[14px] rounded-full w-full"
-                            : "text-neutral-900"
+                            ? "bg-primary-700 text-neutral-50 text-[12px] rounded-full w-full"
+                            : "text-neutral-900 text-[12px]"
                         }`}
                         onClick={() => setActiveTab("Dasar Hukum")}>
                         Dasar Hukum
                       </button>
 
                       <button
-                        className={`p-2 ${
+                        className={`p-1 md:p-2 ${
                           activeTab === "Pelayanan"
-                            ? "bg-primary-700 text-neutral-50 text-[14px] rounded-full w-full"
-                            : "text-neutral-900"
+                            ? "bg-primary-700 text-neutral-50 text-[12px] rounded-full w-full"
+                            : "text-neutral-900 text-[12px]"
                         }`}
                         onClick={() => setActiveTab("Pelayanan")}>
                         Pelayanan
