@@ -340,7 +340,6 @@ export default function PengaduanScreen() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  console.log(pengaduanlists, "ini pengaduan");
 
   return (
     <div className="flex flex-col bg-primary-100 mt-3 mx-[35px] md:mx-[70px] md:mb-5 pb-[124px]">

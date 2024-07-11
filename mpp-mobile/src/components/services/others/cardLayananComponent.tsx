@@ -19,8 +19,6 @@ export default function CardLayananComponent({
 }: {
   layanan: Layanantype;
 }) {
-  console.log(layanan, "layanan");
-
   const token = Cookies.get("Authorization");
 
   let bgStatus = "";

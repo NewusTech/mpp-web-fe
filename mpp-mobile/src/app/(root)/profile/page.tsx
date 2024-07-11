@@ -144,8 +144,6 @@ export default function ProfilePage() {
       break;
   }
 
-  console.log(profile?.aktalahir, ">>>");
-
   return (
     <section className="flex items-center justify-center w-full mb-32 pt-6 md:pb-16 bg-primary-100">
       <div className="flex flex-col items-center w-full mx-8 md:mx-[200px]">
