@@ -13,40 +13,63 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: [22] # nvm uses only major version number
 
     steps:
     - uses: actions/checkout@v4
-    - name : NVM use 22
-      run : nvm use 22
-      working-directory: mpp-mobile
-    - name: Use Node.js 
-      uses: actions/setup-node@v3
-      with:
-        cache: 'npm'
-
-    - name: Install and Build mpp-web-fe
-      run: |
-        git pull origin main
-        npm install
-        npm run build
-      working-directory: mpp-web-fe
     
-    - name: Install and Build mpp-mobile
+    - name: Install NVM
       run: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+        echo 'export NVM_DIR="$HOME/.nvm"' >> $GITHUB_ENV
+        echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $GITHUB_ENV
+        echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set up Node.js ${{ matrix.node-version }} with NVM
+      run: |
+        source $GITHUB_ENV
+        nvm install ${{ matrix.node-version }}
+        nvm use ${{ matrix.node-version }}
+        node -v
+        npm -v
+      shell: bash
+    
+    - name: Install dan Build mpp-web-fe
+      working-directory: mpp-web-fe
+      run: |
+        source $GITHUB_ENV
+        nvm use ${{ matrix.node-version }}
         git pull origin main
         npm install
         npm run build
+      shell: bash
+    
+    - name: Install dan Build mpp-mobile
       working-directory: mpp-mobile
+      run: |
+        source $GITHUB_ENV
+        nvm use ${{ matrix.node-version }}
+        git pull origin main
+        npm install
+        npm run build
+      shell: bash
     
     - name: Restart PM2 Service
       run: pm2 restart mppdigital.newus.id
 
-    - name: Run Tests mpp-web-fe
-      run: npm test
+    - name: Jalankan Tes mpp-web-fe
       working-directory: mpp-web-fe
+      run: |
+        source $GITHUB_ENV
+        nvm use ${{ matrix.node-version }}
+        npm test
+      shell: bash
 
-    - name: Run Tests mpp-mobile
-      run: npm test
+    - name: Jalankan Tes mpp-mobile
       working-directory: mpp-mobile
+      run: |
+        source $GITHUB_ENV
+        nvm use ${{ matrix.node-version }}
+        npm test
+      shell: bash
