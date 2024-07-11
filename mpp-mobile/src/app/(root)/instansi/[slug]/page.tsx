@@ -162,7 +162,7 @@ export default function InstansiDetail({
                 <Dialog>
                   <DialogTrigger asChild>
                     <div className="bg-secondary-700 text-[12px] md:text-[16px] px-5 flex items-center justify-center hover:bg-secondary-600 text-neutral-50 w-full h-[40px] rounded-full">
-                      booking Antrian
+                      Booking Antrian
                     </div>
                   </DialogTrigger>
                   <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center p-6">
