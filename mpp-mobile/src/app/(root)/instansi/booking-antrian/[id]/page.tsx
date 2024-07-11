@@ -159,15 +159,15 @@ export default function BookingAntrianPage({
 
   return (
     <div className="w-full bg-primary-100 md:mb-0">
-      <div className="flex w-full justify-center bg-primary-100 px-[35px] md:px-[150px] mt-[24px] mb-[170px] md:mb-0 md:pb-[130px]">
-        <div className="flex w-full h-full md:w-full flex-col items-center">
+      <div className="flex w-full justify-center bg-primary-100 px-8 md:px-[150px] mt-[24px] mb-[170px] md:mb-0 md:pb-[130px]">
+        <div className="flex w-full h-full flex-col items-center">
           <div className="md:w-full">
             <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
               Booking Antrian
             </h5>
           </div>
 
-          <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-neutral-50 rounded-2xl shadow-md">
+          <div className="flex flex-col w-full border border-neutral-700 items-center px-[25px] mt-[32px] bg-neutral-50 rounded-xl shadow-md">
             <form
               onSubmit={handleSubmit}
               className="flex flex-col w-full md:px-[105px]">
@@ -178,19 +178,19 @@ export default function BookingAntrianPage({
                   <SelectTrigger
                     className={`${
                       !selected ? "opacity-50" : ""
-                    } border-b border-neutral-800 rounded-none pl-4 w-full mx-0 pr-0`}>
+                    } border-b border-neutral-800 rounded-none text-start pl-4 w-full mx-0 pr-0`}>
                     <SelectValue
                       placeholder="Pilih Layanan"
                       className={selected ? "" : "placeholder:opacity-50"}
                     />
                   </SelectTrigger>
-                  <SelectContent className="w-full md:w-full">
-                    <div>
+                  <SelectContent className="w-[94%] pl-2 ml-2 md:pl-0 md:ml-0 md:w-full">
+                    <div className="w-full">
                       {services.map((service: any, i: number) => {
                         return (
                           <SelectItem
                             key={i}
-                            className="pr-none text-neutral-900"
+                            className="pr-none pl-0 text-neutral-900"
                             value={service.id.toString()}>
                             {service.name}
                           </SelectItem>

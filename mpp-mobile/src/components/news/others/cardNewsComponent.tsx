@@ -21,8 +21,8 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
         <Image
           src={news.image}
           className="w-full h-full object-cover rounded-xl"
-          width={100}
-          height={900}
+          width={1000}
+          height={1000}
           layout="fill"
           alt="Lampung Timur"
         />

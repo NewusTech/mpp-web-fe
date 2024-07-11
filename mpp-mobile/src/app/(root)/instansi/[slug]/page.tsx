@@ -166,7 +166,7 @@ export default function InstansiDetail({
               </p>
             </div>
 
-            <div className="flex flex-row md:justify-between w-full items-center gap-x-4 self-center">
+            <div className="flex flex-row w-full md:justify-between justify-center items-center gap-x-2 self-center">
               {!token ? (
                 <Dialog>
                   <DialogTrigger asChild>
@@ -223,7 +223,7 @@ export default function InstansiDetail({
               {!token ? (
                 <Dialog>
                   <DialogTrigger asChild>
-                    <div className="bg-primary-700 px-5 font-semibold text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
+                    <div className="bg-primary-700 px-5 font-normal text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
                       Permohonan Layanan
                     </div>
                   </DialogTrigger>
@@ -256,20 +256,21 @@ export default function InstansiDetail({
               ) : (
                 <>
                   {detailins?.status === true ? (
-                    <Button className="w-full flex justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
-                      <Link
-                        href={`/instansi/permohonan-layanan/${detailins?.id}`}>
+                    <Link
+                      className="w-full h-[40px] md:w-full flex justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
+                      href={`/instansi/permohonan-layanan/${detailins?.id}`}>
+                      <Button className="font-normal">
                         Permohonan Layanan
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
                   ) : (
-                    <Button
-                      disabled
-                      className="w-full flex justify-center items-center font-normal rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
-                      <Link href={`/instansi/${detailins?.slug}`}>
+                    <Link
+                      className="w-full h-[40px] flex justify-center items-center font-normal rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
+                      href={`/instansi/${detailins?.slug}`}>
+                      <Button className="font-normal" disabled>
                         Permohonan Layanan
-                      </Link>
-                    </Button>
+                      </Button>
+                    </Link>
                   )}
                 </>
               )}

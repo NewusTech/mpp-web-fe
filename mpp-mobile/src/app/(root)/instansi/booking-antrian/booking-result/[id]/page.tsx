@@ -78,9 +78,9 @@ export default function BookingResult({ params }: { params: { id: number } }) {
                 </h5>
               </div>
 
-              <div className="flex flex-col mt-3 mb-4">
+              <div className="flex flex-col w-full mt-3 mb-4">
                 <div className="flex flex-col w-full mt-3 mb-2">
-                  <div className="flex justify-between mb-2">
+                  <div className="flex justify-center md:justify-center mb-2 gap-x-20">
                     <p className="text-[10px] md:text-[16px] font-extralight">
                       {antrian?.tanggal}
                     </p>
@@ -94,7 +94,7 @@ export default function BookingResult({ params }: { params: { id: number } }) {
                     {antrian?.qrcode && (
                       <Image
                         src={antrian?.qrcode}
-                        className="w-full h-full object-contain rounded-xl"
+                        className="w-full h-full object-cover rounded-xl"
                         alt="QR CODE"
                         width={200}
                         height={200}
@@ -131,11 +131,9 @@ export default function BookingResult({ params }: { params: { id: number } }) {
               Persyaratan yang harus dibawa
             </h5>
 
-            <ul className="list-disc list-inside ml-[12px]">
-              <li className="text-[12px] md:text-[16px] text-[#656565] font-normal">
-                {antrian?.Layanan.syarat && parse(antrian?.Layanan.syarat)}
-              </li>
-            </ul>
+            <div className="text-[12px] md:text-[16px] text-neutral-900 font-normal">
+              {antrian?.Layanan.syarat && parse(antrian?.Layanan.syarat)}
+            </div>
           </div>
         </div>
       </div>
