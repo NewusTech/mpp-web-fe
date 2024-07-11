@@ -24,6 +24,7 @@ import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstan
 import { JenisLayananType } from "@/types/type";
 import { Loader } from "lucide-react";
 import parse from "html-react-parser";
+import { truncateTitle } from "@/utils/formatTitle";
 
 const steps = [
   { id: 1, title: "1" },
@@ -73,6 +74,8 @@ export default function PermohonanLayananFirstScreen({
     fetchLayanan(params.id);
   }, [params.id]);
 
+  console.log(service, "service");
+
   const handleSelectChange = (value: any) => {
     dispatch(setId(Number(value)));
     const selected = service.find(
@@ -118,14 +121,14 @@ export default function PermohonanLayananFirstScreen({
 
   return (
     <div className="flex flex-col items-center justify-center mt-6 md:mt-4 mx-6 md:mx-[70px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
-      <div className="flex flex-col w-full items-center bg-neutral-50 rounded-xl shadow-md py-4 md:py-9 md:px-16 gap-[16px]">
-        <div className="flex flex-col md:w-full">
-          <div className="flex flex-col md:flex-row md:justify-between w-[300px] md:w-full h-[50px] md:h-6 gap-[24px]">
+      <div className="flex flex-col w-full px-4 items-center bg-neutral-50 rounded-xl shadow-md py-4 md:py-9 md:px-16 gap-[16px]">
+        <div className="flex flex-col w-full">
+          <div className="flex flex-col md:flex-row md:justify-between w-full md:w-full h-[50px] md:h-6 gap-[24px]">
             <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
               Permohonan Layanan
             </h5>
 
-            <div className="flex flex-row items-center justify-center">
+            <div className="flex flex-row items-center justify-center self-center">
               {steps.map((step, index) => (
                 <Steps
                   key={step.id}
@@ -137,26 +140,29 @@ export default function PermohonanLayananFirstScreen({
             </div>
           </div>
 
-          <div className="flex flex-col md:w-full pt-[64px]">
+          <div className="flex flex-col w-full md:w-full pt-[64px]">
             <div>
-              <div className="flex self-center h-[40px]">
+              <div className="flex w-full self-center h-[40px]">
                 <div className="flex w-full md:w-1/2 border border-neutral-700 h-[40px] rounded-[50px]">
                   <Select
                     name="layanan_id"
                     onValueChange={handleSelectChange}
                     defaultValue={localStorage.getItem("instanceId") || ""}>
                     <SelectTrigger
-                      className={
-                        !selectedService && !localStorage.getItem("instanceId")
-                          ? "opacity-50"
-                          : ""
-                      }>
+                      className={`w-full
+                        ${
+                          !selectedService &&
+                          !localStorage.getItem("instanceId")
+                            ? "opacity-50"
+                            : ""
+                        }
+                      `}>
                       <SelectValue placeholder="Pilih Layanan Permohonan" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="w-[96%] md:w-full">
                       {service?.map((el: JenisLayananType) => {
                         return (
-                          <div key={el.id}>
+                          <div key={el.id} className="w-11/12 md:w-full">
                             {el.active_online === false ? (
                               <SelectItem disabled value={String(el.id)}>
                                 {el.name}

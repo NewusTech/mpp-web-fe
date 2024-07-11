@@ -234,7 +234,7 @@ export default function MppNext({
                           className="fixed inset-0 flex items-center justify-center bg-neutral-900 bg-opacity-90 z-50"
                           onClick={handleBackdropClick}>
                           <div
-                            className="relative w-8/12 h-1/3 md:w-8/12 md:h-4/6 bg-neutral-50 rounded-xl p-4"
+                            className="relative w-8/12 h-1/3 md:h-4/6 bg-neutral-50 rounded-xl p-4"
                             onClick={(e) => e.stopPropagation()}>
                             <Image
                               src={facility.image}

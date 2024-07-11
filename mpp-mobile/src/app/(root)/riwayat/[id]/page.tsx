@@ -181,7 +181,7 @@ export default function HasilPermohonan({
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
         <Button
           type="submit"
-          className="text-[12px] w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+          className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
           Lihat
         </Button>
 
@@ -189,13 +189,13 @@ export default function HasilPermohonan({
           <Button
             disabled
             type="submit"
-            className="w-2/12 text-center bg-neutral-700 cursor-not-allowed text-neutral-50 rounded-full py-2 px-2">
+            className="md:w-2/12 text-center bg-neutral-700 cursor-not-allowed text-neutral-50 rounded-full py-2 px-2">
             Unduh
           </Button>
         ) : (
           <Button
             type="submit"
-            className="text-[12px] w-2/12 text-neutral-50 font-normal"
+            className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
             onClick={() =>
               downloadPermohonan(
                 permohonan?.layanan_id ?? 0,
