@@ -30,7 +30,7 @@ export default function CardPengaduanComponent({
   return (
     <div className="bg-primary-100 rounded-2xl shadow-md px-[16px] py-[29px] mt-[16px]">
       <div className="grid grid-rows-3">
-        <div className="grid grid-cols-2 w-full h-[40px]">
+        <div className="grid grid-cols-2 w-full h-[40px] mb-4">
           <p className="text-[12px] text-primary-800 font-semibold">Layanan</p>
 
           <p className="text-[12px] text-primary-800 font-normal">
@@ -76,13 +76,13 @@ export default function CardPengaduanComponent({
 
       <div className="flex w-full self-end justify-end">
         {pengaduan.status !== 3 ? (
-          <div className="w-2/12 h-[18px] cursor-not-allowed flex items-center justify-center rounded-xl text-[8px] bg-neutral-700 hover:bg-neutral-600">
+          <div className="w-3/12 h-[18px] py-4 text-[14px] cursor-not-allowed flex items-center justify-center rounded-full bg-neutral-700 hover:bg-neutral-600">
             Lihat
           </div>
         ) : (
           <Dialog>
             <DialogTrigger>
-              <div className="w-2/12 h-[18px] flex items-center justify-center rounded-xl text-[8px] bg-secondary-700 hover:bg-secondary-600">
+              <div className="w-3/12 h-[18px] py-4 flex items-center justify-center rounded-full text-[14px] bg-secondary-700 hover:bg-secondary-600">
                 Lihat
               </div>
             </DialogTrigger>

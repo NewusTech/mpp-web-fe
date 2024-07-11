@@ -630,7 +630,7 @@ export default function PengaduanScreen() {
                         <TableHead className="w-5/12 bg-primary-400">
                           Status
                         </TableHead>
-                        <TableHead className="w-2/12 bg-primary-400">
+                        <TableHead className="w-3/12 bg-primary-400">
                           Aksi
                         </TableHead>
                       </TableRow>
@@ -687,8 +687,8 @@ export default function PengaduanScreen() {
                                         ? "Sudah ditindak lanjuti"
                                         : "Selesai"}
                                     </TableCell>
-                                    <TableCell className="w-2/12">
-                                      <div className="w-full px-2 h-[18px] cursor-not-allowed text-center rounded-xl text-[8px] bg-neutral-700 hover:bg-neutral-600">
+                                    <TableCell className="w-3/12">
+                                      <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-not-allowed text-center rounded-full bg-neutral-700 hover:bg-neutral-600">
                                         Lihat
                                       </div>
                                     </TableCell>
@@ -748,10 +748,10 @@ export default function PengaduanScreen() {
                                         ? "Sudah ditindak lanjuti"
                                         : "Selesai"}
                                     </TableCell>
-                                    <TableCell className="w-2/12">
+                                    <TableCell className="w-3/12">
                                       <Dialog>
                                         <DialogTrigger>
-                                          <div className="w-full px-2 h-[18px] rounded-xl text-[8px] bg-secondary-700 hover:bg-secondary-600">
+                                          <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-pointer text-center rounded-full bg-secondary-700 hover:bg-secondary-600">
                                             Lihat
                                           </div>
                                         </DialogTrigger>
@@ -854,7 +854,7 @@ export default function PengaduanScreen() {
           ) : (
             <>
               {loadingData ? (
-                <div className="container mx-auto flex flex-col md:w-full justify-center items-center w-full h-full">
+                <div className="container mx-auto flex mt-6 flex-col md:w-full justify-center items-center w-full h-full">
                   <LoadingComponent />
                 </div>
               ) : (

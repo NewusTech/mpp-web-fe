@@ -73,7 +73,7 @@ export default function BookingResult({ params }: { params: { id: number } }) {
                   {antrian?.Instansi.name}
                 </h4>
 
-                <h5 className="text-[12px] md:text-[16px] font-extralight">
+                <h5 className="text-[12px] md:text-[16px] text-center font-extralight">
                   {antrian?.Layanan.name}
                 </h5>
               </div>

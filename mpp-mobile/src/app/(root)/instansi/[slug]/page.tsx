@@ -83,9 +83,9 @@ export default function InstansiDetail({
 
   return (
     <div className="bg-primary-100 md:h-full pb-32">
-      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-4 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
-        <div className="flex md:items-center md:flex-row w-full">
-          <div className="flex flex-col items-center w-full md:w-10/12 h-full md:min-h-full justify-center md:mx-0 bg-neutral-50 shadow-lg rounded-xl">
+      <div className="flex flex-col bg-neutral-50 rounded-xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-4 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
+        <div className="flex flex-col md:items-center md:flex-row w-full bg-neutral-50 p-4 rounded-xl">
+          <div className="flex flex-col items-center border border-neutral-700 w-full md:w-10/12 h-full md:min-h-full justify-center md:mx-0 bg-neutral-50 shadow-lg rounded-xl">
             {detailins?.image && (
               <div className="flex items-center justify-center w-full h-full p-8 md:p-24">
                 <Image
@@ -278,7 +278,7 @@ export default function InstansiDetail({
         </div>
       </div>
 
-      <div className="flex flex-col bg-primary-100 md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
+      <div className="flex flex-col bg-primary-50 p-4 rounded-xl shadow-lg md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
         <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold mb-8">
           Informasi Layanan
         </h5>
@@ -291,7 +291,9 @@ export default function InstansiDetail({
                   key={i}
                   className="w-full h-full mb-2"
                   value={`item-${i}`}>
-                  <AccordionTrigger>{item.name}</AccordionTrigger>
+                  <AccordionTrigger className="text-[12px]">
+                    {item.name}
+                  </AccordionTrigger>
                   <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
                     <div className="grid grid-cols-3 w-full md:w-6/12 p-2 items-center justify-between border border-neutral-700 bg-neutral-50 rounded-full">
                       <button

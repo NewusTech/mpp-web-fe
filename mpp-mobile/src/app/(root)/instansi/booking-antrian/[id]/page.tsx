@@ -184,7 +184,7 @@ export default function BookingAntrianPage({
                       className={selected ? "" : "placeholder:opacity-50"}
                     />
                   </SelectTrigger>
-                  <SelectContent className="w-[266px] md:w-full">
+                  <SelectContent className="w-full md:w-full">
                     <div>
                       {services.map((service: any, i: number) => {
                         return (
