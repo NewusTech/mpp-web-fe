@@ -184,13 +184,13 @@ export default function BookingAntrianPage({
                       className={selected ? "" : "placeholder:opacity-50"}
                     />
                   </SelectTrigger>
-                  <SelectContent className="w-[94%] pl-2 ml-2 md:pl-0 md:ml-0 md:w-full">
+                  <SelectContent className="w-[97%] md:w-full">
                     <div className="w-full">
                       {services.map((service: any, i: number) => {
                         return (
                           <SelectItem
                             key={i}
-                            className="pr-none pl-0 text-neutral-900"
+                            className="pr-none text-neutral-900"
                             value={service.id.toString()}>
                             {service.name}
                           </SelectItem>

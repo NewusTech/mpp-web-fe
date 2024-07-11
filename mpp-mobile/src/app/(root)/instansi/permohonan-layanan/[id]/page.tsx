@@ -74,8 +74,6 @@ export default function PermohonanLayananFirstScreen({
     fetchLayanan(params.id);
   }, [params.id]);
 
-  console.log(service, "service");
-
   const handleSelectChange = (value: any) => {
     dispatch(setId(Number(value)));
     const selected = service.find(
