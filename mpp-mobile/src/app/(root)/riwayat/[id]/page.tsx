@@ -88,7 +88,6 @@ export default function HasilPermohonan({
       );
 
       const blob = await response.blob();
-      console.log(blob, "ini blob");
 
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -108,8 +107,6 @@ export default function HasilPermohonan({
       setIsLoading(false);
     }
   };
-
-  console.log(permohonan, "ini permohonan");
 
   return (
     <div className="flex flex-col mx-6 md:mx-20 bg-neutral-50 px-6 md:px-14 py-6 rounded-xl mt-6">

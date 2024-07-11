@@ -80,7 +80,6 @@ export default function InstansiDetail({
   }, [params.slug]);
 
   const email = wrapText(detailins?.email || "", 15);
-  console.log(detailins, "detail");
 
   return (
     <div className="bg-primary-100 md:h-full pb-32">

@@ -116,8 +116,6 @@ export default function PermohonanLayananFirstScreen({
     }, 2000);
   };
 
-  console.log(service, "service");
-
   return (
     <div className="flex flex-col items-center justify-center mt-6 md:mt-4 mx-6 md:mx-[70px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
       <div className="flex flex-col w-full items-center bg-neutral-50 rounded-xl shadow-md py-4 md:py-9 md:px-16 gap-[16px]">

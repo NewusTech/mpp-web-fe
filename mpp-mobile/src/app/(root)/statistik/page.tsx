@@ -74,8 +74,6 @@ export default function StatisticsPage() {
     fetchStatistik(selectedMonth, selectedYear || thisYear);
   }, [selectedMonth, selectedYear, filterType]);
 
-  console.log(statistik, "ini statistik");
-
   const paginate = (items: any[], pageNumber: number, itemsPerPage: number) => {
     const startIndex = (pageNumber - 1) * itemsPerPage;
     return items.slice(startIndex, startIndex + itemsPerPage);
