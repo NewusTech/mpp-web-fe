@@ -65,26 +65,26 @@ export default function LayoutInput({
   if (typeForm === "date") {
     return (
       <>
-        <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+        <label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
           {labelName}
-        </Label>
+        </label>
 
-        <Input
+        <input
+          type="date"
+          name={nameForm}
           value={valueForm}
           onChange={change}
-          name={nameForm}
-          type="date"
+          className={`w-full ${
+            opacity
+              ? "text-neutral-900 text-[14px]"
+              : "text-gray-500 opacity-50"
+          } px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
+          placeholder={placeholder}
           style={{
             WebkitAppearance: "none",
             MozAppearance: "none",
             appearance: "none",
           }}
-          placeholder={placeholder}
-          className={`${
-            opacity
-              ? "text-neutral-900 text-[14px]"
-              : "text-gray-500 opacity-50"
-          } flex appearance-none w-full border border-neutral-800 px-[16px] h-[36px] md:h-[50px] text-[12px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed`}
         />
       </>
     );

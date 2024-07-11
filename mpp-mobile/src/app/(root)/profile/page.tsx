@@ -14,10 +14,9 @@ import {
   Dialog,
   DialogTrigger,
   DialogContent,
-  DialogTitle,
-  DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ProfilePage() {
   const token = Cookies.get("Authorization");
@@ -145,6 +144,8 @@ export default function ProfilePage() {
       break;
   }
 
+  console.log(profile?.aktalahir, ">>>");
+
   return (
     <section className="flex items-center justify-center w-full mb-32 pt-6 md:pb-16 bg-primary-100">
       <div className="flex flex-col items-center w-full mx-8 md:mx-[200px]">
@@ -156,303 +157,417 @@ export default function ProfilePage() {
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md md:px-[75px] md:pt-8">
           <div className="flex flex-col px-4 pt-4">
-            <div className="md:grid md:grid-rows-7 gap-2">
-              <h3 className="text-primary-800 font-semibold text-[20px]">
-                Data Diri
-              </h3>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2 pt-4 md:pt-0">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Nama Lengkap
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.name}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Golongan Darah
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {golonganDarah || "Harap Perbarui Data Diri Anda!"}
-                  </label>
-                </div>
-              </div>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    NIK
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.nik}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Agama
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {agama || "Harap Perbarui Data Diri Anda!"}
-                  </label>
-                </div>
-              </div>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Nomor Telepon
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.telepon}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Status Perkawinan
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {statusKawin || "Harap Perbarui Data Diri Anda!"}
-                  </label>
-                </div>
-              </div>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Jenis Kelamin
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {gender || "Harap Perbarui Data Diri Anda!"}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Pendidikan
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {pendidikan || "Harap Perbarui Data Diri Anda!"}
-                  </label>
-                </div>
-              </div>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Email
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.email}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Pekerjaan
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.pekerjaan || "Harap Perbarui Data Diri Anda!"}
-                  </label>
-                </div>
-              </div>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Kecamatan
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.kecamatan_name}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    Desa
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.desa_name}
-                  </label>
-                </div>
-              </div>
-
-              <div className="md:grid md:grid-cols-2">
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    RT
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.rt}
-                  </label>
-                </div>
-
-                <div className="flex flex-col w-full mb-2">
-                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                    RW
-                  </label>
-
-                  <label className="text-[12px] md:text-[14px] text-neutral-900">
-                    {profile?.rw}
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex flex-col w-full mb-2">
-                <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
-                  Alamat
-                </label>
-
-                <label className="text-[12px] md:text-[14px] text-neutral-900">
-                  {profile?.alamat}
-                </label>
-              </div>
-
-              <div className="flex flex-col w-full mt-6 md:mt-0 mb-6 md:mb-0">
-                <h3 className="text-primary-800 font-semibold text-[20px] md:mt-6">
+            <Tabs defaultValue="Data Diri">
+              <TabsList>
+                <TabsTrigger
+                  className="font-semibold text-primary-500 md:text-[20px]"
+                  value="Data Diri">
+                  Data Diri
+                </TabsTrigger>
+                <TabsTrigger
+                  className="font-semibold text-primary-500 md:text-[20px]"
+                  value="Dokumen Pendukung">
                   Dokumen Pendukung
-                </h3>
+                </TabsTrigger>
+              </TabsList>
 
-                <div className="md:grid md:grid-cols-2">
-                  <div className="flex flex-col mt-6">
-                    <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                      Kartu Tanda Penduduk (KTP)
-                    </Label>
+              <TabsContent value="Data Diri">
+                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6">
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2 pt-4 md:pt-0">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Nama Lengkap
+                      </label>
 
-                    {profile?.filektp && (
-                      <div className="w-full h-full cursor-pointer">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <div
-                              onClick={() =>
-                                handleImageClick(profile?.filektp || "")
-                              }>
-                              <Image
-                                src={profile.filektp}
-                                className="w-6/12 h-full object-cover rounded-xl"
-                                alt="KTP"
-                                width={100}
-                                height={100}
-                              />
-                            </div>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <div className="min-w-[400px] md:min-w-[800px]">
-                              <Image
-                                src={modalImage || ""}
-                                className="w-full h-full object-cover rounded-xl"
-                                alt="Preview"
-                                width={500}
-                                height={500}
-                              />
-                            </div>
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.name}
+                      </label>
+                    </div>
 
-                            <DialogClose />
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    )}
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Jenis Kelamin
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {gender || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col mt-6">
-                    <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                      Kartu Keluarga(KK)
-                    </Label>
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        NIK
+                      </label>
 
-                    {profile?.filekk && (
-                      <div className="w-full h-full cursor-pointer">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <div
-                              onClick={() =>
-                                handleImageClick(profile?.filekk || "")
-                              }>
-                              <Image
-                                src={profile.filekk}
-                                className="w-6/12 h-full object-cover rounded-xl"
-                                alt="KK"
-                                width={100}
-                                height={100}
-                              />
-                            </div>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <div className="min-w-[400px] md:min-w-[800px]">
-                              <Image
-                                src={modalImage || ""}
-                                className="w-full h-full object-cover rounded-xl"
-                                alt="Preview"
-                                width={500}
-                                height={500}
-                              />
-                            </div>
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.nik}
+                      </label>
+                    </div>
 
-                            <DialogClose />
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    )}
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Agama
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {agama || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col mt-6">
-                    <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                      Ijazah Terakhir
-                    </Label>
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Tempat Lahir
+                      </label>
 
-                    {profile?.fileijazahsd && (
-                      <div className="w-full h-full cursor-pointer">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <div
-                              onClick={() =>
-                                handleImageClick(profile?.fileijazahsd || "")
-                              }>
-                              <Image
-                                src={profile.fileijazahsd}
-                                className="w-6/12 h-full object-cover rounded-xl"
-                                alt="Ijazah Terakhir"
-                                width={100}
-                                height={100}
-                              />
-                            </div>
-                          </DialogTrigger>
-                          <DialogContent>
-                            <div className="min-w-[400px] md:min-w-[800px]">
-                              <Image
-                                src={modalImage || ""}
-                                className="w-full h-full object-cover rounded-xl"
-                                alt="Preview"
-                                width={500}
-                                height={500}
-                              />
-                            </div>
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.tempat_lahir ||
+                          "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
 
-                            <DialogClose />
-                          </DialogContent>
-                        </Dialog>
-                      </div>
-                    )}
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Golongan Darah
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {golonganDarah || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Tanggal Lahir
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.tgl_lahir || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
+
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Status Perkawinan
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {statusKawin || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Nomor Telepon
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.telepon}
+                      </label>
+                    </div>
+
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Pendidikan
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {pendidikan || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Email
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.email}
+                      </label>
+                    </div>
+
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Pekerjaan
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.pekerjaan || "Harap Perbarui Data Diri Anda!"}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Kecamatan
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.kecamatan_name}
+                      </label>
+                    </div>
+
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        Desa
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.desa_name}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="md:grid md:grid-cols-2">
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        RT
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.rt}
+                      </label>
+                    </div>
+
+                    <div className="flex flex-col w-full mb-2">
+                      <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                        RW
+                      </label>
+
+                      <label className="text-[12px] md:text-[14px] text-neutral-900">
+                        {profile?.rw}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col w-full mb-2">
+                    <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                      Alamat
+                    </label>
+
+                    <label className="text-[12px] md:text-[14px] text-neutral-900">
+                      {profile?.alamat}
+                    </label>
                   </div>
                 </div>
-              </div>
-            </div>
+              </TabsContent>
+
+              <TabsContent value="Dokumen Pendukung">
+                <div className="flex flex-col w-full md:mt-0 mb-6 md:mb-0">
+                  <div className="md:grid md:grid-cols-2 mt-3">
+                    <div className="flex flex-col">
+                      <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                        Pas Foto
+                      </Label>
+
+                      {profile?.foto && (
+                        <div className="w-full h-full cursor-pointer">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <div
+                                onClick={() =>
+                                  handleImageClick(profile?.foto || "")
+                                }>
+                                <Image
+                                  src={profile?.foto}
+                                  className="w-6/12 h-full object-cover rounded-xl"
+                                  alt="Ijazah Terakhir"
+                                  width={100}
+                                  height={100}
+                                />
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <div className="min-w-[400px] md:min-w-[800px]">
+                                <Image
+                                  src={modalImage || ""}
+                                  className="w-full h-full object-cover rounded-xl"
+                                  alt="Preview"
+                                  width={500}
+                                  height={500}
+                                />
+                              </div>
+
+                              <DialogClose />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col mt-3">
+                      <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                        Kartu Tanda Penduduk (KTP)
+                      </Label>
+
+                      {profile?.filektp && (
+                        <div className="w-full h-full cursor-pointer">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <div
+                                onClick={() =>
+                                  handleImageClick(profile?.filektp || "")
+                                }>
+                                <Image
+                                  src={profile.filektp}
+                                  className="w-6/12 h-full object-cover rounded-xl"
+                                  alt="KTP"
+                                  width={100}
+                                  height={100}
+                                />
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <div className="min-w-[400px] md:min-w-[800px]">
+                                <Image
+                                  src={modalImage || ""}
+                                  className="w-full h-full object-cover rounded-xl"
+                                  alt="Preview"
+                                  width={500}
+                                  height={500}
+                                />
+                              </div>
+
+                              <DialogClose />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col mt-3">
+                      <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                        Akte Lahir
+                      </Label>
+
+                      {profile?.aktalahir && (
+                        <div className="w-full h-full cursor-pointer">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <div
+                                onClick={() =>
+                                  handleImageClick(profile?.aktalahir || "")
+                                }>
+                                <Image
+                                  src={profile?.aktalahir}
+                                  className="w-6/12 h-full object-cover rounded-xl"
+                                  alt="Ijazah Terakhir"
+                                  width={100}
+                                  height={100}
+                                />
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <div className="min-w-[400px] md:min-w-[800px]">
+                                <Image
+                                  src={modalImage || ""}
+                                  className="w-full h-full object-cover rounded-xl"
+                                  alt="Preview"
+                                  width={500}
+                                  height={500}
+                                />
+                              </div>
+
+                              <DialogClose />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col mt-3">
+                      <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                        Kartu Keluarga(KK)
+                      </Label>
+
+                      {profile?.filekk && (
+                        <div className="w-full h-full cursor-pointer">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <div
+                                onClick={() =>
+                                  handleImageClick(profile?.filekk || "")
+                                }>
+                                <Image
+                                  src={profile.filekk}
+                                  className="w-6/12 h-full object-cover rounded-xl"
+                                  alt="KK"
+                                  width={100}
+                                  height={100}
+                                />
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <div className="min-w-[400px] md:min-w-[800px]">
+                                <Image
+                                  src={modalImage || ""}
+                                  className="w-full h-full object-cover rounded-xl"
+                                  alt="Preview"
+                                  width={500}
+                                  height={500}
+                                />
+                              </div>
+
+                              <DialogClose />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col mt-3">
+                      <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
+                        Ijazah Terakhir
+                      </Label>
+
+                      {profile?.fileijazahsd && (
+                        <div className="w-full h-full cursor-pointer">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <div
+                                onClick={() =>
+                                  handleImageClick(profile?.fileijazahsd || "")
+                                }>
+                                <Image
+                                  src={profile.fileijazahsd}
+                                  className="w-6/12 h-full object-cover rounded-xl"
+                                  alt="Ijazah Terakhir"
+                                  width={100}
+                                  height={100}
+                                />
+                              </div>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <div className="min-w-[400px] md:min-w-[800px]">
+                                <Image
+                                  src={modalImage || ""}
+                                  className="w-full h-full object-cover rounded-xl"
+                                  alt="Preview"
+                                  width={500}
+                                  height={500}
+                                />
+                              </div>
+
+                              <DialogClose />
+                            </DialogContent>
+                          </Dialog>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
 
             <Link
               href={`/profile/detail/${profile?.slug}`}

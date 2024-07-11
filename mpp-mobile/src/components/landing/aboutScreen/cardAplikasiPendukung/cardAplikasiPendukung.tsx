@@ -5,13 +5,13 @@ import Link from "next/link";
 import { truncateTitle } from "@/utils/formatTitle";
 
 export default function CardAplikasiPendukung({ app }: { app: AppType }) {
-  const formatDesc = truncateTitle(app.desc, 25);
+  const formatName = truncateTitle(app.name, 42);
 
   return (
     <Link
       href={app.link}
-      className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-3 place-items-center p-4 gap-x-4 rounded-xl shadow-md">
-      <div className="max-w-max md:h-full flex items-center justify-center rounded-full bg-primary-700 p-2">
+      className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-4 place-items-center p-4 gap-x-4 rounded-xl shadow-md">
+      <div className="max-w-max md:h-full col-span-1 flex items-center justify-center p-2">
         <Image
           src={app.image}
           width={100}
@@ -21,10 +21,10 @@ export default function CardAplikasiPendukung({ app }: { app: AppType }) {
         />
       </div>
 
-      <div className="flex flex-col col-span-2 justify-center mt-3 md:mt-0 w-full">
-        <p className="font-semibold text-primary-700 text-[18px]">{app.name}</p>
-
-        <p className="text-primary-700 text-[14px]">{formatDesc}</p>
+      <div className="flex flex-col col-span-3 md:mt-0 w-full">
+        <p className="font-semibold text-primary-700 text-[18px]">
+          {formatName}
+        </p>
       </div>
     </Link>
   );

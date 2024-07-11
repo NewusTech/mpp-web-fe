@@ -68,6 +68,8 @@ export default function ProfileEditPage({
     gender: "",
     goldar: "",
     status_kawin: "",
+    tempat_lahir: "",
+    tgl_lahir: "",
     agama: "",
     pendidikan: "",
     pekerjaan: "",
@@ -325,6 +327,8 @@ export default function ProfileEditPage({
       gender: String(detail.gender) || "",
       goldar: Number(detail.goldar) || "",
       status_kawin: Number(detail.status_kawin) || "",
+      tempat_lahir: detail.tempat_lahir || "",
+      tgl_lahir: detail.tgl_lahir || "",
       agama: String(detail.agama) || "",
       pendidikan: String(detail.pendidikan) || "",
       pekerjaan: detail.pekerjaan || "",
@@ -621,49 +625,49 @@ export default function ProfileEditPage({
                 )}
               </div>
 
-              <div className="flex flex-col w-full mb-4">
+              <div className="flex flex-col w-full md:mb-4">
                 <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Golongan Darah
+                  Jenis Kelamin
                 </Label>
 
                 <Select
-                  name="goldar"
-                  value={selectedDarah ? String(selectedDarah) : undefined}
+                  name="gender"
+                  value={selectedGender ? String(selectedGender) : undefined}
                   onValueChange={(value) => {
-                    setSelectedDarah(Number(value));
+                    setSelectedGender(Number(value));
                   }}>
                   <SelectTrigger
                     className={`${
-                      !selectedDarah ? "opacity-70" : ""
+                      !selectedGender ? "opacity-70" : ""
                     } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
                     <SelectValue
-                      placeholder="Pilih Golongan Darah"
-                      className={selectedDarah ? "" : "placeholder:opacity-50"}
+                      placeholder="Pilih Jenis Kelamin"
+                      className={selectedGender ? "" : "placeholder:opacity-50"}
                     />
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {golonganDarahs?.map(
-                      (darah: { id: number; value: string }, i: number) => (
+                    {genders?.map(
+                      (gender: { id: number; value: string }, i: number) => (
                         <SelectItem
                           className="pr-none mt-2"
                           key={i}
-                          value={String(darah.id)}>
-                          {darah.value}
+                          value={String(gender.id)}>
+                          {gender.value}
                         </SelectItem>
                       )
                     )}
                   </SelectContent>
                 </Select>
 
-                {formErrors["goldar"] && (
+                {formErrors["gender"] && (
                   <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["goldar"]}
+                    {formErrors["gender"]}
                   </p>
                 )}
 
-                {hasSubmitted && errors?.goldar?._errors && (
+                {hasSubmitted && errors?.gender?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.goldar._errors[0]}
+                    {errors.gender._errors[0]}
                   </div>
                 )}
               </div>
@@ -742,28 +746,110 @@ export default function ProfileEditPage({
                 )}
               </div>
             </div>
+
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full mb-4">
                 <ProfileEditInput
-                  names="telepon"
-                  types="number"
-                  value={detail?.telepon || ""}
+                  names="tempat_lahir"
+                  types="text"
+                  value={detail?.tempat_lahir || ""}
                   change={changeUser}
-                  labelName="Nomor Telepon"
-                  placeholder="Nomor Telepon"
+                  labelName="Tempat Lahir"
+                  placeholder="Tempat Lahir"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
 
-                {formErrors["telepon"] && (
+                {formErrors["tempat_lahir"] && (
                   <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["telepon"]}
+                    {formErrors["tempat_lahir"]}
                   </p>
                 )}
 
-                {hasSubmitted && errors?.telepon?._errors && (
+                {hasSubmitted && errors?.tempat_lahir?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.telepon._errors[0]}
+                    {errors.tempat_lahir._errors[0]}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col w-full mb-4">
+                <Label className="text-[12px] text-neutral-900 font-semibold">
+                  Golongan Darah
+                </Label>
+
+                <Select
+                  name="goldar"
+                  value={selectedDarah ? String(selectedDarah) : undefined}
+                  onValueChange={(value) => {
+                    setSelectedDarah(Number(value));
+                  }}>
+                  <SelectTrigger
+                    className={`${
+                      !selectedDarah ? "opacity-70" : ""
+                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue
+                      placeholder="Pilih Golongan Darah"
+                      className={selectedDarah ? "" : "placeholder:opacity-50"}
+                    />
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    {golonganDarahs?.map(
+                      (darah: { id: number; value: string }, i: number) => (
+                        <SelectItem
+                          className="pr-none mt-2"
+                          key={i}
+                          value={String(darah.id)}>
+                          {darah.value}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
+
+                {formErrors["goldar"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["goldar"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.goldar?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.goldar._errors[0]}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+              <div className="flex flex-col w-full mb-4">
+                <label className="text-[12px] text-neutral-900 font-semibold">
+                  Tanggal Lahir
+                </label>
+
+                <input
+                  type="date"
+                  name="tgl_lahir"
+                  value={detail.tgl_lahir}
+                  onChange={changeUser}
+                  className={`w-full px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
+                  placeholder="Tanggal Lahir"
+                  style={{
+                    WebkitAppearance: "none",
+                    MozAppearance: "none",
+                    appearance: "none",
+                  }}
+                />
+
+                {formErrors["tgl_lahir"] && (
+                  <p className="text-error-700 text-[12px] mt-1 text-center">
+                    {formErrors["tgl_lahir"]}
+                  </p>
+                )}
+
+                {hasSubmitted && errors?.tgl_lahir?._errors && (
+                  <div className="text-error-700 text-[12px] md:text-[14px]">
+                    {errors.tgl_lahir._errors[0]}
                   </div>
                 )}
               </div>
@@ -817,49 +903,27 @@ export default function ProfileEditPage({
             </div>
 
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full md:mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Jenis Kelamin
-                </Label>
+              <div className="flex flex-col w-full mb-4">
+                <ProfileEditInput
+                  names="telepon"
+                  types="number"
+                  value={detail?.telepon || ""}
+                  change={changeUser}
+                  labelName="Nomor Telepon"
+                  placeholder="Nomor Telepon"
+                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                  labelStyle="text-[12px] text-neutral-900 font-semibold"
+                />
 
-                <Select
-                  name="gender"
-                  value={selectedGender ? String(selectedGender) : undefined}
-                  onValueChange={(value) => {
-                    setSelectedGender(Number(value));
-                  }}>
-                  <SelectTrigger
-                    className={`${
-                      !selectedGender ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Jenis Kelamin"
-                      className={selectedGender ? "" : "placeholder:opacity-50"}
-                    />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {genders?.map(
-                      (gender: { id: number; value: string }, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(gender.id)}>
-                          {gender.value}
-                        </SelectItem>
-                      )
-                    )}
-                  </SelectContent>
-                </Select>
-
-                {formErrors["gender"] && (
+                {formErrors["telepon"] && (
                   <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["gender"]}
+                    {formErrors["telepon"]}
                   </p>
                 )}
 
-                {hasSubmitted && errors?.gender?._errors && (
+                {hasSubmitted && errors?.telepon?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.gender._errors[0]}
+                    {errors.telepon._errors[0]}
                   </div>
                 )}
               </div>

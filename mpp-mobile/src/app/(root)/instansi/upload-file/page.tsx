@@ -216,9 +216,9 @@ export default function UploadFilePage() {
                       <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                         {el.field}
                       </h6>
-                      <p className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
+                      <div className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
                         {parse(truncate)}
-                      </p>
+                      </div>
                     </div>
                     <div className="flex self-center items-center w-full md:justify-end">
                       <input
@@ -235,7 +235,12 @@ export default function UploadFilePage() {
                       <label
                         htmlFor={`fileInput-${el.id}`}
                         className="flex items-center w-full md:w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] hover:bg-primary-600 hover:text-neutral-50 border border-1 border-neutral-700 text-primary-700 py-[10px] cursor-pointer">
-                        {fileName[el.id.toString()] || "Upload"}
+                        {(fileName[el.id.toString()] &&
+                          truncateTitle(
+                            String(fileName[el.id.toString()]),
+                            10
+                          )) ||
+                          "Upload"}
                       </label>
 
                       <Dialog>

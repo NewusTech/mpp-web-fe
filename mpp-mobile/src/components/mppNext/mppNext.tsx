@@ -1,7 +1,14 @@
-import Image from "next/legacy/image";
-import React from "react";
-import image from "@/../../public/assets/undraw_synchronize_re_4irq.svg";
+"use client";
 
+import Image from "next/legacy/image";
+import React, { useState } from "react";
+import permohonanantrian from "@/../../public/assets/permohonan&antrian.png";
+import pengaduan from "@/../../public/assets/pengaduan.png";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import {
   Accordion,
   AccordionContent,
@@ -13,6 +20,8 @@ import { Landmark, Send, Ticket } from "lucide-react";
 import CardAplikasiPendukung from "../landing/aboutScreen/cardAplikasiPendukung/cardAplikasiPendukung";
 import { AlurType, AppType, FacilityType, VideoType } from "@/types/type";
 import Link from "next/link";
+import alur1 from "@/../../public/assets/alurmpplamtim.jpg";
+import alur2 from "@/../../public/assets/alurmpplamtim.jpg";
 
 export default function MppNext({
   facilities,
@@ -25,6 +34,19 @@ export default function MppNext({
   alur: AlurType;
   apps: AppType[];
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleBackdropClick = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      closeModal();
+    }
+  };
+
+  const alurfix = [alur1, alur2];
+
   return (
     <section className="flex flex-col justify-center mt-4 md:mt-0 mx-5 md:mx-8 md:rounded-xl md:pt-[25px]">
       <div className="flex flex-col md:flex-row w-full gap-x-2 mb-3">
@@ -59,16 +81,42 @@ export default function MppNext({
             </h4>
           </div>
 
-          <div className="p-4 w-full md:h-full">
-            {alur && (
-              <Image
-                src={alur?.image}
-                className="w-full h-[200px] md:h-full object-contain"
-                width={960}
-                height={350}
-                alt="permohonan & antrian"
-              />
-            )}
+          <div className="w-full p-4 md:self-end md:flex md:h-full rounded-xl">
+            <Swiper
+              pagination={{ clickable: true }}
+              navigation={true}
+              modules={[Pagination, Navigation, Autoplay]}
+              className="mySwiper"
+              spaceBetween={10}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{ delay: 3000 }}
+              breakpoints={{
+                768: {
+                  slidesPerView: 1,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 1,
+                  spaceBetween: 50,
+                },
+              }}>
+              {alurfix.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <div className="p-4 w-full md:h-full rounded-xl">
+                    {alur && (
+                      <Image
+                        src={image}
+                        className="w-full h-[200px] md:h-full object-contain rounded-xl"
+                        width={960}
+                        height={350}
+                        alt="permohonan & antrian"
+                      />
+                    )}
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </div>
@@ -82,7 +130,7 @@ export default function MppNext({
 
             <div className="w-6/12 h-full flex justify-center items-center self-center">
               <Image
-                src={image}
+                src={permohonanantrian}
                 className="w-full h-full object-cover"
                 alt="permohonan & antrian"
               />
@@ -127,7 +175,7 @@ export default function MppNext({
 
             <div className="w-6/12 h-full flex items-center justify-center self-center">
               <Image
-                src={image}
+                src={pengaduan}
                 className="w-full h-full object-cover"
                 alt="permohonan & antrian"
               />
@@ -168,7 +216,9 @@ export default function MppNext({
                       {facility.title}
                     </AccordionTrigger>
                     <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
-                      <div className="w-full md:h-4/5 flex justify-center items-center">
+                      <div
+                        className="w-full md:h-4/5 flex justify-center items-center"
+                        onClick={openModal}>
                         <Image
                           src={facility.image}
                           className="w-full h-full object-cover rounded-xl"
@@ -178,6 +228,25 @@ export default function MppNext({
                           height={390}
                         />
                       </div>
+
+                      {isModalOpen && (
+                        <div
+                          className="fixed inset-0 flex items-center justify-center bg-neutral-900 bg-opacity-90 z-50"
+                          onClick={handleBackdropClick}>
+                          <div
+                            className="relative w-8/12 h-4/6 bg-neutral-50 rounded-xl p-4"
+                            onClick={(e) => e.stopPropagation()}>
+                            <Image
+                              src={facility.image}
+                              alt={facility.title}
+                              layout="fill"
+                              width={430}
+                              height={367}
+                              className="w-full h-full object-fit rounded-xl"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                 );

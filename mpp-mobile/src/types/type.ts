@@ -108,6 +108,7 @@ export interface PengaduanFormType {
 export interface JenisLayananType {
   id: number;
   active_offline: boolean;
+  active_online: boolean;
   createdAt: string;
   instansi_id: number;
   instansi_name: string;
@@ -219,6 +220,7 @@ export type DataStatistik = {
 export type StatistikType = {
   countPerYear: { [key: string]: number };
   formattedCountByInstansi: DataStatistik[];
+  yearList: { key: string; value: string };
 };
 
 export interface ProfileType {
@@ -244,6 +246,8 @@ export interface ProfileNewType {
   gender?: number;
   goldar?: number;
   status_kawin?: number;
+  tempat_lahir: string;
+  tgl_lahir: string;
   agama?: number;
   pendidikan?: number;
   pekerjaan?: string;
@@ -256,6 +260,8 @@ export interface ProfileNewType {
   filektp?: string;
   filekk?: string;
   fileijazahsd?: string;
+  aktalahir?: string;
+  foto?: string;
 }
 
 export interface UpdateUserType {
@@ -266,6 +272,8 @@ export interface UpdateUserType {
   agama?: string;
   goldar?: string;
   status_kawin?: string;
+  tempat_lahir?: string;
+  tgl_lahir?: string;
   pendidikan?: string;
   pekerjaan?: string;
   telepon?: string;
