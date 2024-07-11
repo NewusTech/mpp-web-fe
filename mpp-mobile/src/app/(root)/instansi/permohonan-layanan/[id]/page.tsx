@@ -113,8 +113,10 @@ export default function PermohonanLayananFirstScreen({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, 300);
+    }, 2000);
   };
+
+  console.log(service, "service");
 
   return (
     <div className="flex flex-col items-center justify-center mt-6 md:mt-4 mx-6 md:mx-[70px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
@@ -157,9 +159,15 @@ export default function PermohonanLayananFirstScreen({
                       {service?.map((el: JenisLayananType) => {
                         return (
                           <div key={el.id}>
-                            <SelectItem value={String(el.id)}>
-                              {el.name}
-                            </SelectItem>
+                            {el.active_online === false ? (
+                              <SelectItem disabled value={String(el.id)}>
+                                {el.name}
+                              </SelectItem>
+                            ) : (
+                              <SelectItem value={String(el.id)}>
+                                {el.name}
+                              </SelectItem>
+                            )}
                           </div>
                         );
                       })}

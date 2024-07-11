@@ -8,8 +8,8 @@ export default function AboutScreen({
   return (
     <div className="flex flex-col justify-center mt-[14px] mx-5 md:mx-8 md:mt-0 md:pt-8 md:rounded-xl">
       <div className="flex flex-col justify-center bg-primary-200 py-5 md:py-8 rounded-xl">
-        <div className="grid grid-cols-2 md:grid-cols-4 mx-4 gap-1 md:gap-x-5">
-          <div className="flex w-full">
+        <div className="grid grid-cols-2 place-items-center md:grid-cols-4 mx-4 gap-y-5 md:gap-y-0 md:gap-x-5">
+          <div className="flex w-10/12 md:w-full">
             <div className="grid grid-rows-2 place-items-center items-center p-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-primary-700 self-end font-semibold md:text-[26px]">
                 {infoLanding.instansiCount}
@@ -21,7 +21,7 @@ export default function AboutScreen({
             </div>
           </div>
 
-          <div className="flex w-full">
+          <div className="flex w-10/12 md:w-full">
             <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-secondary-700 self-end font-semibold md:text-[26px]">
                 {infoLanding.layananCount}
@@ -33,7 +33,7 @@ export default function AboutScreen({
             </div>
           </div>
 
-          <div className="flex w-full">
+          <div className="flex w-10/12 md:w-full">
             <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-primary-700 self-end font-semibold md:text-[26px]">
                 18
@@ -45,7 +45,7 @@ export default function AboutScreen({
             </div>
           </div>
 
-          <div className="flex w-full">
+          <div className="flex w-10/12 md:w-full">
             <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-secondary-700 self-end font-semibold md:text-[26px]">
                 {infoLanding.permohonanCountToday}

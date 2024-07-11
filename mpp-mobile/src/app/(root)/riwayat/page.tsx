@@ -103,29 +103,40 @@ export default function RiwayatPage() {
               <>
                 <TabsContent value="antrian">
                   {currentAntrians && currentAntrians.length > 0 ? (
-                    <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
-                      <TableHeader className="md:flex md:w-full">
-                        <TableRow className="md:flex md:flex-row md:w-full">
-                          <TableHead className="w-1/2">Nomor Antrian</TableHead>
-                          <TableHead className="w-full">Instansi</TableHead>
-                          <TableHead className="w-1/2">Waktu</TableHead>
-                          <TableHead className="w-1/2">Tanggal</TableHead>
-                          <TableHead className="w-3/12">Aksi</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {currentAntrians?.map(
-                          (antrian: AntrianDataType, i: number) => {
-                            return (
-                              <TableAntrianComponent
-                                key={i}
-                                antrian={antrian}
-                              />
-                            );
-                          }
-                        )}
-                      </TableBody>
-                    </Table>
+                    <>
+                      <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
+                        <TableHeader className="md:flex md:w-full">
+                          <TableRow className="md:flex md:flex-row md:w-full">
+                            <TableHead className="w-1/2">
+                              Nomor Antrian
+                            </TableHead>
+                            <TableHead className="w-full">Instansi</TableHead>
+                            <TableHead className="w-1/2">Waktu</TableHead>
+                            <TableHead className="w-1/2">Tanggal</TableHead>
+                            <TableHead className="w-3/12">Aksi</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {currentAntrians?.map(
+                            (antrian: AntrianDataType, i: number) => {
+                              return (
+                                <TableAntrianComponent
+                                  key={i}
+                                  antrian={antrian}
+                                />
+                              );
+                            }
+                          )}
+                        </TableBody>
+                      </Table>
+
+                      <PaginationComponent
+                        totalItems={historyAntrianData.length}
+                        itemsPerPage={itemsPerPage}
+                        currentPage={antrianPage}
+                        onPageChange={setAntrianPage}
+                      />
+                    </>
                   ) : (
                     <div className="flex flex-col justify-center items-center h-[311px]">
                       <Image src={sad} width={100} height={100} alt="sad" />

@@ -85,6 +85,7 @@ export default function FormulirPage() {
       ...prevValues,
       [name]: value,
     }));
+    setChangeOpacity(true);
   };
 
   const handleCheckboxChange = (
@@ -114,7 +115,8 @@ export default function FormulirPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-    }, 300);
+    }, 2000);
+
     let wadah: { layananform_id: number; data: string }[] = [];
     let checkboxWadah: { layananform_id: number; data: number[] }[] = [];
 

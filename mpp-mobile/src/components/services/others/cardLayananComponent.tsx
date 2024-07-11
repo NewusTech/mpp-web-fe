@@ -19,12 +19,14 @@ export default function CardLayananComponent({
 }: {
   layanan: Layanantype;
 }) {
+  console.log(layanan, "layanan");
+
   const token = Cookies.get("Authorization");
 
   let bgStatus = "";
   let textStatus = "";
 
-  if (layanan.status === true) {
+  if (layanan.active_online === true) {
     bgStatus = "bg-success-700";
     textStatus = "Buka";
   } else {
@@ -69,9 +71,15 @@ export default function CardLayananComponent({
         {!token ? (
           <Dialog>
             <DialogTrigger asChild>
-              <div className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-md text-neutral-50">
-                Booking Antrian
-              </div>
+              {layanan.active_offline === true ? (
+                <div className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-md text-neutral-50">
+                  Booking Antrian
+                </div>
+              ) : (
+                <div className="flex items-center justify-center font-semibold text-[12px] w-dvw h-full bg-neutral-700 hover:bg-neutral-600 rounded-none rounded-bl-xl shadow-md text-neutral-50">
+                  Booking Antrian
+                </div>
+              )}
             </DialogTrigger>
             <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center py-4">
               <DialogHeader>
@@ -101,7 +109,7 @@ export default function CardLayananComponent({
           </Dialog>
         ) : (
           <>
-            {layanan.status === true ? (
+            {layanan.active_offline === true ? (
               <Button className="flex items-center justify-center font-semibold px-1 text-[12px] w-dvw h-full bg-secondary-700 hover:bg-secondary-600 rounded-none rounded-bl-xl shadow-md text-neutral-50">
                 <Link href={`/instansi/booking-antrian/${layanan.id}`}>
                   Booking Antrian
@@ -120,9 +128,15 @@ export default function CardLayananComponent({
         {!token ? (
           <Dialog>
             <DialogTrigger asChild>
-              <div className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-md text-neutral-50">
-                Permohonan Layanan
-              </div>
+              {layanan.active_online === true ? (
+                <div className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-md text-neutral-50">
+                  Permohonan Layanan
+                </div>
+              ) : (
+                <div className="flex items-center justify-center font-semibold text-wrap text-[12px] w-dvw h-full bg-neutral-700 hover:bg-neutral-600 rounded-none rounded-br-xl shadow-md text-neutral-50">
+                  Permohonan Layanan
+                </div>
+              )}
             </DialogTrigger>
             <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center py-4">
               <DialogHeader>
@@ -152,7 +166,7 @@ export default function CardLayananComponent({
           </Dialog>
         ) : (
           <>
-            {layanan.status === true && layanan.active_online === true ? (
+            {layanan.active_online === true ? (
               <Button className="flex items-center justify-center font-semibold text-wrap px-1 text-[12px] w-dvw h-full bg-primary-700 hover:bg-primary-600 rounded-none rounded-br-xl shadow-md text-neutral-50">
                 <Link href={`/instansi/permohonan-layanan/${layanan.id}`}>
                   Permohonan Layanan

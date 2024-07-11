@@ -1,6 +1,7 @@
 "use client";
 
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
+import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -39,6 +40,8 @@ import fetchPengaduanLists from "@/components/fetching/pengaduan/pengaduan";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/image";
 import z from "zod";
+import { formatLongDate } from "@/helpers/logout/formatted";
+import LoadingComponent from "@/components/loading/LoadingComponent";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -81,6 +84,7 @@ export default function PengaduanScreen() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [formValid, setFormValid] = useState(false);
   const token = Cookies.get("Authorization");
+  const [loadingData, setLoadingData] = useState(false);
 
   const validateForm = async () => {
     try {
@@ -116,12 +120,16 @@ export default function PengaduanScreen() {
   }, []);
 
   const fetchPengaduanList = async (page: number, limit: number) => {
+    setLoadingData(true);
     try {
       const pengaduans = await fetchPengaduanLists(page, limit);
 
       setPengaduanLists(pengaduans.data);
+      setLoadingData(false);
     } catch (error) {
       toast("Gagal mendapatkan data!");
+    } finally {
+      setLoadingData(false);
     }
   };
 
@@ -332,6 +340,7 @@ export default function PengaduanScreen() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  console.log(pengaduanlists, "ini pengaduan");
 
   return (
     <div className="flex flex-col bg-primary-100 mt-3 mx-[35px] md:mx-[70px] md:mb-5 pb-[124px]">
@@ -454,7 +463,7 @@ export default function PengaduanScreen() {
 
                     <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">
                       <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                        Judul Pengajuan
+                        Judul Pengaduan
                       </Label>
 
                       <input
@@ -462,7 +471,7 @@ export default function PengaduanScreen() {
                         name="judul"
                         value={pengaduan.judul}
                         onChange={handleChange}
-                        placeholder="Judul Pengajuan"
+                        placeholder="Judul Pengaduan"
                         className={`w-full pl-4 h-[40px] border border-neutral-700 rounded-[50px] pr-2 placeholder:text-[14px] focus:outline-none appearance-none`}
                       />
 
@@ -574,222 +583,291 @@ export default function PengaduanScreen() {
             </Dialog>
           </div>
 
-          <div className="flex flex-col">
-            {!isWideScreen ? (
-              <>
-                {pengaduanlists &&
-                  pengaduanPaginate?.map(
-                    (pengaduan: PengaduanType, i: number) => {
-                      return (
-                        <CardPengaduanComponent key={i} pengaduan={pengaduan} />
-                      );
-                    }
-                  )}
+          {pengaduanlists && pengaduanlists?.length > 0 ? (
+            <div className="flex flex-col">
+              {!isWideScreen ? (
+                <>
+                  {pengaduanlists &&
+                    pengaduanPaginate?.map(
+                      (pengaduan: PengaduanType, i: number) => {
+                        return (
+                          <CardPengaduanComponent
+                            key={i}
+                            pengaduan={pengaduan}
+                          />
+                        );
+                      }
+                    )}
 
-                <div className="md:flex md:justify-end">
-                  <PaginationComponent
-                    totalItems={pengaduanlists?.length || 0}
-                    itemsPerPage={itemsPerPage}
-                    currentPage={pengaduanPage}
-                    onPageChange={setPengaduanPage}
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <Table className="flex flex-col w-full">
-                  <TableHeader className="flex w-full">
-                    <TableRow className="flex flex-row w-full">
-                      <TableHead className="w-1/12 bg-primary-400">
-                        No
-                      </TableHead>
-                      <TableHead className="w-10/12 bg-primary-400">
-                        Instansi
-                      </TableHead>
-                      <TableHead className="w-10/12 bg-primary-400">
-                        Layanan
-                      </TableHead>
-                      <TableHead className="w-full bg-primary-400">
-                        Judul Pengaduan
-                      </TableHead>
-                      <TableHead className="w-5/12 bg-primary-400">
-                        Status
-                      </TableHead>
-                      <TableHead className="w-2/12 bg-primary-400">
-                        Aksi
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {pengaduan.status !== 3 ? (
-                      <>
-                        {pengaduanlists &&
-                          pengaduanPaginate?.map(
-                            (pengaduan: PengaduanType, i: number) => {
-                              return (
-                                <TableRow key={i}>
-                                  <TableCell className="w-1/12">
-                                    {i + 1}
-                                  </TableCell>
-                                  <TableCell className="w-10/12">
-                                    {pengaduan.Instansi.name}
-                                  </TableCell>
-                                  <TableCell className="w-10/12">
-                                    {pengaduan.Layanan.name}
-                                  </TableCell>
-                                  <TableCell className="w-full">
-                                    {pengaduan.judul}
-                                  </TableCell>
-                                  <TableCell className="w-5/12">
-                                    {pengaduan.status === 0
-                                      ? "Belum diproses"
-                                      : pengaduan.status === 1
-                                      ? "Sedang ditindak lanjuti"
-                                      : pengaduan.status === 2
-                                      ? "Sudah ditindak lanjuti"
-                                      : "Selesai"}
-                                  </TableCell>
-                                  <TableCell className="w-2/12">
-                                    <div className="w-full px-2 h-[18px] cursor-not-allowed text-center rounded-xl text-[8px] bg-neutral-700 hover:bg-neutral-600">
-                                      Lihat
-                                    </div>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            }
-                          )}
-                      </>
-                    ) : (
-                      <>
-                        {pengaduanlists &&
-                          pengaduanPaginate?.map(
-                            (pengaduan: PengaduanType, i: number) => {
-                              return (
-                                <TableRow key={i}>
-                                  <TableCell className="w-1/12">
-                                    {i + 1}
-                                  </TableCell>
-                                  <TableCell className="w-10/12">
-                                    {pengaduan.Instansi.name}
-                                  </TableCell>
-                                  <TableCell className="w-10/12">
-                                    {pengaduan.Layanan.name}
-                                  </TableCell>
-                                  <TableCell className="w-full">
-                                    {pengaduan.judul}
-                                  </TableCell>
-                                  <TableCell className="w-5/12">
-                                    {pengaduan.status === 0
-                                      ? "Belum diproses"
-                                      : pengaduan.status === 1
-                                      ? "Sedang ditindak lanjuti"
-                                      : pengaduan.status === 2
-                                      ? "Sudah ditindak lanjuti"
-                                      : "Selesai"}
-                                  </TableCell>
-                                  <TableCell className="w-2/12">
-                                    <Dialog>
-                                      <DialogTrigger>
-                                        <div className="w-full px-2 h-[18px] rounded-xl text-[8px] bg-secondary-700 hover:bg-secondary-600">
-                                          Lihat
-                                        </div>
-                                      </DialogTrigger>
-                                      <DialogContent className="flex overflow-auto flex-col justify-between md:w-6/12 bg-neutral-50 rounded-2xl">
-                                        <div className="flex flex-col mx-8 my-8">
-                                          <div className="flex flex-col gap-[14px]">
-                                            <div className="flex flex-col gap-2">
-                                              <p className="text-[16px] text-primary-900 font-semibold">
-                                                Instansi
-                                              </p>
+                  <div className="md:flex md:justify-end">
+                    <PaginationComponent
+                      totalItems={pengaduanlists?.length || 0}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={pengaduanPage}
+                      onPageChange={setPengaduanPage}
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Table className="flex flex-col w-full">
+                    <TableHeader className="flex w-full">
+                      <TableRow className="flex flex-row w-full">
+                        <TableHead className="w-1/12 bg-primary-400">
+                          No
+                        </TableHead>
+                        <TableHead className="w-6/12 bg-primary-400">
+                          Hari / Tanggal
+                        </TableHead>
+                        <TableHead className="w-10/12 bg-primary-400">
+                          Instansi
+                        </TableHead>
+                        <TableHead className="w-10/12 bg-primary-400">
+                          Layanan
+                        </TableHead>
+                        <TableHead className="w-full bg-primary-400">
+                          Judul Pengaduan
+                        </TableHead>
+                        <TableHead className="w-5/12 bg-primary-400">
+                          Status
+                        </TableHead>
+                        <TableHead className="w-2/12 bg-primary-400">
+                          Aksi
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {pengaduan.status !== 3 ? (
+                        <>
+                          {pengaduanlists &&
+                            pengaduanPaginate?.map(
+                              (pengaduan: PengaduanType, i: number) => {
+                                const datePengaduan = pengaduan.createdAt;
+                                const date = new Date(datePengaduan);
+                                const daysInIndonesian = [
+                                  "Minggu",
+                                  "Senin",
+                                  "Selasa",
+                                  "Rabu",
+                                  "Kamis",
+                                  "Jumat",
+                                  "Sabtu",
+                                ];
+                                const dayName = daysInIndonesian[date.getDay()];
 
-                                              <p className="text-[16px] text-neutral-900 font-normal">
-                                                {pengaduan.Instansi.name}
-                                              </p>
-                                            </div>
+                                let datePengaduanFormatted = "";
+                                if (datePengaduan) {
+                                  datePengaduanFormatted = formatLongDate(
+                                    `${datePengaduan}`
+                                  );
+                                }
 
-                                            <div className="flex flex-col gap-[8px]">
-                                              <p className="text-[16px] text-primary-900 font-semibold">
-                                                Layanan
-                                              </p>
+                                return (
+                                  <TableRow key={i}>
+                                    <TableCell className="w-1/12">
+                                      {i + 1}
+                                    </TableCell>
+                                    <TableCell className="w-6/12">
+                                      {dayName}, {datePengaduanFormatted}
+                                    </TableCell>
+                                    <TableCell className="w-10/12">
+                                      {pengaduan.Instansi.name}
+                                    </TableCell>
+                                    <TableCell className="w-10/12">
+                                      {pengaduan.Layanan.name}
+                                    </TableCell>
+                                    <TableCell className="w-full">
+                                      {pengaduan.judul}
+                                    </TableCell>
+                                    <TableCell className="w-5/12">
+                                      {pengaduan.status === 0
+                                        ? "Belum diproses"
+                                        : pengaduan.status === 1
+                                        ? "Sedang ditindak lanjuti"
+                                        : pengaduan.status === 2
+                                        ? "Sudah ditindak lanjuti"
+                                        : "Selesai"}
+                                    </TableCell>
+                                    <TableCell className="w-2/12">
+                                      <div className="w-full px-2 h-[18px] cursor-not-allowed text-center rounded-xl text-[8px] bg-neutral-700 hover:bg-neutral-600">
+                                        Lihat
+                                      </div>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              }
+                            )}
+                        </>
+                      ) : (
+                        <>
+                          {pengaduanlists &&
+                            pengaduanPaginate?.map(
+                              (pengaduan: PengaduanType, i: number) => {
+                                const datePengaduan = pengaduan.createdAt;
+                                const date = new Date(datePengaduan);
+                                const daysInIndonesian = [
+                                  "Minggu",
+                                  "Senin",
+                                  "Selasa",
+                                  "Rabu",
+                                  "Kamis",
+                                  "Jumat",
+                                  "Sabtu",
+                                ];
+                                const dayName = daysInIndonesian[date.getDay()];
 
-                                              <p className="text-[16px] text-neutral-900 font-normal">
-                                                {pengaduan.Layanan.name}
-                                              </p>
-                                            </div>
+                                let datePengaduanFormatted = "";
+                                if (datePengaduan) {
+                                  datePengaduanFormatted = formatLongDate(
+                                    `${datePengaduan}`
+                                  );
+                                }
 
-                                            <div className="flex flex-col gap-[8px]">
-                                              <p className="text-[16px] text-primary-900 font-semibold">
-                                                Judul Pengaduan
-                                              </p>
+                                return (
+                                  <TableRow key={i}>
+                                    <TableCell className="w-1/12">
+                                      {i + 1}
+                                    </TableCell>
+                                    <TableCell className="w-6/12">
+                                      {dayName}, {datePengaduanFormatted}
+                                    </TableCell>
+                                    <TableCell className="w-10/12">
+                                      {pengaduan.Instansi.name}
+                                    </TableCell>
+                                    <TableCell className="w-10/12">
+                                      {pengaduan.Layanan.name}
+                                    </TableCell>
+                                    <TableCell className="w-full">
+                                      {pengaduan.judul}
+                                    </TableCell>
+                                    <TableCell className="w-5/12">
+                                      {pengaduan.status === 0
+                                        ? "Belum diproses"
+                                        : pengaduan.status === 1
+                                        ? "Sedang ditindak lanjuti"
+                                        : pengaduan.status === 2
+                                        ? "Sudah ditindak lanjuti"
+                                        : "Selesai"}
+                                    </TableCell>
+                                    <TableCell className="w-2/12">
+                                      <Dialog>
+                                        <DialogTrigger>
+                                          <div className="w-full px-2 h-[18px] rounded-xl text-[8px] bg-secondary-700 hover:bg-secondary-600">
+                                            Lihat
+                                          </div>
+                                        </DialogTrigger>
+                                        <DialogContent className="flex overflow-auto flex-col justify-between md:w-6/12 bg-neutral-50 rounded-2xl">
+                                          <div className="flex flex-col mx-8 my-8">
+                                            <div className="flex flex-col gap-[14px]">
+                                              <div className="flex flex-col gap-2">
+                                                <p className="text-[16px] text-primary-900 font-semibold">
+                                                  Instansi
+                                                </p>
 
-                                              <p className="text-[16px] text-neutral-900 font-normal">
-                                                {pengaduan.judul}
-                                              </p>
-                                            </div>
+                                                <p className="text-[16px] text-neutral-900 font-normal">
+                                                  {pengaduan.Instansi.name}
+                                                </p>
+                                              </div>
 
-                                            <div className="flex flex-col gap-[8px]">
-                                              <p className="text-[16px] text-primary-900 font-semibold">
-                                                Aduan
-                                              </p>
+                                              <div className="flex flex-col gap-[8px]">
+                                                <p className="text-[16px] text-primary-900 font-semibold">
+                                                  Layanan
+                                                </p>
 
-                                              <p className="text-[16px] text-neutral-900 font-normal">
-                                                {pengaduan.aduan}
-                                              </p>
-                                            </div>
+                                                <p className="text-[16px] text-neutral-900 font-normal">
+                                                  {pengaduan.Layanan.name}
+                                                </p>
+                                              </div>
 
-                                            <div className="flex flex-col gap-[8px]">
-                                              <p className="text-[16px] text-primary-900 font-semibold">
-                                                Dokumen
-                                              </p>
+                                              <div className="flex flex-col gap-[8px]">
+                                                <p className="text-[16px] text-primary-900 font-semibold">
+                                                  Judul Pengaduan
+                                                </p>
 
-                                              <div className="md:w-1/2 md:h-1/2">
-                                                {pengaduan.image && (
-                                                  <Image
-                                                    className="md:w-full md:h-full rounded-xl"
-                                                    width={100}
-                                                    height={100}
-                                                    src={pengaduan.image}
-                                                    alt={pengaduan.judul}
-                                                  />
-                                                )}
+                                                <p className="text-[16px] text-neutral-900 font-normal">
+                                                  {pengaduan.judul}
+                                                </p>
+                                              </div>
+
+                                              <div className="flex flex-col gap-[8px]">
+                                                <p className="text-[16px] text-primary-900 font-semibold">
+                                                  Aduan
+                                                </p>
+
+                                                <p className="text-[16px] text-neutral-900 font-normal">
+                                                  {pengaduan.aduan}
+                                                </p>
+                                              </div>
+
+                                              <div className="flex flex-col gap-[8px]">
+                                                <p className="text-[16px] text-primary-900 font-semibold">
+                                                  Dokumen
+                                                </p>
+
+                                                <div className="md:w-1/2 md:h-1/2">
+                                                  {pengaduan.image && (
+                                                    <Image
+                                                      className="md:w-full md:h-full rounded-xl"
+                                                      width={100}
+                                                      height={100}
+                                                      src={pengaduan.image}
+                                                      alt={pengaduan.judul}
+                                                    />
+                                                  )}
+                                                </div>
+                                              </div>
+
+                                              <div className="flex flex-col gap-[8px]">
+                                                <p className="text-[16px] text-primary-900 font-semibold">
+                                                  Balasan
+                                                </p>
+
+                                                <p className="text-[16px] text-neutral-900 font-normal">
+                                                  {pengaduan.jawaban ||
+                                                    "Belum ada balasan!"}
+                                                </p>
                                               </div>
                                             </div>
-
-                                            <div className="flex flex-col gap-[8px]">
-                                              <p className="text-[16px] text-primary-900 font-semibold">
-                                                Balasan
-                                              </p>
-
-                                              <p className="text-[16px] text-neutral-900 font-normal">
-                                                {pengaduan.jawaban ||
-                                                  "Belum ada balasan!"}
-                                              </p>
-                                            </div>
                                           </div>
-                                        </div>
-                                      </DialogContent>
-                                    </Dialog>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            }
-                          )}
-                      </>
-                    )}
-                  </TableBody>
-                </Table>
+                                        </DialogContent>
+                                      </Dialog>
+                                    </TableCell>
+                                  </TableRow>
+                                );
+                              }
+                            )}
+                        </>
+                      )}
+                    </TableBody>
+                  </Table>
 
-                <div className="md:flex md:justify-end">
-                  <PaginationComponent
-                    totalItems={pengaduanlists?.length || 0}
-                    itemsPerPage={itemsPerPage}
-                    currentPage={pengaduanPage}
-                    onPageChange={setPengaduanPage}
-                  />
+                  <div className="md:flex md:justify-end">
+                    <PaginationComponent
+                      totalItems={pengaduanlists?.length || 0}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={pengaduanPage}
+                      onPageChange={setPengaduanPage}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <>
+              {loadingData ? (
+                <div className="container mx-auto flex flex-col md:w-full justify-center items-center w-full h-full">
+                  <LoadingComponent />
                 </div>
-              </>
-            )}
-          </div>
+              ) : (
+                <div className="container mx-auto flex flex-col md:w-full justify-center items-center mt-8 w-full h-full">
+                  <Image src={backHome} width={300} height={300} alt="sad" />
+                  <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
+                    Data tidak ditemukan!
+                  </p>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

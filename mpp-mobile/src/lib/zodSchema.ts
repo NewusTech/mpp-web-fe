@@ -58,6 +58,10 @@ export const schemaDataDiri = z.object({
   gender: z.string({ message: "Pilih Jenis Kelamin" }),
   goldar: z.string({ message: "Pilih Golongan Darah" }),
   status_kawin: z.string({ message: "Pilih Status Perkawinan" }),
+  tempat_lahir: z
+    .string()
+    .refine((val) => val !== "", "Tempat Lahir harus diisi"),
+  tgl_lahir: z.string().refine((val) => val !== "", "Tgl Lahir harus diisi"),
   agama: z.string({ message: "Pilih Agama" }),
   pendidikan: z.string({ message: "Pilih Pendidikan" }),
   pekerjaan: z.string({ message: "Harap isi pekerjaanmu saat ini!" }),
@@ -85,6 +89,10 @@ export const schemaUpdateDiri = z.object({
   gender: z.string({ message: "Pilih Jenis Kelamin" }),
   goldar: z.string({ message: "Pilih Golongan Darah" }),
   status_kawin: z.string({ message: "Pilih Status Perkawinan" }),
+  tempat_lahir: z
+    .string()
+    .refine((val) => val !== "", "Tempat Lahir harus diisi"),
+  tgl_lahir: z.string().refine((val) => val !== "", "Tgl Lahir harus diisi"),
   agama: z.string({ message: "Pilih Agama" }),
   pendidikan: z.string({ message: "Pilih Pendidikan" }),
   pekerjaan: z.string({ message: "Harap isi pekerjaanmu saat ini!" }),

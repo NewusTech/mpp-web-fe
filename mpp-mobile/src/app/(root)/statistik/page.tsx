@@ -50,12 +50,17 @@ export default function StatisticsPage() {
   const [isWideScreen, setIsWideScreen] = useState(false);
   const [statistiData, setStatistiData] = useState<number>(1);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [filterType, setFilterType] = useState<string>("month");
   const itemsPerPage = 10;
   const limitData = 1000000;
 
-  const fetchStatistik = async (month: string) => {
+  const now = new Date();
+  const thisYear = now.getFullYear();
+
+  const fetchStatistik = async (month: string, year: number) => {
     try {
-      const result = await statistikFetch(limitData, month);
+      const result = await statistikFetch(limitData, month, year);
 
       setStatistik(result.data);
       updateChartData(result.data.countPerYear);
@@ -66,8 +71,10 @@ export default function StatisticsPage() {
   };
 
   useEffect(() => {
-    fetchStatistik(selectedMonth);
-  }, [selectedMonth]);
+    fetchStatistik(selectedMonth, selectedYear || thisYear);
+  }, [selectedMonth, selectedYear, filterType]);
+
+  console.log(statistik, "ini statistik");
 
   const paginate = (items: any[], pageNumber: number, itemsPerPage: number) => {
     const startIndex = (pageNumber - 1) * itemsPerPage;
@@ -167,6 +174,15 @@ export default function StatisticsPage() {
     setSelectedMonth(month);
   };
 
+  const handleYearChange = (year: string) => {
+    setSelectedYear(parseInt(year, 10));
+  };
+
+  const handleAllClick = () => {
+    setSelectedMonth("");
+    setSelectedYear(null);
+  };
+
   return (
     <div className="flex items-center md:w-full justify-center pt-6 bg-primary-100 pb-32 md:pb-[120px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
       <div className="flex flex-col md:w-full gap-[10px] md:mx-[70px]">
@@ -235,26 +251,57 @@ export default function StatisticsPage() {
             </h4>
 
             <div className="flex flex-row justify-center items-center w-4/12 gap-x-4">
-              <button className="text-neutral-700">Bulan</button>
+              <button onClick={handleAllClick} className="text-neutral-700">
+                All
+              </button>
 
-              <button className="text-neutral-700">Tahun</button>
+              <button
+                onClick={() => setFilterType("month")}
+                className="text-neutral-700">
+                Bulan
+              </button>
+
+              <button
+                onClick={() => setFilterType("year")}
+                className="text-neutral-700">
+                Tahun
+              </button>
 
               <div className="flex items-center w-10/12 md:w-full h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
-                <Select onValueChange={handleMonthChange}>
-                  <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
-                    <SelectValue
-                      placeholder="Bulan"
-                      className="text-neutral-800"
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {months.map((month: string, i: number) => (
-                      <SelectItem key={i} value={(i + 1).toString()}>
-                        {month}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {filterType === "month" ? (
+                  <Select onValueChange={handleMonthChange}>
+                    <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                      <SelectValue
+                        placeholder="Bulan"
+                        className="text-neutral-800"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((month: string, i: number) => (
+                        <SelectItem key={i} value={(i + 1).toString()}>
+                          {month}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Select onValueChange={handleYearChange}>
+                    <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                      <SelectValue
+                        placeholder="Tahun"
+                        className="text-neutral-800"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statistik &&
+                        Object.keys(statistik.yearList).map((year) => (
+                          <SelectItem key={year} value={year}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
             </div>
           </div>

@@ -1,8 +1,6 @@
 "use client";
 
 import fetchInstansi from "@/components/fetching/instansi/instansi";
-import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import Image from "next/legacy/image";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";
@@ -10,6 +8,7 @@ import SearchComponent from "@/components/others/searchComponent/searchComponent
 import CardLayananComponent from "@/components/services/others/cardLayananComponent";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import { Layanantype } from "@/types/type";
+import LoadingComponent from "@/components/loading/LoadingComponent";
 
 export default function LayananPage() {
   const [instansi, setInstansi] = useState([]);
@@ -77,10 +76,7 @@ export default function LayananPage() {
             </>
           ) : (
             <div className="container mx-auto flex flex-col md:w-full justify-center items-center w-full h-full">
-              <Image src={backHome} width={300} height={300} alt="sad" />
-              <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
-                Data tidak ditemukan!
-              </p>
+              <LoadingComponent />
             </div>
           )}
         </div>

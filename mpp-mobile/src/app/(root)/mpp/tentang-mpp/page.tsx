@@ -2,36 +2,20 @@
 
 import fetchVisiMisi from "@/components/fetching/visimisi/visimisi";
 import { useEffect, useState } from "react";
-import {
-  AlurAntrianType,
-  AlurPermohonanType,
-  VisiMisiType,
-} from "@/types/type";
-import AlurMpp from "@/components/alurMpp/alurMpp";
-import fetchAlurAntrian from "@/components/fetching/alurAntrian.tsx/alurAntrian";
-import fetchAlurPermohonan from "@/components/fetching/alurPermohonan/alurPermohonan";
+import { VisiMisiType } from "@/types/type";
 import parse from "html-react-parser";
-
-const currentAlur = 1;
-const statusAntrian = true;
-const statusPermohonan = false;
+import alurmpp from "@/../../public/assets/alurmpplamtim.jpg";
+import Image from "next/legacy/image";
 
 export default function MppPage() {
   const [visimisi, setVisimisi] = useState<VisiMisiType>({
     visi: "",
     misi: "",
   });
-  const [alurAntrian, setAlurAntrian] = useState<AlurAntrianType[]>();
-  const [alurPermohonan, setAlurPermohonan] = useState<AlurPermohonanType[]>();
-
   const fetchVisiMisiMpp = async () => {
     const visimisi = await fetchVisiMisi();
-    const alurAntrian = await fetchAlurAntrian();
-    const alurPermohonan = await fetchAlurPermohonan();
 
     setVisimisi(visimisi.data);
-    setAlurAntrian(alurAntrian.data);
-    setAlurPermohonan(alurPermohonan.data);
   };
 
   useEffect(() => {
@@ -68,54 +52,29 @@ export default function MppPage() {
             ALUR PELAYANAN MPP
           </h4>
 
-          {/* <div className="flex flex-col w-full mt-4 md:px-12 gap-y-6"> */}
-          <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-6 md:gap-x-6">
-            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-md rounded-2xl gap-8 md:pb-5">
-              <div className="flex justify-center pt-4">
-                <h4 className="text-[16px] md:text-[26px] text-secondary-700 font-semibold">
-                  Booking Antrian
-                </h4>
-              </div>
-
-              {/* <div className="flex flex-col w-full md:grid md:grid-cols-5 justify-start space-y-2 md:space-y-0 px-4 md:px-5"> */}
-              <div className="flex flex-col w-full justify-start space-y-2 md:space-y-0 px-4 md:px-5">
-                {alurAntrian?.map((alur: AlurAntrianType, index: number) => (
-                  <AlurMpp
-                    key={index}
-                    title={alur.id}
-                    desc={alur.desc}
-                    isLastStep={index === alurAntrian.length - 1}
-                    isActive={alur.id === currentAlur}
-                    status={statusAntrian}
-                    total={alurAntrian.length}
-                  />
-                ))}
-              </div>
+          <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 md:gap-x-6">
+            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-md rounded-2xl">
+              <Image
+                src={alurmpp}
+                alt="alur mpp"
+                className="w-full h-ful object-contain rounded-xl"
+                loading="lazy"
+                placeholder="blur"
+                width={1920}
+                height={1080}
+              />
             </div>
 
-            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-md rounded-2xl gap-8 mt-4 md:mt-0">
-              <div className="flex justify-center pt-4">
-                <h4 className="text-[16px] md:text-[26px] text-primary-700 font-semibold">
-                  Permohonan Layanan
-                </h4>
-              </div>
-
-              {/* <div className="flex flex-col w-full md:grid md:grid-cols-5 justify-start gap-y-5 px-8"> */}
-              <div className="flex flex-col w-full justify-start gap-y-5 px-8">
-                {alurPermohonan?.map(
-                  (alur: AlurPermohonanType, index: number) => (
-                    <AlurMpp
-                      key={index}
-                      title={alur.id}
-                      desc={alur.desc}
-                      isLastStep={index === alurPermohonan.length - 1}
-                      isActive={alur.id === currentAlur}
-                      status={statusPermohonan}
-                      total={alurPermohonan.length}
-                    />
-                  )
-                )}
-              </div>
+            <div className="flex flex-col w-full h-full pb-8 bg-neutral-50 shadow-md rounded-2xl mt-2 md:mt-0">
+              <Image
+                src={alurmpp}
+                alt="alur mpp"
+                className="w-full h-ful object-contain rounded-xl"
+                loading="lazy"
+                placeholder="blur"
+                width={1920}
+                height={1080}
+              />
             </div>
           </div>
         </div>
