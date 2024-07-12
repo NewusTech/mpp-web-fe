@@ -117,10 +117,10 @@ export default function SurveySkmPage() {
     setSelected(value);
   };
 
-  const handleChangeDate = (value: any) => {
-    setDate(value);
+  const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
     setChangeOpacity(true);
-    dispatch(setTanggal(value));
+    dispatch(setTanggal(e.target.value));
   };
 
   const handleButtonClick = () => {
@@ -207,7 +207,7 @@ export default function SurveySkmPage() {
               <Input
                 type="date"
                 name="tanggal"
-                value={date}
+                value={date ? date : "Pilih Tanggal"}
                 onChange={handleChangeDate}
                 className={`w-full pl-4 pr-1 h-10 bg-neutral-50 block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
@@ -222,13 +222,18 @@ export default function SurveySkmPage() {
                 name="tanggal"
                 value={date}
                 onChange={handleChangeDate}
-                className={`w-full pl-4 h-10 rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                className={`w-full pl-4 md:pr-1 h-10 rounded-none border-b bg-neutral-50 border-neutral-800 focus:outline-none appearance-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-neutral-900 opacity-50"
                   }`}
                 placeholder="Pilih Tanggal"
+                style={{
+                  WebkitAppearance: "none",
+                  MozAppearance: "none",
+                  appearance: "none",
+                }}
               /> */}
             </div>
 
