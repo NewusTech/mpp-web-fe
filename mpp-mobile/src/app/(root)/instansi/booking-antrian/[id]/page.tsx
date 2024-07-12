@@ -139,12 +139,12 @@ export default function BookingAntrianPage({
     }));
   };
 
-  const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTanggal(e.target.value);
+  const handleChangeTime = (value: any) => {
+    setTanggal(value);
     setChangeOpacity(true);
     setAntrian((prevAntrian) => ({
       ...prevAntrian,
-      waktu: e.target.value,
+      waktu: value,
     }));
   };
 

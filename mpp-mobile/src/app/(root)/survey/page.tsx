@@ -117,10 +117,10 @@ export default function SurveySkmPage() {
     setSelected(value);
   };
 
-  const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+  const handleChangeDate = (value: any) => {
+    setDate(value);
     setChangeOpacity(true);
-    dispatch(setTanggal(e.target.value));
+    dispatch(setTanggal(value));
   };
 
   const handleButtonClick = () => {
@@ -209,7 +209,7 @@ export default function SurveySkmPage() {
                 name="tanggal"
                 value={date}
                 onChange={handleChangeDate}
-                className={`w-full pl-4 pr-1 h-10 block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                className={`w-full pl-4 pr-1 h-10 bg-neutral-50 block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900 text-[14px]"
