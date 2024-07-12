@@ -208,18 +208,13 @@ export default function SurveySkmPage() {
                 name="tanggal"
                 value={date}
                 onChange={handleChangeDate}
-                className={`w-full pl-4 h-10 rounded-none border-b bg-transparent border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                className={`w-full pl-4 h-10 rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-neutral-900 opacity-50"
                   }`}
-                placeholder="Tanggal"
-                style={{
-                  WebkitAppearance: "none",
-                  MozAppearance: "none",
-                  appearance: "none",
-                }}
+                placeholder="Pilih Tanggal"
               />
             </div>
 

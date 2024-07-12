@@ -133,12 +133,12 @@ export default function SurveySKMPage() {
 
         toast("Terimakasih telah mengisi survei!", { duration: 2000 });
         localStorage.clear();
-        router.push("/survey");
       } catch (error) {
         toast("Gagal mengisi survey!");
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
+        router.push("/survey");
       }
     }
   };

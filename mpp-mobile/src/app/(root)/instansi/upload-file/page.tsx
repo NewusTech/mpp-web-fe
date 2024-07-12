@@ -8,11 +8,11 @@ import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
 import { toast } from "sonner";
-import { LayananType } from "@/types/type";
+import { LayananFormType, LayananType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { truncateTitle } from "@/utils/formatTitle";
-import parse from "html-react-parser";
+import { z, ZodObject, ZodSchema } from "zod";
 
 const steps = [
   { id: 1, title: "1" },
@@ -27,6 +27,36 @@ type DataInputItem = {
   data: string;
 };
 
+const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
+  const schemaShape: Record<string, ZodSchema> = {};
+
+  layananForms.forEach((formField) => {
+    let fieldSchema: ZodSchema;
+
+    switch (formField.tipedata) {
+      case "checkbox":
+        fieldSchema = z.array(z.number({ message: "Data wajib diisi!" }));
+        break;
+      case "number":
+        fieldSchema = z.number({ message: "Data wajib diisi!" });
+        break;
+      default:
+        fieldSchema = z.string({ message: "Data wajib diisi!" });
+        break;
+    }
+
+    if (formField.isrequired) {
+      fieldSchema = fieldSchema.refine((val) => val.length > 0, {
+        message: `${formField.field} is required`,
+      });
+    }
+
+    schemaShape[formField.field] = fieldSchema;
+  });
+
+  return z.object(schemaShape);
+};
+
 export default function UploadFilePage() {
   const [dataFile, setDataFile] = useState<LayananType | null>(null);
   const [docValues, setDocValues] = useState<Record<string, File | null>>({});
@@ -38,6 +68,30 @@ export default function UploadFilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateForm = (values: { [key: string]: any }) => {
+    if (!dataFile) return;
+
+    const schema = buildSchema(dataFile.Layananforms);
+
+    try {
+      schema.parse(values);
+      setErrors({});
+      return true;
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        const fieldErrors: { [key: string]: string } = {};
+        e.errors.forEach((error) => {
+          if (error.path.length > 0) {
+            fieldErrors[error.path[0]] = error.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
+      return false;
+    }
+  };
 
   useEffect(() => {
     const storedInstanceId = localStorage.getItem("instanceId");
@@ -76,6 +130,8 @@ export default function UploadFilePage() {
     }
   }, [instansiId]);
 
+  console.log(dataFile, "datafile");
+
   const handleDocChange = (id: string, file: File | null) => {
     setDocValues((prevValues) => ({
       ...prevValues,
@@ -89,6 +145,7 @@ export default function UploadFilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setIsLoading(true);
 
     const formDataArray: {
@@ -144,7 +201,6 @@ export default function UploadFilePage() {
       if (response.ok) {
         toast(data.message);
         localStorage.clear();
-        router.push("/riwayat");
       } else {
         toast.error(data.message);
       }
@@ -152,6 +208,7 @@ export default function UploadFilePage() {
       toast.error("An error occurred while submitting the form.");
     } finally {
       setIsLoading(false);
+      router.push("/riwayat");
     }
   };
 
@@ -166,12 +223,6 @@ export default function UploadFilePage() {
 
   if (previewFile) {
     fileURL = URL.createObjectURL(previewFile);
-  }
-
-  let truncate = "";
-
-  if (dataFile?.desc) {
-    truncate = truncateTitle(dataFile?.desc, 20);
   }
 
   return (
@@ -213,12 +264,24 @@ export default function UploadFilePage() {
                     key={el.id}
                     className="flex flex-row justify-between w-full h-[80px] rounded-2xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
                     <div className="flex flex-col w-full justify-center gap-[9px]">
-                      <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
-                        {el.field}
-                      </h6>
-                      <div className="text-[10px] md:text-[12px] text-neutral-900 font-normal">
-                        {parse(truncate)}
-                      </div>
+                      {el.isrequired === true ? (
+                        <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
+                          {el.field}
+                          <span className="text-error-700 text-[16px] font-normal">
+                            *
+                          </span>
+                        </h6>
+                      ) : (
+                        <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
+                          {el.field}
+                        </h6>
+                      )}
+
+                      {errors[el.field] && (
+                        <p className="text-error-700 text-[14px] font-normal">
+                          {errors[el.field]}
+                        </p>
+                      )}
                     </div>
                     <div className="flex self-center items-center w-full md:justify-end">
                       <input

@@ -246,7 +246,6 @@ export default function PengaduanScreen() {
           setIsOpen(false);
           fetchPengaduanList(1, limitData);
           setFormErrors({});
-          router.push("/pengaduan");
         } else {
           setIsOpen(true);
           const responseData = await response.json();
@@ -267,6 +266,7 @@ export default function PengaduanScreen() {
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
+        router.push("/pengaduan");
       }
     }
   };
@@ -541,7 +541,7 @@ export default function PengaduanScreen() {
                               type="file"
                               id="file-input"
                               name="image"
-                              accept="image/*"
+                              accept="image/*,.pdf"
                               onChange={handleFileChange}
                               className="hidden"
                             />

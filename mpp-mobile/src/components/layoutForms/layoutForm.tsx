@@ -12,6 +12,7 @@ type LayoutFormType = {
   placeholder: string;
   opacity: boolean;
   dataRadio: [{ id: number; key: string }];
+  isRequired?: boolean;
 };
 
 export default function LayoutInput({
@@ -23,22 +24,42 @@ export default function LayoutInput({
   placeholder,
   opacity,
   dataRadio,
+  isRequired,
 }: LayoutFormType) {
   if (typeForm === "string") {
     return (
       <>
-        <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
-          {labelName}
-        </Label>
+        {isRequired === true ? (
+          <>
+            <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+              {labelName} <span className="text-error-700 text-[14px]">*</span>
+            </Label>
 
-        <Input
-          value={valueForm}
-          onChange={change}
-          name={nameForm}
-          type="text"
-          placeholder={placeholder}
-          className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed mb-[8px]"
-        />
+            <Input
+              value={valueForm}
+              onChange={change}
+              name={nameForm}
+              type="text"
+              placeholder={placeholder}
+              className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed mb-[8px]"
+            />
+          </>
+        ) : (
+          <>
+            <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+              {labelName}
+            </Label>
+
+            <Input
+              value={valueForm}
+              onChange={change}
+              name={nameForm}
+              type="text"
+              placeholder={placeholder}
+              className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed mb-[8px]"
+            />
+          </>
+        )}
       </>
     );
   }
@@ -46,18 +67,37 @@ export default function LayoutInput({
   if (typeForm === "number") {
     return (
       <>
-        <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
-          {labelName}
-        </Label>
+        {isRequired === true ? (
+          <>
+            <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+              {labelName} <span className="text-error-700 text-[14px]">*</span>
+            </Label>
 
-        <Input
-          value={valueForm}
-          onChange={change}
-          name={nameForm}
-          type="number"
-          placeholder={placeholder}
-          className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
-        />
+            <Input
+              value={valueForm}
+              onChange={change}
+              name={nameForm}
+              type="number"
+              placeholder={placeholder}
+              className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
+            />
+          </>
+        ) : (
+          <>
+            <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+              {labelName}
+            </Label>
+
+            <Input
+              value={valueForm}
+              onChange={change}
+              name={nameForm}
+              type="number"
+              placeholder={placeholder}
+              className="flex w-full md:h-[50px] border placeholder:opacity-[50%] border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
+            />
+          </>
+        )}
       </>
     );
   }
@@ -78,13 +118,8 @@ export default function LayoutInput({
             opacity
               ? "text-neutral-900 text-[14px]"
               : "text-gray-500 opacity-50"
-          } px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
+          } px-4 mt-1 h-[40px] rounded-full border border-neutral-700 placeholder:text-[12px] focus:outline-none text-neutral-900`}
           placeholder={placeholder}
-          style={{
-            WebkitAppearance: "none",
-            MozAppearance: "none",
-            appearance: "none",
-          }}
         />
       </>
     );
@@ -127,17 +162,35 @@ export default function LayoutInput({
   if (typeForm === "textarea") {
     return (
       <>
-        <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
-          {labelName}
-        </Label>
+        {isRequired === true ? (
+          <>
+            <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+              {labelName} <span className="text-error-700 text-[14px]">*</span>
+            </Label>
 
-        <Textarea
-          value={valueForm}
-          onChange={change}
-          placeholder={placeholder}
-          name={nameForm}
-          className="flex w-full border border-neutral-700 pl-[16px] text-[14px] rounded-xl placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
-        />
+            <Textarea
+              value={valueForm}
+              onChange={change}
+              placeholder={placeholder}
+              name={nameForm}
+              className="flex w-full border border-neutral-700 pl-[16px] text-[14px] rounded-xl placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
+            />
+          </>
+        ) : (
+          <>
+            <Label className="text-[12px] text-neutral-900 font-normal mb-[8px]">
+              {labelName}
+            </Label>
+
+            <Textarea
+              value={valueForm}
+              onChange={change}
+              placeholder={placeholder}
+              name={nameForm}
+              className="flex w-full border border-neutral-700 pl-[16px] text-[14px] rounded-xl placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed"
+            />
+          </>
+        )}
       </>
     );
   }

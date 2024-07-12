@@ -211,19 +211,14 @@ export default function BookingAntrianPage({
                 <input
                   type="date"
                   name="tanggal"
-                  className={`w-full pl-4 h-[40px] rounded-none bg-transparent border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-gray-500 opacity-50"
                   }`}
-                  placeholder="Tanggal"
+                  placeholder="Pilih Tanggal"
                   onChange={handleChangeDate}
-                  style={{
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    // appearance: "none",
-                  }}
                 />
 
                 {hasSubmitted && errors?.tanggal?._errors && (
@@ -237,19 +232,14 @@ export default function BookingAntrianPage({
                 <input
                   type="time"
                   name="waktu"
-                  className={`w-full pl-4 h-[40px] bg-transparent rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none appearance-none 
+                  className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-gray-500 opacity-50"
                   }`}
-                  placeholder="time"
+                  placeholder="Pilih Waktu"
                   onChange={handleChangeTime}
-                  style={{
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
                 />
 
                 {hasSubmitted && errors?.waktu?._errors && (
