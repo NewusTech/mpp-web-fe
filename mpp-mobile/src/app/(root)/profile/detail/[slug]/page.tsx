@@ -784,10 +784,11 @@ export default function ProfileEditPage({
                   onValueChange={(value) =>
                     handleSelectChange("kecamatan_id", value)
                   }
+                  defaultValue={formData?.kecamatan_id}
                   value={formData?.kecamatan_id || ""}>
                   <SelectTrigger
                     className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
+                    <SelectValue placeholder="Pilih Kecamatan" />
                   </SelectTrigger>
                   <SelectContent className="w-full">
                     <div>
@@ -832,10 +833,11 @@ export default function ProfileEditPage({
                   onValueChange={(value) =>
                     handleSelectChange("desa_id", value)
                   }
+                  defaultValue={formData?.desa_id}
                   value={formData?.desa_id || ""}>
                   <SelectTrigger
                     className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
+                    <SelectValue placeholder="Pilih Desa" />
                   </SelectTrigger>
                   <SelectContent className="w-full">
                     <div>
