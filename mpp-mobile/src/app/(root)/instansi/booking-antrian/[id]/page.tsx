@@ -211,7 +211,7 @@ export default function BookingAntrianPage({
                 <input
                   type="date"
                   name="tanggal"
-                  className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  className={`w-full pl-4 h-[40px] appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
@@ -219,6 +219,11 @@ export default function BookingAntrianPage({
                   }`}
                   placeholder="Pilih Tanggal"
                   onChange={handleChangeDate}
+                  style={{
+                    WebkitAppearance: "none",
+                    MozAppearance: "none",
+                    appearance: "none",
+                  }}
                 />
 
                 {hasSubmitted && errors?.tanggal?._errors && (
@@ -232,7 +237,7 @@ export default function BookingAntrianPage({
                 <input
                   type="time"
                   name="waktu"
-                  className={`w-full pl-4 h-[40px] rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  className={`w-full pl-4 h-[40px] appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
@@ -240,6 +245,11 @@ export default function BookingAntrianPage({
                   }`}
                   placeholder="Pilih Waktu"
                   onChange={handleChangeTime}
+                  style={{
+                    WebkitAppearance: "none",
+                    MozAppearance: "none",
+                    appearance: "none",
+                  }}
                 />
 
                 {hasSubmitted && errors?.waktu?._errors && (
