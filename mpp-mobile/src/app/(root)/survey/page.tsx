@@ -23,6 +23,7 @@ import {
 import { redirect } from "next/navigation";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { Loader } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 type DataDinasType = {
   id: number;
@@ -202,20 +203,33 @@ export default function SurveySkmPage() {
               </Select>
             </div>
 
-            <div className="flex flex-col items-center bg-none my-[10px] md:my-10 mx-[1px]">
-              <input
+            <div className="flex w-full flex-col items-center bg-none my-[10px] md:my-10 mx-[1px]">
+              <Input
                 type="date"
                 name="tanggal"
                 value={date}
                 onChange={handleChangeDate}
-                className={`w-full pl-4 h-10 bg-red-400 rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                className={`w-full pl-4 pr-1 h-10 block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900 text-[14px]"
+                      : "text-neutral-900 opacity-50"
+                  }`}
+                placeholder="Pilih Tanggal"
+              />
+              {/* <input
+                type="date"
+                name="tanggal"
+                value={date}
+                onChange={handleChangeDate}
+                className={`w-full pl-4 h-10 rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-neutral-900 opacity-50"
                   }`}
                 placeholder="Pilih Tanggal"
-              />
+              /> */}
             </div>
 
             <div className="flex self-end justify-end items-end mb-8 mt-4">
