@@ -2,12 +2,9 @@
 
 import fetchProfile from "@/components/fetching/profile/profile";
 import { Button } from "@/components/ui/button";
-import { updateProfileUser } from "@/store/action/actionUpdateProfile";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Dispatch } from "redux";
 import Cookies from "js-cookie";
 import {
   Select,
@@ -17,7 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Steps from "@/components/steps/steps";
-import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
+import {
+  DesaType,
+  KecamatanType,
+  ProfileNewType,
+  UpdateUserType,
+} from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
@@ -27,7 +29,7 @@ import { Label } from "@radix-ui/react-label";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
-import { schemaDataDiri } from "@/lib/zodSchema";
+import { schemaDataDiri, schemaUpdateDiri } from "@/lib/zodSchema";
 import {
   agamas,
   genders,
@@ -45,68 +47,36 @@ const steps = [
 const currentStep = 2;
 
 export default function DataDiriPage() {
-  const dispatch: Dispatch<any> = useDispatch();
-  const [selectedKecamatan, setSelectedKecamatan] = useState<number | null>(
-    null
-  );
-  const [selectedDesa, setSelectedDesa] = useState<number | null>(null);
-  const [selectedGender, setSelectedGender] = useState<number | null>(null);
-  const [selectedAgama, setSelectedAgama] = useState<number | null>(null);
-  const [selectedPendidikan, setSelectedPendidikan] = useState<number | null>(
-    null
-  );
-  const [selectedDarah, setSelectedDarah] = useState<number | null>(null);
-  const [selectedKawin, setSelectedKawin] = useState<number | null>(null);
-  const [kecamatan, setKecamatan] = useState<KecamatanType[]>();
-  const [desa, setDesa] = useState<DesaType[]>([]);
-  const [gender, setGender] = useState<{ id: number; value: string }[]>();
-  const [agama, setAgama] = useState<{ id: number; value: string }[]>();
-  const [pendidikan, setPendidikan] =
-    useState<{ id: number; value: string }[]>();
-  const [darah, setDarah] = useState<{ id: number; value: string }[]>();
-  const [kawin, setKawin] = useState<{ id: number; value: string }[]>();
+  const router = useRouter();
+  const dropRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<ProfileNewType>();
+  const [formData, setFormData] = useState<UpdateUserType | null>(null);
+  const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
   const [searchKecamatan, setSearchKecamatan] = useState<string>("");
+  const [debounceSearchKecamatan, setDebounceSearchKecamatan] =
+    useState(searchKecamatan);
+  const [desas, setDesas] = useState<DesaType[]>();
   const [searchDesa, setSearchDesa] = useState<string>("");
-  const debounceSearchKecamatan = useDebounce(searchKecamatan);
-  const debounceSearchDesa = useDebounce(searchDesa);
-  const [detail, setDetail] = useState<UpdateUserType | undefined>({
-    name: "",
-    email: "",
-    telepon: "",
-    nik: "",
-    gender: "",
-    goldar: "",
-    status_kawin: "",
-    tempat_lahir: "",
-    tgl_lahir: "",
-    agama: "",
-    pendidikan: "",
-    pekerjaan: "",
-    kecamatan_id: "",
-    desa_id: "",
-    rt: "",
-    rw: "",
-    alamat: "",
-  });
-  const [isDataFetched, setIsDataFetched] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
+  const [debounceSearchDesa, setDebounceSearchDesa] = useState(searchDesa);
+  const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
+  const [fileKkImage, setFileKkImage] = useState<File | null>(null);
+  const [fileIjazahImage, setFileIjazahImage] = useState<File | null>(null);
+  const [fotos, setFotos] = useState<File | null>(null);
+  const [aktalahirImage, setAktalahirImage] = useState<File | null>(null);
+  const [previewKTPImage, setPreviewKTPImage] = useState<string>("");
+  const [previewKKImage, setPreviewKKImage] = useState<string>("");
+  const [previewIjazahImage, setPreviewIjazahImage] = useState<string>("");
+  const [previewFotos, setPreviewFotos] = useState<string>("");
+  const [previewAktalahir, setPreviewAktalahir] = useState<string>("");
   const [errors, setErrors] = useState<any>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [formValid, setFormValid] = useState(false);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = async () => {
     try {
-      await schemaDataDiri.parseAsync({
-        ...detail,
-        kecamatan_id: String(selectedKecamatan),
-        desa_id: String(selectedDesa),
-        gender: String(selectedGender),
-        agama: String(selectedAgama),
-        pendidikan: String(selectedPendidikan),
-        goldar: String(selectedDarah),
-        status_kawin: String(selectedKawin),
+      await schemaUpdateDiri.parseAsync({
+        ...formData,
       });
       setErrors({});
       return true;
@@ -124,82 +94,17 @@ export default function DataDiriPage() {
     if (hasSubmitted) {
       validateForm();
     }
-  }, [
-    detail,
-    selectedKecamatan,
-    selectedDesa,
-    selectedAgama,
-    selectedGender,
-    selectedPendidikan,
-    hasSubmitted,
-  ]);
-
-  const fetchDatakecamatan = async (search: string, limit: number) => {
-    try {
-      const kecamatans = await kecamatanFetch(search, limit);
-
-      setKecamatan(kecamatans.data);
-    } catch (error) {
-      toast("Gagal Memuat Data!");
-    }
-  };
-
-  const fetchDataDesa = async (search: string, limit: number, id: number) => {
-    try {
-      const desa = await desaFetch(search, limit, id);
-      setDesa(desa.data);
-    } catch (error) {
-      toast("Gagal Memuat Data!");
-    }
-  };
-
-  useEffect(() => {
-    fetchDatakecamatan(debounceSearchKecamatan, 1000000);
-  }, [debounceSearchKecamatan]);
-
-  useEffect(() => {
-    if (selectedKecamatan) {
-      fetchDataDesa(debounceSearchDesa, 1000000, selectedKecamatan);
-    }
-  }, [selectedKecamatan, debounceSearchDesa]);
+  }, [formData, hasSubmitted]);
 
   const fetchUser = async () => {
     try {
-      const result = await fetchProfile();
+      const user = await fetchProfile();
 
-      setDetail(result.data);
-
-      if (result.data.kecamatan_id) {
-        setSelectedKecamatan(result.data.kecamatan_id);
-        fetchDataDesa("", 1000000, result.data.kecamatan_id);
-      }
-
-      if (result.data.desa_id) {
-        setSelectedDesa(result.data.desa_id);
-      }
-
-      if (result.data.gender) {
-        setSelectedGender(result.data.gender);
-      }
-
-      if (result.data.agama) {
-        setSelectedAgama(result.data.agama);
-      }
-
-      if (result.data.pendidikan) {
-        setSelectedPendidikan(result.data.pendidikan);
-      }
-
-      if (result.data.goldar) {
-        setSelectedDarah(result.data.goldar);
-      }
-
-      if (result.data.status_kawin) {
-        setSelectedKawin(result.data.status_kawin);
-      }
-
-      setIsDataFetched(true);
+      setUser(user.data);
+      setFormData(user.data);
     } catch (error) {
+      console.log(error, "error");
+
       toast("Gagal mendapatkan data!");
     }
   };
@@ -208,16 +113,73 @@ export default function DataDiriPage() {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    setGender(genders);
-    setAgama(agamas);
-    setPendidikan(pendidikans);
-    setKawin(statusKawins);
-    setDarah(golonganDarahs);
-  }, []);
+  const fetchKecamatan = async (search: string, limit: number) => {
+    try {
+      const kecamatanDatas = await kecamatanFetch(search, limit);
 
-  const onSubmit = async (e: React.FormEvent) => {
+      setKecamatans(kecamatanDatas.data);
+    } catch (error) {
+      console.log(error, "error");
+      toast("Gagal mendapatkan data kecamatan!");
+    }
+  };
+
+  useEffect(() => {
+    fetchKecamatan(debounceSearchKecamatan, 1000000);
+  }, [debounceSearchKecamatan]);
+
+  const fetchDesa = async (
+    search: string,
+    limit: number,
+    kecamatan_id: number
+  ) => {
+    try {
+      const desaDatas = await desaFetch(search, limit, kecamatan_id);
+      setDesas(desaDatas.data);
+
+      if (formData && formData.desa_id) {
+        const selectedDesa = desaDatas.data.find(
+          (desa: DesaType) => desa.id === Number(formData.desa_id)
+        );
+        if (selectedDesa) {
+          setFormData((prevFormData) => ({
+            ...prevFormData!,
+            desa_id: selectedDesa.id,
+          }));
+        }
+      }
+    } catch (error) {
+      console.log(error, "error");
+      toast("Gagal mendapatkan data desa!");
+    }
+  };
+
+  useEffect(() => {
+    if (formData?.kecamatan_id && formData?.kecamatan_id) {
+      fetchDesa(debounceSearchDesa, 1000000, Number(formData.kecamatan_id));
+    }
+  }, [debounceSearchDesa, formData?.kecamatan_id]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData!,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData!,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setHasSubmitted(true);
 
     const isValid = await validateForm();
@@ -225,49 +187,30 @@ export default function DataDiriPage() {
     if (isValid) {
       setIsLoading(true);
       try {
-        if (detail) {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${detail?.slug}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${Cookies.get("Authorization")}`,
-              },
-              body: JSON.stringify({
-                ...detail,
-                kecamatan_id: String(selectedKecamatan),
-              }),
-              cache: "no-store",
-            }
-          );
-
-          const responseData = await response.json();
-
-          if (response.ok) {
-            toast.success("Berhasil memperbarui informasi data diri!");
-            await fetchUser();
-            setFormErrors({});
-            router.push(`/instansi/formulir`);
-          } else {
-            if (responseData.status === 400 && responseData.data) {
-              const errors: { [key: string]: string } = {};
-              responseData.data.forEach(
-                (error: { message: string; field: string }) => {
-                  errors[error.field] = error.message;
-                }
-              );
-              setFormErrors(errors);
-            } else {
-              toast.error("Gagal mengupdate profile!");
-            }
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${user?.slug}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${Cookies.get("Authorization")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+            cache: "no-store",
           }
+        );
+
+        if (response.ok) {
+          toast.success("Berhasil mengupdate profile!");
+          await fetchUser();
         }
       } catch (error) {
-        toast("Tidak bisa mengupdate profile!");
+        console.log(error, "error");
+        toast("Failed to update profile!");
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
+        router.push(`/instansi/formulir`);
       }
     }
   };
@@ -275,57 +218,6 @@ export default function DataDiriPage() {
   useEffect(() => {
     setFormValid(Object.keys(errors).length === 0);
   }, [errors]);
-
-  const changeUser = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setDetail({ ...detail, [e.target.name]: e.target.value });
-  };
-
-  useEffect(() => {
-    if (selectedKecamatan !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        kecamatan_id: String(selectedKecamatan),
-      }));
-    }
-  }, [selectedKecamatan]);
-
-  useEffect(() => {
-    if (selectedDesa !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        desa_id: String(selectedDesa),
-      }));
-    }
-  }, [selectedDesa]);
-
-  useEffect(() => {
-    if (
-      selectedGender !== null ||
-      selectedAgama !== null ||
-      selectedPendidikan !== null ||
-      selectedDarah !== null ||
-      selectedKawin !== null
-    ) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        gender: String(selectedGender),
-        agama: String(selectedAgama),
-        pendidikan: String(selectedPendidikan),
-        goldar: String(selectedDarah),
-        status_kawin: String(selectedKawin),
-      }));
-    }
-  }, [
-    selectedGender,
-    selectedAgama,
-    selectedPendidikan,
-    selectedDarah,
-    selectedKawin,
-  ]);
 
   return (
     <div className="bg-primary-100 md:mt-6 md:mb-0 pb-32 md:pb-12">
@@ -363,25 +255,19 @@ export default function DataDiriPage() {
               </h5>
 
               <div className="flex flex-col w-full px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
-                <form onSubmit={onSubmit} className="flex flex-col w-full">
+                <form onSubmit={handleSubmit} className="flex flex-col w-full">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">
                       <ProfileEditInput
                         names="name"
                         types="text"
-                        value={detail?.name || ""}
-                        change={changeUser}
+                        value={formData?.name || ""}
+                        change={handleChange}
                         labelName="Nama Lengkap"
                         placeholder="Nama Lengkap"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["name"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["name"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.name?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -397,45 +283,31 @@ export default function DataDiriPage() {
 
                       <Select
                         name="gender"
-                        value={
-                          selectedGender ? String(selectedGender) : undefined
+                        onValueChange={(value) =>
+                          handleSelectChange("gender", value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedGender(Number(value));
-                        }}>
+                        value={formData?.gender || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedGender ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Jenis Kelamin"
-                            className={
-                              selectedGender ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
-                          {genders?.map(
-                            (
-                              gender: { id: number; value: string },
-                              i: number
-                            ) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(gender.id)}>
-                                {gender.value}
-                              </SelectItem>
-                            )
-                          )}
+                          {genders &&
+                            genders.map(
+                              (
+                                gender: { id: number; value: string },
+                                i: number
+                              ) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  key={i}
+                                  value={String(gender.id)}>
+                                  {gender.value}
+                                </SelectItem>
+                              )
+                            )}
                         </SelectContent>
                       </Select>
-
-                      {formErrors["gender"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["gender"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.gender?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -450,19 +322,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="nik"
                         types="number"
-                        value={detail?.nik || ""}
-                        change={changeUser}
+                        value={formData?.nik || ""}
+                        change={handleChange}
                         labelName="NIK"
                         placeholder="NIK"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["nik"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["nik"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.nik?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -478,45 +344,31 @@ export default function DataDiriPage() {
 
                       <Select
                         name="agama"
-                        value={
-                          selectedAgama ? String(selectedAgama) : undefined
+                        onValueChange={(value) =>
+                          handleSelectChange("agama", value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedAgama(Number(value));
-                        }}>
+                        value={formData?.agama || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedAgama ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Agama"
-                            className={
-                              selectedAgama ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
-                          {agamas?.map(
-                            (
-                              agama: { id: number; value: string },
-                              i: number
-                            ) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(agama.id)}>
-                                {agama.value}
-                              </SelectItem>
-                            )
-                          )}
+                          {agamas &&
+                            agamas.map(
+                              (
+                                agama: { id: number; value: string },
+                                i: number
+                              ) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  value={String(agama.id)}
+                                  key={i}>
+                                  {agama.value}
+                                </SelectItem>
+                              )
+                            )}
                         </SelectContent>
                       </Select>
-
-                      {formErrors["agama"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["agama"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.agama?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -531,19 +383,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="tempat_lahir"
                         types="text"
-                        value={detail?.tempat_lahir || ""}
-                        change={changeUser}
+                        value={formData?.tempat_lahir || ""}
+                        change={handleChange}
                         labelName="Tempat Lahir"
                         placeholder="Tempat Lahir"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["tempat_lahir"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["tempat_lahir"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.tempat_lahir?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -559,45 +405,31 @@ export default function DataDiriPage() {
 
                       <Select
                         name="goldar"
-                        value={
-                          selectedDarah ? String(selectedDarah) : undefined
+                        onValueChange={(value) =>
+                          handleSelectChange("goldar", value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedDarah(Number(value));
-                        }}>
+                        value={formData?.goldar || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedDarah ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Golongan Darah"
-                            className={
-                              selectedDarah ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
-                          {golonganDarahs?.map(
-                            (
-                              darah: { id: number; value: string },
-                              i: number
-                            ) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(darah.id)}>
-                                {darah.value}
-                              </SelectItem>
-                            )
-                          )}
+                          {golonganDarahs &&
+                            golonganDarahs.map(
+                              (
+                                darah: { id: number; value: string },
+                                i: number
+                              ) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  value={String(darah.id)}
+                                  key={i}>
+                                  {darah.value}
+                                </SelectItem>
+                              )
+                            )}
                         </SelectContent>
                       </Select>
-
-                      {formErrors["goldar"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["goldar"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.goldar?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -616,8 +448,8 @@ export default function DataDiriPage() {
                       <input
                         type="date"
                         name="tgl_lahir"
-                        value={detail?.tgl_lahir}
-                        onChange={changeUser}
+                        value={formData?.tgl_lahir || ""}
+                        onChange={handleChange}
                         className={`w-full px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
                         placeholder="Tanggal Lahir"
                         style={{
@@ -626,12 +458,6 @@ export default function DataDiriPage() {
                           appearance: "none",
                         }}
                       />
-
-                      {formErrors["tgl_lahir"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["tgl_lahir"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.tgl_lahir?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -647,45 +473,31 @@ export default function DataDiriPage() {
 
                       <Select
                         name="status_kawin"
-                        value={
-                          selectedKawin ? String(selectedKawin) : undefined
+                        onValueChange={(value) =>
+                          handleSelectChange("status_kawin", value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedKawin(Number(value));
-                        }}>
+                        value={formData?.status_kawin || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedKawin ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Status Perkawinan"
-                            className={
-                              selectedKawin ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
-                          {statusKawins?.map(
-                            (
-                              kawin: { id: number; value: string },
-                              i: number
-                            ) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(kawin.id)}>
-                                {kawin.value}
-                              </SelectItem>
-                            )
-                          )}
+                          {statusKawins &&
+                            statusKawins.map(
+                              (
+                                kawin: { id: number; value: string },
+                                i: number
+                              ) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  value={String(kawin.id)}
+                                  key={i}>
+                                  {kawin.value}
+                                </SelectItem>
+                              )
+                            )}
                         </SelectContent>
                       </Select>
-
-                      {formErrors["status_kawin"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["status_kawin"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.status_kawin?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -700,19 +512,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="telepon"
                         types="number"
-                        value={detail?.telepon || ""}
-                        change={changeUser}
+                        value={formData?.telepon || ""}
+                        change={handleChange}
                         labelName="Nomor Telepon"
                         placeholder="Nomor Telepon"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["telepon"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["telepon"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.telepon?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -728,47 +534,31 @@ export default function DataDiriPage() {
 
                       <Select
                         name="pendidikan"
-                        value={
-                          selectedPendidikan
-                            ? String(selectedPendidikan)
-                            : undefined
+                        onValueChange={(value) =>
+                          handleSelectChange("pendidikan", value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedPendidikan(Number(value));
-                        }}>
+                        value={formData?.pendidikan || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedPendidikan ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Pendidikan Terakhir"
-                            className={
-                              selectedPendidikan ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
-                          {pendidikans?.map(
-                            (
-                              pendidikan: { id: number; value: string },
-                              i: number
-                            ) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(pendidikan.id)}>
-                                {pendidikan.value}
-                              </SelectItem>
-                            )
-                          )}
+                          {pendidikans &&
+                            pendidikans.map(
+                              (
+                                pendidikan: { id: number; value: string },
+                                i: number
+                              ) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  value={String(pendidikan.id)}
+                                  key={i}>
+                                  {pendidikan.value}
+                                </SelectItem>
+                              )
+                            )}
                         </SelectContent>
                       </Select>
-
-                      {formErrors["pendidikan"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["pendidikan"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.pendidikan?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -783,19 +573,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="email"
                         types="text"
-                        value={detail?.email || ""}
-                        change={changeUser}
+                        value={formData?.email || ""}
+                        change={handleChange}
                         labelName="Email"
                         placeholder="Email"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["email"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["email"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.email?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -808,19 +592,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="pekerjaan"
                         types="text"
-                        value={detail?.pekerjaan || ""}
-                        change={changeUser}
+                        value={formData?.pekerjaan || ""}
+                        change={handleChange}
                         labelName="Pekerjaan"
                         placeholder="Pekerjaan"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["pekerjaan"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["pekerjaan"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.pekerjaan?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -837,25 +615,13 @@ export default function DataDiriPage() {
 
                       <Select
                         name="kecamatan_id"
-                        value={
-                          selectedKecamatan
-                            ? String(selectedKecamatan)
-                            : undefined
+                        onValueChange={(value) =>
+                          handleSelectChange("kecamatan_id", value)
                         }
-                        onValueChange={(value) => {
-                          setSelectedKecamatan(Number(value));
-                          setSelectedDesa(null);
-                        }}>
+                        value={formData?.kecamatan_id || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedKecamatan ? "opacity-70" : ""
-                          } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Kecamatan"
-                            className={
-                              selectedKecamatan ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           <div>
@@ -868,23 +634,20 @@ export default function DataDiriPage() {
                               />
                             </div>
 
-                            {kecamatan?.map((el: KecamatanType, i: number) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(el.id)}>
-                                {el.name}
-                              </SelectItem>
-                            ))}
+                            {kecamatans &&
+                              kecamatans.map(
+                                (kecamatan: KecamatanType, i: number) => (
+                                  <SelectItem
+                                    className="pr-none mt-2"
+                                    key={i}
+                                    value={String(kecamatan.id)}>
+                                    {kecamatan.name}
+                                  </SelectItem>
+                                )
+                              )}
                           </div>
                         </SelectContent>
                       </Select>
-
-                      {formErrors["kecamatan_id"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["kecamatan_id"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.kecamatan_id?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -900,20 +663,13 @@ export default function DataDiriPage() {
 
                       <Select
                         name="desa_id"
-                        value={selectedDesa ? String(selectedDesa) : undefined}
                         onValueChange={(value) =>
-                          setSelectedDesa(Number(value))
-                        }>
+                          handleSelectChange("desa_id", value)
+                        }
+                        value={formData?.desa_id || ""}>
                         <SelectTrigger
-                          className={`${
-                            !selectedDesa ? "opacity-70" : ""
-                          } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue
-                            placeholder="Pilih Desa"
-                            className={
-                              selectedDesa ? "" : "placeholder:opacity-50"
-                            }
-                          />
+                          className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           <div>
@@ -926,23 +682,18 @@ export default function DataDiriPage() {
                               />
                             </div>
 
-                            {desa?.map((el: DesaType, i: number) => (
-                              <SelectItem
-                                className="pr-none mt-2"
-                                key={i}
-                                value={String(el.id)}>
-                                {el.name}
-                              </SelectItem>
-                            ))}
+                            {desas &&
+                              desas.map((desa: DesaType, i: number) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  value={String(desa.id)}
+                                  key={i}>
+                                  {desa.name}
+                                </SelectItem>
+                              ))}
                           </div>
                         </SelectContent>
                       </Select>
-
-                      {formErrors["desa_id"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["desa_id"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.desa_id?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -957,19 +708,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="rt"
                         types="number"
-                        value={detail?.rt || ""}
-                        change={changeUser}
+                        value={formData?.rt || ""}
+                        change={handleChange}
                         labelName="RT"
                         placeholder="RT"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["rt"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["rt"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.rt?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -982,19 +727,13 @@ export default function DataDiriPage() {
                       <ProfileEditInput
                         names="rw"
                         types="number"
-                        value={detail?.rw || ""}
-                        change={changeUser}
+                        value={formData?.rw || ""}
+                        change={handleChange}
                         labelName="RW"
                         placeholder="RW"
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {formErrors["rw"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["rw"]}
-                        </p>
-                      )}
 
                       {hasSubmitted && errors?.rw?._errors && (
                         <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1010,17 +749,11 @@ export default function DataDiriPage() {
 
                     <Textarea
                       name="alamat"
+                      value={formData?.alamat || ""}
+                      onChange={handleChange}
                       placeholder="Alamat"
-                      value={detail?.alamat}
-                      onChange={changeUser}
                       className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
                     />
-
-                    {formErrors["alamat"] && (
-                      <p className="text-error-700 text-[12px] mt-1 text-center">
-                        {formErrors["alamat"]}
-                      </p>
-                    )}
 
                     {hasSubmitted && errors?.alamat?._errors && (
                       <div className="text-error-700 text-[12px] md:text-[14px]">

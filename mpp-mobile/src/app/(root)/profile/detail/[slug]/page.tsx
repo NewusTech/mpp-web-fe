@@ -3,8 +3,6 @@
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import fetchProfile from "@/components/fetching/profile/profile";
-import { toast } from "sonner";
 import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
   Select,
@@ -13,14 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "@/components/ui/textarea";
-import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
-import desaFetch from "@/components/fetching/desa/desa";
-import { useDebounce } from "@/hooks/useDebounce/useDebounce";
-import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
-import { Loader, Trash } from "lucide-react";
+import {
+  DesaType,
+  KecamatanType,
+  ProfileNewType,
+  UpdateUserType,
+} from "@/types/type";
+import fetchProfile from "@/components/fetching/profile/profile";
+import { toast } from "sonner";
 import Cookies from "js-cookie";
 import {
   agamas,
@@ -29,61 +29,29 @@ import {
   pendidikans,
   statusKawins,
 } from "@/data/data";
+import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
+import desaFetch from "@/components/fetching/desa/desa";
+import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { z } from "zod";
 import { schemaUpdateDiri } from "@/lib/zodSchema";
+import { Loader, Trash } from "lucide-react";
 
 export default function ProfileEditPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const [selectedKecamatan, setSelectedKecamatan] = useState<number | null>(
-    null
-  );
-  const [selectedDesa, setSelectedDesa] = useState<number | null>(null);
-  const [selectedGender, setSelectedGender] = useState<number | null>(null);
-  const [selectedAgama, setSelectedAgama] = useState<number | null>(null);
-  const [selectedPendidikan, setSelectedPendidikan] = useState<number | null>(
-    null
-  );
-  const [selectedDarah, setSelectedDarah] = useState<number | null>(null);
-  const [selectedKawin, setSelectedKawin] = useState<number | null>(null);
-  const [kecamatan, setKecamatan] = useState<KecamatanType[]>();
-  const [desa, setDesa] = useState<DesaType[]>([]);
-  const [gender, setGender] = useState<{ id: number; value: string }[]>();
-  const [agama, setAgama] = useState<{ id: number; value: string }[]>();
-  const [pendidikan, setPendidikan] =
-    useState<{ id: number; value: string }[]>();
-  const [darah, setDarah] = useState<{ id: number; value: string }[]>();
-  const [kawin, setKawin] = useState<{ id: number; value: string }[]>();
+  const router = useRouter();
+  const dropRef = useRef<HTMLDivElement>(null);
+  const [user, setUser] = useState<ProfileNewType>();
+  const [formData, setFormData] = useState<UpdateUserType | null>(null);
+  const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
   const [searchKecamatan, setSearchKecamatan] = useState<string>("");
+  const [debounceSearchKecamatan, setDebounceSearchKecamatan] =
+    useState(searchKecamatan);
+  const [desas, setDesas] = useState<DesaType[]>();
   const [searchDesa, setSearchDesa] = useState<string>("");
-  const debounceSearchKecamatan = useDebounce(searchKecamatan);
-  const debounceSearchDesa = useDebounce(searchDesa);
-  const [detail, setDetail] = useState<UpdateUserType>({
-    name: "",
-    email: "",
-    telepon: "",
-    nik: "",
-    gender: "",
-    goldar: "",
-    status_kawin: "",
-    tempat_lahir: "",
-    tgl_lahir: "",
-    agama: "",
-    pendidikan: "",
-    pekerjaan: "",
-    kecamatan_id: "",
-    desa_id: "",
-    rt: "",
-    rw: "",
-    alamat: "",
-    filektp: "",
-    filekk: "",
-    fileijazahsd: "",
-    foto: "",
-    aktalahir: "",
-  });
+  const [debounceSearchDesa, setDebounceSearchDesa] = useState(searchDesa);
   const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
   const [fileKkImage, setFileKkImage] = useState<File | null>(null);
   const [fileIjazahImage, setFileIjazahImage] = useState<File | null>(null);
@@ -94,10 +62,6 @@ export default function ProfileEditPage({
   const [previewIjazahImage, setPreviewIjazahImage] = useState<string>("");
   const [previewFotos, setPreviewFotos] = useState<string>("");
   const [previewAktalahir, setPreviewAktalahir] = useState<string>("");
-  const [changeOpacity, setChangeOpacity] = useState(false);
-  const dropRef = useRef<HTMLDivElement>(null);
-  const [isDataFetched, setIsDataFetched] = useState(false);
-  const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [errors, setErrors] = useState<any>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [formValid, setFormValid] = useState(false);
@@ -106,14 +70,7 @@ export default function ProfileEditPage({
   const validateForm = async () => {
     try {
       await schemaUpdateDiri.parseAsync({
-        ...detail,
-        kecamatan_id: String(selectedKecamatan),
-        desa_id: String(selectedDesa),
-        gender: String(selectedGender),
-        goldar: String(selectedDarah),
-        status_kawin: String(selectedKawin),
-        agama: String(selectedAgama),
-        pendidikan: String(selectedPendidikan),
+        ...formData,
       });
       setErrors({});
       return true;
@@ -131,84 +88,17 @@ export default function ProfileEditPage({
     if (hasSubmitted) {
       validateForm();
     }
-  }, [
-    detail,
-    selectedKecamatan,
-    selectedDesa,
-    selectedGender,
-    selectedDarah,
-    selectedKawin,
-    selectedAgama,
-    selectedPendidikan,
-    hasSubmitted,
-  ]);
-
-  const fetchDatakecamatan = async (search: string, limit: number) => {
-    try {
-      const kecamatans = await kecamatanFetch(search, limit);
-
-      setKecamatan(kecamatans.data);
-    } catch (error) {
-      toast("Gagal Memuat Data!");
-    }
-  };
-
-  const fetchDataDesa = async (search: string, limit: number, id: number) => {
-    try {
-      const desa = await desaFetch(search, limit, id);
-      setDesa(desa.data);
-    } catch (error) {
-      toast("Gagal Memuat Data!");
-    }
-  };
-
-  useEffect(() => {
-    fetchDatakecamatan(debounceSearchKecamatan, 1000000);
-  }, [debounceSearchKecamatan]);
-
-  useEffect(() => {
-    if (selectedKecamatan) {
-      fetchDataDesa(debounceSearchDesa, 1000000, selectedKecamatan);
-    }
-  }, [selectedKecamatan, debounceSearchDesa]);
+  }, [formData, hasSubmitted]);
 
   const fetchUser = async () => {
     try {
-      const result = await fetchProfile();
+      const user = await fetchProfile();
 
-      setDetail(result.data);
-
-      if (result.data.kecamatan_id) {
-        setSelectedKecamatan(result.data.kecamatan_id);
-        fetchDataDesa("", 1000000, result.data.kecamatan_id);
-      }
-
-      if (result.data.desa_id) {
-        setSelectedDesa(result.data.desa_id);
-      }
-
-      if (result.data.gender) {
-        setSelectedGender(result.data.gender);
-      }
-
-      if (result.data.agama) {
-        setSelectedAgama(result.data.agama);
-      }
-
-      if (result.data.pendidikan) {
-        setSelectedPendidikan(result.data.pendidikan);
-      }
-
-      if (result.data.status_kawin) {
-        setSelectedKawin(result.data.status_kawin);
-      }
-
-      if (result.data.goldar) {
-        setSelectedDarah(result.data.goldar);
-      }
-
-      setIsDataFetched(true);
+      setUser(user.data);
+      setFormData(user.data);
     } catch (error) {
+      console.log(error, "error");
+
       toast("Gagal mendapatkan data!");
     }
   };
@@ -217,28 +107,76 @@ export default function ProfileEditPage({
     fetchUser();
   }, []);
 
+  const fetchKecamatan = async (search: string, limit: number) => {
+    try {
+      const kecamatanDatas = await kecamatanFetch(search, limit);
+
+      setKecamatans(kecamatanDatas.data);
+    } catch (error) {
+      console.log(error, "error");
+      toast("Gagal mendapatkan data kecamatan!");
+    }
+  };
+
   useEffect(() => {
-    setGender(genders);
-    setAgama(agamas);
-    setPendidikan(pendidikans);
-    setKawin(statusKawins);
-    setDarah(golonganDarahs);
-  }, []);
+    fetchKecamatan(debounceSearchKecamatan, 1000000);
+  }, [debounceSearchKecamatan]);
 
-  const router = useRouter();
+  const fetchDesa = async (
+    search: string,
+    limit: number,
+    kecamatan_id: number
+  ) => {
+    try {
+      const desaDatas = await desaFetch(search, limit, kecamatan_id);
+      setDesas(desaDatas.data);
 
-  const changeUser = (
+      if (formData && formData.desa_id) {
+        const selectedDesa = desaDatas.data.find(
+          (desa: DesaType) => desa.id === Number(formData.desa_id)
+        );
+        if (selectedDesa) {
+          setFormData((prevFormData) => ({
+            ...prevFormData!,
+            desa_id: selectedDesa.id,
+          }));
+        }
+      }
+    } catch (error) {
+      console.log(error, "error");
+      toast("Gagal mendapatkan data desa!");
+    }
+  };
+
+  useEffect(() => {
+    if (formData?.kecamatan_id && formData?.kecamatan_id) {
+      fetchDesa(debounceSearchDesa, 1000000, Number(formData.kecamatan_id));
+    }
+  }, [debounceSearchDesa, formData?.kecamatan_id]);
+
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setDetail({ ...detail, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData!,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData!,
+      [name]: value,
+    }));
   };
 
   const handleFileKTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setFileKtpImage(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         filektp: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -250,8 +188,8 @@ export default function ProfileEditPage({
     const file = e.target.files?.[0];
     if (file) {
       setFileKkImage(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         filekk: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -263,9 +201,9 @@ export default function ProfileEditPage({
     const file = e.target.files?.[0];
     if (file) {
       setFileIjazahImage(file);
-      setDetail({
-        ...detail,
-        fileijazahsd: file.name,
+      setFormData({
+        ...formData,
+        fileijazahlain: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
       setPreviewIjazahImage(fileUrl);
@@ -276,8 +214,8 @@ export default function ProfileEditPage({
     const file = e.target.files?.[0];
     if (file) {
       setFotos(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         foto: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -289,8 +227,8 @@ export default function ProfileEditPage({
     const file = e.target.files?.[0];
     if (file) {
       setAktalahirImage(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         aktalahir: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -298,46 +236,26 @@ export default function ProfileEditPage({
     }
   };
 
-  const handleUpdateUser = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const formData = new FormData();
+    const fileData = new FormData();
 
     if (fileKtpImage) {
-      formData.append("filektp", fileKtpImage);
+      fileData.append("filektp", fileKtpImage);
     }
     if (fileKkImage) {
-      formData.append("filekk", fileKkImage);
+      fileData.append("filekk", fileKkImage);
     }
     if (fileIjazahImage) {
-      formData.append("fileijazahsd", fileIjazahImage);
+      fileData.append("fileijazahlain", fileIjazahImage);
     }
     if (fotos) {
-      formData.append("foto", fotos);
+      fileData.append("foto", fotos);
     }
     if (aktalahirImage) {
-      formData.append("aktalahir", aktalahirImage);
+      fileData.append("aktalahir", aktalahirImage);
     }
-
-    const detailData = {
-      name: detail.name || "",
-      email: detail.email || "",
-      telepon: detail.telepon || "",
-      nik: detail.nik || "",
-      gender: String(detail.gender) || "",
-      goldar: Number(detail.goldar) || "",
-      status_kawin: Number(detail.status_kawin) || "",
-      tempat_lahir: detail.tempat_lahir || "",
-      tgl_lahir: detail.tgl_lahir || "",
-      agama: String(detail.agama) || "",
-      pendidikan: String(detail.pendidikan) || "",
-      pekerjaan: detail.pekerjaan || "",
-      kecamatan_id: String(detail.kecamatan_id) || "",
-      desa_id: String(detail.desa_id) || "",
-      rt: detail.rt || "",
-      rw: detail.rw || "",
-      alamat: detail.alamat || "",
-    };
 
     setHasSubmitted(true);
 
@@ -355,11 +273,11 @@ export default function ProfileEditPage({
                 Authorization: `Bearer ${Cookies.get("Authorization")}`,
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(detailData),
+              body: JSON.stringify(formData),
               cache: "no-store",
             }
           ),
-          // Second API call for file uploads
+
           fetch(
             `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatedocs/${params.slug}`,
             {
@@ -367,7 +285,7 @@ export default function ProfileEditPage({
               headers: {
                 Authorization: `Bearer ${Cookies.get("Authorization")}`,
               },
-              body: formData,
+              body: fileData,
               cache: "no-store",
             }
           ),
@@ -376,46 +294,14 @@ export default function ProfileEditPage({
         if (response1.ok && response2.ok) {
           toast.success("Berhasil mengupdate profile!");
           await fetchUser();
-          setFormErrors({});
-          router.push("/profile");
-        } else {
-          const responseData1 = await response1.json();
-
-          const responseData2 = await response2.json();
-
-          if (!response1.ok) {
-            if (responseData1.status === 400 && responseData1.data) {
-              const errors: { [key: string]: string } = {};
-              responseData1.data.forEach(
-                (error: { message: string; field: string }) => {
-                  errors[error.field] = error.message;
-                }
-              );
-              setFormErrors(errors);
-            } else {
-              toast.error("Gagal mengupdate profile 1!");
-            }
-          }
-
-          if (!response2.ok) {
-            if (responseData2.status === 400 && responseData2.data) {
-              const errors: { [key: string]: string } = {};
-              responseData2.data.forEach(
-                (error: { message: string; field: string }) => {
-                  errors[error.field] = error.message;
-                }
-              );
-              setFormErrors(errors);
-            } else {
-              toast.error("Gagal mengupdate profile 2!");
-            }
-          }
         }
       } catch (error) {
-        toast("Tidak bisa mengupdate profile!");
+        console.log(error, "error");
+        toast("Failed to update profile!");
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
+        router.push("/profile");
       }
     }
   };
@@ -424,67 +310,22 @@ export default function ProfileEditPage({
     setFormValid(Object.keys(errors).length === 0);
   }, [errors]);
 
-  useEffect(() => {
-    if (selectedKecamatan !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        kecamatan_id: String(selectedKecamatan),
-      }));
-    }
-  }, [selectedKecamatan]);
-
-  useEffect(() => {
-    if (selectedDesa !== null) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        desa_id: String(selectedDesa),
-      }));
-    }
-  }, [selectedDesa]);
-
-  useEffect(() => {
-    if (
-      selectedGender !== null ||
-      selectedPendidikan !== null ||
-      selectedAgama !== null ||
-      selectedKawin !== null ||
-      selectedDarah !== null
-    ) {
-      setDetail((prevDetail) => ({
-        ...prevDetail,
-        gender: String(selectedGender),
-        pendidikan: String(selectedPendidikan),
-        agama: String(selectedAgama),
-        status_kawin: String(selectedKawin),
-        goldar: String(selectedDarah),
-      }));
-    }
-  }, [
-    selectedGender,
-    selectedPendidikan,
-    selectedAgama,
-    selectedKawin,
-    selectedDarah,
-  ]);
-
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(false);
   };
 
   const handleDropKTP = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(false);
+
     const file = e.dataTransfer.files?.[0];
     if (file) {
       setFileKtpImage(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         filektp: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -494,12 +335,12 @@ export default function ProfileEditPage({
 
   const handleDropKK = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(false);
+
     const file = e.dataTransfer.files?.[0];
     if (file) {
       setFileKkImage(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         filekk: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -509,13 +350,13 @@ export default function ProfileEditPage({
 
   const handleDropIjazah = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(false);
+
     const file = e.dataTransfer.files?.[0];
     if (file) {
       setFileIjazahImage(file);
-      setDetail({
-        ...detail,
-        fileijazahsd: file.name,
+      setFormData({
+        ...formData,
+        fileijazahlain: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
       setPreviewIjazahImage(fileUrl);
@@ -524,12 +365,12 @@ export default function ProfileEditPage({
 
   const handleDropFoto = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(false);
+
     const file = e.dataTransfer.files?.[0];
     if (file) {
       setFotos(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         foto: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -539,12 +380,12 @@ export default function ProfileEditPage({
 
   const handleDropAktaLahir = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setChangeOpacity(false);
+
     const file = e.dataTransfer.files?.[0];
     if (file) {
       setAktalahirImage(file);
-      setDetail({
-        ...detail,
+      setFormData({
+        ...formData,
         aktalahir: file.name,
       });
       const fileUrl = URL.createObjectURL(file);
@@ -555,31 +396,31 @@ export default function ProfileEditPage({
   const handleRemoveKTP = () => {
     setFileKtpImage(null);
     setPreviewKTPImage("");
-    setDetail({ ...detail, filektp: "" });
+    setFormData({ ...formData, filektp: "" });
   };
 
   const handleRemoveKK = () => {
     setFileKkImage(null);
     setPreviewKKImage("");
-    setDetail({ ...detail, filekk: "" });
+    setFormData({ ...formData, filekk: "" });
   };
 
   const handleRemoveIjazah = () => {
     setFileIjazahImage(null);
     setPreviewIjazahImage("");
-    setDetail({ ...detail, fileijazahsd: "" });
+    setFormData({ ...formData, fileijazahlain: "" });
   };
 
   const handleRemoveFoto = () => {
     setFotos(null);
     setPreviewFotos("");
-    setDetail({ ...detail, foto: "" });
+    setFormData({ ...formData, foto: "" });
   };
 
   const handleRemoveAktaLahir = () => {
     setAktalahirImage(null);
     setPreviewAktalahir("");
-    setDetail({ ...detail, aktalahir: "" });
+    setFormData({ ...formData, aktalahir: "" });
   };
 
   return (
@@ -597,26 +438,20 @@ export default function ProfileEditPage({
           </h3>
 
           <form
-            onSubmit={handleUpdateUser}
+            onSubmit={handleSubmit}
             className="flex flex-col w-full mt-2 md:mt-4">
             <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
               <div className="flex flex-col w-full md:mb-4">
                 <ProfileEditInput
                   names="name"
                   types="text"
-                  value={detail?.name || ""}
-                  change={changeUser}
+                  value={formData?.name || ""}
+                  change={handleChange}
                   labelName="Nama Lengkap"
                   placeholder="Nama Lengkap"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["name"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["name"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.name?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -632,38 +467,26 @@ export default function ProfileEditPage({
 
                 <Select
                   name="gender"
-                  value={selectedGender ? String(selectedGender) : undefined}
-                  onValueChange={(value) => {
-                    setSelectedGender(Number(value));
-                  }}>
+                  onValueChange={(value) => handleSelectChange("gender", value)}
+                  value={formData?.gender || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedGender ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Jenis Kelamin"
-                      className={selectedGender ? "" : "placeholder:opacity-50"}
-                    />
+                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {genders?.map(
-                      (gender: { id: number; value: string }, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(gender.id)}>
-                          {gender.value}
-                        </SelectItem>
-                      )
-                    )}
+                    {genders &&
+                      genders.map(
+                        (gender: { id: number; value: string }, i: number) => (
+                          <SelectItem
+                            className="pr-none mt-2"
+                            key={i}
+                            value={String(gender.id)}>
+                            {gender.value}
+                          </SelectItem>
+                        )
+                      )}
                   </SelectContent>
                 </Select>
-
-                {formErrors["gender"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["gender"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.gender?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -678,19 +501,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="nik"
                   types="number"
-                  value={detail?.nik || ""}
-                  change={changeUser}
+                  value={formData?.nik || ""}
+                  change={handleChange}
                   labelName="NIK"
                   placeholder="NIK"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["nik"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["nik"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.nik?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -706,38 +523,26 @@ export default function ProfileEditPage({
 
                 <Select
                   name="agama"
-                  value={selectedAgama ? String(selectedAgama) : undefined}
-                  onValueChange={(value) => {
-                    setSelectedAgama(Number(value));
-                  }}>
+                  onValueChange={(value) => handleSelectChange("agama", value)}
+                  value={formData?.agama || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedAgama ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Agama"
-                      className={selectedAgama ? "" : "placeholder:opacity-50"}
-                    />
+                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {agamas?.map(
-                      (agama: { id: number; value: string }, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(agama.id)}>
-                          {agama.value}
-                        </SelectItem>
-                      )
-                    )}
+                    {agamas &&
+                      agamas.map(
+                        (agama: { id: number; value: string }, i: number) => (
+                          <SelectItem
+                            className="pr-none mt-2"
+                            value={String(agama.id)}
+                            key={i}>
+                            {agama.value}
+                          </SelectItem>
+                        )
+                      )}
                   </SelectContent>
                 </Select>
-
-                {formErrors["agama"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["agama"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.agama?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -752,19 +557,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="tempat_lahir"
                   types="text"
-                  value={detail?.tempat_lahir || ""}
-                  change={changeUser}
+                  value={formData?.tempat_lahir || ""}
+                  change={handleChange}
                   labelName="Tempat Lahir"
                   placeholder="Tempat Lahir"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["tempat_lahir"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["tempat_lahir"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.tempat_lahir?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -780,38 +579,26 @@ export default function ProfileEditPage({
 
                 <Select
                   name="goldar"
-                  value={selectedDarah ? String(selectedDarah) : undefined}
-                  onValueChange={(value) => {
-                    setSelectedDarah(Number(value));
-                  }}>
+                  onValueChange={(value) => handleSelectChange("goldar", value)}
+                  value={formData?.goldar || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedDarah ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Golongan Darah"
-                      className={selectedDarah ? "" : "placeholder:opacity-50"}
-                    />
+                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {golonganDarahs?.map(
-                      (darah: { id: number; value: string }, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(darah.id)}>
-                          {darah.value}
-                        </SelectItem>
-                      )
-                    )}
+                    {golonganDarahs &&
+                      golonganDarahs.map(
+                        (darah: { id: number; value: string }, i: number) => (
+                          <SelectItem
+                            className="pr-none mt-2"
+                            value={String(darah.id)}
+                            key={i}>
+                            {darah.value}
+                          </SelectItem>
+                        )
+                      )}
                   </SelectContent>
                 </Select>
-
-                {formErrors["goldar"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["goldar"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.goldar?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -830,8 +617,8 @@ export default function ProfileEditPage({
                 <input
                   type="date"
                   name="tgl_lahir"
-                  value={detail.tgl_lahir}
-                  onChange={changeUser}
+                  value={formData?.tgl_lahir || ""}
+                  onChange={handleChange}
                   className={`w-full px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
                   placeholder="Tanggal Lahir"
                   style={{
@@ -840,12 +627,6 @@ export default function ProfileEditPage({
                     appearance: "none",
                   }}
                 />
-
-                {formErrors["tgl_lahir"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["tgl_lahir"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.tgl_lahir?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -861,38 +642,28 @@ export default function ProfileEditPage({
 
                 <Select
                   name="status_kawin"
-                  value={selectedKawin ? String(selectedKawin) : undefined}
-                  onValueChange={(value) => {
-                    setSelectedKawin(Number(value));
-                  }}>
+                  onValueChange={(value) =>
+                    handleSelectChange("status_kawin", value)
+                  }
+                  value={formData?.status_kawin || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedKawin ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Status Perkawinan"
-                      className={selectedKawin ? "" : "placeholder:opacity-50"}
-                    />
+                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {statusKawins?.map(
-                      (kawin: { id: number; value: string }, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(kawin.id)}>
-                          {kawin.value}
-                        </SelectItem>
-                      )
-                    )}
+                    {statusKawins &&
+                      statusKawins.map(
+                        (kawin: { id: number; value: string }, i: number) => (
+                          <SelectItem
+                            className="pr-none mt-2"
+                            value={String(kawin.id)}
+                            key={i}>
+                            {kawin.value}
+                          </SelectItem>
+                        )
+                      )}
                   </SelectContent>
                 </Select>
-
-                {formErrors["status_kawin"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["status_kawin"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.status_kawin?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -907,19 +678,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="telepon"
                   types="number"
-                  value={detail?.telepon || ""}
-                  change={changeUser}
+                  value={formData?.telepon || ""}
+                  change={handleChange}
                   labelName="Nomor Telepon"
                   placeholder="Nomor Telepon"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["telepon"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["telepon"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.telepon?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -935,45 +700,31 @@ export default function ProfileEditPage({
 
                 <Select
                   name="pendidikan"
-                  value={
-                    selectedPendidikan ? String(selectedPendidikan) : undefined
+                  onValueChange={(value) =>
+                    handleSelectChange("pendidikan", value)
                   }
-                  onValueChange={(value) => {
-                    setSelectedPendidikan(Number(value));
-                  }}>
+                  value={formData?.pendidikan || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedPendidikan ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Pendidikan Terakhir"
-                      className={
-                        selectedPendidikan ? "" : "placeholder:opacity-50"
-                      }
-                    />
+                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
-                    {pendidikans?.map(
-                      (
-                        pendidikan: { id: number; value: string },
-                        i: number
-                      ) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(pendidikan.id)}>
-                          {pendidikan.value}
-                        </SelectItem>
-                      )
-                    )}
+                    {pendidikans &&
+                      pendidikans.map(
+                        (
+                          pendidikan: { id: number; value: string },
+                          i: number
+                        ) => (
+                          <SelectItem
+                            className="pr-none mt-2"
+                            value={String(pendidikan.id)}
+                            key={i}>
+                            {pendidikan.value}
+                          </SelectItem>
+                        )
+                      )}
                   </SelectContent>
                 </Select>
-
-                {formErrors["pendidikan"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["pendidikan"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.pendidikan?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -988,19 +739,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="email"
                   types="text"
-                  value={detail?.email || ""}
-                  change={changeUser}
+                  value={formData?.email || ""}
+                  change={handleChange}
                   labelName="Email"
                   placeholder="Email"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["email"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["email"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.email?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1013,19 +758,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="pekerjaan"
                   types="text"
-                  value={detail?.pekerjaan || ""}
-                  change={changeUser}
+                  value={formData?.pekerjaan || ""}
+                  change={handleChange}
                   labelName="Pekerjaan"
                   placeholder="Pekerjaan"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["pekerjaan"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["pekerjaan"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.pekerjaan?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1042,23 +781,13 @@ export default function ProfileEditPage({
 
                 <Select
                   name="kecamatan_id"
-                  value={
-                    selectedKecamatan ? String(selectedKecamatan) : undefined
+                  onValueChange={(value) =>
+                    handleSelectChange("kecamatan_id", value)
                   }
-                  onValueChange={(value) => {
-                    setSelectedKecamatan(Number(value));
-                    setSelectedDesa(null);
-                  }}>
+                  value={formData?.kecamatan_id || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedKecamatan ? "opacity-70" : ""
-                    } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Kecamatan"
-                      className={
-                        selectedKecamatan ? "" : "placeholder:opacity-50"
-                      }
-                    />
+                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
                     <div>
@@ -1071,23 +800,20 @@ export default function ProfileEditPage({
                         />
                       </div>
 
-                      {kecamatan?.map((el: KecamatanType, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(el.id)}>
-                          {el.name}
-                        </SelectItem>
-                      ))}
+                      {kecamatans &&
+                        kecamatans.map(
+                          (kecamatan: KecamatanType, i: number) => (
+                            <SelectItem
+                              className="pr-none mt-2"
+                              key={i}
+                              value={String(kecamatan.id)}>
+                              {kecamatan.name}
+                            </SelectItem>
+                          )
+                        )}
                     </div>
                   </SelectContent>
                 </Select>
-
-                {formErrors["kecamatan_id"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["kecamatan_id"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.kecamatan_id?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1103,16 +829,13 @@ export default function ProfileEditPage({
 
                 <Select
                   name="desa_id"
-                  value={selectedDesa ? String(selectedDesa) : undefined}
-                  onValueChange={(value) => setSelectedDesa(Number(value))}>
+                  onValueChange={(value) =>
+                    handleSelectChange("desa_id", value)
+                  }
+                  value={formData?.desa_id || ""}>
                   <SelectTrigger
-                    className={`${
-                      !selectedDesa ? "opacity-70" : ""
-                    } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue
-                      placeholder="Pilih Desa"
-                      className={selectedDesa ? "" : "placeholder:opacity-50"}
-                    />
+                    className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="w-full">
                     <div>
@@ -1125,23 +848,18 @@ export default function ProfileEditPage({
                         />
                       </div>
 
-                      {desa?.map((el: DesaType, i: number) => (
-                        <SelectItem
-                          className="pr-none mt-2"
-                          key={i}
-                          value={String(el.id)}>
-                          {el.name}
-                        </SelectItem>
-                      ))}
+                      {desas &&
+                        desas.map((desa: DesaType, i: number) => (
+                          <SelectItem
+                            className="pr-none mt-2"
+                            value={String(desa.id)}
+                            key={i}>
+                            {desa.name}
+                          </SelectItem>
+                        ))}
                     </div>
                   </SelectContent>
                 </Select>
-
-                {formErrors["desa_id"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["desa_id"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.desa_id?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1156,19 +874,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="rt"
                   types="number"
-                  value={detail?.rt || ""}
-                  change={changeUser}
+                  value={formData?.rt || ""}
+                  change={handleChange}
                   labelName="RT"
                   placeholder="RT"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["rt"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["rt"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.rt?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1181,19 +893,13 @@ export default function ProfileEditPage({
                 <ProfileEditInput
                   names="rw"
                   types="number"
-                  value={detail?.rw || ""}
-                  change={changeUser}
+                  value={formData?.rw || ""}
+                  change={handleChange}
                   labelName="RW"
                   placeholder="RW"
                   classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                   labelStyle="text-[12px] text-neutral-900 font-semibold"
                 />
-
-                {formErrors["rw"] && (
-                  <p className="text-error-700 text-[12px] mt-1 text-center">
-                    {formErrors["rw"]}
-                  </p>
-                )}
 
                 {hasSubmitted && errors?.rw?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1202,6 +908,7 @@ export default function ProfileEditPage({
                 )}
               </div>
             </div>
+
             <div className="flex flex-col w-full">
               <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                 ALamat
@@ -1209,17 +916,11 @@ export default function ProfileEditPage({
 
               <Textarea
                 name="alamat"
+                value={formData?.alamat || ""}
+                onChange={handleChange}
                 placeholder="Alamat"
-                value={detail?.alamat}
-                onChange={changeUser}
                 className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
               />
-
-              {formErrors["alamat"] && (
-                <p className="text-error-700 text-[12px] mt-1 text-center">
-                  {formErrors["alamat"]}
-                </p>
-              )}
 
               {hasSubmitted && errors?.alamat?._errors && (
                 <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -1245,10 +946,10 @@ export default function ProfileEditPage({
                     onDragLeave={handleDragLeave}
                     onDrop={handleDropKTP}
                     className={`w-full ${
-                      detail.filektp || previewKTPImage ? "md:w-8/12" : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                      changeOpacity ? "opacity-50" : "opacity-100"
-                    }`}>
+                      formData?.filektp || previewKTPImage
+                        ? "md:w-8/12"
+                        : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center }`}>
                     <>
                       <input
                         type="file"
@@ -1264,19 +965,13 @@ export default function ProfileEditPage({
                         Drag and drop file here or click to select file
                       </label>
                     </>
-
-                    {formErrors["filektp"] && (
-                      <p className="text-error-700 text-[12px] mt-1 text-center">
-                        {formErrors["filektp"]}
-                      </p>
-                    )}
                   </div>
 
-                  {(previewKTPImage || detail.filektp) && (
+                  {(previewKTPImage || formData?.filektp) && (
                     <div className="relative md:ml-4 w-full mt-1">
                       <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
                         <img
-                          src={previewKTPImage || detail.filektp}
+                          src={previewKTPImage || formData?.filektp}
                           alt="Preview"
                           className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
                         />
@@ -1303,10 +998,10 @@ export default function ProfileEditPage({
                     onDragLeave={handleDragLeave}
                     onDrop={handleDropKK}
                     className={`w-full ${
-                      detail.filekk || previewKKImage ? "md:w-8/12" : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                      changeOpacity ? "opacity-50" : "opacity-100"
-                    }`}>
+                      formData?.filekk || previewKKImage
+                        ? "md:w-8/12"
+                        : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center `}>
                     <>
                       <input
                         type="file"
@@ -1322,19 +1017,13 @@ export default function ProfileEditPage({
                         Drag and drop file here or click to select file
                       </label>
                     </>
-
-                    {formErrors["filekk"] && (
-                      <p className="text-error-700 text-[12px] mt-1 text-center">
-                        {formErrors["filekk"]}
-                      </p>
-                    )}
                   </div>
 
-                  {(previewKKImage || detail.filekk) && (
+                  {(previewKKImage || formData?.filekk) && (
                     <div className="relative md:ml-4 w-full mt-1">
                       <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
                         <img
-                          src={previewKKImage || detail.filekk}
+                          src={previewKKImage || formData?.filekk}
                           alt="Preview"
                           className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
                         />
@@ -1362,17 +1051,15 @@ export default function ProfileEditPage({
                     onDragLeave={handleDragLeave}
                     onDrop={handleDropIjazah}
                     className={`w-full ${
-                      detail.fileijazahsd || previewIjazahImage
+                      formData?.fileijazahlain || previewIjazahImage
                         ? "md:w-8/12"
                         : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                      changeOpacity ? "opacity-50" : "opacity-100"
-                    }`}>
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
                     <>
                       <input
                         type="file"
                         id="file-input-ijazah"
-                        name="fileijazahsd"
+                        name="fileijazahlain"
                         accept="image/*"
                         onChange={handleFileIjazahChange}
                         className="hidden"
@@ -1383,19 +1070,13 @@ export default function ProfileEditPage({
                         Drag and drop file here or click to select file
                       </label>
                     </>
-
-                    {formErrors["fileijazahsd"] && (
-                      <p className="text-error-700 text-[12px] mt-1 text-center">
-                        {formErrors["fileijazahsd"]}
-                      </p>
-                    )}
                   </div>
 
-                  {(previewIjazahImage || detail.fileijazahsd) && (
+                  {(previewIjazahImage || formData?.fileijazahlain) && (
                     <div className="relative md:ml-4 w-full mt-1">
                       <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
                         <img
-                          src={previewIjazahImage || detail.fileijazahsd}
+                          src={previewIjazahImage || formData?.fileijazahlain}
                           alt="Preview"
                           className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
                         />
@@ -1423,10 +1104,8 @@ export default function ProfileEditPage({
                     onDragLeave={handleDragLeave}
                     onDrop={handleDropFoto}
                     className={`w-full ${
-                      detail.foto || previewFotos ? "md:w-8/12" : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                      changeOpacity ? "opacity-50" : "opacity-100"
-                    }`}>
+                      formData?.foto || previewFotos ? "md:w-8/12" : "w-full"
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
                     <>
                       <input
                         type="file"
@@ -1442,19 +1121,13 @@ export default function ProfileEditPage({
                         Drag and drop file here or click to select file
                       </label>
                     </>
-
-                    {formErrors["foto"] && (
-                      <p className="text-error-700 text-[12px] mt-1 text-center">
-                        {formErrors["foto"]}
-                      </p>
-                    )}
                   </div>
 
-                  {(previewFotos || detail.foto) && (
+                  {(previewFotos || formData?.foto) && (
                     <div className="relative md:ml-4 w-full mt-1">
                       <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
                         <img
-                          src={previewFotos || detail.foto}
+                          src={previewFotos || formData?.foto}
                           alt="Preview"
                           className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
                         />
@@ -1482,12 +1155,10 @@ export default function ProfileEditPage({
                     onDragLeave={handleDragLeave}
                     onDrop={handleDropAktaLahir}
                     className={`w-full ${
-                      detail.aktalahir || previewAktalahir
+                      formData?.aktalahir || previewAktalahir
                         ? "md:w-8/12"
                         : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center ${
-                      changeOpacity ? "opacity-50" : "opacity-100"
-                    }`}>
+                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
                     <>
                       <input
                         type="file"
@@ -1503,19 +1174,13 @@ export default function ProfileEditPage({
                         Drag and drop file here or click to select file
                       </label>
                     </>
-
-                    {formErrors["aktalahir"] && (
-                      <p className="text-error-700 text-[12px] mt-1 text-center">
-                        {formErrors["aktalahir"]}
-                      </p>
-                    )}
                   </div>
 
-                  {(previewAktalahir || detail.aktalahir) && (
+                  {(previewAktalahir || formData?.aktalahir) && (
                     <div className="relative md:ml-4 w-full mt-1">
                       <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
                         <img
-                          src={previewAktalahir || detail.aktalahir}
+                          src={previewAktalahir || formData?.aktalahir}
                           alt="Preview"
                           className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
                         />

@@ -8,33 +8,14 @@ import {
   setDataInput,
   updateCheckboxData,
 } from "@/store/action/actionPermohonanLayanan";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { useDispatch } from "react-redux";
 import Image from "next/legacy/image";
 import { ChevronLeft, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-type LayananFormType = {
-  id: number;
-  field: string;
-  tipedata: string;
-  datajson: [{ id: number; key: string }];
-};
-
-type LayananType = {
-  Layananforms: [LayananFormType];
-  desc: string;
-  image: string;
-  name: string;
-  slug: string;
-};
-
-type FormType = {
-  status: string;
-  data: LayananType;
-};
+import { FormType, LayananFormType, LayananType } from "@/types/type";
+import { z, ZodObject, ZodSchema } from "zod";
 
 const steps = [
   { id: 1, title: "1" },
@@ -44,8 +25,39 @@ const steps = [
 ];
 const currentStep = 3;
 
+const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
+  const schemaShape: Record<string, ZodSchema> = {};
+
+  layananForms.forEach((formField) => {
+    let fieldSchema: ZodSchema;
+
+    switch (formField.tipedata) {
+      case "checkbox":
+        fieldSchema = z.array(z.number({ message: "Data wajib diisi!" }));
+        break;
+      case "number":
+        fieldSchema = z.number({ message: "Data wajib diisi!" });
+        break;
+      default:
+        fieldSchema = z.string({ message: "Data wajib diisi!" });
+        break;
+    }
+
+    if (formField.isrequired) {
+      fieldSchema = fieldSchema.refine((val) => val.length > 0, {
+        message: `${formField.field} is required`,
+      });
+    }
+
+    schemaShape[formField.field] = fieldSchema;
+  });
+
+  return z.object(schemaShape);
+};
+
 export default function FormulirPage() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [form, setForm] = useState<LayananType>();
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
@@ -54,7 +66,30 @@ export default function FormulirPage() {
   const [checkboxValues, setCheckboxValues] = useState<{
     [key: number]: number[];
   }>({});
-  const router = useRouter();
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const validateForm = (values: { [key: string]: any }) => {
+    if (!form) return;
+
+    const schema = buildSchema(form.Layananforms);
+
+    try {
+      schema.parse(values);
+      setErrors({});
+      return true;
+    } catch (e) {
+      if (e instanceof z.ZodError) {
+        const fieldErrors: { [key: string]: string } = {};
+        e.errors.forEach((error) => {
+          if (error.path.length > 0) {
+            fieldErrors[error.path[0]] = error.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
+      return false;
+    }
+  };
 
   const fetchInputForm = async (id: number) => {
     const result: FormType = await ByLayanan(id);
@@ -135,10 +170,17 @@ export default function FormulirPage() {
       setChangeOpacity(true);
     });
 
-    dispatch(setDataInput(wadah));
-    checkboxWadah.forEach((item) => {
-      dispatch(updateCheckboxData(item));
-    });
+    if (validateForm({ ...formValues, ...checkboxValues })) {
+      setIsLoading(true);
+      dispatch(setDataInput(wadah));
+      checkboxWadah.forEach((item) => {
+        dispatch(updateCheckboxData(item));
+      });
+      setTimeout(() => {
+        setIsLoading(false);
+        router.push("/instansi/upload-file");
+      }, 2000);
+    }
   };
 
   return (
@@ -209,6 +251,12 @@ export default function FormulirPage() {
                                   </div>
                                 ))}
                               </div>
+
+                              {errors[el.field] && (
+                                <p className="text-error-700 text-[14px] font-normal">
+                                  {errors[el.field]}
+                                </p>
+                              )}
                             </div>
                           );
                         } else {
@@ -218,12 +266,18 @@ export default function FormulirPage() {
                                 typeForm={el.tipedata}
                                 labelName={el.field}
                                 change={change}
+                                isRequired={el.isrequired}
                                 nameForm={el.field}
                                 valueForm={formValues[el.field] || ""}
                                 placeholder="Kirim Jawaban!"
                                 opacity={changeOpacity}
                                 dataRadio={el.datajson}
                               />
+                              {errors[el.field] && (
+                                <p className="text-error-700 text-[14px] font-normal">
+                                  {errors[el.field]}
+                                </p>
+                              )}
                             </div>
                           );
                         }
@@ -237,13 +291,11 @@ export default function FormulirPage() {
                       variant="success"
                       disabled={isLoading ? true : false}
                       onClick={handleClick}>
-                      <Link href="/instansi/upload-file">
-                        {isLoading ? (
-                          <Loader className="animate-spin" />
-                        ) : (
-                          "Lanjut"
-                        )}
-                      </Link>
+                      {isLoading ? (
+                        <Loader className="animate-spin" />
+                      ) : (
+                        "Lanjut"
+                      )}
                     </Button>
                   </div>
                 </div>

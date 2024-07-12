@@ -260,6 +260,7 @@ export interface ProfileNewType {
   filektp?: string;
   filekk?: string;
   fileijazahsd?: string;
+  fileijazahlain?: string;
   aktalahir?: string;
   foto?: string;
 }
@@ -286,6 +287,7 @@ export interface UpdateUserType {
   filektp?: string;
   filekk?: string;
   fileijazahsd?: string;
+  fileijazahlain?: string;
   slug?: string;
   foto?: string;
   aktalahir?: string;
@@ -310,20 +312,6 @@ export type InfoType = {
     alamat: string;
     slug: string;
   };
-};
-
-export type LayananFormType = {
-  id: number;
-  field: string;
-  tipedata: string;
-};
-
-export type LayananType = {
-  Layananforms: LayananFormType[];
-  desc: string;
-  image: string;
-  name: string;
-  slug: string;
 };
 
 export interface AppType {
@@ -362,3 +350,24 @@ export interface RiwayatPermohonanType {
   instansi_name: string;
   instansi_image: string;
 }
+
+export type LayananFormType = {
+  id: number;
+  field: string;
+  tipedata: string;
+  datajson: [{ id: number; key: string }];
+  isrequired: boolean;
+};
+
+export type LayananType = {
+  Layananforms: [LayananFormType];
+  desc: string;
+  image: string;
+  name: string;
+  slug: string;
+};
+
+export type FormType = {
+  status: string;
+  data: LayananType;
+};

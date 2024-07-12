@@ -528,16 +528,18 @@ export default function ProfilePage() {
                         Ijazah Terakhir
                       </Label>
 
-                      {profile?.fileijazahsd && (
+                      {profile?.fileijazahlain && (
                         <div className="w-full h-full cursor-pointer">
                           <Dialog>
                             <DialogTrigger asChild>
                               <div
                                 onClick={() =>
-                                  handleImageClick(profile?.fileijazahsd || "")
+                                  handleImageClick(
+                                    profile?.fileijazahlain || ""
+                                  )
                                 }>
                                 <Image
-                                  src={profile.fileijazahsd}
+                                  src={profile.fileijazahlain}
                                   className="w-6/12 h-full object-cover rounded-xl"
                                   alt="Ijazah Terakhir"
                                   width={100}

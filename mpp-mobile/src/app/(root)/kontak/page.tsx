@@ -1,6 +1,7 @@
 "use client";
 
 import fetchContact from "@/components/fetching/contact/contact";
+import LoadingComponent from "@/components/loading/LoadingComponent";
 import { ContactType } from "@/types/type";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -39,7 +40,9 @@ export default function KontakPage() {
       <div className="flex flex-col-reverse md:flex-row items-center md:p-8 md:gap-x-9">
         <div className="w-full p-6 md:p-0 md:w-4/5 flex items-center justify-center">
           {isLoading ? (
-            <Loader className="animate-spin w-32 h-32" />
+            <div className="w-8/12">
+              <LoadingComponent />
+            </div>
           ) : (
             <iframe
               src={iframeSrc}
