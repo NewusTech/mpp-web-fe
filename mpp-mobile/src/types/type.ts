@@ -204,6 +204,7 @@ export interface VideoType {
 
 export interface AlurType {
   image: string;
+  title: string;
 }
 
 export interface VisiMisiType {

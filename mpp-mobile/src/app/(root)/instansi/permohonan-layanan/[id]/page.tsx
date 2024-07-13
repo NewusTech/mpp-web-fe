@@ -25,6 +25,7 @@ import { JenisLayananType } from "@/types/type";
 import { Loader } from "lucide-react";
 import parse from "html-react-parser";
 import { truncateTitle } from "@/utils/formatTitle";
+import { useRouter } from "next/navigation";
 
 const steps = [
   { id: 1, title: "1" },
@@ -51,6 +52,7 @@ export default function PermohonanLayananFirstScreen({
   const [service, setService] = useState<JenisLayananType[]>([]);
   const [selectedService, setSelectedService] = useState<JenisLayananType>();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const fetchLayanan = async (id: number) => {
     try {
@@ -75,7 +77,6 @@ export default function PermohonanLayananFirstScreen({
   }, [params.id]);
 
   const handleSelectChange = (value: any) => {
-    dispatch(setId(Number(value)));
     const selected = service.find(
       (el: JenisLayananType) => el.id.toString() === value
     );
@@ -111,9 +112,13 @@ export default function PermohonanLayananFirstScreen({
   };
 
   const handleButtonClick = () => {
+    if (selectedService) {
+      dispatch(setId(selectedService.id));
+    }
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      router.push("/instansi/data-diri");
     }, 2000);
   };
 
@@ -188,9 +193,7 @@ export default function PermohonanLayananFirstScreen({
             variant="success"
             disabled={isLoading || isButtonDisabled()}
             onClick={handleButtonClick}>
-            <Link href="/instansi/data-diri">
-              {isLoading ? <Loader className="animate-spin" /> : "Lanjut"}
-            </Link>
+            {isLoading ? <Loader className="animate-spin" /> : "Lanjut"}
           </Button>
         </div>
       </div>

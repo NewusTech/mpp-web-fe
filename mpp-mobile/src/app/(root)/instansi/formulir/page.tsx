@@ -33,7 +33,9 @@ const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
 
     switch (formField.tipedata) {
       case "checkbox":
-        fieldSchema = z.array(z.number({ message: "Data wajib diisi!" }));
+        fieldSchema = z
+          .array(z.number({ message: "Data wajib diisi!" }))
+          .optional();
         break;
       case "number":
         fieldSchema = z.number({ message: "Data wajib diisi!" });
@@ -43,10 +45,13 @@ const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
         break;
     }
 
-    if (formField.isrequired) {
-      fieldSchema = fieldSchema.refine((val) => val.length > 0, {
-        message: `${formField.field} is required`,
-      });
+    if (formField.isrequired && formField.tipedata !== "checkbox") {
+      fieldSchema = fieldSchema.refine(
+        (val) => val !== undefined && val !== null && val !== "",
+        {
+          message: `${formField.field} is required`,
+        }
+      );
     }
 
     schemaShape[formField.field] = fieldSchema;
@@ -229,7 +234,7 @@ export default function FormulirPage() {
                               <label className="text-neutral-900 text-[16px] font-normal">
                                 {el.field}
                               </label>
-                              <div className="grid grid-cols-2">
+                              <div className="md:grid md:grid-cols-2">
                                 {el.datajson.map((data) => (
                                   <div
                                     key={data.id}
@@ -238,6 +243,7 @@ export default function FormulirPage() {
                                       type="checkbox"
                                       name={el.field}
                                       value={data.id}
+                                      className="h-8"
                                       checked={
                                         checkboxValues[el.id]?.includes(
                                           data.id

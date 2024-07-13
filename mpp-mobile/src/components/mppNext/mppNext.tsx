@@ -20,18 +20,16 @@ import { Landmark, Send, Ticket } from "lucide-react";
 import CardAplikasiPendukung from "../landing/aboutScreen/cardAplikasiPendukung/cardAplikasiPendukung";
 import { AlurType, AppType, FacilityType, VideoType } from "@/types/type";
 import Link from "next/link";
-import alur1 from "@/../../public/assets/alurmpplamtim.jpg";
-import alur2 from "@/../../public/assets/alurmpplamtim.jpg";
 
 export default function MppNext({
   facilities,
   video,
-  alur,
+  alurs,
   apps,
 }: {
   facilities: FacilityType[];
   video: VideoType;
-  alur: AlurType;
+  alurs: AlurType[];
   apps: AppType[];
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -44,8 +42,6 @@ export default function MppNext({
       closeModal();
     }
   };
-
-  const alurfix = [alur1, alur2];
 
   return (
     <section className="flex flex-col justify-center mt-4 md:mt-0 mx-5 md:mx-8 md:rounded-xl md:pt-[25px]">
@@ -101,15 +97,15 @@ export default function MppNext({
                   spaceBetween: 50,
                 },
               }}>
-              {alurfix.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <div className="p-4 w-full md:h-full rounded-xl">
+              {alurs.map((alur: AlurType, i: number) => (
+                <SwiperSlide key={i}>
+                  <div className="w-full h-full rounded-xl">
                     {alur && (
                       <Image
-                        src={image}
-                        className="w-full h-[200px] md:h-full object-contain rounded-xl"
+                        src={alur.image}
+                        className="w-full h-full md:h-full object-fit rounded-xl"
                         width={960}
-                        height={350}
+                        height={450}
                         alt="permohonan & antrian"
                       />
                     )}

@@ -39,7 +39,7 @@ function Home() {
   const [infoLanding, setInfoLanding] = useState<InfoLandingType | undefined>();
   const [carousel, setCarousel] = useState<CarouselType[] | undefined>();
   const [video, setVideo] = useState<VideoType>();
-  const [alur, setAlur] = useState<AlurType>();
+  const [alur, setAlur] = useState<AlurType[]>();
   const [apps, setApps] = useState<AppType[] | undefined>();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -145,7 +145,7 @@ function Home() {
         <MppNext
           facilities={facilities || []}
           video={video || { video: "" }}
-          alur={alur || { image: "" }}
+          alurs={alur || []}
           apps={apps || []}
         />
 
