@@ -24,6 +24,7 @@ import { redirect } from "next/navigation";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 
 type DataDinasType = {
   id: number;
@@ -54,6 +55,7 @@ export default function SurveySkmPage() {
   const [changeOpacity, setChangeOpacity] = useState(false);
   const token = Cookies.get("Authorization");
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   const fetchDinas = async (search: string, page: number, limit: number) => {
     try {
@@ -204,24 +206,66 @@ export default function SurveySkmPage() {
             </div>
 
             <div className="flex w-full flex-col items-center bg-none my-[10px] md:my-10 mx-[1px]">
-              <Input
-                type="date"
-                name="tanggal"
-                value={date ? date : "Pilih Tanggal"}
-                onChange={handleChangeDate}
-                className={`w-full pl-4 pr-1 h-10 bg-neutral-50 appearance-none block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+              {isMobile ? (
+                <div className="relative w-full">
+                  <Input
+                    id="tanggal"
+                    type="date"
+                    name="tanggal"
+                    value={date ? date : "Pilih Tanggal"}
+                    onChange={handleChangeDate}
+                    className={`w-full pl-4 pr-1 h-10 bg-neutral-50 appearance-none block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900 text-[14px]"
                       : "text-neutral-900 opacity-50"
                   }`}
-                placeholder="Pilih Tanggal"
-                style={{
-                  WebkitAppearance: "none",
-                  MozAppearance: "none",
-                  appearance: "none",
-                }}
-              />
+                    placeholder="Pilih Tanggal"
+                    style={{
+                      WebkitAppearance: "none",
+                      MozAppearance: "none",
+                      appearance: "none",
+                    }}
+                  />
+
+                  {!date && (
+                    <label
+                      htmlFor="tanggal"
+                      style={{ pointerEvents: "auto" }}
+                      className="absolute top-2 left-4 text-[14px] opacity-60 text-neutral-900">
+                      Pilih Tanggal
+                    </label>
+                  )}
+                  {date && (
+                    <label
+                      htmlFor="tanggal"
+                      style={{ pointerEvents: "auto" }}
+                      className="absolute left-4 mt-2 text-[12px] text-neutral-500">
+                      {date}
+                    </label>
+                  )}
+                </div>
+              ) : (
+                <Input
+                  type="date"
+                  name="tanggal"
+                  value={date ? date : "Pilih Tanggal"}
+                  onChange={handleChangeDate}
+                  className={`w-full pl-4 pr-1 h-10 bg-neutral-50 appearance-none block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900 text-[14px]"
+                      : "text-neutral-900 opacity-50"
+                  }`}
+                  placeholder="Pilih Tanggal"
+                  style={{
+                    WebkitAppearance: "none",
+                    MozAppearance: "none",
+                    appearance: "none",
+                  }}
+                />
+              )}
+
               {/* <input
                 type="date"
                 name="tanggal"
