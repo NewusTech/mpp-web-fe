@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { schemaBooking } from "@/lib/zodSchema";
 import { z } from "zod";
 import { Loader } from "lucide-react";
+import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 
 export default function BookingAntrianPage({
   params,
@@ -40,6 +41,7 @@ export default function BookingAntrianPage({
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formValid, setFormValid] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
 
   const validateForm = async () => {
     try {
@@ -208,23 +210,57 @@ export default function BookingAntrianPage({
               </div>
 
               <div className="flex flex-col items-center my-[10px] md:mt-[14px] mx-[1px]">
-                <input
-                  type="date"
-                  name="tanggal"
-                  className={`w-full pl-4 h-[40px] appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                {isMobile ? (
+                  <div className="relative w-full">
+                    <input
+                      id="tanggal"
+                      type="date"
+                      value={antrian.tanggal}
+                      name="tanggal"
+                      className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-gray-500 opacity-50"
                   }`}
-                  placeholder="Pilih Tanggal"
-                  onChange={handleChangeDate}
-                  style={{
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
-                />
+                      placeholder="Pilih Tanggal"
+                      onChange={handleChangeDate}
+                      style={{
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        appearance: "none",
+                      }}
+                    />
+
+                    {!antrian.tanggal && (
+                      <label
+                        htmlFor="tanggal"
+                        style={{ pointerEvents: "auto" }}
+                        className="absolute top-2 left-4 text-[14px] opacity-60 text-neutral-900">
+                        Pilih Tanggal
+                      </label>
+                    )}
+                  </div>
+                ) : (
+                  <input
+                    type="date"
+                    name="tanggal"
+                    value={antrian.tanggal}
+                    className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900"
+                      : "text-gray-500 opacity-50"
+                  }`}
+                    placeholder="Pilih Tanggal"
+                    onChange={handleChangeDate}
+                    style={{
+                      WebkitAppearance: "none",
+                      MozAppearance: "none",
+                      appearance: "none",
+                    }}
+                  />
+                )}
 
                 {hasSubmitted && errors?.tanggal?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
@@ -234,23 +270,57 @@ export default function BookingAntrianPage({
               </div>
 
               <div className="flex flex-col items-center my-[10px] md:my-[20px] mx-[1px]">
-                <input
-                  type="time"
-                  name="waktu"
-                  className={`w-full pl-4 h-[40px] appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                {isMobile ? (
+                  <div className="relative w-full">
+                    <input
+                      id="waktu"
+                      type="time"
+                      name="waktu"
+                      value={antrian.waktu}
+                      className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
                       ? "text-neutral-900"
                       : "text-gray-500 opacity-50"
                   }`}
-                  placeholder="Pilih Waktu"
-                  onChange={handleChangeTime}
-                  style={{
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
-                />
+                      placeholder="Pilih Waktu"
+                      onChange={handleChangeTime}
+                      style={{
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        appearance: "none",
+                      }}
+                    />
+
+                    {!antrian.waktu && (
+                      <label
+                        htmlFor="waktu"
+                        style={{ pointerEvents: "auto" }}
+                        className="absolute top-2 left-4 text-[14px] opacity-60 text-neutral-900">
+                        Pilih Waktu
+                      </label>
+                    )}
+                  </div>
+                ) : (
+                  <input
+                    type="time"
+                    name="waktu"
+                    value={antrian.waktu}
+                    className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
+                  ${
+                    changeOpacity
+                      ? "text-neutral-900"
+                      : "text-gray-500 opacity-50"
+                  }`}
+                    placeholder="Pilih Waktu"
+                    onChange={handleChangeTime}
+                    style={{
+                      WebkitAppearance: "none",
+                      MozAppearance: "none",
+                      appearance: "none",
+                    }}
+                  />
+                )}
 
                 {hasSubmitted && errors?.waktu?._errors && (
                   <div className="text-error-700 text-[12px] md:text-[14px]">
