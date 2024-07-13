@@ -107,52 +107,52 @@ export default function ProfileEditPage({
     fetchUser();
   }, []);
 
-  const fetchKecamatan = async (search: string, limit: number) => {
-    try {
-      const kecamatanDatas = await kecamatanFetch(search, limit);
-
-      setKecamatans(kecamatanDatas.data);
-    } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data kecamatan!");
-    }
-  };
-
   useEffect(() => {
-    fetchKecamatan(debounceSearchKecamatan, 1000000);
-  }, [debounceSearchKecamatan]);
+    const fetchKecamatan = async (search: string, limit: number) => {
+      try {
+        const kecamatanDatas = await kecamatanFetch(search, limit);
 
-  const fetchDesa = async (
-    search: string,
-    limit: number,
-    kecamatan_id: number
-  ) => {
-    try {
-      const desaDatas = await desaFetch(search, limit, kecamatan_id);
-      setDesas(desaDatas.data);
-
-      if (formData && formData.desa_id) {
-        const selectedDesa = desaDatas.data.find(
-          (desa: DesaType) => desa.id === Number(formData.desa_id)
-        );
-        if (selectedDesa) {
-          setFormData((prevFormData) => ({
-            ...prevFormData!,
-            desa_id: selectedDesa.id,
-          }));
-        }
+        setKecamatans(kecamatanDatas.data);
+      } catch (error) {
+        console.log(error, "error");
+        toast("Gagal mendapatkan data kecamatan!");
       }
-    } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data desa!");
-    }
-  };
+    };
+
+    fetchKecamatan(debounceSearchKecamatan, 1000000);
+  }, [debounceSearchKecamatan, formData]);
 
   useEffect(() => {
+    const fetchDesa = async (
+      search: string,
+      limit: number,
+      kecamatan_id: number
+    ) => {
+      try {
+        const desaDatas = await desaFetch(search, limit, kecamatan_id);
+        setDesas(desaDatas.data);
+
+        if (formData && formData.desa_id) {
+          const selectedDesa = desaDatas.data.find(
+            (desa: DesaType) => desa.id === Number(formData.desa_id)
+          );
+          if (selectedDesa) {
+            setFormData((prevFormData) => ({
+              ...prevFormData!,
+              desa_id: selectedDesa.id,
+            }));
+          }
+        }
+      } catch (error) {
+        console.log(error, "error");
+        toast("Gagal mendapatkan data desa!");
+      }
+    };
+
     if (formData?.kecamatan_id && formData?.kecamatan_id) {
       fetchDesa(debounceSearchDesa, 1000000, Number(formData.kecamatan_id));
     }
-  }, [debounceSearchDesa, formData?.kecamatan_id]);
+  }, [debounceSearchDesa, formData, formData?.kecamatan_id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

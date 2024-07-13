@@ -157,7 +157,7 @@ export default function SurveySkmPage() {
                     className={selectedDinas ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
-                <SelectContent className="w-full md:w-full">
+                <SelectContent className="w-[97%] md:w-full">
                   <div>
                     {instances?.map((el: DataDinasType, i: number) => {
                       return (
@@ -188,7 +188,7 @@ export default function SurveySkmPage() {
                     className={selectedLayanan ? "" : "placeholder:opacity-50"}
                   />
                 </SelectTrigger>
-                <SelectContent className="w-full md:w-full">
+                <SelectContent className="w-[97%] md:w-full">
                   <div>
                     {service?.map((el: any, i: number) => {
                       return (
@@ -234,14 +234,6 @@ export default function SurveySkmPage() {
                       style={{ pointerEvents: "auto" }}
                       className="absolute top-2 left-4 text-[14px] opacity-60 text-neutral-900">
                       Pilih Tanggal
-                    </label>
-                  )}
-                  {date && (
-                    <label
-                      htmlFor="tanggal"
-                      style={{ pointerEvents: "auto" }}
-                      className="absolute left-4 mt-2 text-[12px] text-neutral-500">
-                      {date}
                     </label>
                   )}
                 </div>

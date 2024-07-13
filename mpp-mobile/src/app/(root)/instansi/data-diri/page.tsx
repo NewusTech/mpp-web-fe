@@ -58,16 +58,6 @@ export default function DataDiriPage() {
   const [desas, setDesas] = useState<DesaType[]>();
   const [searchDesa, setSearchDesa] = useState<string>("");
   const [debounceSearchDesa, setDebounceSearchDesa] = useState(searchDesa);
-  const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
-  const [fileKkImage, setFileKkImage] = useState<File | null>(null);
-  const [fileIjazahImage, setFileIjazahImage] = useState<File | null>(null);
-  const [fotos, setFotos] = useState<File | null>(null);
-  const [aktalahirImage, setAktalahirImage] = useState<File | null>(null);
-  const [previewKTPImage, setPreviewKTPImage] = useState<string>("");
-  const [previewKKImage, setPreviewKKImage] = useState<string>("");
-  const [previewIjazahImage, setPreviewIjazahImage] = useState<string>("");
-  const [previewFotos, setPreviewFotos] = useState<string>("");
-  const [previewAktalahir, setPreviewAktalahir] = useState<string>("");
   const [errors, setErrors] = useState<any>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [formValid, setFormValid] = useState(false);
@@ -111,54 +101,52 @@ export default function DataDiriPage() {
 
   useEffect(() => {
     fetchUser();
-  }, []);
-
-  const fetchKecamatan = async (search: string, limit: number) => {
-    try {
-      const kecamatanDatas = await kecamatanFetch(search, limit);
-
-      setKecamatans(kecamatanDatas.data);
-    } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data kecamatan!");
-    }
-  };
+  }, [formData, user]);
 
   useEffect(() => {
-    fetchKecamatan(debounceSearchKecamatan, 1000000);
-  }, [debounceSearchKecamatan]);
+    const fetchKecamatan = async (search: string, limit: number) => {
+      try {
+        const kecamatanDatas = await kecamatanFetch(search, limit);
 
-  const fetchDesa = async (
-    search: string,
-    limit: number,
-    kecamatan_id: number
-  ) => {
-    try {
-      const desaDatas = await desaFetch(search, limit, kecamatan_id);
-      setDesas(desaDatas.data);
-
-      if (formData && formData.desa_id) {
-        const selectedDesa = desaDatas.data.find(
-          (desa: DesaType) => desa.id === Number(formData.desa_id)
-        );
-        if (selectedDesa) {
-          setFormData((prevFormData) => ({
-            ...prevFormData!,
-            desa_id: selectedDesa.id,
-          }));
-        }
+        setKecamatans(kecamatanDatas.data);
+      } catch (error) {
+        console.log(error, "error");
+        toast("Gagal mendapatkan data kecamatan!");
       }
-    } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data desa!");
-    }
-  };
+    };
+    fetchKecamatan(debounceSearchKecamatan, 1000000);
+  }, [debounceSearchKecamatan, formData]);
 
   useEffect(() => {
+    const fetchDesa = async (
+      search: string,
+      limit: number,
+      kecamatan_id: number
+    ) => {
+      try {
+        const desaDatas = await desaFetch(search, limit, kecamatan_id);
+        setDesas(desaDatas.data);
+
+        if (formData && formData.desa_id) {
+          const selectedDesa = desaDatas.data.find(
+            (desa: DesaType) => desa.id === Number(formData.desa_id)
+          );
+          if (selectedDesa) {
+            setFormData((prevFormData) => ({
+              ...prevFormData!,
+              desa_id: selectedDesa.id,
+            }));
+          }
+        }
+      } catch (error) {
+        console.log(error, "error");
+        toast("Gagal mendapatkan data desa!");
+      }
+    };
     if (formData?.kecamatan_id && formData?.kecamatan_id) {
       fetchDesa(debounceSearchDesa, 1000000, Number(formData.kecamatan_id));
     }
-  }, [debounceSearchDesa, formData?.kecamatan_id]);
+  }, [debounceSearchDesa, formData, formData?.kecamatan_id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -618,6 +606,7 @@ export default function DataDiriPage() {
                         onValueChange={(value) =>
                           handleSelectChange("kecamatan_id", value)
                         }
+                        defaultValue={formData?.kecamatan_id}
                         value={formData?.kecamatan_id || ""}>
                         <SelectTrigger
                           className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
@@ -666,6 +655,7 @@ export default function DataDiriPage() {
                         onValueChange={(value) =>
                           handleSelectChange("desa_id", value)
                         }
+                        defaultValue={formData?.desa_id}
                         value={formData?.desa_id || ""}>
                         <SelectTrigger
                           className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
