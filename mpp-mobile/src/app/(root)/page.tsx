@@ -4,6 +4,7 @@ import HeroScreen from "@/components/landing/heroScreen/heroScreen";
 import AboutScreen from "@/components/landing/aboutScreen/aboutScreen";
 import CardLayananComponent from "@/components/services/others/cardLayananComponent";
 import Link from "next/link";
+import parse from "html-react-parser";
 import CardNewsComponent from "@/components/news/others/cardNewsComponent";
 import FAQScreen from "@/components/landing/faqScreen/faqScreen";
 import fetchNews from "@/components/fetching/berita/berita";
@@ -31,6 +32,7 @@ import {
   VideoType,
 } from "@/types/type";
 import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
+import { truncateTitle } from "@/utils/formatTitle";
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
@@ -43,6 +45,7 @@ function Home() {
   const [apps, setApps] = useState<AppType[] | undefined>();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const fetchAll = async (search: string) => {
     try {
@@ -96,6 +99,12 @@ function Home() {
   const desc = berita?.data[berita.data.length - 1].desc;
   const title = berita?.data[berita.data.length - 1].title;
   const instansi = berita?.data[berita.data.length - 1].Instansi?.name;
+
+  const truncateDesc = truncateTitle(desc ?? "", 600);
+
+  const handleToggle = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
@@ -157,7 +166,7 @@ function Home() {
           <div className="hidden md:block md:w-full md:flex-col">
             <div className="md:flex md:flex-rows md:w-full md:gap-8">
               {slug && (
-                <Link href={`/berita/${slug}`} className="md:w-6/12 md:h-full">
+                <Link href={`/berita/${slug}`} className="md:w-full md:h-full">
                   {image && (
                     <Image
                       className="md:w-full md:h-full md:object-cover md:rounded-2xl"
@@ -171,30 +180,39 @@ function Home() {
               )}
 
               {slug && (
-                <Link
-                  href={`/berita/${slug}`}
-                  className="md:flex md:flex-col md:w-6/12 md:gap-[16px]">
-                  <div className="md:flex md:flex-col md:gap-[8px]">
-                    <h3 className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold">
-                      {title}
-                    </h3>
+                <div className="md:flex md:flex-col w-full">
+                  <Link
+                    href={`/berita/${slug}`}
+                    className="md:flex md:flex-col md:w-full md:gap-[16px]">
+                    <div className="md:flex md:flex-col md:gap-[8px]">
+                      <h3 className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold">
+                        {title}
+                      </h3>
 
-                    <div className="md:flex md:flex-row">
-                      <p className="md:text-neutral-800 md:text-[16px] md:font-light">
-                        {instansi}
-                      </p>
-                      <ul>
-                        <li className="list-disc md:text-[12px] text-neutral-800 font-normal ml-6">
-                          {date}
-                        </li>
-                      </ul>
+                      <div className="md:flex md:flex-row">
+                        <p className="md:text-neutral-800 md:text-[16px] md:font-light">
+                          {instansi}
+                        </p>
+                        <ul>
+                          <li className="list-disc md:text-[12px] text-neutral-800 font-normal ml-6">
+                            {date}
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
 
-                  <h5 className="md:text-[20px] md:text-justify md:text-black md:font-light">
-                    {desc}
-                  </h5>
-                </Link>
+                    <h5 className="md:text-[20px] md:text-justify md:text-black md:font-light">
+                      {desc && parse(isExpanded ? desc : truncateDesc)}
+                    </h5>
+                  </Link>
+                  <div className="md:w-6/12 mt-2 relative pb-5">
+                    <button
+                      onClick={handleToggle}
+                      className="absolute text-primary-700 underline md:text-[16px] md:font-light">
+                      {isExpanded ? "Perkecil" : "Lihat Selengkapnya"}
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>

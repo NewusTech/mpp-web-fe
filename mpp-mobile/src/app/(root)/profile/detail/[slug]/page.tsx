@@ -13,12 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  DesaType,
-  KecamatanType,
-  ProfileNewType,
-  UpdateUserType,
-} from "@/types/type";
+import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -29,12 +24,14 @@ import {
   pendidikans,
   statusKawins,
 } from "@/data/data";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { z } from "zod";
 import { schemaUpdateDiri } from "@/lib/zodSchema";
 import { Loader, Trash } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 
 export default function ProfileEditPage({
   params,
@@ -43,15 +40,14 @@ export default function ProfileEditPage({
 }) {
   const router = useRouter();
   const dropRef = useRef<HTMLDivElement>(null);
-  const [user, setUser] = useState<ProfileNewType>();
   const [formData, setFormData] = useState<UpdateUserType | null>(null);
   const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
   const [searchKecamatan, setSearchKecamatan] = useState<string>("");
-  const [debounceSearchKecamatan, setDebounceSearchKecamatan] =
-    useState(searchKecamatan);
+  const debounceSearchKecamatan = useDebounce(searchKecamatan);
   const [desas, setDesas] = useState<DesaType[]>();
   const [searchDesa, setSearchDesa] = useState<string>("");
-  const [debounceSearchDesa, setDebounceSearchDesa] = useState(searchDesa);
+  const debounceSearchDesa = useDebounce(searchDesa);
+  const [kecamatanId, setKecamatanId] = useState<number>();
   const [fileKtpImage, setFileKtpImage] = useState<File | null>(null);
   const [fileKkImage, setFileKkImage] = useState<File | null>(null);
   const [fileIjazahImage, setFileIjazahImage] = useState<File | null>(null);
@@ -90,24 +86,23 @@ export default function ProfileEditPage({
     }
   }, [formData, hasSubmitted]);
 
-  const fetchUser = async () => {
-    try {
-      const user = await fetchProfile();
-
-      setUser(user.data);
-      setFormData(user.data);
-    } catch (error) {
-      console.log(error, "error");
-
-      toast("Gagal mendapatkan data!");
-    }
-  };
-
   useEffect(() => {
-    fetchUser();
-  }, []);
+    const fetchUser = async () => {
+      try {
+        const user = await fetchProfile();
 
-  useEffect(() => {
+        setFormData(user.data);
+
+        if (user.data.kecamatan_id) {
+          setKecamatanId(user.data.kecamatan_id);
+          fetchDesa(debounceSearchDesa, 10, user.data.kecamatan_id);
+        }
+      } catch (error) {
+        console.log(error, "error");
+
+        toast("Gagal mendapatkan data!");
+      }
+    };
     const fetchKecamatan = async (search: string, limit: number) => {
       try {
         const kecamatanDatas = await kecamatanFetch(search, limit);
@@ -119,10 +114,6 @@ export default function ProfileEditPage({
       }
     };
 
-    fetchKecamatan(debounceSearchKecamatan, 1000000);
-  }, [debounceSearchKecamatan, formData]);
-
-  useEffect(() => {
     const fetchDesa = async (
       search: string,
       limit: number,
@@ -132,10 +123,11 @@ export default function ProfileEditPage({
         const desaDatas = await desaFetch(search, limit, kecamatan_id);
         setDesas(desaDatas.data);
 
-        if (formData && formData.desa_id) {
+        if (kecamatanId) {
           const selectedDesa = desaDatas.data.find(
-            (desa: DesaType) => desa.id === Number(formData.desa_id)
+            (desa: DesaType) => desa.id === kecamatanId
           );
+
           if (selectedDesa) {
             setFormData((prevFormData) => ({
               ...prevFormData!,
@@ -148,11 +140,16 @@ export default function ProfileEditPage({
         toast("Gagal mendapatkan data desa!");
       }
     };
+    fetchKecamatan(debounceSearchKecamatan, 1000000);
 
-    if (formData?.kecamatan_id && formData?.kecamatan_id) {
-      fetchDesa(debounceSearchDesa, 1000000, Number(formData.kecamatan_id));
+    if (kecamatanId) {
+      fetchDesa(debounceSearchDesa, 1000000, kecamatanId);
     }
-  }, [debounceSearchDesa, formData, formData?.kecamatan_id]);
+
+    // if (!formData) {
+    fetchUser();
+    // }
+  }, [kecamatanId, debounceSearchKecamatan, debounceSearchDesa]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -238,7 +235,48 @@ export default function ProfileEditPage({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setHasSubmitted(true);
 
+    const isValid = await validateForm();
+
+    if (isValid) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${Cookies.get("Authorization")}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...formData,
+              kecamatan_id: String(kecamatanId),
+              desa_id: String(formData?.desa_id),
+            }),
+            cache: "no-store",
+          }
+        );
+
+        if (response.ok) {
+          toast.success("Berhasil mengupdate profile!");
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error, "error");
+        toast("Failed to update profile!");
+      } finally {
+        setIsLoading(false);
+        setHasSubmitted(false);
+        router.push("/profile");
+      }
+    }
+  };
+
+  const handleSubmitFile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
     const fileData = new FormData();
 
     if (fileKtpImage) {
@@ -257,52 +295,29 @@ export default function ProfileEditPage({
       fileData.append("aktalahir", aktalahirImage);
     }
 
-    setHasSubmitted(true);
-
-    const isValid = await validateForm();
-
-    if (isValid) {
-      setIsLoading(true);
-      try {
-        const [response1, response2] = await Promise.all([
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${params.slug}`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization: `Bearer ${Cookies.get("Authorization")}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
-              cache: "no-store",
-            }
-          ),
-
-          fetch(
-            `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatedocs/${params.slug}`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization: `Bearer ${Cookies.get("Authorization")}`,
-              },
-              body: fileData,
-              cache: "no-store",
-            }
-          ),
-        ]);
-
-        if (response1.ok && response2.ok) {
-          toast.success("Berhasil mengupdate profile!");
-          await fetchUser();
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatedocs/${params.slug}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          body: fileData,
+          cache: "no-store",
         }
-      } catch (error) {
-        console.log(error, "error");
-        toast("Failed to update profile!");
-      } finally {
+      );
+
+      if (response.ok) {
+        toast.success("Berhasil mengupdate profile!");
         setIsLoading(false);
-        setHasSubmitted(false);
-        router.push("/profile");
       }
+    } catch (error) {
+      console.log(error, "error");
+      toast("Failed to update profile!");
+    } finally {
+      setIsLoading(false);
+      router.push("/profile");
     }
   };
 
@@ -433,782 +448,830 @@ export default function ProfileEditPage({
         </div>
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">
-          <h3 className="text-primary-800 font-semibold text-[20px]">
-            Data Diri
-          </h3>
-
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col w-full mt-2 md:mt-4">
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full md:mb-4">
-                <ProfileEditInput
-                  names="name"
-                  types="text"
-                  value={formData?.name || ""}
-                  change={handleChange}
-                  labelName="Nama Lengkap"
-                  placeholder="Nama Lengkap"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.name?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.name._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full md:mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Jenis Kelamin
-                </Label>
-
-                <Select
-                  name="gender"
-                  onValueChange={(value) => handleSelectChange("gender", value)}
-                  value={formData?.gender || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {genders &&
-                      genders.map(
-                        (gender: { id: number; value: string }, i: number) => (
-                          <SelectItem
-                            className="pr-none mt-2"
-                            key={i}
-                            value={String(gender.id)}>
-                            {gender.value}
-                          </SelectItem>
-                        )
-                      )}
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.gender?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.gender._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="nik"
-                  types="number"
-                  value={formData?.nik || ""}
-                  change={handleChange}
-                  labelName="NIK"
-                  placeholder="NIK"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.nik?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.nik._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Agama
-                </Label>
-
-                <Select
-                  name="agama"
-                  onValueChange={(value) => handleSelectChange("agama", value)}
-                  value={formData?.agama || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {agamas &&
-                      agamas.map(
-                        (agama: { id: number; value: string }, i: number) => (
-                          <SelectItem
-                            className="pr-none mt-2"
-                            value={String(agama.id)}
-                            key={i}>
-                            {agama.value}
-                          </SelectItem>
-                        )
-                      )}
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.agama?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.agama._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="tempat_lahir"
-                  types="text"
-                  value={formData?.tempat_lahir || ""}
-                  change={handleChange}
-                  labelName="Tempat Lahir"
-                  placeholder="Tempat Lahir"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.tempat_lahir?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.tempat_lahir._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Golongan Darah
-                </Label>
-
-                <Select
-                  name="goldar"
-                  onValueChange={(value) => handleSelectChange("goldar", value)}
-                  value={formData?.goldar || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {golonganDarahs &&
-                      golonganDarahs.map(
-                        (darah: { id: number; value: string }, i: number) => (
-                          <SelectItem
-                            className="pr-none mt-2"
-                            value={String(darah.id)}
-                            key={i}>
-                            {darah.value}
-                          </SelectItem>
-                        )
-                      )}
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.goldar?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.goldar._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <label className="text-[12px] text-neutral-900 font-semibold">
-                  Tanggal Lahir
-                </label>
-
-                <input
-                  type="date"
-                  name="tgl_lahir"
-                  value={formData?.tgl_lahir || ""}
-                  onChange={handleChange}
-                  className={`w-full px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
-                  placeholder="Tanggal Lahir"
-                  style={{
-                    WebkitAppearance: "none",
-                    MozAppearance: "none",
-                    appearance: "none",
-                  }}
-                />
-
-                {hasSubmitted && errors?.tgl_lahir?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.tgl_lahir._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Status Perkawinan
-                </Label>
-
-                <Select
-                  name="status_kawin"
-                  onValueChange={(value) =>
-                    handleSelectChange("status_kawin", value)
-                  }
-                  value={formData?.status_kawin || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {statusKawins &&
-                      statusKawins.map(
-                        (kawin: { id: number; value: string }, i: number) => (
-                          <SelectItem
-                            className="pr-none mt-2"
-                            value={String(kawin.id)}
-                            key={i}>
-                            {kawin.value}
-                          </SelectItem>
-                        )
-                      )}
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.status_kawin?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.status_kawin._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="telepon"
-                  types="number"
-                  value={formData?.telepon || ""}
-                  change={handleChange}
-                  labelName="Nomor Telepon"
-                  placeholder="Nomor Telepon"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.telepon?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.telepon._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Pendidikan
-                </Label>
-
-                <Select
-                  name="pendidikan"
-                  onValueChange={(value) =>
-                    handleSelectChange("pendidikan", value)
-                  }
-                  value={formData?.pendidikan || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {pendidikans &&
-                      pendidikans.map(
-                        (
-                          pendidikan: { id: number; value: string },
-                          i: number
-                        ) => (
-                          <SelectItem
-                            className="pr-none mt-2"
-                            value={String(pendidikan.id)}
-                            key={i}>
-                            {pendidikan.value}
-                          </SelectItem>
-                        )
-                      )}
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.pendidikan?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.pendidikan._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="email"
-                  types="text"
-                  value={formData?.email || ""}
-                  change={handleChange}
-                  labelName="Email"
-                  placeholder="Email"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.email?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.email._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="pekerjaan"
-                  types="text"
-                  value={formData?.pekerjaan || ""}
-                  change={handleChange}
-                  labelName="Pekerjaan"
-                  placeholder="Pekerjaan"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.pekerjaan?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.pekerjaan._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Kecamatan
-                </Label>
-
-                <Select
-                  name="kecamatan_id"
-                  onValueChange={(value) =>
-                    handleSelectChange("kecamatan_id", value)
-                  }
-                  defaultValue={formData?.kecamatan_id}
-                  value={formData?.kecamatan_id || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue placeholder="Pilih Kecamatan" />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    <div>
-                      <div className="w-full px-2 mt-2">
-                        <SearchComponent
-                          change={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setSearchKecamatan(e.target.value)
-                          }
-                          search={searchKecamatan}
-                        />
-                      </div>
-
-                      {kecamatans &&
-                        kecamatans.map(
-                          (kecamatan: KecamatanType, i: number) => (
-                            <SelectItem
-                              className="pr-none mt-2"
-                              key={i}
-                              value={String(kecamatan.id)}>
-                              {kecamatan.name}
-                            </SelectItem>
-                          )
-                        )}
-                    </div>
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.kecamatan_id?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.kecamatan_id._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4w-full">
-                <Label className="text-[12px] text-neutral-900 font-semibold">
-                  Desa
-                </Label>
-
-                <Select
-                  name="desa_id"
-                  onValueChange={(value) =>
-                    handleSelectChange("desa_id", value)
-                  }
-                  defaultValue={formData?.desa_id}
-                  value={formData?.desa_id || ""}>
-                  <SelectTrigger
-                    className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                    <SelectValue placeholder="Pilih Desa" />
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    <div>
-                      <div className="w-full px-2 mt-2">
-                        <SearchComponent
-                          change={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            setSearchDesa(e.target.value)
-                          }
-                          search={searchDesa}
-                        />
-                      </div>
-
-                      {desas &&
-                        desas.map((desa: DesaType, i: number) => (
-                          <SelectItem
-                            className="pr-none mt-2"
-                            value={String(desa.id)}
-                            key={i}>
-                            {desa.name}
-                          </SelectItem>
-                        ))}
-                    </div>
-                  </SelectContent>
-                </Select>
-
-                {hasSubmitted && errors?.desa_id?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.desa_id._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="rt"
-                  types="number"
-                  value={formData?.rt || ""}
-                  change={handleChange}
-                  labelName="RT"
-                  placeholder="RT"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.rt?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.rt._errors[0]}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col w-full mb-4">
-                <ProfileEditInput
-                  names="rw"
-                  types="number"
-                  value={formData?.rw || ""}
-                  change={handleChange}
-                  labelName="RW"
-                  placeholder="RW"
-                  classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
-                  labelStyle="text-[12px] text-neutral-900 font-semibold"
-                />
-
-                {hasSubmitted && errors?.rw?._errors && (
-                  <div className="text-error-700 text-[12px] md:text-[14px]">
-                    {errors.rw._errors[0]}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex flex-col w-full">
-              <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
-                ALamat
-              </Label>
-
-              <Textarea
-                name="alamat"
-                value={formData?.alamat || ""}
-                onChange={handleChange}
-                placeholder="Alamat"
-                className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
-              />
-
-              {hasSubmitted && errors?.alamat?._errors && (
-                <div className="text-error-700 text-[12px] md:text-[14px]">
-                  {errors.alamat._errors[0]}
-                </div>
-              )}
-            </div>
-
-            <div className="flex flex-col w-full">
-              <h3 className="text-primary-800 font-semibold text-[20px] mt-6 mb-3">
+          <Tabs defaultValue="Data Diri">
+            <TabsList>
+              <TabsTrigger
+                className="font-semibold text-primary-500 md:text-[20px]"
+                value="Data Diri">
+                Data Diri
+              </TabsTrigger>
+              <TabsTrigger
+                className="font-semibold text-primary-500 md:text-[20px]"
+                value="Dokumen Pendukung">
                 Dokumen Pendukung
-              </h3>
+              </TabsTrigger>
+            </TabsList>
 
-              <div className="flex flex-col w-full">
-                <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
-                  Kartu Tanda Penduduk (KTP)
-                </Label>
+            <TabsContent value="Data Diri">
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col w-full mt-2 md:mt-4">
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full md:mb-4">
+                    <ProfileEditInput
+                      names="name"
+                      types="text"
+                      value={formData?.name || ""}
+                      change={handleChange}
+                      labelName="Nama Lengkap"
+                      placeholder="Nama Lengkap"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
 
-                <div className="flex flex-col md:flex-row w-full">
-                  <div
-                    ref={dropRef}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDropKTP}
-                    className={`w-full ${
-                      formData?.filektp || previewKTPImage
-                        ? "md:w-8/12"
-                        : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center }`}>
-                    <>
-                      <input
-                        type="file"
-                        id="file-input-ktp"
-                        name="filektp"
-                        accept="image/*"
-                        onChange={handleFileKTPChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="file-input-ktp"
-                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
-                        Drag and drop file here or click to select file
-                      </label>
-                    </>
+                    {hasSubmitted && errors?.name?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.name._errors[0]}
+                      </div>
+                    )}
                   </div>
 
-                  {(previewKTPImage || formData?.filektp) && (
-                    <div className="relative md:ml-4 w-full mt-1">
-                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
-                        <img
-                          src={previewKTPImage || formData?.filektp}
-                          alt="Preview"
-                          className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleRemoveKTP}
-                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
-                          <Trash />
-                        </button>
+                  <div className="flex flex-col w-full md:mb-4">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Jenis Kelamin
+                    </Label>
+
+                    <Select
+                      name="gender"
+                      onValueChange={(value) =>
+                        handleSelectChange("gender", value)
+                      }
+                      value={formData?.gender || ""}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        {genders &&
+                          genders.map(
+                            (
+                              gender: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                key={i}
+                                value={String(gender.id)}>
+                                {gender.value}
+                              </SelectItem>
+                            )
+                          )}
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.gender?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.gender._errors[0]}
                       </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="nik"
+                      types="number"
+                      value={formData?.nik || ""}
+                      change={handleChange}
+                      labelName="NIK"
+                      placeholder="NIK"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.nik?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.nik._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Agama
+                    </Label>
+
+                    <Select
+                      name="agama"
+                      onValueChange={(value) =>
+                        handleSelectChange("agama", value)
+                      }
+                      value={formData?.agama || ""}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        {agamas &&
+                          agamas.map(
+                            (
+                              agama: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                value={String(agama.id)}
+                                key={i}>
+                                {agama.value}
+                              </SelectItem>
+                            )
+                          )}
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.agama?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.agama._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="tempat_lahir"
+                      types="text"
+                      value={formData?.tempat_lahir || ""}
+                      change={handleChange}
+                      labelName="Tempat Lahir"
+                      placeholder="Tempat Lahir"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.tempat_lahir?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.tempat_lahir._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Golongan Darah
+                    </Label>
+
+                    <Select
+                      name="goldar"
+                      onValueChange={(value) =>
+                        handleSelectChange("goldar", value)
+                      }
+                      value={formData?.goldar || ""}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        {golonganDarahs &&
+                          golonganDarahs.map(
+                            (
+                              darah: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                value={String(darah.id)}
+                                key={i}>
+                                {darah.value}
+                              </SelectItem>
+                            )
+                          )}
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.goldar?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.goldar._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <label className="text-[12px] text-neutral-900 font-semibold">
+                      Tanggal Lahir
+                    </label>
+
+                    <input
+                      type="date"
+                      name="tgl_lahir"
+                      value={formData?.tgl_lahir || ""}
+                      onChange={handleChange}
+                      className={`w-full px-4 mt-1 h-[40px] rounded-full border bg-transparent border-neutral-700 placeholder:text-[12px] focus:outline-none appearance-none text-neutral-900`}
+                      placeholder="Tanggal Lahir"
+                      style={{
+                        WebkitAppearance: "none",
+                        MozAppearance: "none",
+                        appearance: "none",
+                      }}
+                    />
+
+                    {hasSubmitted && errors?.tgl_lahir?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.tgl_lahir._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Status Perkawinan
+                    </Label>
+
+                    <Select
+                      name="status_kawin"
+                      onValueChange={(value) =>
+                        handleSelectChange("status_kawin", value)
+                      }
+                      value={formData?.status_kawin || ""}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        {statusKawins &&
+                          statusKawins.map(
+                            (
+                              kawin: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                value={String(kawin.id)}
+                                key={i}>
+                                {kawin.value}
+                              </SelectItem>
+                            )
+                          )}
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.status_kawin?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.status_kawin._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="telepon"
+                      types="number"
+                      value={formData?.telepon || ""}
+                      change={handleChange}
+                      labelName="Nomor Telepon"
+                      placeholder="Nomor Telepon"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.telepon?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.telepon._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Pendidikan
+                    </Label>
+
+                    <Select
+                      name="pendidikan"
+                      onValueChange={(value) =>
+                        handleSelectChange("pendidikan", value)
+                      }
+                      value={formData?.pendidikan || ""}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        {pendidikans &&
+                          pendidikans.map(
+                            (
+                              pendidikan: { id: number; value: string },
+                              i: number
+                            ) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                value={String(pendidikan.id)}
+                                key={i}>
+                                {pendidikan.value}
+                              </SelectItem>
+                            )
+                          )}
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.pendidikan?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.pendidikan._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="email"
+                      types="text"
+                      value={formData?.email || ""}
+                      change={handleChange}
+                      labelName="Email"
+                      placeholder="Email"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.email?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.email._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="pekerjaan"
+                      types="text"
+                      value={formData?.pekerjaan || ""}
+                      change={handleChange}
+                      labelName="Pekerjaan"
+                      placeholder="Pekerjaan"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.pekerjaan?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.pekerjaan._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Kecamatan
+                    </Label>
+
+                    <Select
+                      name="kecamatan_id"
+                      onValueChange={(value) => setKecamatanId(Number(value))}
+                      value={String(kecamatanId)}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue placeholder="Pilih Kecamatan" />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        <div>
+                          <div className="w-full px-2 mt-2">
+                            <SearchComponent
+                              change={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                              ) => setSearchKecamatan(e.target.value)}
+                              search={searchKecamatan}
+                            />
+                          </div>
+
+                          {kecamatans &&
+                            kecamatans.map(
+                              (kecamatan: KecamatanType, i: number) => (
+                                <SelectItem
+                                  className="pr-none mt-2"
+                                  key={i}
+                                  value={String(kecamatan.id)}>
+                                  {kecamatan.name}
+                                </SelectItem>
+                              )
+                            )}
+                        </div>
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.kecamatan_id?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.kecamatan_id._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4w-full">
+                    <Label className="text-[12px] text-neutral-900 font-semibold">
+                      Desa
+                    </Label>
+
+                    <Select
+                      name="desa_id"
+                      onValueChange={(value) =>
+                        handleSelectChange("desa_id", value)
+                      }
+                      value={String(formData?.desa_id)}>
+                      <SelectTrigger
+                        className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                        <SelectValue placeholder="Pilih Desa" />
+                      </SelectTrigger>
+                      <SelectContent className="w-full">
+                        <div>
+                          <div className="w-full px-2 mt-2">
+                            <SearchComponent
+                              change={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                              ) => setSearchDesa(e.target.value)}
+                              search={searchDesa}
+                            />
+                          </div>
+
+                          {desas &&
+                            desas.map((desa: DesaType, i: number) => (
+                              <SelectItem
+                                className="pr-none mt-2"
+                                value={String(desa.id)}
+                                key={i}>
+                                {desa.name}
+                              </SelectItem>
+                            ))}
+                        </div>
+                      </SelectContent>
+                    </Select>
+
+                    {hasSubmitted && errors?.desa_id?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.desa_id._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="rt"
+                      types="number"
+                      value={formData?.rt || ""}
+                      change={handleChange}
+                      labelName="RT"
+                      placeholder="RT"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.rt?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.rt._errors[0]}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col w-full mb-4">
+                    <ProfileEditInput
+                      names="rw"
+                      types="number"
+                      value={formData?.rw || ""}
+                      change={handleChange}
+                      labelName="RW"
+                      placeholder="RW"
+                      classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
+                      labelStyle="text-[12px] text-neutral-900 font-semibold"
+                    />
+
+                    {hasSubmitted && errors?.rw?._errors && (
+                      <div className="text-error-700 text-[12px] md:text-[14px]">
+                        {errors.rw._errors[0]}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-col w-full">
+                  <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
+                    ALamat
+                  </Label>
+
+                  <Textarea
+                    name="alamat"
+                    value={formData?.alamat || ""}
+                    onChange={handleChange}
+                    placeholder="Alamat"
+                    className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] md:text-[14px] placeholder:opacity-[70%]"
+                  />
+
+                  {hasSubmitted && errors?.alamat?._errors && (
+                    <div className="text-error-700 text-[12px] md:text-[14px]">
+                      {errors.alamat._errors[0]}
                     </div>
                   )}
                 </div>
-              </div>
 
-              <div className="flex flex-col w-full h-full mt-6">
-                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                  Kartu Keluarga (KK)
-                </Label>
-                <div className="flex flex-col md:flex-row w-full">
-                  <div
-                    ref={dropRef}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDropKK}
-                    className={`w-full ${
-                      formData?.filekk || previewKKImage
-                        ? "md:w-8/12"
-                        : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center `}>
-                    <>
-                      <input
-                        type="file"
-                        id="file-input-kk"
-                        name="filekk"
-                        accept="image/*"
-                        onChange={handleFileKKChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="file-input-kk"
-                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
-                        Drag and drop file here or click to select file
-                      </label>
-                    </>
+                <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
+                  <Button
+                    className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                    type="submit"
+                    variant="success"
+                    disabled={!formValid || isLoading}>
+                    {isLoading ? <Loader className="animate-spin" /> : "Simpan"}
+                  </Button>
+                </div>
+              </form>
+            </TabsContent>
+
+            <TabsContent value="Dokumen Pendukung">
+              <form
+                onSubmit={handleSubmitFile}
+                className="flex flex-col w-full mt-2 md:mt-4">
+                <div className="flex flex-col w-full">
+                  <div className="flex flex-col w-full">
+                    <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
+                      Kartu Tanda Penduduk (KTP)
+                    </Label>
+
+                    <div className="flex flex-col md:flex-row w-full">
+                      <div
+                        ref={dropRef}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDropKTP}
+                        className={`w-full ${
+                          formData?.filektp || previewKTPImage
+                            ? "md:w-8/12"
+                            : "w-full"
+                        }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center }`}>
+                        <>
+                          <input
+                            type="file"
+                            id="file-input-ktp"
+                            name="filektp"
+                            accept="image/*"
+                            onChange={handleFileKTPChange}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="file-input-ktp"
+                            className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                            Drag and drop file here or click to select file
+                          </label>
+                        </>
+                      </div>
+
+                      {(previewKTPImage || formData?.filektp) && (
+                        <div className="relative md:ml-4 w-full mt-1">
+                          <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                            <img
+                              src={previewKTPImage || formData?.filektp}
+                              alt="Preview"
+                              className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleRemoveKTP}
+                              className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                              <Trash />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  {(previewKKImage || formData?.filekk) && (
-                    <div className="relative md:ml-4 w-full mt-1">
-                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
-                        <img
-                          src={previewKKImage || formData?.filekk}
-                          alt="Preview"
-                          className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleRemoveKK}
-                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
-                          <Trash />
-                        </button>
+                  <div className="flex flex-col w-full h-full mt-6">
+                    <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      Kartu Keluarga (KK)
+                    </Label>
+                    <div className="flex flex-col md:flex-row w-full">
+                      <div
+                        ref={dropRef}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDropKK}
+                        className={`w-full ${
+                          formData?.filekk || previewKKImage
+                            ? "md:w-8/12"
+                            : "w-full"
+                        }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center `}>
+                        <>
+                          <input
+                            type="file"
+                            id="file-input-kk"
+                            name="filekk"
+                            accept="image/*"
+                            onChange={handleFileKKChange}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="file-input-kk"
+                            className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                            Drag and drop file here or click to select file
+                          </label>
+                        </>
                       </div>
+
+                      {(previewKKImage || formData?.filekk) && (
+                        <div className="relative md:ml-4 w-full mt-1">
+                          <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                            <img
+                              src={previewKKImage || formData?.filekk}
+                              alt="Preview"
+                              className="max-h-full rounded-xl p-4 md:p-2 max-w-full object-contain"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleRemoveKK}
+                              className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                              <Trash />
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex flex-col w-full h-full mt-6">
-                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                  Ijazah Terakhir
-                </Label>
-
-                <div className="flex flex-col md:flex-row w-full">
-                  <div
-                    ref={dropRef}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDropIjazah}
-                    className={`w-full ${
-                      formData?.fileijazahlain || previewIjazahImage
-                        ? "md:w-8/12"
-                        : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
-                    <>
-                      <input
-                        type="file"
-                        id="file-input-ijazah"
-                        name="fileijazahlain"
-                        accept="image/*"
-                        onChange={handleFileIjazahChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="file-input-ijazah"
-                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
-                        Drag and drop file here or click to select file
-                      </label>
-                    </>
                   </div>
 
-                  {(previewIjazahImage || formData?.fileijazahlain) && (
-                    <div className="relative md:ml-4 w-full mt-1">
-                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
-                        <img
-                          src={previewIjazahImage || formData?.fileijazahlain}
-                          alt="Preview"
-                          className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleRemoveIjazah}
-                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
-                          <Trash />
-                        </button>
+                  <div className="flex flex-col w-full h-full mt-6">
+                    <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      Ijazah Terakhir
+                    </Label>
+
+                    <div className="flex flex-col md:flex-row w-full">
+                      <div
+                        ref={dropRef}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDropIjazah}
+                        className={`w-full ${
+                          formData?.fileijazahlain || previewIjazahImage
+                            ? "md:w-8/12"
+                            : "w-full"
+                        }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
+                        <>
+                          <input
+                            type="file"
+                            id="file-input-ijazah"
+                            name="fileijazahlain"
+                            accept="image/*"
+                            onChange={handleFileIjazahChange}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="file-input-ijazah"
+                            className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                            Drag and drop file here or click to select file
+                          </label>
+                        </>
                       </div>
+
+                      {(previewIjazahImage || formData?.fileijazahlain) && (
+                        <div className="relative md:ml-4 w-full mt-1">
+                          <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                            <img
+                              src={
+                                previewIjazahImage || formData?.fileijazahlain
+                              }
+                              alt="Preview"
+                              className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleRemoveIjazah}
+                              className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                              <Trash />
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex flex-col w-full h-full mt-6">
-                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                  Pas Foto
-                </Label>
-
-                <div className="flex flex-col md:flex-row w-full">
-                  <div
-                    ref={dropRef}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDropFoto}
-                    className={`w-full ${
-                      formData?.foto || previewFotos ? "md:w-8/12" : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
-                    <>
-                      <input
-                        type="file"
-                        id="file-input-foto"
-                        name="foto"
-                        accept="image/*"
-                        onChange={handleFotosChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="file-input-foto"
-                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
-                        Drag and drop file here or click to select file
-                      </label>
-                    </>
                   </div>
 
-                  {(previewFotos || formData?.foto) && (
-                    <div className="relative md:ml-4 w-full mt-1">
-                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
-                        <img
-                          src={previewFotos || formData?.foto}
-                          alt="Preview"
-                          className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleRemoveFoto}
-                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
-                          <Trash />
-                        </button>
+                  <div className="flex flex-col w-full h-full mt-6">
+                    <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      Pas Foto
+                    </Label>
+
+                    <div className="flex flex-col md:flex-row w-full">
+                      <div
+                        ref={dropRef}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDropFoto}
+                        className={`w-full ${
+                          formData?.foto || previewFotos
+                            ? "md:w-8/12"
+                            : "w-full"
+                        }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
+                        <>
+                          <input
+                            type="file"
+                            id="file-input-foto"
+                            name="foto"
+                            accept="image/*"
+                            onChange={handleFotosChange}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="file-input-foto"
+                            className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                            Drag and drop file here or click to select file
+                          </label>
+                        </>
                       </div>
+
+                      {(previewFotos || formData?.foto) && (
+                        <div className="relative md:ml-4 w-full mt-1">
+                          <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                            <img
+                              src={previewFotos || formData?.foto}
+                              alt="Preview"
+                              className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleRemoveFoto}
+                              className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                              <Trash />
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex flex-col w-full h-full mt-6">
-                <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
-                  Akte Lahir
-                </Label>
-
-                <div className="flex flex-col md:flex-row w-full">
-                  <div
-                    ref={dropRef}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDropAktaLahir}
-                    className={`w-full ${
-                      formData?.aktalahir || previewAktalahir
-                        ? "md:w-8/12"
-                        : "w-full"
-                    }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
-                    <>
-                      <input
-                        type="file"
-                        id="file-input-akta"
-                        name="aktalahir"
-                        accept="image/*"
-                        onChange={handleAktaLahirChange}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="file-input-akta"
-                        className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
-                        Drag and drop file here or click to select file
-                      </label>
-                    </>
                   </div>
 
-                  {(previewAktalahir || formData?.aktalahir) && (
-                    <div className="relative md:ml-4 w-full mt-1">
-                      <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
-                        <img
-                          src={previewAktalahir || formData?.aktalahir}
-                          alt="Preview"
-                          className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleRemoveAktaLahir}
-                          className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
-                          <Trash />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+                  <div className="flex flex-col w-full h-full mt-6">
+                    <Label className="text-[12px] text-neutral-900 font-semibold text-start mb-2">
+                      Akte Lahir
+                    </Label>
 
-            <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
-              <Button
-                className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
-                type="submit"
-                variant="success"
-                disabled={!formValid || isLoading}>
-                {isLoading ? <Loader className="animate-spin" /> : "Simpan"}
-              </Button>
-            </div>
-          </form>
+                    <div className="flex flex-col md:flex-row w-full">
+                      <div
+                        ref={dropRef}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDropAktaLahir}
+                        className={`w-full ${
+                          formData?.aktalahir || previewAktalahir
+                            ? "md:w-8/12"
+                            : "w-full"
+                        }  h-[100px] border-2 border-dashed rounded-xl mt-1 flex flex-col items-center justify-center`}>
+                        <>
+                          <input
+                            type="file"
+                            id="file-input-akta"
+                            name="aktalahir"
+                            accept="image/*"
+                            onChange={handleAktaLahirChange}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="file-input-akta"
+                            className="text-[16px] text-center text-neutral-600 p-2 md:p-4 font-light cursor-pointer">
+                            Drag and drop file here or click to select file
+                          </label>
+                        </>
+                      </div>
+
+                      {(previewAktalahir || formData?.aktalahir) && (
+                        <div className="relative md:ml-4 w-full mt-1">
+                          <div className="border-2 border-dashed flex justify-center rounded-xl p-2">
+                            <img
+                              src={previewAktalahir || formData?.aktalahir}
+                              alt="Preview"
+                              className="max-h-full rounded-xl p-4 md:p-4 max-w-full object-contain"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleRemoveAktaLahir}
+                              className="absolute bg-none -top-0 -right-0 md:-top-0 md:-right-0 text-neutral-800 p-1">
+                              <Trash />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
+                    <Button
+                      className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                      type="submit"
+                      variant="success"
+                      disabled={!formValid || isLoading}>
+                      {isLoading ? (
+                        <Loader className="animate-spin" />
+                      ) : (
+                        "Simpan"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </section>

@@ -279,16 +279,16 @@ export default function SurveySkmPage() {
             </div>
 
             <div className="flex self-end justify-end items-end mb-8 mt-4">
-              <Button
-                className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
-                type="submit"
-                variant="warning"
-                disabled={isLoading ? true : false}
-                onClick={handleButtonClick}>
-                <Link href="/survey/skm">
+              <Link href="/survey/skm">
+                <Button
+                  className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
+                  type="submit"
+                  variant="warning"
+                  disabled={isLoading ? true : false}
+                  onClick={handleButtonClick}>
                   {isLoading ? <Loader className="animate-spin" /> : "Isi SKM"}
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

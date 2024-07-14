@@ -130,8 +130,6 @@ export default function UploadFilePage() {
     }
   }, [instansiId]);
 
-  console.log(dataFile, "datafile");
-
   const handleDocChange = (id: string, file: File | null) => {
     setDocValues((prevValues) => ({
       ...prevValues,

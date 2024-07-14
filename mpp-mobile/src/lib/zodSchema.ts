@@ -96,8 +96,6 @@ export const schemaUpdateDiri = z.object({
   agama: z.string({ message: "Pilih Agama" }),
   pendidikan: z.string({ message: "Pilih Pendidikan" }),
   pekerjaan: z.string({ message: "Harap isi pekerjaanmu saat ini!" }),
-  kecamatan_id: z.string({ message: "Pilih Asal Kecamatan" }),
-  desa_id: z.string({ message: "Pilih Asal Desa" }),
   rt: z.string().refine((val) => val !== "", "RT harus diisi"),
   rw: z.string().refine((val) => val !== "", "RW harus diisi"),
   alamat: z.string().refine((val) => val !== "", "Alamat harus diisi"),

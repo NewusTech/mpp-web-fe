@@ -26,7 +26,7 @@ export default function LayoutInput({
   dataRadio,
   isRequired,
 }: LayoutFormType) {
-  if (typeForm === "string") {
+  if (typeForm === "text") {
     return (
       <>
         {isRequired === true ? (
