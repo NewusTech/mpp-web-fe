@@ -636,119 +636,72 @@ export default function PengaduanScreen() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {pengaduan.status !== 3 ? (
-                        <>
-                          {pengaduanlists &&
-                            pengaduanPaginate?.map(
-                              (pengaduan: PengaduanType, i: number) => {
-                                const datePengaduan = pengaduan.createdAt;
-                                const date = new Date(datePengaduan);
-                                const daysInIndonesian = [
-                                  "Minggu",
-                                  "Senin",
-                                  "Selasa",
-                                  "Rabu",
-                                  "Kamis",
-                                  "Jumat",
-                                  "Sabtu",
-                                ];
-                                const dayName = daysInIndonesian[date.getDay()];
+                      <>
+                        {pengaduanlists &&
+                          pengaduanPaginate?.map(
+                            (pengaduan: PengaduanType, i: number) => {
+                              const datePengaduan = pengaduan.createdAt;
+                              const dateEnd = pengaduan.updatedAt;
+                              const date = new Date(datePengaduan);
+                              const daysInIndonesian = [
+                                "Minggu",
+                                "Senin",
+                                "Selasa",
+                                "Rabu",
+                                "Kamis",
+                                "Jumat",
+                                "Sabtu",
+                              ];
+                              const dayName = daysInIndonesian[date.getDay()];
 
-                                let datePengaduanFormatted = "";
-                                if (datePengaduan) {
-                                  datePengaduanFormatted = formatLongDate(
-                                    `${datePengaduan}`
-                                  );
-                                }
+                              let datePengaduanFormatted = "";
+                              if (datePengaduan) {
+                                datePengaduanFormatted = formatLongDate(
+                                  `${datePengaduan}`
+                                );
+                              }
 
-                                return (
-                                  <TableRow key={i}>
-                                    <TableCell className="w-1/12">
-                                      {i + 1}
-                                    </TableCell>
-                                    <TableCell className="w-6/12">
-                                      {dayName}, {datePengaduanFormatted}
-                                    </TableCell>
-                                    <TableCell className="w-10/12">
-                                      {pengaduan.Instansi.name}
-                                    </TableCell>
-                                    <TableCell className="w-10/12">
-                                      {pengaduan.Layanan.name}
-                                    </TableCell>
-                                    <TableCell className="w-full">
-                                      {pengaduan.judul}
-                                    </TableCell>
-                                    <TableCell className="w-5/12">
-                                      {pengaduan.status === 0
-                                        ? "Belum diproses"
-                                        : pengaduan.status === 1
-                                        ? "Sedang ditindak lanjuti"
-                                        : pengaduan.status === 2
-                                        ? "Sudah ditindak lanjuti"
-                                        : "Selesai"}
-                                    </TableCell>
-                                    <TableCell className="w-3/12">
+                              let dateEndPengaduanFormatted = "";
+                              if (dateEnd) {
+                                dateEndPengaduanFormatted = formatLongDate(
+                                  `${dateEnd}`
+                                );
+                              }
+
+                              return (
+                                <TableRow key={i}>
+                                  <TableCell className="w-1/12">
+                                    {i + 1}
+                                  </TableCell>
+                                  <TableCell className="w-6/12">
+                                    {dayName}, {datePengaduanFormatted}
+                                  </TableCell>
+                                  <TableCell className="w-10/12">
+                                    {pengaduan.Instansi.name}
+                                  </TableCell>
+                                  <TableCell className="w-10/12">
+                                    {pengaduan.Layanan.name}
+                                  </TableCell>
+                                  <TableCell className="w-full">
+                                    {pengaduan.judul}
+                                  </TableCell>
+                                  <TableCell className="w-5/12">
+                                    {pengaduan.status === 0
+                                      ? "Belum diproses"
+                                      : pengaduan.status === 1
+                                      ? "Sedang ditindak lanjuti"
+                                      : pengaduan.status === 2
+                                      ? "Sudah ditindak lanjuti"
+                                      : pengaduan.status === 3
+                                      ? "Gagal"
+                                      : "Selesai"}
+                                  </TableCell>
+                                  <TableCell className="w-3/12">
+                                    {pengaduan.status !== 4 ? (
                                       <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-not-allowed text-center rounded-full bg-neutral-700 hover:bg-neutral-600">
                                         Lihat
                                       </div>
-                                    </TableCell>
-                                  </TableRow>
-                                );
-                              }
-                            )}
-                        </>
-                      ) : (
-                        <>
-                          {pengaduanlists &&
-                            pengaduanPaginate?.map(
-                              (pengaduan: PengaduanType, i: number) => {
-                                const datePengaduan = pengaduan.createdAt;
-                                const date = new Date(datePengaduan);
-                                const daysInIndonesian = [
-                                  "Minggu",
-                                  "Senin",
-                                  "Selasa",
-                                  "Rabu",
-                                  "Kamis",
-                                  "Jumat",
-                                  "Sabtu",
-                                ];
-                                const dayName = daysInIndonesian[date.getDay()];
-
-                                let datePengaduanFormatted = "";
-                                if (datePengaduan) {
-                                  datePengaduanFormatted = formatLongDate(
-                                    `${datePengaduan}`
-                                  );
-                                }
-
-                                return (
-                                  <TableRow key={i}>
-                                    <TableCell className="w-1/12">
-                                      {i + 1}
-                                    </TableCell>
-                                    <TableCell className="w-6/12">
-                                      {dayName}, {datePengaduanFormatted}
-                                    </TableCell>
-                                    <TableCell className="w-10/12">
-                                      {pengaduan.Instansi.name}
-                                    </TableCell>
-                                    <TableCell className="w-10/12">
-                                      {pengaduan.Layanan.name}
-                                    </TableCell>
-                                    <TableCell className="w-full">
-                                      {pengaduan.judul}
-                                    </TableCell>
-                                    <TableCell className="w-5/12">
-                                      {pengaduan.status === 0
-                                        ? "Belum diproses"
-                                        : pengaduan.status === 1
-                                        ? "Sedang ditindak lanjuti"
-                                        : pengaduan.status === 2
-                                        ? "Sudah ditindak lanjuti"
-                                        : "Selesai"}
-                                    </TableCell>
-                                    <TableCell className="w-3/12">
+                                    ) : (
                                       <Dialog>
                                         <DialogTrigger>
                                           <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-pointer text-center rounded-full bg-secondary-700 hover:bg-secondary-600">
@@ -818,7 +771,10 @@ export default function PengaduanScreen() {
 
                                               <div className="flex flex-col gap-[8px]">
                                                 <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Balasan
+                                                  Balasan{" "}
+                                                  <span className="text-neutral-800 text-normal text-[12px]">
+                                                    {dateEndPengaduanFormatted}
+                                                  </span>
                                                 </p>
 
                                                 <p className="text-[16px] text-neutral-900 font-normal">
@@ -830,13 +786,13 @@ export default function PengaduanScreen() {
                                           </div>
                                         </DialogContent>
                                       </Dialog>
-                                    </TableCell>
-                                  </TableRow>
-                                );
-                              }
-                            )}
-                        </>
-                      )}
+                                    )}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            }
+                          )}
+                      </>
                     </TableBody>
                   </Table>
 

@@ -69,6 +69,7 @@ export default function ProfileEditPage({
         ...formData,
       });
       setErrors({});
+      setIsLoading(true);
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -259,6 +260,8 @@ export default function ProfileEditPage({
           }
         );
 
+        await response.json();
+
         if (response.ok) {
           toast.success("Berhasil mengupdate profile!");
           setIsLoading(false);
@@ -448,8 +451,8 @@ export default function ProfileEditPage({
         </div>
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">
-          <Tabs defaultValue="Data Diri">
-            <TabsList>
+          <Tabs defaultValue="Data Diri" className="pt-6">
+            <TabsList className="gap-x-3">
               <TabsTrigger
                 className="font-semibold text-primary-500 md:text-[20px]"
                 value="Data Diri">
@@ -466,7 +469,7 @@ export default function ProfileEditPage({
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col w-full mt-2 md:mt-4">
-                <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
+                <div className="grid grid-rows-2 mt-4 md:mt-4 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                   <div className="flex flex-col w-full md:mb-4">
                     <ProfileEditInput
                       names="name"
@@ -486,7 +489,7 @@ export default function ProfileEditPage({
                     )}
                   </div>
 
-                  <div className="flex flex-col w-full md:mb-4">
+                  <div className="flex flex-col w-full mt-2 md:mt-0 md:mb-4">
                     <Label className="text-[12px] text-neutral-900 font-semibold">
                       Jenis Kelamin
                     </Label>
@@ -528,7 +531,7 @@ export default function ProfileEditPage({
                 </div>
 
                 <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-                  <div className="flex flex-col w-full mb-4">
+                  <div className="flex flex-col w-full mt-2 md:mt-0 mb-4">
                     <ProfileEditInput
                       names="nik"
                       types="number"
@@ -977,7 +980,7 @@ export default function ProfileEditPage({
                     className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                     type="submit"
                     variant="success"
-                    disabled={!formValid || isLoading}>
+                    disabled={isLoading ? true : false}>
                     {isLoading ? <Loader className="animate-spin" /> : "Simpan"}
                   </Button>
                 </div>
@@ -988,7 +991,7 @@ export default function ProfileEditPage({
               <form
                 onSubmit={handleSubmitFile}
                 className="flex flex-col w-full mt-2 md:mt-4">
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full mt-4">
                   <div className="flex flex-col w-full">
                     <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                       Kartu Tanda Penduduk (KTP)
@@ -1260,7 +1263,7 @@ export default function ProfileEditPage({
                       className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                       type="submit"
                       variant="success"
-                      disabled={!formValid || isLoading}>
+                      disabled={isLoading ? true : false}>
                       {isLoading ? (
                         <Loader className="animate-spin" />
                       ) : (

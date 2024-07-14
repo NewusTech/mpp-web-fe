@@ -249,19 +249,27 @@ export default function StatisticsPage() {
             </h4>
 
             <div className="flex flex-row justify-center items-center w-4/12 gap-x-4">
-              <button onClick={handleAllClick} className="text-neutral-700">
+              <button
+                onClick={handleAllClick}
+                className={`text-neutral-700 ${
+                  filterType === "" ? "text-neutral-900 font-semibold" : ""
+                }`}>
                 All
               </button>
 
               <button
                 onClick={() => setFilterType("month")}
-                className="text-neutral-700">
+                className={`text-neutral-700 ${
+                  filterType === "month" ? "text-neutral-900 font-semibold" : ""
+                }`}>
                 Bulan
               </button>
 
               <button
                 onClick={() => setFilterType("year")}
-                className="text-neutral-700">
+                className={`text-neutral-700 ${
+                  filterType === "year" ? "text-neutral-900 font-semibold" : ""
+                }`}>
                 Tahun
               </button>
 

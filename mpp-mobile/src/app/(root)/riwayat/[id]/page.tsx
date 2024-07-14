@@ -196,12 +196,21 @@ export default function HasilPermohonan({
       </div>
 
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
-        <Button
-          onClick={() => openModal()}
-          type="submit"
-          className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
-          Lihat
-        </Button>
+        {permohonan?.input_skm === false || permohonan?.status === 4 ? (
+          <Button
+            disabled
+            type="submit"
+            className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+            Lihat
+          </Button>
+        ) : (
+          <Button
+            onClick={() => openModal()}
+            type="submit"
+            className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+            Lihat
+          </Button>
+        )}
 
         {isModalOpen && (
           <div
