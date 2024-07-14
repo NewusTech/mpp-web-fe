@@ -86,28 +86,23 @@ export const schemaUpdateDiri = z.object({
     .min(12, "Nomor telepon harus terdiri dari minimal 12 digit")
     .max(13, "Nomor telepon harus terdiri dari maksimal 13 digit"),
   nik: z.string().length(16, "NIK harus terdiri dari 16 karakter"),
-  gender: z.string({ message: "Pilih Jenis Kelamin" }),
-  goldar: z.string({ message: "Pilih Golongan Darah" }),
-  status_kawin: z.string({ message: "Pilih Status Perkawinan" }),
+  gender: z.string({ message: "Pilih Jenis Kelamin" }).optional(),
+  goldar: z.string({ message: "Pilih Golongan Darah" }).optional(),
+  status_kawin: z.string({ message: "Pilih Status Perkawinan" }).optional(),
   tempat_lahir: z
     .string()
-    .refine((val) => val !== "", "Tempat Lahir harus diisi"),
-  tgl_lahir: z.string().refine((val) => val !== "", "Tgl Lahir harus diisi"),
-  agama: z.string({ message: "Pilih Agama" }),
-  pendidikan: z.string({ message: "Pilih Pendidikan" }),
-  pekerjaan: z.string({ message: "Harap isi pekerjaanmu saat ini!" }),
+    .refine((val) => val !== "", "Tempat Lahir harus diisi")
+    .optional(),
+  tgl_lahir: z
+    .string()
+    .refine((val) => val !== "", "Tgl Lahir harus diisi")
+    .optional(),
+  agama: z.string({ message: "Pilih Agama" }).optional(),
+  pendidikan: z.string({ message: "Pilih Pendidikan" }).optional(),
+  pekerjaan: z
+    .string({ message: "Harap isi pekerjaanmu saat ini!" })
+    .optional(),
   rt: z.string().refine((val) => val !== "", "RT harus diisi"),
   rw: z.string().refine((val) => val !== "", "RW harus diisi"),
   alamat: z.string().refine((val) => val !== "", "Alamat harus diisi"),
-  filektp: z.string().refine((val) => val !== "", "File KTP harus diisi"),
-  filekk: z.string().refine((val) => val !== "", "File KK harus diisi"),
-  fileijazahsd: z
-    .string()
-    .refine((val) => val !== "", "File Ijazah Terakhir harus diisi"),
-  foto: z
-    .string()
-    .refine((val) => val !== "", "File Ijazah Terakhir harus diisi"),
-  aktalahir: z
-    .string()
-    .refine((val) => val !== "", "File Ijazah Terakhir harus diisi"),
 });

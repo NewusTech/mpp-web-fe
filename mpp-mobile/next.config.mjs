@@ -5,6 +5,7 @@ const nextConfig = {
     return middleware;
   },
   reactStrictMode: true,
+  poweredByHeader: false,
   images: {
     domains: [
       "res.cloudinary.com",

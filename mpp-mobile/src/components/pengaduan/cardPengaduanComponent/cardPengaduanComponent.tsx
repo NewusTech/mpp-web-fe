@@ -69,13 +69,15 @@ export default function CardPengaduanComponent({
               ? "Sedang ditindak lanjuti"
               : pengaduan.status === 2
               ? "Sudah ditindak lanjuti"
+              : pengaduan.status === 3
+              ? "Gagal"
               : "Selesai"}
           </p>
         </div>
       </div>
 
       <div className="flex w-full self-end justify-end">
-        {pengaduan.status !== 3 ? (
+        {pengaduan.status !== 4 ? (
           <div className="w-3/12 h-[18px] py-4 text-[14px] cursor-not-allowed flex items-center justify-center rounded-full bg-neutral-700 hover:bg-neutral-600">
             Lihat
           </div>

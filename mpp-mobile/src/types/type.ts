@@ -95,6 +95,7 @@ export interface PengaduanType {
   status: number;
   aduan: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface PengaduanFormType {

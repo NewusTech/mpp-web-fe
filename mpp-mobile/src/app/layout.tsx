@@ -14,6 +14,21 @@ export const metadata: Metadata = {
       url: `${lambang.src}`,
     },
   },
+  openGraph: {
+    title: "SISTEM INFORMASI MPP KABUPATEN LAMPUNG TIMUR",
+    description: "Mal Pelayanan Publik Kabupaten Lampung Timur",
+    url: "https://mppdigital.newus.id/",
+    siteName: "Mal Pelayanan Publik Kabupaten Lampung Timur",
+    images: [
+      {
+        url: `${lambang.src}`,
+        width: 1920,
+        height: 1080,
+      },
+    ],
+    locale: "id-Id",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
