@@ -82,7 +82,7 @@ export default function CardPengaduanComponent({
         ) : (
           <Dialog>
             <DialogTrigger>
-              <div className="w-3/12 h-[18px] py-4 flex items-center justify-center rounded-full text-[14px] bg-secondary-700 hover:bg-secondary-600">
+              <div className="w-full h-[18px] py-4 px-5 flex items-center justify-center rounded-full text-[14px] bg-secondary-700 hover:bg-secondary-600">
                 Lihat
               </div>
             </DialogTrigger>

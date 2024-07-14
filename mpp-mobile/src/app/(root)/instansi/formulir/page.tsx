@@ -38,14 +38,18 @@ const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
           .optional();
         break;
       case "number":
-        fieldSchema = z.number({ message: "Data wajib diisi!" });
+        fieldSchema = z.string({ message: "Data wajib diisi!" }).optional();
         break;
       default:
         fieldSchema = z.string({ message: "Data wajib diisi!" });
         break;
     }
 
-    if (formField.isrequired && formField.tipedata !== "checkbox") {
+    if (
+      formField.isrequired &&
+      formField.tipedata !== "checkbox" &&
+      formField.tipedata !== "number"
+    ) {
       fieldSchema = fieldSchema.refine(
         (val) => val !== undefined && val !== null && val !== "",
         {
@@ -279,6 +283,7 @@ export default function FormulirPage() {
                                 opacity={changeOpacity}
                                 dataRadio={el.datajson}
                               />
+
                               {errors[el.field] && (
                                 <p className="text-error-700 text-[14px] font-normal">
                                   {errors[el.field]}

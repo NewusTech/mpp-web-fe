@@ -1,11 +1,9 @@
 "use client";
 
-import fetchProfile from "@/components/fetching/profile/profile";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
+import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
   Select,
   SelectContent,
@@ -13,23 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Steps from "@/components/steps/steps";
-import {
-  DesaType,
-  KecamatanType,
-  ProfileNewType,
-  UpdateUserType,
-} from "@/types/type";
-import { ChevronLeft, Loader } from "lucide-react";
-import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
-import desaFetch from "@/components/fetching/desa/desa";
-import { useDebounce } from "@/hooks/useDebounce/useDebounce";
-import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import { Label } from "@radix-ui/react-label";
-import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { Textarea } from "@/components/ui/textarea";
-import { z } from "zod";
-import { schemaDataDiri, schemaUpdateDiri } from "@/lib/zodSchema";
+import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
+import fetchProfile from "@/components/fetching/profile/profile";
+import { toast } from "sonner";
+import Cookies from "js-cookie";
 import {
   agamas,
   genders,
@@ -37,6 +24,15 @@ import {
   pendidikans,
   statusKawins,
 } from "@/data/data";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
+import desaFetch from "@/components/fetching/desa/desa";
+import SearchComponent from "@/components/others/searchComponent/searchComponent";
+import { z } from "zod";
+import { schemaUpdateDiri } from "@/lib/zodSchema";
+import { ChevronLeft, Loader, Trash } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce/useDebounce";
+import Steps from "@/components/steps/steps";
 
 const steps = [
   { id: 1, title: "1" },
@@ -49,15 +45,14 @@ const currentStep = 2;
 export default function DataDiriPage() {
   const router = useRouter();
   const dropRef = useRef<HTMLDivElement>(null);
-  const [user, setUser] = useState<ProfileNewType>();
   const [formData, setFormData] = useState<UpdateUserType | null>(null);
   const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
   const [searchKecamatan, setSearchKecamatan] = useState<string>("");
-  const [debounceSearchKecamatan, setDebounceSearchKecamatan] =
-    useState(searchKecamatan);
+  const debounceSearchKecamatan = useDebounce(searchKecamatan);
   const [desas, setDesas] = useState<DesaType[]>();
   const [searchDesa, setSearchDesa] = useState<string>("");
-  const [debounceSearchDesa, setDebounceSearchDesa] = useState(searchDesa);
+  const debounceSearchDesa = useDebounce(searchDesa);
+  const [kecamatanId, setKecamatanId] = useState<number>();
   const [errors, setErrors] = useState<any>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [formValid, setFormValid] = useState(false);
@@ -86,24 +81,23 @@ export default function DataDiriPage() {
     }
   }, [formData, hasSubmitted]);
 
-  const fetchUser = async () => {
-    try {
-      const user = await fetchProfile();
-
-      setUser(user.data);
-      setFormData(user.data);
-    } catch (error) {
-      console.log(error, "error");
-
-      toast("Gagal mendapatkan data!");
-    }
-  };
-
   useEffect(() => {
-    fetchUser();
-  }, [formData, user]);
+    const fetchUser = async () => {
+      try {
+        const user = await fetchProfile();
 
-  useEffect(() => {
+        setFormData(user.data);
+
+        if (user.data.kecamatan_id) {
+          setKecamatanId(user.data.kecamatan_id);
+          fetchDesa(debounceSearchDesa, 10, user.data.kecamatan_id);
+        }
+      } catch (error) {
+        console.log(error, "error");
+
+        toast("Gagal mendapatkan data!");
+      }
+    };
     const fetchKecamatan = async (search: string, limit: number) => {
       try {
         const kecamatanDatas = await kecamatanFetch(search, limit);
@@ -114,10 +108,7 @@ export default function DataDiriPage() {
         toast("Gagal mendapatkan data kecamatan!");
       }
     };
-    fetchKecamatan(debounceSearchKecamatan, 1000000);
-  }, [debounceSearchKecamatan, formData]);
 
-  useEffect(() => {
     const fetchDesa = async (
       search: string,
       limit: number,
@@ -127,10 +118,11 @@ export default function DataDiriPage() {
         const desaDatas = await desaFetch(search, limit, kecamatan_id);
         setDesas(desaDatas.data);
 
-        if (formData && formData.desa_id) {
+        if (kecamatanId) {
           const selectedDesa = desaDatas.data.find(
-            (desa: DesaType) => desa.id === Number(formData.desa_id)
+            (desa: DesaType) => desa.id === kecamatanId
           );
+
           if (selectedDesa) {
             setFormData((prevFormData) => ({
               ...prevFormData!,
@@ -143,10 +135,16 @@ export default function DataDiriPage() {
         toast("Gagal mendapatkan data desa!");
       }
     };
-    if (formData?.kecamatan_id && formData?.kecamatan_id) {
-      fetchDesa(debounceSearchDesa, 1000000, Number(formData.kecamatan_id));
+    fetchKecamatan(debounceSearchKecamatan, 1000000);
+
+    if (kecamatanId) {
+      fetchDesa(debounceSearchDesa, 1000000, kecamatanId);
     }
-  }, [debounceSearchDesa, formData, formData?.kecamatan_id]);
+
+    // if (!formData) {
+    fetchUser();
+    // }
+  }, [kecamatanId, debounceSearchKecamatan, debounceSearchDesa]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -167,7 +165,6 @@ export default function DataDiriPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setHasSubmitted(true);
 
     const isValid = await validateForm();
@@ -176,21 +173,25 @@ export default function DataDiriPage() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${user?.slug}`,
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${formData?.slug}`,
           {
             method: "PUT",
             headers: {
               Authorization: `Bearer ${Cookies.get("Authorization")}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({
+              ...formData,
+              kecamatan_id: String(kecamatanId),
+              desa_id: String(formData?.desa_id),
+            }),
             cache: "no-store",
           }
         );
 
         if (response.ok) {
           toast.success("Berhasil mengupdate profile!");
-          await fetchUser();
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error, "error");
@@ -198,7 +199,7 @@ export default function DataDiriPage() {
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
-        router.push(`/instansi/formulir`);
+        router.push("/instansi/formulir");
       }
     }
   };
@@ -243,7 +244,9 @@ export default function DataDiriPage() {
               </h5>
 
               <div className="flex flex-col w-full px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
-                <form onSubmit={handleSubmit} className="flex flex-col w-full">
+                <form
+                  onSubmit={handleSubmit}
+                  className="flex flex-col w-full mt-2 md:mt-4">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">
                       <ProfileEditInput
@@ -595,6 +598,7 @@ export default function DataDiriPage() {
                       )}
                     </div>
                   </div>
+
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full mb-4">
                       <Label className="text-[12px] text-neutral-900 font-semibold">
@@ -603,14 +607,11 @@ export default function DataDiriPage() {
 
                       <Select
                         name="kecamatan_id"
-                        onValueChange={(value) =>
-                          handleSelectChange("kecamatan_id", value)
-                        }
-                        defaultValue={formData?.kecamatan_id}
-                        value={formData?.kecamatan_id || ""}>
+                        onValueChange={(value) => setKecamatanId(Number(value))}
+                        value={String(kecamatanId)}>
                         <SelectTrigger
                           className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          <SelectValue placeholder="Pilih Kecamatan" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           <div>
@@ -655,11 +656,10 @@ export default function DataDiriPage() {
                         onValueChange={(value) =>
                           handleSelectChange("desa_id", value)
                         }
-                        defaultValue={formData?.desa_id}
-                        value={formData?.desa_id || ""}>
+                        value={String(formData?.desa_id)}>
                         <SelectTrigger
                           className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          <SelectValue placeholder="Pilih Desa" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           <div>
@@ -732,6 +732,7 @@ export default function DataDiriPage() {
                       )}
                     </div>
                   </div>
+
                   <div className="flex flex-col w-full">
                     <Label className="text-[12px] text-neutral-900 font-semibold mb-2">
                       ALamat
@@ -742,7 +743,7 @@ export default function DataDiriPage() {
                       value={formData?.alamat || ""}
                       onChange={handleChange}
                       placeholder="Alamat"
-                      className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] placeholder:opacity-[70%]"
+                      className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] md:text-[14px] placeholder:opacity-[70%]"
                     />
 
                     {hasSubmitted && errors?.alamat?._errors && (
@@ -752,9 +753,9 @@ export default function DataDiriPage() {
                     )}
                   </div>
 
-                  <div className="flex justify-center items-end self-end md:w-full md:self-center my-[16px] md:pb-[30px]">
+                  <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
                     <Button
-                      className="w-[90px] md:w-[290px] h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                      className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                       type="submit"
                       variant="success"
                       disabled={!formValid || isLoading}>

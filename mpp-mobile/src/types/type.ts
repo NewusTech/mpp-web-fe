@@ -64,6 +64,7 @@ export interface PermohonanDataType {
   tanggalSelesai: string;
   createdAt: string;
   input_skm: boolean;
+  fileoutput: string;
 }
 
 export interface AntrianDataType {
@@ -252,7 +253,9 @@ export interface ProfileNewType {
   agama?: number;
   pendidikan?: number;
   pekerjaan?: string;
+  kecamatan_id?: number;
   kecamatan_name: string;
+  desa_id?: number;
   desa_name: string;
   rt: string;
   rw: string;

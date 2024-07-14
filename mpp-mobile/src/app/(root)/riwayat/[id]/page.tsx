@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronLeft, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/legacy/image";
 
 export default function HasilPermohonan({
   params,
@@ -18,6 +19,20 @@ export default function HasilPermohonan({
   const [permohonan, setPermohonan] = useState<PermohonanDataType>();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleBackdropClick = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      closeModal();
+    }
+  };
 
   const fetchRiwayatPermohonan = async (id: number) => {
     try {
@@ -69,6 +84,8 @@ export default function HasilPermohonan({
     permohonanStatus = "Ditolak";
   }
 
+  console.log(permohonan, "permohonan");
+
   const downloadPermohonan = async (
     idLayanan: number,
     idPermohonan: number
@@ -109,7 +126,7 @@ export default function HasilPermohonan({
   };
 
   return (
-    <div className="flex flex-col mx-6 md:mx-20 bg-neutral-50 px-6 md:px-14 py-6 rounded-xl mt-6">
+    <div className="flex flex-col mx-6 md:mx-20 bg-neutral-50 md:mb-32 px-6 md:px-14 py-6 rounded-xl mt-6">
       <div className="grid grid-cols-2 md:grid-cols-none md:flex md:flex-row md:justify-between items-center md:w-full md:mb-8">
         <div className="flex flex-row items-center">
           <button onClick={() => router.back()}>
@@ -180,12 +197,29 @@ export default function HasilPermohonan({
 
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
         <Button
+          onClick={() => openModal()}
           type="submit"
           className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
           Lihat
         </Button>
 
-        {permohonan?.input_skm === false ? (
+        {isModalOpen && (
+          <div
+            className="fixed inset-0 bg-neutral-900 bg-opacity-50 flex items-center justify-center z-50"
+            onClick={handleBackdropClick}>
+            <div className="bg-neutral-50 p-4 rounded-xl w-10/12 md:max-w-3xl mx-auto">
+              <Image
+                src={permohonan?.fileoutput || ""}
+                alt="Selected alur mpp"
+                className="w-full h-full object-cover rounded-xl"
+                width={1920}
+                height={1080}
+              />
+            </div>
+          </div>
+        )}
+
+        {permohonan?.input_skm === false || permohonan?.status === 4 ? (
           <Button
             disabled
             type="submit"

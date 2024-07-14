@@ -98,7 +98,7 @@ export default function NavbarScreen() {
               <DropdownMenuTrigger>
                 <div className="flex flex-row gap-x-5 justify-center items-center group">
                   <h3
-                    className={`text-center text-[20px] ${
+                    className={`text-center text-[20px] font-normal ${
                       pathName === "/mpp/tentang-mpp" ||
                       pathName === "/mpp/fasilitas" ||
                       pathName === "/mpp/aplikasi-pendukung"

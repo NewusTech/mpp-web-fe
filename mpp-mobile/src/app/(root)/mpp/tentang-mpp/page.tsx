@@ -14,6 +14,23 @@ export default function MppPage() {
     misi: "",
   });
   const [alurs, setAlurs] = useState<AlurType[]>();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = (image: string) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setSelectedImage(null);
+    setIsModalOpen(false);
+  };
+
+  const handleBackdropClick = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      closeModal();
+    }
+  };
 
   const fetchVisiMisiMpp = async () => {
     const visimisi = await fetchVisiMisi();
@@ -26,6 +43,9 @@ export default function MppPage() {
   useEffect(() => {
     fetchVisiMisiMpp();
   }, []);
+
+  const imageSatu = alurs ? alurs[alurs.length - 1].image : undefined;
+  const imageDua = alurs ? alurs[alurs.length - 2].image : undefined;
 
   return (
     <div className="bg-primary-100 md:mx-12 md:h-full">
@@ -62,6 +82,7 @@ export default function MppPage() {
               return (
                 <div
                   key={i}
+                  onClick={() => openModal(alur.image)}
                   className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
                   <Image
                     src={alur.image}
@@ -76,6 +97,22 @@ export default function MppPage() {
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 bg-neutral-900 bg-opacity-50 flex items-center justify-center z-50"
+          onClick={handleBackdropClick}>
+          <div className="bg-neutral-50 p-4 rounded-xl w-10/12 md:max-w-3xl mx-auto">
+            <Image
+              src={selectedImage || ""}
+              alt="Selected alur mpp"
+              className="w-full h-full object-cover rounded-xl"
+              width={1920}
+              height={1080}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
