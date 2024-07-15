@@ -102,10 +102,6 @@ function Home() {
 
   const truncateDesc = truncateTitle(desc ?? "", 600);
 
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
   });
@@ -203,15 +199,11 @@ function Home() {
 
                     <h5 className="md:text-[20px] md:text-justify md:text-black md:font-light">
                       {desc && parse(isExpanded ? desc : truncateDesc)}
+                      <span className="text-primary-700 font-normal hover:underline text-[16px]">
+                        Lihat Selengkapnya
+                      </span>
                     </h5>
                   </Link>
-                  <div className="md:w-6/12 mt-2 relative pb-5">
-                    <button
-                      onClick={handleToggle}
-                      className="absolute text-primary-700 underline md:text-[16px] md:font-light">
-                      {isExpanded ? "Perkecil" : "Lihat Selengkapnya"}
-                    </button>
-                  </div>
                 </div>
               )}
             </div>

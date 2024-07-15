@@ -84,8 +84,6 @@ export default function HasilPermohonan({
     permohonanStatus = "Ditolak";
   }
 
-  console.log(permohonan, "permohonan");
-
   const downloadPermohonan = async (
     idLayanan: number,
     idPermohonan: number

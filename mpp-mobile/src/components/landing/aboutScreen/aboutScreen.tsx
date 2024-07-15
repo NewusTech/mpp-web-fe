@@ -5,8 +5,6 @@ export default function AboutScreen({
 }: {
   infoLanding: InfoLandingType;
 }) {
-  console.log(infoLanding, "infoLanding");
-
   return (
     <div className="flex flex-col justify-center mt-[14px] mx-5 md:mx-8 md:mt-0 md:pt-8 md:rounded-xl">
       <div className="flex flex-col justify-center bg-primary-200 py-5 md:py-8 rounded-xl">
@@ -38,7 +36,7 @@ export default function AboutScreen({
           <div className="flex w-10/12 md:w-full">
             <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-primary-700 self-end font-semibold md:text-[26px]">
-                18
+                0
               </h5>
 
               <p className="text-[12px] md:text-[20px] self-start text-primary-700 font-semibold text-center">
