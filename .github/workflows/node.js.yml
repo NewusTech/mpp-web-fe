@@ -38,6 +38,12 @@ jobs:
     - name : Start Apps
       working-directory: ./mpp-mobile
       run: pm2 start npm --name mppdigital.newus.id -- start -- --port 3007
+    - name : start live
+      working-directory: ./mpp-mobile
+      run: pm2 startup
+    - name : save pm2 setting
+      working-directory: ./mpp-mobile
+      run: pm2 save
     
 
     
