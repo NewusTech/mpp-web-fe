@@ -63,6 +63,7 @@ export interface PermohonanDataType {
   pesan: string;
   tanggalSelesai: string;
   createdAt: string;
+  updatedAt: string;
   input_skm: boolean;
   fileoutput: string;
 }
