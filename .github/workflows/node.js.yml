@@ -15,15 +15,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
-    - name : Git branch
-      run : git branch
-    - name : change checkout main
-      run : git checkout main
     - name : Git pull
-      run : git pull
+      run : git pull origin main
     - name : Run NPM
       working-directory: ./mpp-mobile
-      run: npm install
+      run: npm ci
     - name : Run build
       working-directory: ./mpp-mobile
       run: npm run build --if-present
