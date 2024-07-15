@@ -32,12 +32,10 @@ jobs:
     - name : check pm2 list
       working-directory: ./mpp-mobile
       run : pm2 list
-    - name : check pm2 list
+    - name : Start Apps
       working-directory: ./mpp-mobile
-      run : pm2 list
-    - name : Restart Apps
-      working-directory: ./mpp-mobile
-      run: pm2 restart mppdigital.newus.id
+      run: pm2 start npm --name mppdigital.newus.id -- start -- --port 3007
+    
 
     
     
