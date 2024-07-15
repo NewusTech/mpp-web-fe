@@ -15,12 +15,29 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
+    - name : Git pull
+      run : git pull
     - name : Run NPM
       working-directory: ./mpp-mobile
       run: npm install
     - name : Run build
       working-directory: ./mpp-mobile
       run: npm run build --if-present
+    - name : Install PM2
+      working-directory: ./mpp-mobile
+      run : npm install pm2@latest -g 
+    - name : check pm2 version
+      working-directory: ./mpp-mobile
+      run : pm2 -V
+    - name : check pm2 list
+      working-directory: ./mpp-mobile
+      run : pm2 list
+    - name : check pm2 list
+      working-directory: ./mpp-mobile
+      run : pm2 list
+    - name : Restart Apps
+      working-directory: ./mpp-mobile
+      run: pm2 restart mppdigital.newus.id
 
     
     
