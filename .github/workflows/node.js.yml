@@ -40,7 +40,8 @@ jobs:
       run: pm2 start npm --name mppdigital.newus.id -- start -- --port 3007
     - name : start live
       working-directory: ./mpp-mobile
-      run: pm2 startup
+      run: sudo env PATH=$PATH:/opt/hostedtoolcache/node/22.4.1/x64/bin /opt/hostedtoolcache/node/22.4.1/x64/lib/node_modules/pm2/bin/pm2 
+    - run: startup systemd -u runner --hp /home/runner
     - name : save pm2 setting
       working-directory: ./mpp-mobile
       run: pm2 save
