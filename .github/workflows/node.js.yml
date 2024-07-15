@@ -19,8 +19,10 @@ jobs:
       working-directory: ./mpp-mobile
       run: npm install
     - name : Run build
+      working-directory: ./mpp-mobile
       run: npm run build --if-present
     - name : Run test
+      working-directory: ./mpp-mobile
       run: npm test
 
     
