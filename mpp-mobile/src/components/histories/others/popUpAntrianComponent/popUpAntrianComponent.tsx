@@ -59,7 +59,7 @@ export default function PopUpAntrianComponent({
         </div>
 
         <div className="flex flex-col justify-center items-center w-full h-full gap-2">
-          <div className="w-full h-full rounded-xl">
+          <div className="w-full h-full flex justify-center rounded-xl">
             <Image
               src={antrian.qrcode}
               className="w-full h-full object-contain rounded-xl"

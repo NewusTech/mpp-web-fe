@@ -66,13 +66,15 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
               ? "Sedang ditindak lanjuti"
               : permohonan.status === 2
               ? "Sudah ditindak lanjuti"
+              : permohonan.status === 4
+              ? "Ditolak"
               : "Selesai"}
           </p>
         </div>
       </div>
 
       <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
-        {permohonan.status !== 3 ? (
+        {permohonan.status === 3 || permohonan.status === 4 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}
