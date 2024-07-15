@@ -7,44 +7,26 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [22]
+    env:
+      NEXT_PUBLIC_API_URL_MPP: ${{ secrets.NEXT_PUBLIC_API_URL_MPP }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Fetch all history for all branches and tags
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22.x'
-    - name : Git pull
-      run : git pull origin main
+        node-version: ${{ matrix.node_version }}
+        cache: 'npm'
     - name : Run NPM
       working-directory: ./mpp-mobile
       run: npm ci
     - name : Run build
       working-directory: ./mpp-mobile
       run: npm run build --if-present
-    - name : Install PM2
-      working-directory: ./mpp-mobile
-      run : npm install pm2@latest -g 
-    - name : check pm2 version
-      working-directory: ./mpp-mobile
-      run : pm2 -V
-    - name : check pm2 list
-      working-directory: ./mpp-mobile
-      run : pm2 list
-    - name : Start Apps
-      working-directory: ./mpp-mobile
-      run: pm2 start npm --name mppdigital.newus.id -- start -- --port 3007
-    - name : start live
-      working-directory: ./mpp-mobile
-      run: sudo env PATH=$PATH:/opt/hostedtoolcache/node/22.4.1/x64/bin /opt/hostedtoolcache/node/22.4.1/x64/lib/node_modules/pm2/bin/pm2 
-    - run: startup systemd -u runner --hp /home/runner
-    - name : save pm2 setting
-      working-directory: ./mpp-mobile
-      run: pm2 save
     
 
     
