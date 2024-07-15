@@ -9,6 +9,13 @@ import { toast } from "sonner";
 import parse from "html-react-parser";
 import fetchGetBookingId from "@/components/fetching/getbookingid/getbookingid";
 import { Loader } from "lucide-react";
+import { Raleway } from "next/font/google";
+import logo from "@/../public/assets/DesignLogoMpp.svg";
+
+const raleway = Raleway({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
 
 export default function BookingResult({ params }: { params: { id: number } }) {
   const [antrian, setAntrian] = useState<AntrianBookingType>();
@@ -68,6 +75,30 @@ export default function BookingResult({ params }: { params: { id: number } }) {
         <div className="flex flex-col w-full mx-[35px] md:mx-[70px] gap-[12px]">
           <div className="flex flex-col md:justify-center md:items-center md:self-center mb-8 md:mb-10 md:w-6/12">
             <div className="flex flex-col items-center w-full bg-neutral-50 shadow-md rounded-xl py-6">
+              <div className="flex flex-row justify-center items-center self-center gap-x-3 w-full mb-4">
+                <div className="w-2/12 h-[64px] flex items-center">
+                  <Image
+                    src={logo}
+                    alt="Lampung Timur"
+                    className="w-full h-full object-fit"
+                    width={1000}
+                    height={1000}
+                  />
+                </div>
+
+                <div className="flex flex-col justify-center leading-none">
+                  <h3
+                    className={`${raleway.className} font-bold text-[18px] text-secondary-700 py-[4px]`}>
+                    MAL PELAYANAN PUBLIK
+                  </h3>
+
+                  <h3
+                    className={`${raleway.className} font-normal text-primary-700 text-[16px]`}>
+                    Kabupaten Lampung Timur
+                  </h3>
+                </div>
+              </div>
+
               <div className="flex flex-col items-center justify-center gap-2">
                 <h4 className="text-[16px] md:text-[20px] font-semibold">
                   {antrian?.Instansi.name}

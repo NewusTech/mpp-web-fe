@@ -4,7 +4,7 @@ import { PermohonanDataType } from "@/types/type";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import formatDate from "@/helpers/logout/formatted";
+import { formatLongDate } from "@/helpers/logout/formatted";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronLeft, Loader } from "lucide-react";
@@ -33,6 +33,12 @@ export default function HasilPermohonan({
       closeModal();
     }
   };
+
+  let dateBalesan = "";
+
+  if (permohonan?.updatedAt) {
+    dateBalesan = formatLongDate(permohonan?.updatedAt);
+  }
 
   const fetchRiwayatPermohonan = async (id: number) => {
     try {
@@ -63,13 +69,7 @@ export default function HasilPermohonan({
   let permohonanDate = "";
 
   if (permohonan?.createdAt) {
-    permohonanDate = formatDate(`${permohonan?.createdAt}`);
-  }
-
-  let permohonanSelesai = "";
-
-  if (permohonan?.tanggalSelesai) {
-    permohonanDate = formatDate(`${permohonan?.tanggalSelesai}`);
+    permohonanDate = formatLongDate(`${permohonan?.createdAt}`);
   }
 
   let permohonanStatus;
@@ -163,7 +163,7 @@ export default function HasilPermohonan({
             </p>
 
             <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal">
-              {permohonan?.tanggalSelesai ?? permohonanSelesai}
+              {dateBalesan}
             </p>
           </div>
 
