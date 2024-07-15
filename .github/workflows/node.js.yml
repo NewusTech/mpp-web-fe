@@ -15,6 +15,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
+    - name : Git branch
+      run : git branch
+    - name : change checkout main
+      run : git checkout main
     - name : Git pull
       run : git pull
     - name : Run NPM
