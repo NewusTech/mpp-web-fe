@@ -16,7 +16,7 @@ jobs:
       with:
         node-version: '22.x'
     - name : Run NPM
-      working-directory: ../../../mpp-mobile
+      working-directory: ./mpp-mobile
       run: npm install
     - name : Run build
       run: npm run build --if-present
