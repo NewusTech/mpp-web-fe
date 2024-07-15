@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         height: 1080,
       },
     ],
-    locale: "id-Id",
+    locale: "id-ID",
     type: "website",
   },
 };

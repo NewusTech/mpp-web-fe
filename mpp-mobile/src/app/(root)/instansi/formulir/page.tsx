@@ -123,8 +123,6 @@ export default function FormulirPage() {
     }
   }, [instansiId]);
 
-  console.log(form, "form");
-
   const change = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
