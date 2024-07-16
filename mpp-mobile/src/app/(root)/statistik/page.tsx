@@ -51,7 +51,8 @@ export default function StatisticsPage() {
   const [statistiData, setStatistiData] = useState<number>(1);
   const [selectedMonth, setSelectedMonth] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [filterType, setFilterType] = useState<string>("month");
+  const [filterType, setFilterType] = useState<string>("");
+  const [placeHolder, setPlaceHolder] = useState<string>("Semua Data");
   const itemsPerPage = 10;
   const limitData = 1000000;
 
@@ -179,6 +180,7 @@ export default function StatisticsPage() {
   const handleAllClick = () => {
     setSelectedMonth("");
     setSelectedYear(null);
+    setPlaceHolder("Semua Data");
   };
 
   return (
@@ -250,7 +252,11 @@ export default function StatisticsPage() {
 
             <div className="flex flex-row justify-center items-center w-4/12 gap-x-4">
               <button
-                onClick={handleAllClick}
+                onClick={() => {
+                  handleAllClick();
+                  setFilterType("");
+                  setPlaceHolder("Semua Data");
+                }}
                 className={`text-neutral-700 ${
                   filterType === "" ? "text-neutral-900 font-semibold" : ""
                 }`}>
@@ -278,7 +284,7 @@ export default function StatisticsPage() {
                   <Select onValueChange={handleMonthChange}>
                     <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                       <SelectValue
-                        placeholder="Bulan"
+                        placeholder="Pilih Bulan"
                         className="text-neutral-800"
                       />
                     </SelectTrigger>
@@ -290,11 +296,11 @@ export default function StatisticsPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                ) : (
+                ) : filterType === "year" ? (
                   <Select onValueChange={handleYearChange}>
                     <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                       <SelectValue
-                        placeholder="Tahun"
+                        placeholder="Pilih Tahun"
                         className="text-neutral-800"
                       />
                     </SelectTrigger>
@@ -306,6 +312,17 @@ export default function StatisticsPage() {
                           </SelectItem>
                         ))}
                     </SelectContent>
+                  </Select>
+                ) : (
+                  <Select>
+                    <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                      <SelectValue
+                        placeholder={
+                          filterType === "" ? "Semua Data" : placeHolder
+                        }
+                        className="text-neutral-800"
+                      />
+                    </SelectTrigger>
                   </Select>
                 )}
               </div>
