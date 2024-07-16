@@ -4,6 +4,10 @@ const nextConfig = {
     const { middleware } = await import("./src/middlewares.ts");
     return middleware;
   },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
+  },
   reactStrictMode: true,
   poweredByHeader: false,
   images: {

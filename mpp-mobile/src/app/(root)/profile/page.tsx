@@ -167,6 +167,11 @@ export default function ProfilePage() {
                   value="Dokumen Pendukung">
                   Dokumen Pendukung
                 </TabsTrigger>
+                <TabsTrigger
+                  className="font-semibold text-primary-500 md:text-[20px]"
+                  value="Dokumen Terbit">
+                  DokumenTerbit
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="Data Diri">
@@ -565,6 +570,12 @@ export default function ProfilePage() {
                       )}
                     </div>
                   </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="Dokumen Terbit">
+                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6">
+                  Hello
                 </div>
               </TabsContent>
             </Tabs>

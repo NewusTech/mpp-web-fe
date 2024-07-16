@@ -2,17 +2,19 @@
 
 import fetchVisiMisi from "@/components/fetching/visimisi/visimisi";
 import { useEffect, useState } from "react";
-import { AlurType, VisiMisiType } from "@/types/type";
+import { AlurType, VideoType, VisiMisiType } from "@/types/type";
 import parse from "html-react-parser";
-import alurmpp from "@/../../public/assets/alurmpplamtim.jpg";
 import Image from "next/legacy/image";
 import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
+import fetchVideo from "@/components/fetching/video/video";
+import PdfView from "@/components/pdfViews/pdfView";
 
 export default function MppPage() {
   const [visimisi, setVisimisi] = useState<VisiMisiType>({
     visi: "",
     misi: "",
   });
+  const [videos, setVideos] = useState<VideoType>();
   const [alurs, setAlurs] = useState<AlurType[]>();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,17 +37,16 @@ export default function MppPage() {
   const fetchVisiMisiMpp = async () => {
     const visimisi = await fetchVisiMisi();
     const alur = await fetchAlurMpp();
+    const videos = await fetchVideo();
 
     setVisimisi(visimisi.data);
     setAlurs(alur.data);
+    setVideos(videos.data);
   };
 
   useEffect(() => {
     fetchVisiMisiMpp();
   }, []);
-
-  const imageSatu = alurs ? alurs[alurs.length - 1].image : undefined;
-  const imageDua = alurs ? alurs[alurs.length - 2].image : undefined;
 
   return (
     <div className="bg-primary-100 md:mx-12 md:h-full">
@@ -94,6 +95,52 @@ export default function MppPage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+
+        <div className="flex flex-col w-full items-center mt-16">
+          <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold md:mb-[40px]">
+            Tutorial Penggunaan MPP
+          </h4>
+
+          <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-8 md:gap-x-4">
+            {/* <div className="flex flex-col w-full gap-y-6"> */}
+            <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
+              {videos && (
+                <video
+                  className="md:w-full md:h-full object-cover rounded-xl"
+                  width={650}
+                  height={310}
+                  autoPlay
+                  src={videos.video}
+                  muted
+                  controls>
+                  <source src={videos.video} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+            </div>
+
+            {/* <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
+                {videos && (
+                  <video
+                    className="md:w-full md:h-full object-cover rounded-xl"
+                    width={650}
+                    height={310}
+                    autoPlay
+                    src={videos.video}
+                    muted
+                    controls>
+                    <source src={videos.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
+            </div> */}
+
+            <div className="flex flex-col w-full bg-neutral-50 shadow-md rounded-xl p-2">
+              <PdfView fileUrl="/assets/manualBook.pdf" />
+            </div>
           </div>
         </div>
       </div>
