@@ -1,9 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
   Select,
   SelectContent,
@@ -12,11 +11,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@radix-ui/react-label";
-import { Textarea } from "@/components/ui/textarea";
-import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
+import {
+  DesaType,
+  KecamatanType,
+  TestProfileUpdate,
+  UpdateUserType,
+} from "@/types/type";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
+import desaFetch from "@/components/fetching/desa/desa";
+import SearchComponent from "@/components/others/searchComponent/searchComponent";
+import { ChevronDown, ChevronLeft, Loader } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce/useDebounce";
+import Steps from "@/components/steps/steps";
+import { Textarea } from "@/components/ui/textarea";
+import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
   agamas,
   genders,
@@ -24,15 +35,6 @@ import {
   pendidikans,
   statusKawins,
 } from "@/data/data";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
-import desaFetch from "@/components/fetching/desa/desa";
-import SearchComponent from "@/components/others/searchComponent/searchComponent";
-import { z } from "zod";
-import { schemaUpdateDiri } from "@/lib/zodSchema";
-import { ChevronLeft, Loader, Trash } from "lucide-react";
-import { useDebounce } from "@/hooks/useDebounce/useDebounce";
-import Steps from "@/components/steps/steps";
 
 const steps = [
   { id: 1, title: "1" },
@@ -44,107 +46,60 @@ const currentStep = 2;
 
 export default function DataDiriPage() {
   const router = useRouter();
-  const dropRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<UpdateUserType | null>(null);
   const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
-  const [searchKecamatan, setSearchKecamatan] = useState<string>("");
-  const debounceSearchKecamatan = useDebounce(searchKecamatan);
   const [desas, setDesas] = useState<DesaType[]>();
-  const [searchDesa, setSearchDesa] = useState<string>("");
-  const debounceSearchDesa = useDebounce(searchDesa);
   const [kecamatanId, setKecamatanId] = useState<number>();
-  const [errors, setErrors] = useState<any>({});
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [formValid, setFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateForm = async () => {
+  const fetchUser = async () => {
     try {
-      await schemaUpdateDiri.parseAsync({
-        ...formData,
-      });
-      setErrors({});
-      return true;
+      const user = await fetchProfile();
+      setFormData(user.data);
+      setKecamatanId(user.data.kecamatan_id);
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const formattedErrors = error.format();
-        setErrors(formattedErrors);
-      }
-      setIsLoading(false);
-      return false;
+      console.log(error, "error");
+      toast("Gagal mendapatkan data!");
     }
   };
 
   useEffect(() => {
-    if (hasSubmitted) {
-      validateForm();
+    fetchUser();
+  }, []);
+
+  const fetchKecamatan = async (search: string, limit: number) => {
+    try {
+      const kecamatanDatas = await kecamatanFetch(search, limit);
+      setKecamatans(kecamatanDatas.data);
+    } catch (error) {
+      console.log(error, "error");
+      toast("Gagal mendapatkan data kecamatan!");
     }
-  }, [formData, hasSubmitted]);
+  };
+
+  const fetchDesa = async (
+    search: string,
+    limit: number,
+    kecamatan_id: number
+  ) => {
+    try {
+      const desaDatas = await desaFetch(search, limit, kecamatan_id);
+      setDesas(desaDatas.data);
+    } catch (error) {
+      console.log(error, "error");
+      toast("Gagal mendapatkan data desa!");
+    }
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await fetchProfile();
+    fetchKecamatan("", 1000000);
+  }, []);
 
-        setFormData(user.data);
-
-        if (user.data.kecamatan_id) {
-          setKecamatanId(user.data.kecamatan_id);
-          fetchDesa(debounceSearchDesa, 10, user.data.kecamatan_id);
-        }
-      } catch (error) {
-        console.log(error, "error");
-
-        toast("Gagal mendapatkan data!");
-      }
-    };
-    const fetchKecamatan = async (search: string, limit: number) => {
-      try {
-        const kecamatanDatas = await kecamatanFetch(search, limit);
-
-        setKecamatans(kecamatanDatas.data);
-      } catch (error) {
-        console.log(error, "error");
-        toast("Gagal mendapatkan data kecamatan!");
-      }
-    };
-
-    const fetchDesa = async (
-      search: string,
-      limit: number,
-      kecamatan_id: number
-    ) => {
-      try {
-        const desaDatas = await desaFetch(search, limit, kecamatan_id);
-        setDesas(desaDatas.data);
-
-        if (kecamatanId) {
-          const selectedDesa = desaDatas.data.find(
-            (desa: DesaType) => desa.id === kecamatanId
-          );
-
-          if (selectedDesa) {
-            setFormData((prevFormData) => ({
-              ...prevFormData!,
-              desa_id: selectedDesa.id,
-            }));
-          }
-        }
-      } catch (error) {
-        console.log(error, "error");
-        toast("Gagal mendapatkan data desa!");
-      }
-    };
-    fetchKecamatan(debounceSearchKecamatan, 1000000);
-
+  useEffect(() => {
     if (kecamatanId) {
-      fetchDesa(debounceSearchDesa, 1000000, kecamatanId);
+      fetchDesa("", 1000000, kecamatanId);
     }
-
-    // if (!formData) {
-    fetchUser();
-    // }
-  }, [kecamatanId, debounceSearchKecamatan, debounceSearchDesa]);
+  }, [kecamatanId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -153,6 +108,16 @@ export default function DataDiriPage() {
     setFormData((prevFormData) => ({
       ...prevFormData!,
       [name]: value,
+    }));
+  };
+
+  const handleKecamatanChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedKecamatanId = Number(e.target.value);
+    setKecamatanId(selectedKecamatanId);
+    setFormData((prevFormData: any) => ({
+      ...prevFormData!,
+      kecamatan_id: selectedKecamatanId,
+      desa_id: undefined,
     }));
   };
 
@@ -165,48 +130,38 @@ export default function DataDiriPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setHasSubmitted(true);
+    setIsLoading(true);
 
-    const isValid = await validateForm();
-
-    if (isValid) {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${formData?.slug}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${Cookies.get("Authorization")}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              ...formData,
-              kecamatan_id: String(kecamatanId),
-              desa_id: String(formData?.desa_id),
-            }),
-            cache: "no-store",
-          }
-        );
-
-        if (response.ok) {
-          toast.success("Berhasil mengupdate profile!");
-          setIsLoading(false);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${formData?.slug}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            kecamatan_id: String(kecamatanId),
+            desa_id: String(formData?.desa_id),
+          }),
+          cache: "no-store",
         }
-      } catch (error) {
-        console.log(error, "error");
-        toast("Failed to update profile!");
-      } finally {
+      );
+
+      if (response.ok) {
+        toast.success("Berhasil mengupdate profile!");
         setIsLoading(false);
-        setHasSubmitted(false);
-        router.push("/instansi/formulir");
       }
+    } catch (error) {
+      console.log(error, "error");
+      toast("Failed to update profile!");
+    } finally {
+      setIsLoading(false);
+      router.push("/instansi/formulir");
     }
   };
-
-  useEffect(() => {
-    setFormValid(Object.keys(errors).length === 0);
-  }, [errors]);
 
   return (
     <div className="bg-primary-100 md:mt-6 md:mb-0 pb-32 md:pb-12">
@@ -259,12 +214,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.name?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.name._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full md:mb-4">
@@ -299,12 +248,6 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
-
-                      {hasSubmitted && errors?.gender?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.gender._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -320,12 +263,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.nik?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.nik._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -360,12 +297,6 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
-
-                      {hasSubmitted && errors?.agama?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.agama._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -381,12 +312,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.tempat_lahir?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.tempat_lahir._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -421,12 +346,6 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
-
-                      {hasSubmitted && errors?.goldar?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.goldar._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -449,12 +368,6 @@ export default function DataDiriPage() {
                           appearance: "none",
                         }}
                       />
-
-                      {hasSubmitted && errors?.tgl_lahir?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.tgl_lahir._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -489,12 +402,6 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
-
-                      {hasSubmitted && errors?.status_kawin?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.status_kawin._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -510,12 +417,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.telepon?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.telepon._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -550,12 +451,6 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
-
-                      {hasSubmitted && errors?.pendidikan?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.pendidikan._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -571,12 +466,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.email?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.email._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -590,106 +479,70 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.pekerjaan?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.pekerjaan._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full mb-4">
-                      <Label className="text-[12px] text-neutral-900 font-semibold">
+                      <Label
+                        htmlFor="kecamatan"
+                        className="text-[12px] text-neutral-900 font-semibold">
                         Kecamatan
                       </Label>
 
-                      <Select
-                        name="kecamatan_id"
-                        onValueChange={(value) => setKecamatanId(Number(value))}
-                        value={String(kecamatanId)}>
-                        <SelectTrigger
-                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue placeholder="Pilih Kecamatan" />
-                        </SelectTrigger>
-                        <SelectContent className="w-full">
-                          <div>
-                            <div className="w-full px-2 mt-2">
-                              <SearchComponent
-                                change={(
-                                  e: React.ChangeEvent<HTMLInputElement>
-                                ) => setSearchKecamatan(e.target.value)}
-                                search={searchKecamatan}
-                              />
-                            </div>
+                      <div className="flex flex-row items-center justify-between border border-neutral-700 rounded-[50px] appearance-none mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-2">
+                        <select
+                          name="kecamatan_id"
+                          id="kecamatan"
+                          value={kecamatanId || ""}
+                          onChange={handleKecamatanChange}
+                          className="appearance-none w-full rounded-full p-2">
+                          <option value="" disabled>
+                            Pilih Kecamatan
+                          </option>
+                          {kecamatans &&
+                            kecamatans.map(
+                              (kecamatan: KecamatanType, i: number) => (
+                                <option key={i} value={kecamatan.id}>
+                                  {kecamatan.name}
+                                </option>
+                              )
+                            )}
+                        </select>
 
-                            {kecamatans &&
-                              kecamatans.map(
-                                (kecamatan: KecamatanType, i: number) => (
-                                  <SelectItem
-                                    className="pr-none mt-2"
-                                    key={i}
-                                    value={String(kecamatan.id)}>
-                                    {kecamatan.name}
-                                  </SelectItem>
-                                )
-                              )}
-                          </div>
-                        </SelectContent>
-                      </Select>
-
-                      {hasSubmitted && errors?.kecamatan_id?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.kecamatan_id._errors[0]}
-                        </div>
-                      )}
+                        <ChevronDown className="w-6 h-6" />
+                      </div>
                     </div>
 
                     <div className="flex flex-col w-full mb-4w-full">
-                      <Label className="text-[12px] text-neutral-900 font-semibold">
+                      <Label
+                        htmlFor="desa"
+                        className="text-[12px] text-neutral-900 font-semibold">
                         Desa
                       </Label>
 
-                      <Select
-                        name="desa_id"
-                        onValueChange={(value) =>
-                          handleSelectChange("desa_id", value)
-                        }
-                        value={String(formData?.desa_id)}>
-                        <SelectTrigger
-                          className={` border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue placeholder="Pilih Desa" />
-                        </SelectTrigger>
-                        <SelectContent className="w-full">
-                          <div>
-                            <div className="w-full px-2 mt-2">
-                              <SearchComponent
-                                change={(
-                                  e: React.ChangeEvent<HTMLInputElement>
-                                ) => setSearchDesa(e.target.value)}
-                                search={searchDesa}
-                              />
-                            </div>
+                      <div className="flex flex-row items-center justify-between border border-neutral-700 rounded-[50px] appearance-none mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-2">
+                        <select
+                          name="desa_id"
+                          id="desa"
+                          value={formData?.desa_id || ""}
+                          onChange={(e) =>
+                            handleSelectChange("desa_id", e.target.value)
+                          }
+                          className="appearance-none w-full rounded-full p-2">
+                          <option value="" disabled>
+                            Pilih Desa
+                          </option>
+                          {desas &&
+                            desas.map((desa: DesaType, i: number) => (
+                              <option key={i} value={desa.id}>
+                                {desa.name}
+                              </option>
+                            ))}
+                        </select>
 
-                            {desas &&
-                              desas.map((desa: DesaType, i: number) => (
-                                <SelectItem
-                                  className="pr-none mt-2"
-                                  value={String(desa.id)}
-                                  key={i}>
-                                  {desa.name}
-                                </SelectItem>
-                              ))}
-                          </div>
-                        </SelectContent>
-                      </Select>
-
-                      {hasSubmitted && errors?.desa_id?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.desa_id._errors[0]}
-                        </div>
-                      )}
+                        <ChevronDown className="w-6 h-6" />
+                      </div>
                     </div>
                   </div>
 
@@ -705,12 +558,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.rt?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.rt._errors[0]}
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -724,12 +571,6 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
-
-                      {hasSubmitted && errors?.rw?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.rw._errors[0]}
-                        </div>
-                      )}
                     </div>
                   </div>
 
@@ -745,12 +586,6 @@ export default function DataDiriPage() {
                       placeholder="Alamat"
                       className="w-full rounded-3xl border border-neutral-700 md:w-full h-[74px] md:h-[150px] text-[12px] md:text-[14px] placeholder:opacity-[70%]"
                     />
-
-                    {hasSubmitted && errors?.alamat?._errors && (
-                      <div className="text-error-700 text-[12px] md:text-[14px]">
-                        {errors.alamat._errors[0]}
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
@@ -758,7 +593,7 @@ export default function DataDiriPage() {
                       className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
                       type="submit"
                       variant="success"
-                      disabled={!formValid || isLoading}>
+                      disabled={isLoading ? true : false}>
                       {isLoading ? (
                         <Loader className="animate-spin" />
                       ) : (

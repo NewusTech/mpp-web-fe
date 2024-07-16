@@ -285,8 +285,8 @@ export interface UpdateUserType {
   pekerjaan?: string;
   telepon?: string;
   email?: string;
-  kecamatan_id?: string;
-  desa_id?: string;
+  kecamatan_id?: number;
+  desa_id?: number;
   rt?: string;
   rw?: string;
   alamat?: string;
@@ -297,6 +297,12 @@ export interface UpdateUserType {
   slug?: string;
   foto?: string;
   aktalahir?: string;
+}
+
+export interface TestProfileUpdate {
+  kecamatan_id: number;
+  desa_id: number;
+  slug: string;
 }
 
 export interface KecamatanType {
