@@ -227,12 +227,11 @@ export default function HasilPermohonan({
         )}
 
         {permohonan?.input_skm === false || permohonan?.status === 4 ? (
-          <Button
-            disabled
-            type="submit"
-            className="md:w-2/12 text-center bg-neutral-700 cursor-not-allowed text-neutral-50 rounded-full py-2 px-2">
-            Unduh
-          </Button>
+          <Link
+            href={`/riwayat/permohonan-update/${permohonan?.id}/`}
+            className="md:w-2/12 text-center bg-primary-700 hover:bg-primary-600 cursor-pointer text-neutral-50 rounded-full py-2 px-2">
+            Edit
+          </Link>
         ) : (
           <Button
             type="submit"

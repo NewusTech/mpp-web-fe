@@ -1,5 +1,5 @@
 import Link from "next/link";
-import formatDate from "@/helpers/logout/formatted";
+import { formatLongDate } from "@/helpers/logout/formatted";
 
 interface PermohonanType {
   permohonan: {
@@ -19,12 +19,12 @@ interface PermohonanType {
 export default function CardHistoryComponent({ permohonan }: PermohonanType) {
   let permohonanDate = "";
   if (permohonan.createdAt) {
-    permohonanDate = formatDate(`${permohonan.createdAt}`);
+    permohonanDate = formatLongDate(`${permohonan.createdAt}`);
   }
 
   return (
-    <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-md w-full">
-      <div className="flex flex-col justify-center m-4 gap-2 h-full">
+    <div className="flex flex-col h-[300px] justify-center items-start bg-neutral-50 rounded-xl shadow-md w-full">
+      <div className="flex flex-col justify-center px-4 gap-2 h-full w-full gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
             No Permohonan
@@ -59,7 +59,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           <h6 className="text-[14px] font-semibold text-primary-800">Status</h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            :
+            :{" "}
             {permohonan.status === 0
               ? "Belum diproses"
               : permohonan.status === 1

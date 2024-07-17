@@ -1,14 +1,19 @@
 import { AntrianDataType } from "@/types/type";
 import PopAntrianComponent from "../others/popAntrianComponent/popAntrianComponent";
+import { formattedDate } from "@/helpers/logout/formatted";
+import { formatTime } from "@/utils/formatTime";
 
 export default function CardHistoryAntrian({
   antrian,
 }: {
   antrian: AntrianDataType;
 }) {
+  const time = formatTime(antrian.waktu);
+  const date = formattedDate(antrian.tanggal);
+
   return (
     <div className="flex flex-col h-[300px] justify-center items-center bg-neutral-50 rounded-2xl shadow-lg w-full mb-4">
-      <div className="flex flex-col justify-center m-4 gap-2 w-full h-full pl-4">
+      <div className="flex flex-col justify-center m-4 gap-2 w-full h-full px-4 gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
             Nomor Antrian
@@ -33,7 +38,7 @@ export default function CardHistoryAntrian({
           <h6 className="text-[14px] font-semibold text-primary-800">Waktu</h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.waktu}
+            : {time} WIB
           </p>
         </div>
 
@@ -43,7 +48,7 @@ export default function CardHistoryAntrian({
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            {antrian.tanggal}
+            : {date}
           </p>
         </div>
       </div>

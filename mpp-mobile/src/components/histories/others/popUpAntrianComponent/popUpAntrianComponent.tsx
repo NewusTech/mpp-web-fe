@@ -9,6 +9,8 @@ import Cookies from "js-cookie";
 import { Loader } from "lucide-react";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import { Raleway } from "next/font/google";
+import { formatTime } from "@/utils/formatTime";
+import { formattedDate } from "@/helpers/logout/formatted";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -21,6 +23,9 @@ export default function PopUpAntrianComponent({
   antrian: AntrianDataType;
 }) {
   const [isLoading, setIsLoading] = useState(false);
+
+  const time = formatTime(antrian.waktu);
+  const date = formattedDate(antrian.tanggal);
 
   const downloadAntrian = async (id: number) => {
     setIsLoading(true);
@@ -58,7 +63,7 @@ export default function PopUpAntrianComponent({
 
   return (
     <div className="flex flex-col justify-center items-center px-10 py-4 w-full h-4/6 bg-neutral-50 shadow-md rounded-xl mt-2 gap-4">
-      <div className="flex flex-row justify-center items-center self-center gap-x-3 w-full mb-4">
+      <div className="flex flex-row justify-center items-center self-center gap-x-3 w-full mb-4 mt-4">
         <div className="w-2/12 h-[64px] flex items-center">
           <Image
             src={logo}
@@ -82,11 +87,21 @@ export default function PopUpAntrianComponent({
         </div>
       </div>
 
+      <div className="flex flex-col items-center justify-center gap-2">
+        <h4 className="text-[16px] md:text-[20px] font-semibold">
+          {antrian?.Instansi.name}
+        </h4>
+
+        <h5 className="text-[12px] md:text-[16px] text-center font-extralight">
+          {/* {antrian?.Layanan.name} */} Layanan
+        </h5>
+      </div>
+
       <div className="flex flex-col justify-center items-center mt-[18px] gap-2">
         <div className="flex justify-between w-full h-full">
-          <p className="text-[14px] font-extralight">{antrian.tanggal}</p>
+          <p className="text-[14px] font-extralight">{date}</p>
 
-          <p className="text-[14px] font-extralight">{antrian.waktu}</p>
+          <p className="text-[14px] font-extralight">{time} WIB</p>
         </div>
 
         <div className="flex flex-col justify-center items-center w-full h-full gap-2">
@@ -101,10 +116,10 @@ export default function PopUpAntrianComponent({
           </div>
 
           <div className="flex flex-col w-full h-[40px] justify-center items-center md:mt-3">
-            <h5 className="text-[14px] font-bold">{antrian.id}</h5>
+            <h5 className="text-[14px] font-bold">No Antrian : {antrian.id}</h5>
 
             <h5 className="text-[14px] font-normal md:text-center">
-              {antrian.Instansi.name}
+              Loket : {antrian.Instansi.name}
             </h5>
           </div>
         </div>

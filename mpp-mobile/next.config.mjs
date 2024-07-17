@@ -49,6 +49,10 @@ const nextConfig = {
         source: "/instansi/permohonan-layanan/:path*",
         destination: "/instansi/permohonan-layanan/:path*",
       },
+      {
+        source: "/pengaduan/:path*",
+        destination: "/pengaduan/:path*",
+      },
     ];
   },
 };

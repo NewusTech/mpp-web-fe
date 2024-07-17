@@ -1,5 +1,3 @@
-import React from "react";
-
 export default async function fetchAlurMpp() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/alurmpp/get`,

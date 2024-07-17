@@ -1,7 +1,7 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import formatDate from "@/helpers/logout/formatted";
+import formatDate, { formatLongDate } from "@/helpers/logout/formatted";
 import { PermohonanDataType } from "@/types/type";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ export default function TablePermohonanComponent({
 }) {
   let permohonanDate = "";
   if (permohonan.createdAt) {
-    permohonanDate = formatDate(`${permohonan.createdAt}`);
+    permohonanDate = formatLongDate(`${permohonan.createdAt}`);
   }
 
   let permohonanStatus;

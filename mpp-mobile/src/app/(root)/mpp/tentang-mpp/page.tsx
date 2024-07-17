@@ -104,7 +104,6 @@ export default function MppPage() {
           </h4>
 
           <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-8 md:gap-x-4">
-            {/* <div className="flex flex-col w-full gap-y-6"> */}
             <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
               {videos && (
                 <video
@@ -120,23 +119,6 @@ export default function MppPage() {
                 </video>
               )}
             </div>
-
-            {/* <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
-                {videos && (
-                  <video
-                    className="md:w-full md:h-full object-cover rounded-xl"
-                    width={650}
-                    height={310}
-                    autoPlay
-                    src={videos.video}
-                    muted
-                    controls>
-                    <source src={videos.video} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
-              </div>
-            </div> */}
 
             <div className="flex flex-col w-full bg-neutral-50 shadow-md rounded-xl p-2">
               <PdfView fileUrl="/assets/manualBook.pdf" />

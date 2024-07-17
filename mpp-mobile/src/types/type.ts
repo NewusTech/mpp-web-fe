@@ -299,12 +299,6 @@ export interface UpdateUserType {
   aktalahir?: string;
 }
 
-export interface TestProfileUpdate {
-  kecamatan_id: number;
-  desa_id: number;
-  slug: string;
-}
-
 export interface KecamatanType {
   id: number;
   name: string;
@@ -382,4 +376,47 @@ export type LayananType = {
 export type FormType = {
   status: string;
   data: LayananType;
+};
+
+export interface LayananFormPermohonanType {
+  data: string;
+  data_key: string;
+  id: number;
+  layananform_datajson: [{ id: number; key: string }];
+  layananform_id: number;
+  layananform_name: string;
+  layananform_tipedata: string;
+  layananformnum_id: number;
+}
+
+export interface DataInstansiRiwayatPermohonan {
+  id: number;
+  name: string;
+  desc: string;
+}
+
+export interface DataLayananRiwayatPermohonan {
+  id: number;
+  Instansi: DataInstansiRiwayatPermohonan;
+  desc: string;
+  name: string;
+}
+
+export interface DataRiwayatPermohonan {
+  id: number;
+  Layananforminputs: LayananFormPermohonanType[];
+  createdAt: string;
+  updatedAt: string;
+  fileoutput: string;
+  layanan: DataLayananRiwayatPermohonan;
+  layanan_id: number;
+  status: number;
+  tgl_selesai: string;
+  userinfo: ProfileNewType;
+  userinfo_id: number;
+}
+
+export type DataInputItem = {
+  layananform_id: string;
+  data: string;
 };

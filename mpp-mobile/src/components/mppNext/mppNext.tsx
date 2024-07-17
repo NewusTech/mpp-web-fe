@@ -252,7 +252,7 @@ export default function MppNext({
           <div className="flex self-end h-full">
             <Link
               href={"/mpp/fasilitas"}
-              className="self-end border-b text-[12px] md:text-[16px] text-primary-800">
+              className="self-end border-b text-[12px] md:text-[16px] hover:underline text-primary-800">
               Lihat Selengkapnya...
             </Link>
           </div>
