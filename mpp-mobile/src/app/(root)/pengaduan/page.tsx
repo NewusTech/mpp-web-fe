@@ -42,6 +42,8 @@ import Image from "next/image";
 import z from "zod";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import LoadingComponent from "@/components/loading/LoadingComponent";
+import PengaduanHasil from "./[id]/pengaduan-hasil/page";
+import Link from "next/link";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -702,90 +704,11 @@ export default function PengaduanScreen() {
                                         Lihat
                                       </div>
                                     ) : (
-                                      <Dialog>
-                                        <DialogTrigger>
-                                          <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-pointer text-center rounded-full bg-secondary-700 hover:bg-secondary-600">
-                                            Lihat
-                                          </div>
-                                        </DialogTrigger>
-                                        <DialogContent className="flex overflow-auto flex-col justify-between md:w-6/12 bg-neutral-50 rounded-2xl">
-                                          <div className="flex flex-col mx-8 my-8">
-                                            <div className="flex flex-col gap-[14px]">
-                                              <div className="flex flex-col gap-2">
-                                                <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Instansi
-                                                </p>
-
-                                                <p className="text-[16px] text-neutral-900 font-normal">
-                                                  {pengaduan.Instansi.name}
-                                                </p>
-                                              </div>
-
-                                              <div className="flex flex-col gap-[8px]">
-                                                <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Layanan
-                                                </p>
-
-                                                <p className="text-[16px] text-neutral-900 font-normal">
-                                                  {pengaduan.Layanan.name}
-                                                </p>
-                                              </div>
-
-                                              <div className="flex flex-col gap-[8px]">
-                                                <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Judul Pengaduan
-                                                </p>
-
-                                                <p className="text-[16px] text-neutral-900 font-normal">
-                                                  {pengaduan.judul}
-                                                </p>
-                                              </div>
-
-                                              <div className="flex flex-col gap-[8px]">
-                                                <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Aduan
-                                                </p>
-
-                                                <p className="text-[16px] text-neutral-900 font-normal">
-                                                  {pengaduan.aduan}
-                                                </p>
-                                              </div>
-
-                                              <div className="flex flex-col gap-[8px]">
-                                                <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Dokumen
-                                                </p>
-
-                                                <div className="md:w-1/2 md:h-1/2">
-                                                  {pengaduan.image && (
-                                                    <Image
-                                                      className="md:w-full md:h-full rounded-xl"
-                                                      width={100}
-                                                      height={100}
-                                                      src={pengaduan.image}
-                                                      alt={pengaduan.judul}
-                                                    />
-                                                  )}
-                                                </div>
-                                              </div>
-
-                                              <div className="flex flex-col gap-[8px]">
-                                                <p className="text-[16px] text-primary-900 font-semibold">
-                                                  Balasan{" "}
-                                                  <span className="text-neutral-800 text-normal text-[12px]">
-                                                    {dateEndPengaduanFormatted}
-                                                  </span>
-                                                </p>
-
-                                                <p className="text-[16px] text-neutral-900 font-normal">
-                                                  {pengaduan.jawaban ||
-                                                    "Belum ada balasan!"}
-                                                </p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </DialogContent>
-                                      </Dialog>
+                                      <Link
+                                        href={`/pengaduan/${pengaduan.id}/pengaduan-hasil`}
+                                        className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-pointer text-center rounded-full bg-secondary-700 hover:bg-secondary-600">
+                                        Lihat
+                                      </Link>
                                     )}
                                   </TableCell>
                                 </TableRow>

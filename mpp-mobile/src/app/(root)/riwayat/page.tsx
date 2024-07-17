@@ -1,6 +1,5 @@
 "use client";
 
-import CardHistoryComponent from "@/components/histories/cardHistoryComponent/cardHistoryComponent";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchRiwayatPermohonan } from "@/store/action/actionHistoryPermohonan";
 import { AppDispatch, RootState } from "@/store/store";
@@ -8,21 +7,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { redirect } from "next/navigation";
-import Image from "next/legacy/image";
-import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import TablePermohonanComponent from "@/components/histories/others/tablePermohonanComponent/tablePermohonanComponent";
-import TableAntrianComponent from "@/components/histories/others/tableAntrianComponent/tableAntrianComponent";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import CardHistoryAntrian from "@/components/histories/cardHistoryAntrian/cardHistoryAntrian";
-import PaginationComponent from "@/components/pagination/paginationComponent";
-import { AntrianDataType, PermohonanDataType } from "@/types/type";
 import { fetchRiwayatAntrian } from "@/store/action/actionHistoryAntrian";
+import WebsitePermohonanHistories from "@/components/histories/results/permohonans/websites/websitePermohonanHistories";
+import MobilePermohonanHistories from "@/components/histories/results/permohonans/mobiles/mobilePermohonanHistories";
+import WebsiteAntrianHistories from "@/components/histories/results/antrians/websites/websiteAntrianHistories";
+import MobileAntrianHistories from "@/components/histories/results/antrians/mobiles/mobileAntrianHistories";
 
 export default function RiwayatPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -102,154 +91,44 @@ export default function RiwayatPage() {
             {isDesktop ? (
               <>
                 <TabsContent value="antrian">
-                  {currentAntrians && currentAntrians.length > 0 ? (
-                    <>
-                      <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
-                        <TableHeader className="md:flex md:w-full">
-                          <TableRow className="md:flex md:flex-row md:w-full">
-                            <TableHead className="w-1/2">
-                              Nomor Antrian
-                            </TableHead>
-                            <TableHead className="w-full">Instansi</TableHead>
-                            <TableHead className="w-1/2">Waktu</TableHead>
-                            <TableHead className="w-1/2">Tanggal</TableHead>
-                            <TableHead className="w-3/12">Aksi</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {currentAntrians?.map(
-                            (antrian: AntrianDataType, i: number) => {
-                              return (
-                                <TableAntrianComponent
-                                  key={i}
-                                  antrian={antrian}
-                                />
-                              );
-                            }
-                          )}
-                        </TableBody>
-                      </Table>
-
-                      <PaginationComponent
-                        totalItems={historyAntrianData.length}
-                        itemsPerPage={itemsPerPage}
-                        currentPage={antrianPage}
-                        onPageChange={setAntrianPage}
-                      />
-                    </>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center h-[311px]">
-                      <Image src={sad} width={100} height={100} alt="sad" />
-                      <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-                        Data tidak ditemukan!
-                      </p>
-                    </div>
-                  )}
+                  <WebsiteAntrianHistories
+                    currentAntrians={currentAntrians}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={antrianPage}
+                    onPageChange={setAntrianPage}
+                    totalItems={historyAntrianData.length}
+                  />
                 </TabsContent>
 
                 <TabsContent value="permohonan">
-                  {currentPermohonans && currentPermohonans.length > 0 ? (
-                    <>
-                      <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
-                        <TableHeader className="md:flex md:w-full">
-                          <TableRow className="md:flex md:flex-row md:w-full">
-                            <TableHead className="w-1/2">
-                              Nomor Permohonan
-                            </TableHead>
-                            <TableHead className="w-full">Instansi</TableHead>
-                            <TableHead className="w-1/2">Tanggal</TableHead>
-                            <TableHead className="w-1/2">Status</TableHead>
-                            <TableHead className="w-3/12">Aksi</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {currentPermohonans?.map(
-                            (permohonan: PermohonanDataType, i: number) => {
-                              return (
-                                <TablePermohonanComponent
-                                  key={i}
-                                  permohonan={permohonan}
-                                />
-                              );
-                            }
-                          )}
-                        </TableBody>
-                      </Table>
-
-                      <PaginationComponent
-                        totalItems={historyData.length}
-                        itemsPerPage={itemsPerPage}
-                        currentPage={permohonanPage}
-                        onPageChange={setPermohonanPage}
-                      />
-                    </>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center h-[311px]">
-                      <Image src={sad} width={100} height={100} alt="sad" />
-                      <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-                        Data tidak ditemukan!
-                      </p>
-                    </div>
-                  )}
+                  <WebsitePermohonanHistories
+                    currentPermohonans={currentPermohonans}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={permohonanPage}
+                    onPageChange={setPermohonanPage}
+                    totalItems={historyData.length}
+                  />
                 </TabsContent>
               </>
             ) : (
               <>
                 <TabsContent value="antrian">
-                  {currentAntrians && currentAntrians.length > 0 ? (
-                    <>
-                      {currentAntrians?.map(
-                        (antrian: AntrianDataType, i: number) => {
-                          return (
-                            <div key={i}>
-                              <CardHistoryAntrian antrian={antrian} />
-                            </div>
-                          );
-                        }
-                      )}
-                    </>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center h-[311px]">
-                      <Image src={sad} width={100} height={100} alt="sad" />
-                      <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-                        Data tidak ditemukan!
-                      </p>
-                    </div>
-                  )}
-                  <PaginationComponent
-                    totalItems={historyAntrianData.length}
+                  <MobileAntrianHistories
+                    currentAntrians={currentAntrians}
                     itemsPerPage={itemsPerPage}
                     currentPage={antrianPage}
                     onPageChange={setAntrianPage}
+                    totalItems={historyAntrianData.length}
                   />
                 </TabsContent>
 
                 <TabsContent className="flex flex-col gap-4" value="permohonan">
-                  {currentPermohonans && currentPermohonans.length > 0 ? (
-                    <>
-                      {currentPermohonans?.map(
-                        (permohonan: PermohonanDataType, i: number) => {
-                          return (
-                            <div key={i}>
-                              <CardHistoryComponent permohonan={permohonan} />
-                            </div>
-                          );
-                        }
-                      )}
-                    </>
-                  ) : (
-                    <div className="flex flex-col justify-center items-center h-[311px]">
-                      <Image src={sad} width={100} height={100} alt="sad" />
-                      <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-                        Data tidak ditemukan!
-                      </p>
-                    </div>
-                  )}
-                  <PaginationComponent
-                    totalItems={historyData.length}
+                  <MobilePermohonanHistories
+                    currentPermohonans={currentPermohonans}
                     itemsPerPage={itemsPerPage}
                     currentPage={permohonanPage}
                     onPageChange={setPermohonanPage}
+                    totalItems={historyData.length}
                   />
                 </TabsContent>
               </>

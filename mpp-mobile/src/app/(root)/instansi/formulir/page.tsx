@@ -183,17 +183,15 @@ export default function FormulirPage() {
       setChangeOpacity(true);
     });
 
-    if (validateForm({ ...formValues, ...checkboxValues })) {
-      setIsLoading(true);
-      dispatch(setDataInput(wadah));
-      checkboxWadah.forEach((item) => {
-        dispatch(updateCheckboxData(item));
-      });
-      setTimeout(() => {
-        setIsLoading(false);
-        router.push("/instansi/upload-file");
-      }, 2000);
-    }
+    setIsLoading(true);
+    dispatch(setDataInput(wadah));
+    checkboxWadah.forEach((item) => {
+      dispatch(updateCheckboxData(item));
+    });
+    setTimeout(() => {
+      setIsLoading(false);
+      router.push("/instansi/upload-file");
+    }, 2000);
   };
 
   return (

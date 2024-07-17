@@ -100,7 +100,7 @@ function Home() {
   const title = berita?.data[berita.data.length - 1].title;
   const instansi = berita?.data[berita.data.length - 1].Instansi?.name;
 
-  const truncateDesc = truncateTitle(desc ?? "", 600);
+  const truncateDesc = truncateTitle(desc ?? "", 750);
 
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
@@ -162,14 +162,17 @@ function Home() {
           <div className="hidden md:block md:w-full md:flex-col">
             <div className="md:flex md:flex-rows md:w-full md:gap-8">
               {slug && (
-                <Link href={`/berita/${slug}`} className="md:w-full md:h-full">
+                <Link
+                  href={`/berita/${slug}`}
+                  className="md:w-full md:min-h-[450px]">
                   {image && (
                     <Image
                       className="md:w-full md:h-full md:object-cover md:rounded-2xl"
                       src={image}
                       alt="Berita"
                       width={960}
-                      height={570}
+                      height={670}
+                      layout="responsive"
                     />
                   )}
                 </Link>
@@ -177,13 +180,13 @@ function Home() {
 
               {slug && (
                 <div className="md:flex md:flex-col w-full">
-                  <Link
-                    href={`/berita/${slug}`}
-                    className="md:flex md:flex-col md:w-full md:gap-[16px]">
+                  <div className="md:flex md:flex-col md:w-full md:gap-[16px]">
                     <div className="md:flex md:flex-col md:gap-[8px]">
-                      <h3 className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold">
+                      <Link
+                        href={`/berita/${slug}`}
+                        className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold">
                         {title}
-                      </h3>
+                      </Link>
 
                       <div className="md:flex md:flex-row">
                         <p className="md:text-neutral-800 md:text-[16px] md:font-light">
@@ -199,11 +202,13 @@ function Home() {
 
                     <h5 className="md:text-[20px] md:text-justify md:text-black md:font-light">
                       {desc && parse(isExpanded ? desc : truncateDesc)}
-                      <span className="text-primary-700 font-normal hover:underline text-[16px]">
-                        Lihat Selengkapnya
-                      </span>
+                      <Link href={`/berita/${slug}`}>
+                        <span className="text-primary-700 font-normal hover:underline text-[16px]">
+                          Lihat Selengkapnya
+                        </span>
+                      </Link>
                     </h5>
-                  </Link>
+                  </div>
                 </div>
               )}
             </div>

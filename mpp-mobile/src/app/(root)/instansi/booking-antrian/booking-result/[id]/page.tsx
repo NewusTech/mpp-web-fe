@@ -11,6 +11,8 @@ import fetchGetBookingId from "@/components/fetching/getbookingid/getbookingid";
 import { Loader } from "lucide-react";
 import { Raleway } from "next/font/google";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
+import { formatTime } from "@/utils/formatTime";
+import { formattedDate } from "@/helpers/logout/formatted";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -69,6 +71,17 @@ export default function BookingResult({ params }: { params: { id: number } }) {
     }
   };
 
+  let time = "";
+
+  if (antrian?.waktu) {
+    time = formatTime(antrian?.waktu);
+  }
+
+  let date = "";
+  if (antrian?.tanggal) {
+    date = formattedDate(antrian?.tanggal);
+  }
+
   return (
     <div className="bg-primary-100 md:mb-0 pb-32 md:pb-[150px]">
       <div className="flex items-center w-full justify-center bg-primary-100 md:mt-8 mt-[24px] md:pb-8">
@@ -113,11 +126,11 @@ export default function BookingResult({ params }: { params: { id: number } }) {
                 <div className="flex flex-col w-full mt-3 mb-2">
                   <div className="flex justify-center md:justify-center mb-2 gap-x-20">
                     <p className="text-[10px] md:text-[16px] font-extralight">
-                      {antrian?.tanggal}
+                      {date}
                     </p>
 
                     <p className="text-[10px] md:text-[16px] font-extralight">
-                      {antrian?.waktu}
+                      {time} WIB
                     </p>
                   </div>
 

@@ -8,7 +8,7 @@ import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
 import { toast } from "sonner";
-import { LayananFormType, LayananType } from "@/types/type";
+import { DataInputItem, LayananFormType, LayananType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { truncateTitle } from "@/utils/formatTitle";
@@ -21,11 +21,6 @@ const steps = [
   { id: 4, title: "4" },
 ];
 const currentStep = 4;
-
-type DataInputItem = {
-  layananform_id: string;
-  data: string;
-};
 
 const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
   const schemaShape: Record<string, ZodSchema> = {};

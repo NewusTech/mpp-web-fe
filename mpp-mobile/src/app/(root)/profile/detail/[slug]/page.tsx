@@ -711,13 +711,13 @@ export default function ProfileEditPage({
                       Kecamatan
                     </Label>
 
-                    <div className="flex flex-row items-center justify-between border border-neutral-700 rounded-[50px] appearance-none mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-2">
+                    <div className="flex flex-row items-center justify-between border border-neutral-700 rounded-[50px] appearance-none mt-1 bg-neutral-50 md:h-[40px] w-full mx-0 pr-2">
                       <select
                         name="kecamatan_id"
                         id="kecamatan"
                         value={kecamatanId || ""}
                         onChange={handleKecamatanChange}
-                        className="appearance-none w-full rounded-full p-2">
+                        className="appearance-none w-full bg-transparent rounded-full pl-4 p-2 outline-none border-none">
                         <option value="" disabled>
                           Pilih Kecamatan
                         </option>
@@ -742,7 +742,7 @@ export default function ProfileEditPage({
                       Desa
                     </Label>
 
-                    <div className="flex flex-row items-center justify-between border border-neutral-700 rounded-[50px] appearance-none mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-2">
+                    <div className="flex flex-row items-center justify-between border border-neutral-700 rounded-[50px] appearance-none mt-1 bg-neutral-50 md:h-[40px] w-full mx-0 pr-2">
                       <select
                         name="desa_id"
                         id="desa"
@@ -750,7 +750,7 @@ export default function ProfileEditPage({
                         onChange={(e) =>
                           handleSelectChange("desa_id", e.target.value)
                         }
-                        className="appearance-none w-full rounded-full p-2">
+                        className="appearance-none w-full bg-transparent rounded-full pl-4 p-2 outline-none border-none">
                         <option value="" disabled>
                           Pilih Desa
                         </option>
