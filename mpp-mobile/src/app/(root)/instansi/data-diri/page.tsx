@@ -185,7 +185,7 @@ export default function DataDiriPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full border border-neutral-700 bg-neutral-50 pb-6 md:pb-0 rounded-2xl shadow-md">
+          <div className="flex flex-col w-full border border-neutral-700 bg-neutral-50 pb-6 md:pb-0 rounded-xl shadow-md">
             <div className="flex flex-col mt-5 px-5 md:px-20">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Data Diri

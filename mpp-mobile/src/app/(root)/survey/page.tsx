@@ -141,7 +141,7 @@ export default function SurveySkmPage() {
           </h3>
         </div>
 
-        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-8 bg-neutral-50 rounded-2xl shadow-md">
+        <div className="flex flex-col w-full md:w-full border border-neutral-700 items-center mt-8 bg-neutral-50 rounded-xl shadow-md">
           <div className="flex flex-col w-full px-6 md:px-[105px]">
             <div className="flex flex-col w-full items-center mb-[10px] md:mb-10 mx-[1px] mt-[62px]">
               <Select
@@ -257,25 +257,6 @@ export default function SurveySkmPage() {
                   }}
                 />
               )}
-
-              {/* <input
-                type="date"
-                name="tanggal"
-                value={date}
-                onChange={handleChangeDate}
-                className={`w-full pl-4 md:pr-1 h-10 rounded-none border-b bg-neutral-50 border-neutral-800 focus:outline-none appearance-none
-                  ${
-                    changeOpacity
-                      ? "text-neutral-900"
-                      : "text-neutral-900 opacity-50"
-                  }`}
-                placeholder="Pilih Tanggal"
-                style={{
-                  WebkitAppearance: "none",
-                  MozAppearance: "none",
-                  appearance: "none",
-                }}
-              /> */}
             </div>
 
             <div className="flex self-end justify-end items-end mb-8 mt-4">

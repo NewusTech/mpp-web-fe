@@ -145,37 +145,39 @@ export default function ProfilePage() {
   }
 
   return (
-    <section className="flex items-center justify-center w-full mb-32 pt-6 md:pb-16 bg-primary-100">
-      <div className="flex flex-col items-center w-full mx-8 md:mx-[200px]">
+    <section className="flex items-center justify-center w-full px-4 md:px-0 mb-32 pt-6 md:pb-16 bg-primary-100">
+      <div className="flex flex-col items-center w-full md:mx-[200px]">
         <div className="flex self-start mb-6">
           <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
             Profile
           </h5>
         </div>
 
-        <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md md:px-[75px] md:pt-8">
+        <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md md:px-[75px] md:pt-8">
           <div className="flex flex-col px-4 pt-4">
-            <Tabs defaultValue="Data Diri">
-              <TabsList>
+            <Tabs
+              defaultValue="Data Diri"
+              className="flex flex-col gap-y-16 md:gap-y-0">
+              <TabsList className="md:gap-x-6 flex flex-col items-center md:justify-start md:flex-row">
                 <TabsTrigger
-                  className="font-semibold text-primary-500 md:text-[20px]"
+                  className="font-semibold w-1/12 md:w-full text-primary-500 md:text-[20px]"
                   value="Data Diri">
                   Data Diri
                 </TabsTrigger>
                 <TabsTrigger
-                  className="font-semibold text-primary-500 md:text-[20px]"
+                  className="font-semibold w-3/12 md:w-full text-primary-500 md:text-[20px]"
                   value="Dokumen Pendukung">
                   Dokumen Pendukung
                 </TabsTrigger>
                 <TabsTrigger
-                  className="font-semibold text-primary-500 md:text-[20px]"
+                  className="font-semibold w-2/12 md:w-full text-primary-500 md:text-[20px]"
                   value="Dokumen Terbit">
-                  DokumenTerbit
+                  Dokumen Terbit
                 </TabsTrigger>
               </TabsList>
 
               <TabsContent value="Data Diri">
-                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6">
+                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6 px-4 md:px-0">
                   <div className="md:grid md:grid-cols-2">
                     <div className="flex flex-col w-full mb-2 pt-4 md:pt-0">
                       <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
@@ -366,7 +368,7 @@ export default function ProfilePage() {
               </TabsContent>
 
               <TabsContent value="Dokumen Pendukung">
-                <div className="flex flex-col w-full md:mt-0 mb-6 md:mb-0">
+                <div className="flex flex-col w-full md:mt-0 mb-6 md:mb-0 px-4 md:px-0">
                   <div className="md:grid md:grid-cols-2 mt-3">
                     <div className="flex flex-col">
                       <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
@@ -574,7 +576,7 @@ export default function ProfilePage() {
               </TabsContent>
 
               <TabsContent value="Dokumen Terbit">
-                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6">
+                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6 px-4 md:px-0">
                   Hello
                 </div>
               </TabsContent>

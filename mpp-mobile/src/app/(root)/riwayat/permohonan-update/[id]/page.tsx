@@ -31,8 +31,6 @@ export default function PermohonanUpdateHistory({
   const [checkboxValues, setCheckboxValues] = useState<{
     [key: number]: number[];
   }>({});
-  const [dataInput, setDataInput] = useState<any[]>([]);
-  const [dataFile, setDataFile] = useState<LayananType | null>(null);
   const [docValues, setDocValues] = useState<Record<string, File | null>>({});
   const [fileName, setFileName] = useState<Record<string, string>>({});
   const [previewFile, setPreviewFile] = useState<File | null>(null);
@@ -42,19 +40,18 @@ export default function PermohonanUpdateHistory({
   const fetchDataPermohonanHistory = async (id: number) => {
     try {
       const data = await fetchInputForm(id);
-
       setFormData(data.data);
 
       const initialFormValues: { [key: string]: any } = {};
       const initialCheckboxValues: { [key: number]: number[] } = {};
       const initialFileNames: { [key: string]: string } = {};
 
-      data.data.Layananforminputs.forEach(
+      data?.data?.Layananforminputs?.forEach(
         (input: LayananFormPermohonanType) => {
           if (input.layananform_tipedata === "checkbox") {
             initialCheckboxValues[input.id] = [];
           } else {
-            initialFormValues[input.layananform_name] = input.data || "";
+            initialFormValues[input.id] = input.data || "";
           }
 
           if (input.layananform_tipedata === "file" && input.data) {
@@ -75,8 +72,6 @@ export default function PermohonanUpdateHistory({
   useEffect(() => {
     fetchDataPermohonanHistory(params.id);
   }, [params.id]);
-
-  console.log(formData, "formData");
 
   const change = (
     e: React.ChangeEvent<
@@ -139,50 +134,38 @@ export default function PermohonanUpdateHistory({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setIsLoading(true);
 
-    const formDataArray: {
-      datainput: any[];
-      datafile: any[];
-    }[] = [
-      {
-        datainput: [],
-        datafile: [],
-      },
-    ];
-
-    Object.entries(docValues).forEach(([key, value]) => {
-      if (value) {
-        formDataArray[0].datafile.push({
-          layananform_id: key,
-          data: value,
-        });
-      }
-    });
-
-    Object.entries(formValues).forEach(([key, value]) => {
-      formDataArray[0].datainput.push({
-        layananform_id: key,
-        data: value,
-      });
-    });
-
-    Object.entries(checkboxValues).forEach(([key, value]) => {
-      formDataArray[0].datainput.push({
-        layananform_id: key,
-        data: value,
-      });
-    });
+    const dataToSubmit = {
+      datainput: formData?.Layananforminputs.filter(
+        (input) => input.layananform_tipedata !== "file"
+      ).map((input) => ({
+        id: input.id,
+        layananform_id: input.layananform_id,
+        data:
+          input.layananform_tipedata === "checkbox"
+            ? checkboxValues[input.id]
+            : formValues[input.id] || "",
+      })),
+      datafile: formData?.Layananforminputs.filter(
+        (input) => input.layananform_tipedata === "file"
+      ).map((input) => ({
+        id: input.id,
+        layananform_id: input.layananform_id,
+        data: docValues[input.id.toString()] || "",
+      })),
+    };
 
     const data = new FormData();
 
-    formDataArray[0].datainput.forEach((input: any, index: number) => {
-      const permohananId = formData?.Layananforminputs[index].layananform_id;
-
-      data.append(`datainput[${index}][layananform_id]`, String(permohananId));
+    dataToSubmit?.datainput?.forEach((input, index) => {
+      data.append(`datainput[${index}][id]`, String(input.id));
+      data.append(
+        `datainput[${index}][layananform_id]`,
+        String(input.layananform_id)
+      );
       if (Array.isArray(input.data)) {
-        input.data.forEach((val: any, idx: number) => {
+        input.data.forEach((val, idx) => {
           data.append(`datainput[${index}][data][${idx}]`, String(val));
         });
       } else {
@@ -190,9 +173,15 @@ export default function PermohonanUpdateHistory({
       }
     });
 
-    formDataArray[0].datafile.forEach((file, index) => {
-      data.append(`datafile[${index}][layananform_id]`, file.layananform_id);
-      data.append(`datafile[${index}][data]`, file.data);
+    dataToSubmit?.datafile?.forEach((fileInput, index) => {
+      data.append(`datafile[${index}][id]`, String(fileInput.id));
+      data.append(
+        `datafile[${index}][layananform_id]`,
+        String(fileInput.layananform_id)
+      );
+      if (fileInput.data instanceof File) {
+        data.append(`datafile[${index}][data]`, fileInput.data);
+      }
     });
 
     data.forEach((value, key) => {
@@ -214,7 +203,7 @@ export default function PermohonanUpdateHistory({
 
       const dataInput = await response.json();
 
-      console.log(dataInput, "dataInput");
+      console.log(dataInput, "datainput");
 
       if (response.ok) {
         toast(dataInput.message);
@@ -226,14 +215,14 @@ export default function PermohonanUpdateHistory({
       toast.error("An error occurred while submitting the form.");
     } finally {
       setIsLoading(false);
-      // router.push("/riwayat");
+      router.push("/riwayat");
     }
   };
 
-  // console.log(formData, "formData");
+  console.log(formData, "formdata");
 
   return (
-    <div className="flex flex-col mx-20 px-32 mt-6 bg-neutral-50 shadow-md rounded-xl border border-neutral-700 gap-y-6 py-6 mb-32">
+    <div className="flex flex-col mx-8 px-4 md:mx-20 md:px-32 mt-6 bg-neutral-50 shadow-md rounded-xl border border-neutral-700 gap-y-6 py-6 mb-32">
       <div className="flex flex-row w-full items-center gap-x-4">
         <ChevronLeft className="w-8 h-8 text-secondary-900" />
 
@@ -247,7 +236,7 @@ export default function PermohonanUpdateHistory({
 
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col w-full md:w-full mb-[8px] gap-y-5">
-            {formData?.Layananforminputs.map(
+            {formData?.Layananforminputs?.map(
               (permohonan: LayananFormPermohonanType, i: number) => {
                 if (permohonan.layananform_tipedata === "checkbox") {
                   return (
@@ -272,7 +261,11 @@ export default function PermohonanUpdateHistory({
                                 handleCheckboxChange(e, permohonan.id)
                               }
                             />
-                            <label className="ml-2">{data.key}</label>
+                            <Label
+                              className="text-neutral-900 text-[12px] md:text-[14px] font-normal ml-2"
+                              htmlFor={data.key}>
+                              {data.key}
+                            </Label>
                           </div>
                         ))}
                       </div>
@@ -285,7 +278,7 @@ export default function PermohonanUpdateHistory({
                         Dokumen
                       </h3>
 
-                      <div className="flex flex-row justify-between w-full h-[80px] rounded-2xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
+                      <div className="flex flex-row justify-between w-full h-[80px] rounded-xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
                         <div className="flex flex-col w-full justify-center gap-[9px]">
                           <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                             {permohonan.layananform_name}
@@ -332,7 +325,9 @@ export default function PermohonanUpdateHistory({
                                   {previewFile?.type.startsWith("image/") ? (
                                     <div className="w-full h-full p-4 rounded-xl">
                                       <Image
-                                        src={fileURL}
+                                        src={
+                                          fileURL ? fileURL : permohonan.data
+                                        }
                                         alt="File preview"
                                         className="w-full h-full object-cover rounded-xl"
                                         width={500}
@@ -357,17 +352,15 @@ export default function PermohonanUpdateHistory({
                   return (
                     <div key={i} className="space-y-2 w-full">
                       <LayoutInput
-                        typeForm={permohonan.layananform_tipedata}
-                        labelName={permohonan.layananform_name}
-                        change={change}
-                        isRequired={false}
-                        nameForm={permohonan.layananform_name}
-                        valueForm={
-                          formValues[permohonan.layananform_name] || ""
-                        }
+                        title={permohonan.layananform_name}
+                        type={permohonan.layananform_tipedata}
+                        onChange={change}
+                        required={false}
+                        name={permohonan.id.toString()}
+                        value={formValues[permohonan.id] || ""}
                         placeholder="Kirim Jawaban!"
                         opacity={false}
-                        dataRadio={permohonan.layananform_datajson}
+                        options={permohonan.layananform_datajson}
                       />
                     </div>
                   );

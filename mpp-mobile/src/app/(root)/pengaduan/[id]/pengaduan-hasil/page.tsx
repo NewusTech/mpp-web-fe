@@ -86,7 +86,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
 
       <div className="flex md:flex-row flex-col w-full md:gap-x-4 gap-y-4">
         <div className="flex flex-col w-full border border-neutral-700 bg-neutral-50 rounded-xl shadow-md p-4 gap-y-4">
-          <div className="flex flex-col w-full px-4 py-2 border border-neutral-600 rounded-xl">
+          <div className="flex flex-col w-full px-4 py-2 rounded-xl">
             <Label className="text-primary-700 font-semibold text-[16px]">
               Tanggal Pengajuan
             </Label>
@@ -96,7 +96,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
             </h3>
           </div>
 
-          <div className="flex flex-col w-full px-4 py-2 border border-neutral-600 rounded-xl">
+          <div className="flex flex-col w-full px-4 py-2 rounded-xl">
             <Label className="text-primary-700 font-semibold text-[16px]">
               Balasan
               <span className="text-neutral-800 font-normal text-[12px] pl-4">
@@ -110,7 +110,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
             </h3>
           </div>
 
-          <div className="flex flex-col w-full px-4 py-2 border border-neutral-600 rounded-xl">
+          <div className="flex flex-col w-full px-4 py-2 rounded-xl">
             <Label className="text-primary-700 font-semibold text-[16px]">
               Instansi
             </Label>
@@ -120,7 +120,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
             </h3>
           </div>
 
-          <div className="flex flex-col w-full px-4 py-2 border border-neutral-600 rounded-xl">
+          <div className="flex flex-col w-full px-4 py-2 rounded-xl">
             <Label className="text-primary-700 font-semibold text-[16px]">
               Layanan
             </Label>
@@ -130,7 +130,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
             </h3>
           </div>
 
-          <div className="flex flex-col w-full px-4 py-2 border border-neutral-600 rounded-xl">
+          <div className="flex flex-col w-full px-4 py-2 rounded-xl">
             <Label className="text-primary-700 font-semibold text-[16px]">
               Judul Pengaduan
             </Label>
@@ -140,7 +140,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
             </h3>
           </div>
 
-          <div className="flex flex-col w-full px-4 py-2 border border-neutral-600 rounded-xl">
+          <div className="flex flex-col w-full px-4 py-2 rounded-xl">
             <Label className="text-primary-700 font-semibold text-[16px]">
               Aduan
             </Label>
@@ -153,7 +153,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
 
         <div className="w-full md:w-8/12 bg-neutral-50 rounded-xl border shadow-md border-neutral-700 p-4">
           {fileType === "image" ? (
-            <div className="md:w-full md:h-full">
+            <div className="md:w-full md:h-full flex justify-center items-center">
               {pengaduan?.image && (
                 <Image
                   className="md:w-full md:h-full rounded-xl"

@@ -84,7 +84,7 @@ export default function MppPage() {
                 <div
                   key={i}
                   onClick={() => openModal(alur.image)}
-                  className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
+                  className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
                   <Image
                     src={alur.image}
                     alt="alur mpp"
@@ -104,7 +104,7 @@ export default function MppPage() {
           </h4>
 
           <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-8 md:gap-x-4">
-            <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-2xl">
+            <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
               {videos && (
                 <video
                   className="md:w-full md:h-full object-cover rounded-xl"

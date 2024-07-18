@@ -27,12 +27,37 @@ export default function TablePermohonanComponent({
     permohonanStatus = "Ditolak";
   }
 
+  let statusColor = "";
+
+  switch (permohonan.status) {
+    case 1:
+      statusColor = "text-secondary-700";
+      break;
+    case 2:
+      statusColor = "text-secondary-700";
+      break;
+    case 0:
+      statusColor = "text-primary-700";
+      break;
+    case 3:
+      statusColor = "text-success-700";
+      break;
+    case 4:
+      statusColor = "text-error-700";
+      break;
+    default:
+      statusColor = "text-gray-500";
+      break;
+  }
+
   return (
     <TableRow>
       <TableCell className="w-1/2">{permohonan.id}</TableCell>
       <TableCell className="w-full">{permohonan.instansi_name}</TableCell>
       <TableCell className="w-1/2">{permohonanDate}</TableCell>
-      <TableCell className="w-1/2">{permohonanStatus}</TableCell>
+      <TableCell className={`w-1/2 ${statusColor}`}>
+        {permohonanStatus}
+      </TableCell>
       <TableCell className="w-3/12">
         {permohonan.status === 3 || permohonan.status === 4 ? (
           <div>

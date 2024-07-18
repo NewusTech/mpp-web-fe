@@ -22,36 +22,6 @@ const steps = [
 ];
 const currentStep = 4;
 
-const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
-  const schemaShape: Record<string, ZodSchema> = {};
-
-  layananForms.forEach((formField) => {
-    let fieldSchema: ZodSchema;
-
-    switch (formField.tipedata) {
-      case "checkbox":
-        fieldSchema = z.array(z.number({ message: "Data wajib diisi!" }));
-        break;
-      case "number":
-        fieldSchema = z.number({ message: "Data wajib diisi!" });
-        break;
-      default:
-        fieldSchema = z.string({ message: "Data wajib diisi!" });
-        break;
-    }
-
-    if (formField.isrequired) {
-      fieldSchema = fieldSchema.refine((val) => val.length > 0, {
-        message: `${formField.field} is required`,
-      });
-    }
-
-    schemaShape[formField.field] = fieldSchema;
-  });
-
-  return z.object(schemaShape);
-};
-
 export default function UploadFilePage() {
   const [dataFile, setDataFile] = useState<LayananType | null>(null);
   const [docValues, setDocValues] = useState<Record<string, File | null>>({});
@@ -63,30 +33,6 @@ export default function UploadFilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [previewFile, setPreviewFile] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const validateForm = (values: { [key: string]: any }) => {
-    if (!dataFile) return;
-
-    const schema = buildSchema(dataFile.Layananforms);
-
-    try {
-      schema.parse(values);
-      setErrors({});
-      return true;
-    } catch (e) {
-      if (e instanceof z.ZodError) {
-        const fieldErrors: { [key: string]: string } = {};
-        e.errors.forEach((error) => {
-          if (error.path.length > 0) {
-            fieldErrors[error.path[0]] = error.message;
-          }
-        });
-        setErrors(fieldErrors);
-      }
-      return false;
-    }
-  };
 
   useEffect(() => {
     const storedInstanceId = localStorage.getItem("instanceId");
@@ -124,6 +70,8 @@ export default function UploadFilePage() {
       fetchFile(instansiId);
     }
   }, [instansiId]);
+
+  console.log(dataFile, "datafile");
 
   const handleDocChange = (id: string, file: File | null) => {
     setDocValues((prevValues) => ({
@@ -255,7 +203,7 @@ export default function UploadFilePage() {
                 {dataFile.Layananforms.map((el) => (
                   <div
                     key={el.id}
-                    className="flex flex-row justify-between w-full h-[80px] rounded-2xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
+                    className="flex flex-row justify-between w-full h-[80px] rounded-xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
                     <div className="flex flex-col w-full justify-center gap-[9px]">
                       {el.isrequired === true ? (
                         <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
@@ -270,10 +218,8 @@ export default function UploadFilePage() {
                         </h6>
                       )}
 
-                      {errors[el.field] && (
-                        <p className="text-error-700 text-[14px] font-normal">
-                          {errors[el.field]}
-                        </p>
+                      {el.isrequired === true && (
+                        <div className="text-error-700">Data Wajib Diisi!</div>
                       )}
                     </div>
                     <div className="flex self-center items-center w-full md:justify-end">
@@ -339,7 +285,15 @@ export default function UploadFilePage() {
                   <Button
                     type="submit"
                     variant="success"
-                    disabled={isLoading ? true : false}>
+                    disabled={
+                      isLoading
+                        ? true
+                        : false ||
+                          dataFile?.Layananforms.some(
+                            (el) =>
+                              el.isrequired && !docValues[el.id.toString()]
+                          )
+                    }>
                     {isLoading ? <Loader className="animate-spin" /> : "Ajukan"}
                   </Button>
                 </div>

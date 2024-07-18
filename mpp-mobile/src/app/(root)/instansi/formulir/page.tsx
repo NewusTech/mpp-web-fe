@@ -44,14 +44,13 @@ const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
         fieldSchema = z.string({ message: "Data wajib diisi!" }).optional();
         break;
       default:
-        fieldSchema = z.string({ message: "Data wajib diisi!" });
+        fieldSchema = z.string({ message: "Data wajib diisi!" }).optional();
         break;
     }
 
     if (
       formField.isrequired &&
       formField.tipedata !== "checkbox" &&
-      formField.tipedata !== "number" &&
       formField.tipedata !== "radio"
     ) {
       fieldSchema = fieldSchema.refine(
@@ -80,6 +79,7 @@ export default function FormulirPage() {
     [key: number]: number[];
   }>({});
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const validateForm = (values: { [key: string]: any }) => {
     if (!form) return;
@@ -123,6 +123,39 @@ export default function FormulirPage() {
     }
   }, [instansiId]);
 
+  useEffect(() => {
+    if (form) {
+      checkRequiredFields();
+    }
+  }, [form, formValues, checkboxValues]);
+
+  const checkRequiredFields = () => {
+    if (!form) return;
+
+    let allRequiredFilled = true;
+
+    form.Layananforms.forEach((formField) => {
+      if (formField.isrequired) {
+        if (formField.tipedata === "checkbox") {
+          if (
+            !checkboxValues[formField.id] ||
+            checkboxValues[formField.id].length === 0
+          ) {
+            allRequiredFilled = false;
+          }
+        } else if (formField.tipedata === "radio") {
+          if (!formValues[formField.field]) {
+            allRequiredFilled = false;
+          }
+        }
+      }
+    });
+
+    setIsButtonDisabled(!allRequiredFilled);
+  };
+
+  console.log(form, "form");
+
   const change = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -160,6 +193,17 @@ export default function FormulirPage() {
   };
 
   const handleClick = () => {
+    const requiredFields = form?.Layananforms.reduce((acc, field) => {
+      if (field.isrequired && field.tipedata !== "radio") {
+        acc[field.field] = formValues[field.field];
+      }
+      return acc;
+    }, {} as { [key: string]: any });
+
+    if (requiredFields && !validateForm(requiredFields)) {
+      return;
+    }
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -223,22 +267,25 @@ export default function FormulirPage() {
             </div>
           </div>
 
-          <div className="flex flex-col w-full bg-neutral-50 rounded-2xl shadow-md mt-[20px]">
+          <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md mt-[20px]">
             <div className="flex flex-col md:w-full mt-[22px] px-[21px] md:px-[75px] md:py-[32px]">
               <h5 className="text-[14px] md:text-[20px] font-semibold text-primary-800">
                 Formulir
               </h5>
 
               {form?.Layananforms ? (
-                <div className="flex flex-col w-full md:w-full mt-[32px]">
-                  <div className="flex flex-col w-full md:w-full mb-[8px] gap-y-5">
+                <div className="flex flex-col w-full mt-[32px]">
+                  <div className="flex flex-col w-full mb-[8px] gap-y-5">
                     {form?.Layananforms?.map(
                       (el: LayananFormType, i: number) => {
                         if (el.tipedata === "checkbox") {
                           return (
                             <div key={i} className="space-y-2 w-full">
                               <label className="text-neutral-900 text-[16px] font-normal">
-                                {el.field}
+                                {el.field}{" "}
+                                {el.isrequired && (
+                                  <span className="text-error-500">*</span>
+                                )}
                               </label>
                               <div className="md:grid md:grid-cols-2">
                                 {el.datajson.map((data) => (
@@ -264,62 +311,61 @@ export default function FormulirPage() {
                                 ))}
                               </div>
 
-                              {errors[el.field] && (
-                                <p className="text-error-700 text-[14px] font-normal">
-                                  {errors[el.field]}
-                                </p>
+                              {el.isrequired && (
+                                <div className="text-error-500">
+                                  Data Wajib Diisi!
+                                </div>
                               )}
                             </div>
                           );
                         } else {
                           return (
-                            <div key={i} className="space-y-2 w-full">
-                              <LayoutInput
-                                typeForm={el.tipedata}
-                                labelName={el.field}
-                                change={change}
-                                isRequired={el.isrequired}
-                                nameForm={el.field}
-                                valueForm={formValues[el.field] || ""}
-                                placeholder="Kirim Jawaban!"
-                                opacity={changeOpacity}
-                                dataRadio={el.datajson}
-                              />
-
-                              {errors[el.field] && (
-                                <p className="text-error-700 text-[14px] font-normal">
-                                  {errors[el.field]}
-                                </p>
-                              )}
-                            </div>
+                            <LayoutInput
+                              key={i}
+                              title={el.field}
+                              value={formValues[el.field]}
+                              placeholder="Kirim Jawaban"
+                              type={el.tipedata}
+                              required={el.isrequired}
+                              name={el.field}
+                              onChange={change}
+                              error={errors[el.field]}
+                              options={el.datajson}
+                              opacity={changeOpacity}
+                            />
                           );
                         }
                       }
                     )}
                   </div>
-
-                  <div className="flex self-center md:justify-center h-[40px] w-[120px] md:w-full mb-[19px] mt-[16px]">
-                    <Button
-                      type="submit"
-                      variant="success"
-                      disabled={isLoading ? true : false}
-                      onClick={handleClick}>
-                      {isLoading ? (
-                        <Loader className="animate-spin" />
-                      ) : (
-                        "Lanjut"
-                      )}
-                    </Button>
-                  </div>
                 </div>
               ) : (
-                <div className="container mx-auto mt-7 flex flex-col md:w-full justify-center items-center w-full h-full pb-16">
-                  <Image src={backHome} width={300} height={300} alt="sad" />
-                  <p className="text-center text-neutral-900 text-[20px] md:text-[32px] font-thin mt-8 mb-8">
-                    Data tidak ditemukan!
-                  </p>
+                <div className="flex flex-col w-full justify-center items-center py-[32px]">
+                  <Image
+                    src={backHome}
+                    alt="Back Home"
+                    width={300}
+                    height={300}
+                    priority
+                  />
+                  <h5 className="text-[16px] md:text-[20px] font-semibold text-primary-800 mt-4">
+                    Tidak ada form tersedia
+                  </h5>
                 </div>
               )}
+              <div className="flex self-center md:justify-center mt-6 h-[40px] w-[120px] md:w-full mb-[19px]">
+                <Button
+                  variant="success"
+                  onClick={handleClick}
+                  // disabled={isLoading ? true : false}>
+                  disabled={isButtonDisabled || isLoading}>
+                  {isLoading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    "Lanjutkan"
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </div>

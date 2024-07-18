@@ -167,7 +167,7 @@ function Home() {
                   className="md:w-full md:min-h-[450px]">
                   {image && (
                     <Image
-                      className="md:w-full md:h-full md:object-cover md:rounded-2xl"
+                      className="md:w-full md:h-full md:object-cover md:rounded-xl"
                       src={image}
                       alt="Berita"
                       width={960}

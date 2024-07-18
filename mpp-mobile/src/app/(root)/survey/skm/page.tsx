@@ -157,21 +157,21 @@ export default function SurveySKMPage() {
   return (
     <section className="flex items-center justify-center md:w-full bg-primary-100 mt-6 md:mt-0 md:pt-6 mb-6 pb-32 md:mb-0 md:pb-[150px]">
       <div className="flex flex-col md:w-full items-center md:mx-[230px]">
-        <div className="flex flex-col w-10/12 md:w-full bg-neutral-50 rounded-2xl shadow-lg px-4">
+        <div className="flex flex-col w-10/12 md:w-full bg-neutral-50 rounded-xl shadow-lg px-4">
           <div className="flex justify-center my-[22px] mb-4">
             <h6 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
               Survey Kepuasan Masyarakat
             </h6>
           </div>
 
-          <div className="flex flex-col md:w-full my-4 rounded-2xl">
+          <div className="flex flex-col md:w-full my-4 rounded-xl">
             {surveis &&
             surveis.Surveyforms &&
             surveis?.Surveyforms?.length > 0 ? (
               <form
                 onSubmit={handleSubmit}
                 className="flex flex-col md:w-full place-items-center">
-                <div className="flex flex-col md:w-full rounded-2xl mb-3 gap-6">
+                <div className="flex flex-col md:w-full rounded-xl mb-3 gap-6">
                   {surveis?.Surveyforms?.map((el: any, i: number) => {
                     return (
                       <div key={i}>

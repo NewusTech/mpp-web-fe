@@ -10,7 +10,7 @@ type DataStatistik = {
 
 export default function CardGrafikBulananComponent({ data }: DataStatistik) {
   return (
-    <div className="grid grid-rows-5 w-full bg-neutral-50 rounded-2xl shadow-md p-[17px] gap-2">
+    <div className="grid grid-rows-5 w-full bg-neutral-50 rounded-xl shadow-md p-[17px] gap-2">
       <div className="grid grid-cols-2 w-full h-[40px]">
         <p className="text-[12px] font-semibold text-primary-800">Instansi</p>
 
