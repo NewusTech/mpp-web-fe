@@ -362,7 +362,7 @@ export default function PengaduanScreen() {
                   </h2>
                 </div>
               </DialogTrigger>
-              <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-2xl">
+              <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
                 <form
                   onSubmit={handlePengaduan}
                   className="flex flex-col w-full">
@@ -670,6 +670,29 @@ export default function PengaduanScreen() {
                                 );
                               }
 
+                              let statusColor = "";
+
+                              switch (pengaduan?.status) {
+                                case 1:
+                                  statusColor = "text-secondary-700";
+                                  break;
+                                case 2:
+                                  statusColor = "text-warning-700";
+                                  break;
+                                case 0:
+                                  statusColor = "text-primary-700";
+                                  break;
+                                case 4:
+                                  statusColor = "text-success-700";
+                                  break;
+                                case 3:
+                                  statusColor = "text-error-700";
+                                  break;
+                                default:
+                                  statusColor = "text-gray-500";
+                                  break;
+                              }
+
                               return (
                                 <TableRow key={i}>
                                   <TableCell className="w-1/12">
@@ -687,7 +710,8 @@ export default function PengaduanScreen() {
                                   <TableCell className="w-full">
                                     {pengaduan.judul}
                                   </TableCell>
-                                  <TableCell className="w-5/12">
+                                  <TableCell
+                                    className={`w-5/12 ${statusColor}`}>
                                     {pengaduan.status === 0
                                       ? "Belum diproses"
                                       : pengaduan.status === 1

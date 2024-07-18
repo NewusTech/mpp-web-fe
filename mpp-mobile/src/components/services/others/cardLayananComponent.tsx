@@ -33,7 +33,7 @@ export default function CardLayananComponent({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full md:w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-md rounded-2xl">
+    <div className="flex flex-col items-center justify-center w-full md:w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-md rounded-xl">
       <div className="flex flex-row md:flex-col items-center justify-center p-4 md:p-0 w-full md:w-10/12 md:min-h-[270px]">
         <Link
           href={`/instansi/${layanan.slug}`}
@@ -79,7 +79,7 @@ export default function CardLayananComponent({
                 </div>
               )}
             </DialogTrigger>
-            <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center py-4">
+            <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center py-4">
               <DialogHeader>
                 <div className="">
                   <Image
@@ -136,7 +136,7 @@ export default function CardLayananComponent({
                 </div>
               )}
             </DialogTrigger>
-            <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center py-4">
+            <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center py-4">
               <DialogHeader>
                 <div className="">
                   <Image

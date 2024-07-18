@@ -84,6 +84,29 @@ export default function HasilPermohonan({
     permohonanStatus = "Ditolak";
   }
 
+  let statusColor = "";
+
+  switch (permohonan?.status) {
+    case 1:
+      statusColor = "text-secondary-700";
+      break;
+    case 2:
+      statusColor = "text-secondary-700";
+      break;
+    case 0:
+      statusColor = "text-primary-700";
+      break;
+    case 3:
+      statusColor = "text-success-700";
+      break;
+    case 4:
+      statusColor = "text-error-700";
+      break;
+    default:
+      statusColor = "text-gray-500";
+      break;
+  }
+
   const downloadPermohonan = async (
     idLayanan: number,
     idPermohonan: number
@@ -136,7 +159,8 @@ export default function HasilPermohonan({
           </h5>
         </div>
 
-        <h5 className="text-[14px] md:text-[20px] text-end text-success-700 font-semibold">
+        <h5
+          className={`text-[14px] md:text-[20px] text-end ${statusColor} font-semibold`}>
           {permohonanStatus}
         </h5>
       </div>
@@ -229,8 +253,8 @@ export default function HasilPermohonan({
         {permohonan?.input_skm === false || permohonan?.status === 4 ? (
           <Link
             href={`/riwayat/permohonan-update/${permohonan?.id}/`}
-            className="md:w-2/12 text-center bg-primary-700 hover:bg-primary-600 cursor-pointer text-neutral-50 rounded-full py-2 px-2">
-            Edit
+            className="w-4/12 md:w-2/12 text-center bg-primary-700 hover:bg-primary-600 cursor-pointer text-neutral-50 rounded-full py-2 px-2">
+            Perbaiki
           </Link>
         ) : (
           <Button

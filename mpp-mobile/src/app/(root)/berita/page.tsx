@@ -111,7 +111,7 @@ export default function BeritaPage() {
         Berita
       </h3>
 
-      <div className="flex w-full flex-row md:self-start md:items-start rounded-2xl gap-4 mb-4">
+      <div className="flex w-full flex-row md:self-start md:items-start rounded-xl gap-4 mb-4">
         <div
           onClick={handleAllClick}
           className={`flex items-center justify-center w-1/2 md:w-1/12 text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
@@ -125,7 +125,7 @@ export default function BeritaPage() {
         <div className="flex items-center w-full md:w-1/4 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
           <Select onValueChange={handleInstansiChange}>
             <SelectTrigger
-              className={`w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
+              className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
                 selectedInstansiId !== null ? "text-primary-700" : "opacity-50"
               }`}>
               <SelectValue

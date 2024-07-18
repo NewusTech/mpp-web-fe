@@ -227,7 +227,7 @@ export default function InstansiDetail({
                       Permohonan Layanan
                     </div>
                   </DialogTrigger>
-                  <DialogContent className="flex flex-col bg-neutral-50 rounded-2xl items-center w-10/12 md:w-6/12 justify-center p-6">
+                  <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center p-6">
                     <DialogHeader>
                       <div className="bg-neutral-50 w-full">
                         <Image
@@ -279,7 +279,7 @@ export default function InstansiDetail({
         </div>
       </div>
 
-      <div className="flex flex-col bg-primary-50 p-4 rounded-xl shadow-lg md:rounded-2xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
+      <div className="flex flex-col bg-primary-50 p-4 rounded-xl shadow-lg md:rounded-xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-[36px] md:my-0 mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
         <h5 className="text-[14px] md:text-[20px] text-primary-800 font-semibold mb-8">
           Informasi Layanan
         </h5>

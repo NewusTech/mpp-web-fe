@@ -187,7 +187,7 @@ export default function StatisticsPage() {
     <div className="flex items-center md:w-full justify-center pt-6 bg-primary-100 pb-32 md:pb-[120px] md:mb-0 md:mt-0 md:pt-[56px] md:mx-0">
       <div className="flex flex-col md:w-full gap-[10px] md:mx-[70px]">
         <div className="flex flex-col items-center md:flex-none md:grid md:grid-cols-2 md:w-full gap-4">
-          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-md rounded-2xl relative">
+          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-md rounded-xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
               <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Antrian Online
@@ -215,7 +215,7 @@ export default function StatisticsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-md rounded-2xl relative">
+          <div className="flex flex-col bg-neutral-50 w-10/12 md:w-full shadow-md rounded-xl relative">
             <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
               <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
                 Permohonan Layanan
@@ -244,7 +244,7 @@ export default function StatisticsPage() {
           </div>
         </div>
 
-        <div className="flex flex-col bg-neutral-50 shadow-md rounded-2xl mt-4 mx-[35px] md:px-[75px] md:mx-0">
+        <div className="flex flex-col bg-neutral-50 shadow-md rounded-xl mt-4 mx-[35px] md:px-[75px] md:mx-0">
           <div className="flex flex-col md:flex-row justify-between items-center mx-[10px] mt-4 md:px-[30px]">
             <h4 className="text-[16px] text-primary-900 font-semibold">
               Grafik Mal Pelayanan Publik
@@ -282,7 +282,7 @@ export default function StatisticsPage() {
               <div className="flex items-center w-10/12 md:w-full h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
                 {filterType === "month" ? (
                   <Select onValueChange={handleMonthChange}>
-                    <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                    <SelectTrigger className="w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                       <SelectValue
                         placeholder="Pilih Bulan"
                         className="text-neutral-800"
@@ -298,7 +298,7 @@ export default function StatisticsPage() {
                   </Select>
                 ) : filterType === "year" ? (
                   <Select onValueChange={handleYearChange}>
-                    <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                    <SelectTrigger className="w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                       <SelectValue
                         placeholder="Pilih Tahun"
                         className="text-neutral-800"
@@ -315,7 +315,7 @@ export default function StatisticsPage() {
                   </Select>
                 ) : (
                   <Select>
-                    <SelectTrigger className="w-full rounded-2xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                    <SelectTrigger className="w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                       <SelectValue
                         placeholder={
                           filterType === "" ? "Semua Data" : placeHolder

@@ -67,7 +67,7 @@ export default function RiwayatPage() {
         </h5>
       </div>
 
-      <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:pb-[50px] md:rounded-2xl md:shadow-md">
+      <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:pb-[50px] md:rounded-xl md:shadow-md">
         <Tabs
           defaultValue="antrian"
           className="flex flex-col w-full gap-[10px]">

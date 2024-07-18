@@ -22,6 +22,29 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
     permohonanDate = formatLongDate(`${permohonan.createdAt}`);
   }
 
+  let statusColor = "";
+
+  switch (permohonan.status) {
+    case 1:
+      statusColor = "text-secondary-700";
+      break;
+    case 2:
+      statusColor = "text-secondary-700";
+      break;
+    case 0:
+      statusColor = "text-primary-700";
+      break;
+    case 3:
+      statusColor = "text-success-700";
+      break;
+    case 4:
+      statusColor = "text-error-700";
+      break;
+    default:
+      statusColor = "text-gray-500";
+      break;
+  }
+
   return (
     <div className="flex flex-col h-[300px] justify-center items-start bg-neutral-50 rounded-xl shadow-md w-full">
       <div className="flex flex-col justify-center px-4 gap-2 h-full w-full gap-y-4">
@@ -58,7 +81,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">Status</h6>
 
-          <p className="text-[14px] pl-2 font-normal text-primary-800">
+          <p className={`text-[14px] pl-2 font-normal ${statusColor}`}>
             :{" "}
             {permohonan.status === 0
               ? "Belum diproses"
