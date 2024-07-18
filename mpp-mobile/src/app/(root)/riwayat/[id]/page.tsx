@@ -80,8 +80,12 @@ export default function HasilPermohonan({
     permohonanStatus = "Belum diproses";
   } else if (permohonan?.status === 3) {
     permohonanStatus = "Selesai";
-  } else {
+  } else if (permohonan?.status === 4) {
     permohonanStatus = "Ditolak";
+  } else if (permohonan?.status === 5) {
+    permohonanStatus = "Butuh Perbaiki";
+  } else {
+    permohonanStatus = "Sudah Diperbaiki";
   }
 
   let statusColor = "";
@@ -102,8 +106,11 @@ export default function HasilPermohonan({
     case 4:
       statusColor = "text-error-700";
       break;
+    case 5:
+      statusColor = "text-warning-700";
+      break;
     default:
-      statusColor = "text-gray-500";
+      statusColor = "text-success-600";
       break;
   }
 
@@ -218,7 +225,7 @@ export default function HasilPermohonan({
       </div>
 
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
-        {permohonan?.input_skm === false || permohonan?.status === 4 ? (
+        {permohonan?.input_skm === false || permohonan?.status !== 3 ? (
           <Button
             disabled
             type="submit"
@@ -250,13 +257,13 @@ export default function HasilPermohonan({
           </div>
         )}
 
-        {permohonan?.input_skm === false || permohonan?.status === 4 ? (
-          <Link
-            href={`/riwayat/permohonan-update/${permohonan?.id}/`}
-            className="w-4/12 md:w-2/12 text-center bg-primary-700 hover:bg-primary-600 cursor-pointer text-neutral-50 rounded-full py-2 px-2">
-            Perbaiki
-          </Link>
-        ) : (
+        {permohonan?.input_skm === false && permohonan?.status === 3 ? (
+          <Button
+            className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
+            disabled>
+            Unduh
+          </Button>
+        ) : permohonan?.input_skm === true && permohonan?.status === 3 ? (
           <Button
             type="submit"
             className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
@@ -268,6 +275,24 @@ export default function HasilPermohonan({
             }
             disabled={isLoading ? true : false}>
             {isLoading ? <Loader className="animate-spin" /> : "Unduh"}
+          </Button>
+        ) : permohonan?.status === 4 ? (
+          <Button
+            className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
+            disabled>
+            Unduh
+          </Button>
+        ) : permohonan?.status === 5 ? (
+          <Link
+            href={`/riwayat/permohonan-update/${permohonan?.id}/`}
+            className="w-4/12 md:w-2/12 text-center bg-primary-700 hover:bg-primary-600 cursor-pointer text-neutral-50 rounded-full py-2 px-2">
+            Perbaiki
+          </Link>
+        ) : (
+          <Button
+            className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
+            disabled>
+            Unduh
           </Button>
         )}
       </div>

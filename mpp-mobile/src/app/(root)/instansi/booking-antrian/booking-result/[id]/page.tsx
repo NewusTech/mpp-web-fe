@@ -41,7 +41,7 @@ export default function BookingResult({ params }: { params: { id: number } }) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/pdf/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/bookingantrian/pdf/${id}`,
         {
           method: "GET",
           headers: {
@@ -148,12 +148,8 @@ export default function BookingResult({ params }: { params: { id: number } }) {
                 </div>
 
                 <div className="flex flex-col justify-center items-center">
-                  <h5 className="text-[14px] md:text-[20px] font-semibold">
-                    No. Antrian: {antrian?.id}
-                  </h5>
-
                   <h5 className="text-[14px] md:text-[20px] font-normal">
-                    Loket: {antrian?.Instansi.name}
+                    Loket: {antrian?.Layanan.name}
                   </h5>
                 </div>
               </div>

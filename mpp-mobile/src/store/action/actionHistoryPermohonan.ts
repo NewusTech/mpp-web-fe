@@ -54,7 +54,7 @@ export function fetchRiwayatPermohonan() {
 
       dispatch(setHistoryPermohonan(result.data));
     } catch (error) {
-      toast("Tidak berhasil mendapatkan riwayat permohonan!");
+      console.log(error);
     }
   };
 }

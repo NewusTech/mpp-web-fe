@@ -116,8 +116,6 @@ export default function PopUpAntrianComponent({
           </div>
 
           <div className="flex flex-col w-full h-[40px] justify-center items-center md:mt-3">
-            <h5 className="text-[14px] font-bold">No Antrian : {antrian.id}</h5>
-
             <h5 className="text-[14px] font-normal md:text-center">
               Loket : {antrian.Instansi.name}
             </h5>

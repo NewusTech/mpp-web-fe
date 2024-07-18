@@ -224,7 +224,10 @@ export default function PermohonanUpdateHistory({
   return (
     <div className="flex flex-col mx-8 px-4 md:mx-20 md:px-32 mt-6 bg-neutral-50 shadow-md rounded-xl border border-neutral-700 gap-y-6 py-6 mb-32">
       <div className="flex flex-row w-full items-center gap-x-4">
-        <ChevronLeft className="w-8 h-8 text-secondary-900" />
+        <ChevronLeft
+          onClick={() => router.back()}
+          className="w-8 h-8 text-secondary-900"
+        />
 
         <h3 className="text-neutral-900 font-semibold text-[20px]">
           Permohonan Layanan

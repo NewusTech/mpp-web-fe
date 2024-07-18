@@ -23,8 +23,12 @@ export default function TablePermohonanComponent({
     permohonanStatus = "Belum diproses";
   } else if (permohonan.status === 3) {
     permohonanStatus = "Selesai";
-  } else {
+  } else if (permohonan.status === 4) {
     permohonanStatus = "Ditolak";
+  } else if (permohonan.status === 5) {
+    permohonanStatus = "Butuh Perbaiki";
+  } else {
+    permohonanStatus = "Sudah Diperbaiki";
   }
 
   let statusColor = "";
@@ -45,8 +49,11 @@ export default function TablePermohonanComponent({
     case 4:
       statusColor = "text-error-700";
       break;
+    case 5:
+      statusColor = "text-warning-700";
+      break;
     default:
-      statusColor = "text-gray-500";
+      statusColor = "text-success-600";
       break;
   }
 
@@ -59,7 +66,9 @@ export default function TablePermohonanComponent({
         {permohonanStatus}
       </TableCell>
       <TableCell className="w-3/12">
-        {permohonan.status === 3 || permohonan.status === 4 ? (
+        {permohonan.status === 3 ||
+        permohonan.status === 4 ||
+        permohonan.status === 5 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}

@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { AntrianFormType } from "@/types/type";
+import { AntrianCheckType, AntrianFormType } from "@/types/type";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -19,12 +19,14 @@ import { schemaBooking } from "@/lib/zodSchema";
 import { z } from "zod";
 import { Loader } from "lucide-react";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
+import AntrianCheck from "@/components/fetching/antrianCheck/antrianCheck";
 
 export default function BookingAntrianPage({
   params,
 }: {
   params: { id: number };
 }) {
+  const [cekAntrian, setCekAntrian] = useState<AntrianCheckType>();
   const [selected, setSelected] = useState<string | null>();
   const [services, setServices] = useState<any>([]);
   const [tanggal, setTanggal] = useState<string | null>(null);
@@ -91,7 +93,7 @@ export default function BookingAntrianPage({
       setIsLoading(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/create`,
+          `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/bookingantrian/create`,
           {
             method: "POST",
             headers: {
@@ -158,6 +160,23 @@ export default function BookingAntrianPage({
       tanggal: e.target.value,
     }));
   };
+
+  const HandleAntrianCheck = async (id: number) => {
+    try {
+      const check = await AntrianCheck(id);
+      setCekAntrian(check.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (antrian?.layanan_id) {
+      HandleAntrianCheck(antrian?.layanan_id);
+    }
+  }, [antrian?.layanan_id]);
+
+  console.log(cekAntrian, "cek antrian");
 
   return (
     <div className="w-full bg-primary-100 md:mb-0">
@@ -349,7 +368,7 @@ export default function BookingAntrianPage({
                           </h4>
 
                           <p className="text-neutral-50 font-normal text-[24px]">
-                            20
+                            {cekAntrian?.AntrianCount}
                           </p>
                         </div>
 
@@ -359,7 +378,7 @@ export default function BookingAntrianPage({
                           </h4>
 
                           <p className="text-neutral-50 font-normal text-[24px]">
-                            20
+                            {cekAntrian?.AntrianNumber}
                           </p>
                         </div>
 
@@ -369,7 +388,7 @@ export default function BookingAntrianPage({
                           </h4>
 
                           <p className="text-neutral-50 font-normal text-[24px]">
-                            20
+                            {cekAntrian?.AntrianClear}
                           </p>
                         </div>
                       </div>

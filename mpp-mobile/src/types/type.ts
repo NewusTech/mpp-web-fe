@@ -195,6 +195,7 @@ export interface InfoLandingType {
   instansiCount: string;
   layananCount: string;
   permohonanCountToday: string;
+  antrianCountToday: string;
 }
 
 export interface CarouselType {
@@ -420,3 +421,9 @@ export type DataInputItem = {
   layananform_id: string;
   data: string;
 };
+
+export interface AntrianCheckType {
+  AntrianClear: number;
+  AntrianCount: number;
+  AntrianNumber: number;
+}
