@@ -117,6 +117,7 @@ function Home() {
               instansiCount: "",
               layananCount: "",
               permohonanCountToday: "",
+              antrianCountToday: "",
             }
           }
         />

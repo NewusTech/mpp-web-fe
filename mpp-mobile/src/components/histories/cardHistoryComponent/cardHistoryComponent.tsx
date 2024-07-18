@@ -40,8 +40,11 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
     case 4:
       statusColor = "text-error-700";
       break;
+    case 5:
+      statusColor = "text-warning-700";
+      break;
     default:
-      statusColor = "text-gray-500";
+      statusColor = "text-success-600";
       break;
   }
 
@@ -89,15 +92,21 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
               ? "Sedang ditindak lanjuti"
               : permohonan.status === 2
               ? "Sudah ditindak lanjuti"
+              : permohonan.status === 3
+              ? "Selesai"
               : permohonan.status === 4
               ? "Ditolak"
-              : "Selesai"}
+              : permohonan.status === 5
+              ? "Butuh Perbaikan"
+              : "Sudah Diperbaiki"}
           </p>
         </div>
       </div>
 
       <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
-        {permohonan.status === 3 || permohonan.status === 4 ? (
+        {permohonan.status === 3 ||
+        permohonan.status === 4 ||
+        permohonan.status === 5 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}

@@ -42,7 +42,7 @@ export function fetchRiwayatAntrian() {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/antrian/getforuser`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/bookingantrian/getforuser`,
         {
           method: "GET",
           headers: {
@@ -57,7 +57,7 @@ export function fetchRiwayatAntrian() {
 
       dispatch(setHistoryAntrian(result.data));
     } catch (error) {
-      toast("Tidak berhasil mendapatkan riwayat permohonan!");
+      console.log(error);
     }
   };
 }

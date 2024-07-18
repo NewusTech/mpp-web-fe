@@ -36,7 +36,7 @@ export default function AboutScreen({
           <div className="flex w-10/12 md:w-full">
             <div className="grid grid-rows-2 place-items-center items-center px-2 justify-center w-full min-h-[130px] bg-neutral-50 rounded-xl shadow-md md:w-full md:h-[215px]">
               <h5 className="text-[26px] text-primary-700 self-end font-semibold md:text-[26px]">
-                0
+                {infoLanding.antrianCountToday}
               </h5>
 
               <p className="text-[12px] md:text-[20px] self-start text-primary-700 font-semibold text-center">
