@@ -204,7 +204,7 @@ function Home() {
                     <h5 className="md:text-[20px] md:text-justify md:text-black md:font-light">
                       {desc && parse(isExpanded ? desc : truncateDesc)}
                       <Link href={`/berita/${slug}`}>
-                        <span className="text-primary-700 font-normal hover:underline text-[16px]">
+                        <span className="text-primary-700 pl-1 font-normal hover:underline text-[16px]">
                           Lihat Selengkapnya
                         </span>
                       </Link>

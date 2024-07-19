@@ -259,7 +259,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
+                  <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <CircleUserRound
                       className={`${
                         pathName === `/profile`
@@ -286,7 +286,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
+                  <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <ClipboardList
                       className={`${
                         pathName === "/survey"
@@ -313,7 +313,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
+                  <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <Send
                       className={`${
                         pathName === "/pengaduan"
@@ -340,7 +340,7 @@ export default function NavbarScreen() {
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
-                  <DropdownMenuItem className="text-neutral-700 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
+                  <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <History
                       className={`${
                         pathName === "/riwayat"

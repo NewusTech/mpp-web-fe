@@ -126,6 +126,7 @@ export interface JenisLayananType {
 export interface TermType {
   id: number;
   desc: string;
+  privasi: string;
 }
 
 export interface ErrorType {
@@ -209,6 +210,12 @@ export interface VideoType {
 export interface AlurType {
   image: string;
   title: string;
+}
+
+export interface ManualBookType {
+  id: number;
+  dokumen: string;
+  video: string;
 }
 
 export interface VisiMisiType {
@@ -426,4 +433,5 @@ export interface AntrianCheckType {
   AntrianClear: number;
   AntrianCount: number;
   AntrianNumber: number;
+  LayananData: { code: string; name: string };
 }

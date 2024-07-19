@@ -29,6 +29,7 @@ import parse from "html-react-parser";
 import { truncateTitle } from "@/utils/formatTitle";
 import { z } from "zod";
 import { schemaRegister } from "@/lib/zodSchema";
+import TermCondition from "@/components/fetching/termCond/termCond";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -101,20 +102,9 @@ export default function RegisterScreen() {
 
   const fetchTerm = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/termcond/get`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-        }
-      );
+      const terms = await TermCondition();
 
-      const result = await response.json();
-
-      setTerm(result.data);
+      setTerm(terms.data);
     } catch (error) {
       toast("Gagal Memuat Data!");
     }

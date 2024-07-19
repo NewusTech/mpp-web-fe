@@ -24,8 +24,8 @@ import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstan
 import { JenisLayananType } from "@/types/type";
 import { Loader } from "lucide-react";
 import parse from "html-react-parser";
-import { truncateTitle } from "@/utils/formatTitle";
-import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { redirect, useRouter } from "next/navigation";
 
 const steps = [
   { id: 1, title: "1" },
@@ -49,10 +49,11 @@ export default function PermohonanLayananFirstScreen({
   params: { id: number };
 }) {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [service, setService] = useState<JenisLayananType[]>([]);
   const [selectedService, setSelectedService] = useState<JenisLayananType>();
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const fetchLayanan = async (id: number) => {
     try {
@@ -73,6 +74,9 @@ export default function PermohonanLayananFirstScreen({
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchLayanan(params.id);
   }, [params.id]);
 

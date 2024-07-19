@@ -8,7 +8,7 @@ import { formatLongDate } from "@/helpers/logout/formatted";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronLeft, Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Image from "next/legacy/image";
 
 export default function HasilPermohonan({
@@ -16,9 +16,10 @@ export default function HasilPermohonan({
 }: {
   params: { id: number };
 }) {
+  const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [permohonan, setPermohonan] = useState<PermohonanDataType>();
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -63,6 +64,9 @@ export default function HasilPermohonan({
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchRiwayatPermohonan(params.id);
   }, [params.id]);
 
