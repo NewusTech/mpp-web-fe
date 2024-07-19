@@ -20,7 +20,7 @@ export default function CardHistoryAntrian({
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.id}
+            : {antrian.Layanan.code}
           </p>
         </div>
 

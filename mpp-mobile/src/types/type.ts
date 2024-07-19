@@ -39,6 +39,7 @@ export interface AntrianBookingType {
   Layanan: {
     name: string;
     syarat: string;
+    code: string;
   };
 }
 
@@ -80,6 +81,10 @@ export interface AntrianDataType {
   tanggal: string;
   waktu: string;
   Instansi: {
+    name: string;
+  };
+  Layanan: {
+    code: string;
     name: string;
   };
 }
@@ -227,12 +232,16 @@ export type DataStatistik = {
   name: string;
   permohonan_count: number;
   skm_count: number;
+  antrian_count: number;
 };
 
 export type StatistikType = {
   countPerYear: { [key: string]: number };
+  countantrianPerYear: { [key: string]: number };
   formattedCountByInstansi: DataStatistik[];
   yearList: { key: string; value: string };
+  total3year: number;
+  totalantrian3year: number;
 };
 
 export interface ProfileType {

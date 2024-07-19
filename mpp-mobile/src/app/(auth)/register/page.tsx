@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Raleway } from "next/font/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,8 +24,6 @@ import RegisterInput from "@/components/others/registerInput/registerInput";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { DesaType, KecamatanType, TermType } from "@/types/type";
-import parse from "html-react-parser";
-import { truncateTitle } from "@/utils/formatTitle";
 import { z } from "zod";
 import { schemaRegister } from "@/lib/zodSchema";
 import TermCondition from "@/components/fetching/termCond/termCond";
@@ -97,7 +94,9 @@ export default function RegisterScreen() {
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
-    setIsDialogOpen(event.target.checked);
+    if (event.target.checked) {
+      window.open(term?.privasi, "_blank");
+    }
   };
 
   const fetchTerm = async () => {
@@ -223,11 +222,6 @@ export default function RegisterScreen() {
       }));
     }
   }, [selectedDesa]);
-
-  let termText = "";
-  if (term?.desc) {
-    termText = truncateTitle(term?.desc, 75);
-  }
 
   return (
     <section className="flex justify-center md:px-36 items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:h-screen">
@@ -545,23 +539,17 @@ export default function RegisterScreen() {
             </div>
 
             <div className="mt-4 flex flex-row gap-x-2">
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger>
-                  <input
-                    type="checkbox"
-                    name="term"
-                    className="w-4 h-4"
-                    checked={isChecked}
-                    onChange={handleCheckboxChange}
-                  />
-                </DialogTrigger>
-                <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-6 justify-center items-center w-10/12 md:w-6/12">
-                  {term?.desc && parse(term.desc)}
-                </DialogContent>
-              </Dialog>
+              <input
+                type="checkbox"
+                name="term"
+                className="w-4 h-4"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+              />
 
               <div className="text-neutral-900 overflow-y-auto font-normal text-[12px]">
-                {term?.desc && parse(termText)}
+                Dengan mendaftar, Anda menyetujui Syarat & Ketentuan kami dan
+                Anda telah membaca Kebijakan Privasi kami.
               </div>
             </div>
 

@@ -93,7 +93,7 @@ export default function PopUpAntrianComponent({
         </h4>
 
         <h5 className="text-[12px] md:text-[16px] text-center font-extralight">
-          {/* {antrian?.Layanan.name} */} Layanan
+          {antrian.Layanan.name}
         </h5>
       </div>
 
@@ -117,7 +117,7 @@ export default function PopUpAntrianComponent({
 
           <div className="flex flex-col w-full h-[40px] justify-center items-center md:mt-3">
             <h5 className="text-[14px] font-normal md:text-center">
-              Loket : {antrian.Instansi.name}
+              Loket : {antrian.Layanan.code}
             </h5>
           </div>
         </div>

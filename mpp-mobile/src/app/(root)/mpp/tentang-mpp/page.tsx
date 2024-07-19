@@ -57,8 +57,6 @@ export default function MppPage() {
     fetchVisiMisiMpp();
   }, []);
 
-  console.log(book, "ini manual book");
-
   return (
     <div className="bg-primary-100 md:mx-12 md:h-full">
       <div className="flex flex-col w-full items-center justify-center pb-32 pt-4 px-[35px] md:px-0 bg-primary-100 md:mx-0 mb-4 md:mb-0 md:pb-[150px]">
@@ -116,27 +114,43 @@ export default function MppPage() {
 
           <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-8 md:gap-x-4">
             <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
-              {book && (
-                <video
-                  className="md:w-full md:h-full object-cover rounded-xl"
-                  width={650}
-                  height={310}
-                  autoPlay
-                  src={book.video}
-                  muted
-                  controls>
-                  <source src={book.video} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
+              <div className="bg-secondary-700 w-full rounded-t-xl h-12 flex justify-center items-center">
+                <h4 className="text-neutral-50 font-semibold text-[18px] text-center">
+                  Video
+                </h4>
+              </div>
+              <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
+                {book && (
+                  <video
+                    className="md:w-full md:h-full object-cover rounded-xl"
+                    width={650}
+                    height={310}
+                    autoPlay
+                    src={book.video}
+                    muted
+                    controls>
+                    <source src={book.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
             </div>
 
-            <div className="flex flex-col w-full bg-neutral-50 shadow-md rounded-xl p-2">
-              {book?.dokumen && (
-                <iframe src={book.dokumen} height={330} className="rounded-xl">
-                  {book.id}
-                </iframe>
-              )}
+            <div className="flex flex-col w-full bg-neutral-50 shadow-md rounded-xl">
+              <div className="bg-secondary-700 w-full rounded-t-xl h-12 md:h-14 flex justify-center items-center">
+                <h4 className="text-neutral-50 font-semibold text-[18px] text-center">
+                  Manual Book
+                </h4>
+              </div>
+              <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
+                {book?.dokumen && (
+                  <iframe
+                    src={book.dokumen}
+                    className="rounded-b-xl w-full h-full">
+                    {book.id}
+                  </iframe>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -78,9 +78,7 @@ const LayoutInput: React.FC<LayoutInputProps> = ({
           required={required}
           onChange={onChange}
           className={`flex flex-col justify-center pr-2 w-full md:h-[50px] border placeholder:opacity-[50%] ${
-            opacity
-              ? "text-neutral-900 text-[14px]"
-              : "text-gray-500 opacity-90"
+            opacity ? "text-neutral-900 text-[14px]" : "text-neutral-900"
           } border-neutral-700 pl-[16px] h-[36px] text-[14px] rounded-[50px] placeholder:text-[12px] font-normal file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed ${
             error ? "border-error-800" : "border-neutral-700"
           }`}

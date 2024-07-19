@@ -1,7 +1,7 @@
 "use client";
 
 import { TableCell, TableRow } from "@/components/ui/table";
-import formatDate, { formatLongDate } from "@/helpers/logout/formatted";
+import { formatLongDate } from "@/helpers/logout/formatted";
 import { PermohonanDataType } from "@/types/type";
 import Link from "next/link";
 
@@ -68,7 +68,8 @@ export default function TablePermohonanComponent({
       <TableCell className="w-3/12">
         {permohonan.status === 3 ||
         permohonan.status === 4 ||
-        permohonan.status === 5 ? (
+        permohonan.status === 5 ||
+        permohonan.status === 6 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}

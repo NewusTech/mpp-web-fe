@@ -190,10 +190,6 @@ export default function PermohonanUpdateHistory({
 
     data.append("status", "6");
 
-    data.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
-
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/inputform/update/${params.id}`,
@@ -208,8 +204,6 @@ export default function PermohonanUpdateHistory({
       );
 
       const dataInput = await response.json();
-
-      console.log(dataInput, "datainput");
 
       if (response.ok) {
         toast(dataInput.message);
