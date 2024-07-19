@@ -117,7 +117,7 @@ export default function BookingResult({ params }: { params: { id: number } }) {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center justify-center gap-2">
+              <div className="flex flex-col items-center justify-center gap-2 mt-3">
                 <h4 className="text-[16px] md:text-[20px] font-semibold">
                   {antrian?.Instansi.name}
                 </h4>
@@ -154,7 +154,7 @@ export default function BookingResult({ params }: { params: { id: number } }) {
 
                 <div className="flex flex-col justify-center items-center">
                   <h5 className="text-[14px] md:text-[20px] font-normal">
-                    Loket: {antrian?.Layanan.name}
+                    Loket: {antrian?.Layanan.code}
                   </h5>
                 </div>
               </div>

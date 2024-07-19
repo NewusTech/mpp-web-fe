@@ -161,6 +161,17 @@ export default function StatisticsPage() {
     );
   };
 
+  const renderAntrianYearStats = () => {
+    if (!statistik || !statistik.countantrianPerYear) {
+      return null;
+    }
+    return Object.entries(statistik.countantrianPerYear).map(
+      ([year, count], i: number) => (
+        <CardYearStatistik key={i} year={year} count={count} />
+      )
+    );
+  };
+
   const calculateTotalCount = (countPerYear: { [key: string]: number }) => {
     const total = Object.values(countPerYear).reduce(
       (sum, count) => sum + count,
@@ -200,7 +211,7 @@ export default function StatisticsPage() {
 
             <div className="absolute inset-0 flex items-center justify-center">
               <h5 className="text-[18px] text-primary-900 font-semibold">
-                {totalCount}
+                {statistik?.totalantrian3year}
               </h5>
             </div>
 
@@ -211,7 +222,7 @@ export default function StatisticsPage() {
             />
 
             <div className="flex flex-row self-center w-10/12 md:w-full justify-between pb-[10.5px] px-[12px] md:px-12">
-              {renderYearStats()}
+              {renderAntrianYearStats()}
             </div>
           </div>
 
@@ -228,7 +239,7 @@ export default function StatisticsPage() {
 
             <div className="absolute inset-0 flex items-center justify-center">
               <h5 className="text-[18px] text-primary-900 font-semibold">
-                {totalCount}
+                {statistik?.total3year}
               </h5>
             </div>
 
@@ -279,7 +290,7 @@ export default function StatisticsPage() {
                 Tahun
               </button>
 
-              <div className="flex items-center w-10/12 md:w-full h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
+              <div className="flex items-center w-full h-[40px] justify-between border border-neutral-700 rounded-[50px] pl-[10px] py-[10px] my-8">
                 {filterType === "month" ? (
                   <Select onValueChange={handleMonthChange}>
                     <SelectTrigger className="w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
@@ -362,8 +373,14 @@ export default function StatisticsPage() {
                       return (
                         <TableRow key={i} className="flex flex-row w-full">
                           <TableCell className="w-full">{data.name}</TableCell>
-                          <TableCell className="w-1/5">300</TableCell>
-                          <TableCell className="w-1/5">300</TableCell>
+                          <TableCell className="w-1/5">
+                            {data.skm_count +
+                              data.antrian_count +
+                              data.permohonan_count}
+                          </TableCell>
+                          <TableCell className="w-1/5">
+                            {data.antrian_count}
+                          </TableCell>
                           <TableCell className="w-1/5">
                             {data.permohonan_count}
                           </TableCell>

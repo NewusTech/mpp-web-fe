@@ -78,8 +78,6 @@ export default function DataDiriPage() {
     fetchUser();
   }, []);
 
-  console.log(terms, "ini terms");
-
   const fetchKecamatan = async (search: string, limit: number) => {
     try {
       const kecamatanDatas = await kecamatanFetch(search, limit);

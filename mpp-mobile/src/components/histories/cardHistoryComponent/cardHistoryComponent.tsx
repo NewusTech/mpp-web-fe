@@ -106,7 +106,8 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
       <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
         {permohonan.status === 3 ||
         permohonan.status === 4 ||
-        permohonan.status === 5 ? (
+        permohonan.status === 5 ||
+        permohonan.status === 6 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}

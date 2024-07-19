@@ -16,7 +16,7 @@ export default function TableAntrianComponent({
 
   return (
     <TableRow>
-      <TableCell className="w-1/2">{antrian.id}</TableCell>
+      <TableCell className="w-1/2">{antrian.Layanan.code}</TableCell>
       <TableCell className="w-full">{antrian.Instansi.name}</TableCell>
       <TableCell className="w-1/2">{time} WIB</TableCell>
       <TableCell className="w-1/2">{date}</TableCell>
