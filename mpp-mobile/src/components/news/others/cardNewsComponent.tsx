@@ -41,7 +41,7 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
         </ul>
       </div>
 
-      <div className="w-full h-full md:items-start">
+      <div className="w-full h-full md:items-start pb-4 md:pb-0">
         <Link
           href={`/berita/${news.slug}`}
           className="flex flex-row md:self-start">

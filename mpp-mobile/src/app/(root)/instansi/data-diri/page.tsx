@@ -28,6 +28,8 @@ import {
   pendidikans,
   statusKawins,
 } from "@/data/data";
+import { schema } from "@/lib/zodSchema";
+import { z } from "zod";
 
 const steps = [
   { id: 1, title: "1" },
@@ -44,6 +46,8 @@ export default function DataDiriPage() {
   const [desas, setDesas] = useState<DesaType[]>();
   const [kecamatanId, setKecamatanId] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
+  const [opacity, setOpacity] = useState(false);
+  const [errors, setErrors] = useState<any>({});
 
   const fetchUser = async () => {
     try {
@@ -119,6 +123,7 @@ export default function DataDiriPage() {
       ...prevFormData!,
       [name]: value,
     }));
+    setOpacity(true);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -126,6 +131,7 @@ export default function DataDiriPage() {
     setIsLoading(true);
 
     try {
+      schema.parse(formData);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${formData?.slug}`,
         {
@@ -146,13 +152,21 @@ export default function DataDiriPage() {
       if (response.ok) {
         toast.success("Berhasil mengupdate profile!");
         setIsLoading(false);
+        router.push("/instansi/formulir");
       }
-    } catch (error) {
-      console.log(error, "error");
-      toast("Failed to update profile!");
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        const formattedErrors = error.errors.reduce((acc: any, curr: any) => {
+          acc[curr.path[0]] = curr.message;
+          return acc;
+        }, {});
+        setErrors(formattedErrors);
+      } else {
+        console.log(error, "error");
+        toast("Failed to update profile!");
+      }
     } finally {
       setIsLoading(false);
-      router.push("/instansi/formulir");
     }
   };
 
@@ -221,8 +235,10 @@ export default function DataDiriPage() {
                         }
                         value={formData?.gender || ""}>
                         <SelectTrigger
-                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          className={`border border-neutral-700 text-[13px] ${
+                            !opacity ? "opacity-70" : ""
+                          } rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue placeholder="Pilih Jenis Kelamin" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           {genders &&
@@ -241,6 +257,12 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
+
+                      {errors.gender && (
+                        <span className="text-error-700 text-sm">
+                          {errors.gender}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -270,8 +292,10 @@ export default function DataDiriPage() {
                         }
                         value={formData?.agama || ""}>
                         <SelectTrigger
-                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          className={` border border-neutral-700 text-[13px] ${
+                            !opacity ? "opacity-70" : ""
+                          } rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue placeholder="Pilih Agama" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           {agamas &&
@@ -290,6 +314,12 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
+
+                      {errors.agama && (
+                        <span className="text-error-700 text-sm">
+                          {errors.agama}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -305,6 +335,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {errors.tempat_lahir && (
+                        <span className="text-error-700 text-sm">
+                          {errors.tempat_lahir}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -319,8 +355,10 @@ export default function DataDiriPage() {
                         }
                         value={formData?.goldar || ""}>
                         <SelectTrigger
-                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          className={` border border-neutral-700 text-[13px] ${
+                            !opacity ? "opacity-70" : ""
+                          } rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue placeholder="Pilih Golongan Darah" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           {golonganDarahs &&
@@ -339,6 +377,12 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
+
+                      {errors.goldar && (
+                        <span className="text-error-700 text-sm">
+                          {errors.goldar}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -361,6 +405,12 @@ export default function DataDiriPage() {
                           appearance: "none",
                         }}
                       />
+
+                      {errors.tgl_lahir && (
+                        <span className="text-error-700 text-sm">
+                          {errors.tgl_lahir}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex flex-col w-full mb-4">
@@ -375,8 +425,10 @@ export default function DataDiriPage() {
                         }
                         value={formData?.status_kawin || ""}>
                         <SelectTrigger
-                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          className={`border border-neutral-700 text-[13px] ${
+                            !opacity ? "opacity-70" : ""
+                          } rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue placeholder="Pilih Status Perkawinan" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           {statusKawins &&
@@ -395,6 +447,12 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
+
+                      {errors.status_kawin && (
+                        <span className="text-error-700 text-sm">
+                          {errors.status_kawin}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -424,8 +482,10 @@ export default function DataDiriPage() {
                         }
                         value={formData?.pendidikan || ""}>
                         <SelectTrigger
-                          className={` border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
-                          <SelectValue />
+                          className={`border border-neutral-700 text-[13px] ${
+                            !opacity ? "opacity-70" : ""
+                          } rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-4`}>
+                          <SelectValue placeholder="Pilih Pendidikan Terakhir" />
                         </SelectTrigger>
                         <SelectContent className="w-full">
                           {pendidikans &&
@@ -444,6 +504,12 @@ export default function DataDiriPage() {
                             )}
                         </SelectContent>
                       </Select>
+
+                      {errors.pendidikan && (
+                        <span className="text-error-700 text-sm">
+                          {errors.pendidikan}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -472,6 +538,12 @@ export default function DataDiriPage() {
                         classStyle="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%]"
                         labelStyle="text-[12px] text-neutral-900 font-semibold"
                       />
+
+                      {errors.pekerjaan && (
+                        <span className="text-error-700 text-sm">
+                          {errors.pekerjaan}
+                        </span>
+                      )}
                     </div>
                   </div>
 

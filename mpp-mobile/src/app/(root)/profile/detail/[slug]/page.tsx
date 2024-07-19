@@ -406,7 +406,7 @@ export default function ProfileEditPage({
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">
           <Tabs defaultValue="Data Diri" className="pt-6">
-            <TabsList className="gap-x-3">
+            <TabsList className="gap-x-3 flex flex-row justify-around md:justify-start">
               <TabsTrigger
                 className="font-semibold text-primary-500 md:text-[20px]"
                 value="Data Diri">

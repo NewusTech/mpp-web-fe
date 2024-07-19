@@ -19,27 +19,14 @@ export const schemaRegister = z.object({
 });
 
 export const schema = z.object({
-  name: z.string().refine((val) => val !== "", "Nama Lengkap harus diisi"),
-  email: z.string().email("Email tidak valid"),
-  telepon: z
-    .string()
-    .min(12, "Nomor telepon harus terdiri dari minimal 12 digit")
-    .max(13, "Nomor telepon harus terdiri dari maksimal 13 digit"),
-  nik: z.string().length(16, "NIK harus terdiri dari 16 karakter"),
+  tgl_lahir: z.string({ message: "Tgl Lahir harus diisi" }),
+  tempat_lahir: z.string({ message: "Tempat Lahir harus diisi" }),
+  goldar: z.string({ message: "Pilih Golongan Darah" }),
+  status_kawin: z.string({ message: "Pilih Status Perkawinan" }),
   gender: z.string({ message: "Pilih Jenis Kelamin" }),
   agama: z.string({ message: "Pilih Agama" }),
   pendidikan: z.string({ message: "Pilih Pendidikan" }),
   pekerjaan: z.string({ message: "Harap isi pekerjaanmu saat ini!" }),
-  kecamatan_id: z.string({ message: "Pilih Asal Kecamatan" }),
-  desa_id: z.string({ message: "Pilih Asal Desa" }),
-  rt: z.string().refine((val) => val !== "", "RT harus diisi"),
-  rw: z.string().refine((val) => val !== "", "RW harus diisi"),
-  alamat: z.string().refine((val) => val !== "", "Alamat harus diisi"),
-  filektp: z.string().refine((val) => val !== "", "File KTP harus diisi"),
-  filekk: z.string().refine((val) => val !== "", "File KK harus diisi"),
-  fileijazahsd: z
-    .string()
-    .refine((val) => val !== "", "File Ijazah Terakhir harus diisi"),
 });
 
 export const schemaBooking = z.object({
