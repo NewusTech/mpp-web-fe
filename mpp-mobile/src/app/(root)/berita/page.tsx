@@ -3,7 +3,7 @@
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import fetchNews from "@/components/fetching/berita/berita";
 import { Berita, Instansi } from "@/types/type";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   Select,
@@ -18,6 +18,7 @@ import SearchComponent from "@/components/others/searchComponent/searchComponent
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
+import LoadingComponent from "@/components/loading/LoadingComponent";
 export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
@@ -30,6 +31,7 @@ export default function BeritaPage() {
   const [search, setSearch] = useState<string>("");
   const searchDebounce = useDebounce(search, 500);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const itemsPerPage = 12;
   const limitData = 1000000;
 
@@ -58,14 +60,19 @@ export default function BeritaPage() {
   };
 
   useEffect(() => {
-    if (selectedInstansiId !== null && news) {
-      const filtered = news.filter(
-        (berita) => berita.instansi_id === selectedInstansiId
-      );
-      setFilteredNews(filtered);
-    } else {
-      setFilteredNews(news || []);
-    }
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      if (selectedInstansiId !== null && news) {
+        const filtered = news.filter(
+          (berita) => berita.instansi_id === selectedInstansiId
+        );
+        setFilteredNews(filtered);
+      } else {
+        setFilteredNews(news || []);
+      }
+      setIsLoading(false);
+      return () => clearTimeout(timer);
+    }, 500);
   }, [selectedInstansiId, news]);
 
   useEffect(() => {
@@ -134,7 +141,7 @@ export default function BeritaPage() {
               />
             </SelectTrigger>
             <SelectContent>
-              <div>
+              <div className="pt-2">
                 <div className="w-full px-2 mb-2">
                   <SearchComponent
                     change={handleSearchChange}
@@ -143,7 +150,10 @@ export default function BeritaPage() {
                 </div>
                 {instansis?.map((instansi: Instansi, i: number) => {
                   return (
-                    <SelectItem key={i} value={String(instansi.id)}>
+                    <SelectItem
+                      className={`w-full px-4`}
+                      key={i}
+                      value={String(instansi.id)}>
                       {instansi.name}
                     </SelectItem>
                   );
@@ -154,7 +164,11 @@ export default function BeritaPage() {
         </div>
       </div>
 
-      {news?.length ?? 0 > 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center w-full md:w-3/12 h-48">
+          <LoadingComponent />
+        </div>
+      ) : news?.length ?? 0 > 0 ? (
         <>
           <div className="flex flex-col md:grid md:grid-cols-4 md:w-full md:items-start justify-center gap-[20px] md:pb-5 md:gap-x-4 md:gap-y-8">
             {currentDataBerita.map((berita: Berita, i: number) => (

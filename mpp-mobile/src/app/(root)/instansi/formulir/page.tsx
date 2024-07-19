@@ -154,8 +154,6 @@ export default function FormulirPage() {
     setIsButtonDisabled(!allRequiredFilled);
   };
 
-  console.log(form, "form");
-
   const change = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

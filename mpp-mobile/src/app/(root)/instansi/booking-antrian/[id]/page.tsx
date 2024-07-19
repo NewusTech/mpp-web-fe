@@ -176,8 +176,6 @@ export default function BookingAntrianPage({
     }
   }, [antrian?.layanan_id]);
 
-  console.log(cekAntrian, "cek antrian");
-
   return (
     <div className="w-full bg-primary-100 md:mb-0">
       <div className="flex w-full justify-center bg-primary-100 px-8 md:px-[150px] mt-[24px] mb-[170px] md:mb-0 md:pb-[130px]">
