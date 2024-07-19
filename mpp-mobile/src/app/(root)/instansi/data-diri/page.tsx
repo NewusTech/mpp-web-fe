@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -11,7 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@radix-ui/react-label";
-import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
+import {
+  DesaType,
+  KecamatanType,
+  TermType,
+  UpdateUserType,
+} from "@/types/type";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -30,6 +35,8 @@ import {
 } from "@/data/data";
 import { schema } from "@/lib/zodSchema";
 import { z } from "zod";
+import TermCondition from "@/components/fetching/termCond/termCond";
+import Link from "next/link";
 
 const steps = [
   { id: 1, title: "1" },
@@ -41,10 +48,12 @@ const currentStep = 2;
 
 export default function DataDiriPage() {
   const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [formData, setFormData] = useState<UpdateUserType | null>(null);
   const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
   const [desas, setDesas] = useState<DesaType[]>();
   const [kecamatanId, setKecamatanId] = useState<number>();
+  const [terms, setTerms] = useState<TermType>();
   const [isLoading, setIsLoading] = useState(false);
   const [opacity, setOpacity] = useState(false);
   const [errors, setErrors] = useState<any>({});
@@ -52,8 +61,10 @@ export default function DataDiriPage() {
   const fetchUser = async () => {
     try {
       const user = await fetchProfile();
+      const term = await TermCondition();
       setFormData(user.data);
       setKecamatanId(user.data.kecamatan_id);
+      setTerms(term.data);
     } catch (error) {
       console.log(error, "error");
       toast("Gagal mendapatkan data!");
@@ -61,8 +72,13 @@ export default function DataDiriPage() {
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchUser();
   }, []);
+
+  console.log(terms, "ini terms");
 
   const fetchKecamatan = async (search: string, limit: number) => {
     try {
@@ -170,6 +186,12 @@ export default function DataDiriPage() {
     }
   };
 
+  const handleButtonClick = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await handleSubmit(e);
+    window.open(terms?.privasi, "_blank");
+  };
+
   return (
     <div className="bg-primary-100 md:mt-6 md:mb-0 pb-32 md:pb-12">
       <div className="flex items-center justify-center bg-primary-100 mx-7 md:mx-[150px] mt-6 mb-7 md:mb-0 md:pb-7">
@@ -207,7 +229,7 @@ export default function DataDiriPage() {
 
               <div className="flex flex-col w-full px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
                 <form
-                  onSubmit={handleSubmit}
+                  onSubmit={handleButtonClick}
                   className="flex flex-col w-full mt-2 md:mt-4">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">

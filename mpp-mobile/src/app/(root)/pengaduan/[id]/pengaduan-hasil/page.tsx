@@ -6,12 +6,14 @@ import { formatLongDate } from "@/helpers/logout/formatted";
 import { PengaduanType } from "@/types/type";
 import { ChevronLeft } from "lucide-react";
 import Image from "next/legacy/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export default function PengaduanHasil({ params }: { params: { id: number } }) {
   const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [pengaduan, setPengaduan] = useState<PengaduanType>();
 
   const fetchPengaduan = async (id: number) => {
@@ -25,6 +27,9 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchPengaduan(params.id);
   }, [params.id]);
 

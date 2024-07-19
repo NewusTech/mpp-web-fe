@@ -13,9 +13,10 @@ import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import { useDispatch } from "react-redux";
 import Image from "next/legacy/image";
 import { ChevronLeft, Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { FormType, LayananFormType, LayananType } from "@/types/type";
 import { z, ZodObject, ZodSchema } from "zod";
+import Cookies from "js-cookie";
 
 const steps = [
   { id: 1, title: "1" },
@@ -70,6 +71,7 @@ const buildSchema = (layananForms: LayananFormType[]): ZodObject<any> => {
 export default function FormulirPage() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [form, setForm] = useState<LayananType>();
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
@@ -111,6 +113,10 @@ export default function FormulirPage() {
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
+
     const instanceid = localStorage.getItem("instanceId");
     if (instanceid) {
       setInstansiId(Number(instanceid));

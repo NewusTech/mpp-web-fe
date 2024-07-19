@@ -2,12 +2,18 @@
 
 import fetchVisiMisi from "@/components/fetching/visimisi/visimisi";
 import { useEffect, useState } from "react";
-import { AlurType, VideoType, VisiMisiType } from "@/types/type";
+import {
+  AlurType,
+  ManualBookType,
+  VideoType,
+  VisiMisiType,
+} from "@/types/type";
 import parse from "html-react-parser";
 import Image from "next/legacy/image";
 import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
 import fetchVideo from "@/components/fetching/video/video";
 import PdfView from "@/components/pdfViews/pdfView";
+import ManualBooks from "@/components/fetching/manualBook/manualBook";
 
 export default function MppPage() {
   const [visimisi, setVisimisi] = useState<VisiMisiType>({
@@ -16,6 +22,7 @@ export default function MppPage() {
   });
   const [videos, setVideos] = useState<VideoType>();
   const [alurs, setAlurs] = useState<AlurType[]>();
+  const [book, setBook] = useState<ManualBookType>();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,15 +45,19 @@ export default function MppPage() {
     const visimisi = await fetchVisiMisi();
     const alur = await fetchAlurMpp();
     const videos = await fetchVideo();
+    const book = await ManualBooks();
 
     setVisimisi(visimisi.data);
     setAlurs(alur.data);
     setVideos(videos.data);
+    setBook(book.data);
   };
 
   useEffect(() => {
     fetchVisiMisiMpp();
   }, []);
+
+  console.log(book, "ini manual book");
 
   return (
     <div className="bg-primary-100 md:mx-12 md:h-full">
@@ -105,23 +116,27 @@ export default function MppPage() {
 
           <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 gap-y-8 md:gap-x-4">
             <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
-              {videos && (
+              {book && (
                 <video
                   className="md:w-full md:h-full object-cover rounded-xl"
                   width={650}
                   height={310}
                   autoPlay
-                  src={videos.video}
+                  src={book.video}
                   muted
                   controls>
-                  <source src={videos.video} type="video/mp4" />
+                  <source src={book.video} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               )}
             </div>
 
             <div className="flex flex-col w-full bg-neutral-50 shadow-md rounded-xl p-2">
-              <PdfView fileUrl="/assets/manualBook.pdf" />
+              {book?.dokumen && (
+                <iframe src={book.dokumen} height={330} className="rounded-xl">
+                  {book.id}
+                </iframe>
+              )}
             </div>
           </div>
         </div>

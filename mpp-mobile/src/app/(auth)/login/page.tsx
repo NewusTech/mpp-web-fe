@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormComponents from "@/components/others/formComponents/formComponents";
 import Cookies from "js-cookie";
+import { TermType } from "@/types/type";
+import TermCondition from "@/components/fetching/termCond/termCond";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -33,6 +35,7 @@ const formSchema = z.object({
 export default function LoginScreen() {
   const router = useRouter();
   const [seen, setSeen] = useState(true);
+  const [term, setTerm] = useState<TermType>();
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -49,6 +52,19 @@ export default function LoginScreen() {
       router.push("/");
     }
   }, [router]);
+
+  const fetchTerm = async () => {
+    try {
+      const terms = await TermCondition();
+      setTerm(terms.data);
+    } catch (error) {
+      toast("Gagal Memuat Data!");
+    }
+  };
+
+  useEffect(() => {
+    fetchTerm();
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
@@ -92,14 +108,16 @@ export default function LoginScreen() {
       <div className="flex flex-col w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 mx-8 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
         <Link
           href={"/"}
-          className="flex flex-col items-center justify-center w-full">
-          <Image
-            src={logo}
-            alt="Lampung Timur"
-            className="w-[73px] md:w-[170px] h-[69px] md:h-[160px]"
-            width={73}
-            height={69}
-          />
+          className="flex flex-col items-center justify-center w-full gap-y-3">
+          <div className="w-full flex flex-row justify-center">
+            <Image
+              src={logo}
+              alt="Lampung Timur"
+              className="w-full h-full"
+              width={300}
+              height={100}
+            />
+          </div>
 
           <div className="flex flex-col pl-[23px] justify-center items-center">
             <h3
@@ -193,6 +211,28 @@ export default function LoginScreen() {
               </div>
             </form>
           </Form>
+        </div>
+
+        <div className="w-full text-center text-primary-700 text-[14px] mt-8">
+          Dengan mendaftar, Anda menyetujui{" "}
+          {term && (
+            <Link
+              href={term?.desc}
+              target="_blank"
+              className="text-primary-800 font-semibold hover:underline">
+              Syarat & Ketentuan{" "}
+            </Link>
+          )}{" "}
+          kami dan Anda telah membaca{" "}
+          {term && (
+            <Link
+              href={term?.privasi}
+              target="_blank"
+              className="text-primary-800 font-semibold hover:underline">
+              Kebijakan Privasi{" "}
+            </Link>
+          )}{" "}
+          kami.
         </div>
       </div>
     </section>

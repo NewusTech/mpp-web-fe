@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
@@ -35,6 +35,9 @@ export default function UploadFilePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     const storedInstanceId = localStorage.getItem("instanceId");
     const storedDataInput = localStorage.getItem("dataInput");
 

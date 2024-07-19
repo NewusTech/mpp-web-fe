@@ -12,7 +12,7 @@ import {
   LayananType,
 } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import Image from "next/legacy/image";
@@ -26,6 +26,7 @@ export default function PermohonanUpdateHistory({
   params: { id: number };
 }) {
   const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [formData, setFormData] = useState<DataRiwayatPermohonan>();
   const [formValues, setFormValues] = useState<{ [key: string]: any }>({});
   const [checkboxValues, setCheckboxValues] = useState<{
@@ -70,6 +71,9 @@ export default function PermohonanUpdateHistory({
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchDataPermohonanHistory(params.id);
   }, [params.id]);
 
@@ -184,6 +188,8 @@ export default function PermohonanUpdateHistory({
       }
     });
 
+    data.append("status", "6");
+
     data.forEach((value, key) => {
       console.log(`${key}: ${value}`);
     });
@@ -218,8 +224,6 @@ export default function PermohonanUpdateHistory({
       router.push("/riwayat");
     }
   };
-
-  console.log(formData, "formdata");
 
   return (
     <div className="flex flex-col mx-8 px-4 md:mx-20 md:px-32 mt-6 bg-neutral-50 shadow-md rounded-xl border border-neutral-700 gap-y-6 py-6 mb-32">

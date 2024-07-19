@@ -13,6 +13,7 @@ import { Raleway } from "next/font/google";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import { formatTime } from "@/utils/formatTime";
 import { formattedDate } from "@/helpers/logout/formatted";
+import { redirect } from "next/navigation";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -20,6 +21,7 @@ const raleway = Raleway({
 });
 
 export default function BookingResult({ params }: { params: { id: number } }) {
+  const token = Cookies.get("Authorization");
   const [antrian, setAntrian] = useState<AntrianBookingType>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,6 +36,9 @@ export default function BookingResult({ params }: { params: { id: number } }) {
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchAntrian(params.id);
   }, [params.id]);
 

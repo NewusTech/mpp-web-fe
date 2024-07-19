@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
   Select,
@@ -39,6 +39,7 @@ export default function ProfileEditPage({
   params: { slug: string };
 }) {
   const router = useRouter();
+  const token = Cookies.get("Authorization");
   const dropRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<UpdateUserType | null>(null);
   const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
@@ -68,6 +69,9 @@ export default function ProfileEditPage({
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchUser();
   }, []);
 

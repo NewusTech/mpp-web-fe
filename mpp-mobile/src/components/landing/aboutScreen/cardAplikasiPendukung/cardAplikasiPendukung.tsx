@@ -10,6 +10,7 @@ export default function CardAplikasiPendukung({ app }: { app: AppType }) {
   return (
     <Link
       href={app.link}
+      target="_blank"
       className="bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-4 place-items-center p-4 gap-x-4 rounded-xl shadow-md">
       <div className="max-w-max md:h-full col-span-1 flex items-center justify-center p-2">
         <Image

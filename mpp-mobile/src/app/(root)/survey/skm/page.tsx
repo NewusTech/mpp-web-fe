@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import { setDataSurvei } from "@/store/action/actionSurvei";
 import { Label } from "@radix-ui/react-label";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Image from "next/legacy/image";
@@ -85,6 +85,9 @@ export default function SurveySKMPage() {
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchSurvei(survei.layananId);
   }, [survei.layananId]);
 

@@ -14,7 +14,7 @@ import { AntrianCheckType, AntrianFormType } from "@/types/type";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { schemaBooking } from "@/lib/zodSchema";
 import { z } from "zod";
 import { Loader } from "lucide-react";
@@ -26,6 +26,8 @@ export default function BookingAntrianPage({
 }: {
   params: { id: number };
 }) {
+  const router = useRouter();
+  const token = Cookies.get("Authorization");
   const [cekAntrian, setCekAntrian] = useState<AntrianCheckType>();
   const [selected, setSelected] = useState<string | null>();
   const [services, setServices] = useState<any>([]);
@@ -38,7 +40,6 @@ export default function BookingAntrianPage({
     tanggal: "",
     waktu: "",
   });
-  const router = useRouter();
   const [errors, setErrors] = useState<any>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,6 +80,9 @@ export default function BookingAntrianPage({
   };
 
   useEffect(() => {
+    if (!token) {
+      redirect("/login");
+    }
     fetchLayanan(params.id);
   }, [params.id]);
 
@@ -175,6 +179,8 @@ export default function BookingAntrianPage({
       HandleAntrianCheck(antrian?.layanan_id);
     }
   }, [antrian?.layanan_id]);
+
+  console.log(cekAntrian, "ini cek antrian");
 
   return (
     <div className="w-full bg-primary-100 md:mb-0">
@@ -356,7 +362,7 @@ export default function BookingAntrianPage({
                   <DialogContent className="flex flex-col justify-center items-center bg-neutral-200 rounded-xl w-10/12 md:w-6/12 p-4 md:p-8">
                     <div className="flex flex-col w-full">
                       <h2 className="text-[26px] font-semibold text-primary-800">
-                        Nama Instansi
+                        {cekAntrian?.LayananData.name}
                       </h2>
 
                       <div className="grid grid-cols-3 w-full items-center justify-center gap-2 mt-6">
