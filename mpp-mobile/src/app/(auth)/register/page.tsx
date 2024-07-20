@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Cookies from "js-cookie";
 import { Eye, EyeOff, Loader } from "lucide-react";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
@@ -25,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { DesaType, KecamatanType, TermType } from "@/types/type";
 import { z } from "zod";
+import parse from "html-react-parser";
 import { schemaRegister } from "@/lib/zodSchema";
 import TermCondition from "@/components/fetching/termCond/termCond";
 
@@ -93,10 +95,15 @@ export default function RegisterScreen() {
   }, [newUser, selectedKecamatan, selectedDesa, isChecked, hasSubmitted]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked);
-    if (event.target.checked) {
-      window.open(term?.privasi, "_blank");
+    const checked = event.target.checked;
+    setIsChecked(checked);
+    if (checked) {
+      setIsDialogOpen(true);
     }
+  };
+
+  const handleAgree = () => {
+    setIsDialogOpen(false);
   };
 
   const fetchTerm = async () => {
@@ -225,7 +232,7 @@ export default function RegisterScreen() {
 
   return (
     <section className="flex justify-center md:px-36 items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-full md:h-screen">
-      <div className="flex flex-col gap-[4px] w-full rounded-xl bg-primary-200 px-[32px] mx-[32px] md:mx-0 my-[45px] md:my-0 md:px-[60px]">
+      <div className="flex flex-col gap-[4px] w-10/12 rounded-xl bg-primary-200 px-[32px] mx-[32px] md:mx-0 my-[45px] md:my-0 md:px-[60px]">
         <div className="flex flex-col pt-[32px]">
           <h6 className="text-primary-800 text-[16px] md:text-[24px] font-semibold mb-[4px]">
             DAFTAR
@@ -539,15 +546,82 @@ export default function RegisterScreen() {
             </div>
 
             <div className="mt-4 flex flex-row gap-x-2">
-              <input
-                type="checkbox"
-                name="term"
-                className="w-4 h-4"
-                checked={isChecked}
-                onChange={handleCheckboxChange}
-              />
+              <Dialog open={isDialogOpen}>
+                <DialogTrigger>
+                  <input
+                    type="checkbox"
+                    name="term"
+                    className="w-4 h-4"
+                    checked={isChecked}
+                    onChange={handleCheckboxChange}
+                  />
+                </DialogTrigger>
+                <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 md:w-4/12 max-h-[600px]">
+                  <div className="m-3 px-4 flex flex-col items-center w-full verticalScroll gap-y-6">
+                    <div>
+                      <h3>
+                        Kebijakan Privasi Kami berkomitmen untuk melindungi
+                        privasi dan keamanan informasi pribadi Anda. Kebijakan
+                        privasi ini menjelaskan bagaimana kami mengumpulkan,
+                        menggunakan, dan melindungi informasi pribadi yang Anda
+                        berikan kepada kami. Dengan menggunakan layanan kami,
+                        Anda menyetujui pengumpulan dan penggunaan informasi
+                        sesuai dengan kebijakan privasi ini. Informasi yang Kami
+                        Kumpulkan Kami dapat mengumpulkan informasi pribadi
+                        berikut dari Anda: Nama lengkap: Untuk identifikasi dan
+                        pengelolaan akun Anda. NIK (Nomor Induk Kependudukan):
+                        Untuk keperluan verifikasi identitas. Nomor telepon:
+                        Untuk menghubungi Anda mengenai akun atau layanan.
+                        Alamat email: Untuk komunikasi dan pemberitahuan terkait
+                        layanan. Informasi domisili: Kecamatan, desa, RT, RW,
+                        dan alamat lengkap untuk keperluan pengiriman atau
+                        verifikasi. Kata sandi: Untuk mengamankan akun Anda.
+                        Penggunaan Informasi Informasi pribadi yang Anda berikan
+                        akan digunakan untuk: Memproses pendaftaran: Membuat dan
+                        mengelola akun Anda. Verifikasi identitas: Memastikan
+                        bahwa informasi yang Anda berikan akurat dan sah.
+                        Komunikasi: Menghubungi Anda mengenai layanan,
+                        pembaruan, dan dukungan. Pemenuhan layanan: Memastikan
+                        layanan kami memenuhi kebutuhan Anda. Kepatuhan hukum:
+                        Memenuhi persyaratan hukum yang berlaku. Perlindungan
+                        Informasi Kami menerapkan langkah-langkah keamanan yang
+                        wajar untuk melindungi informasi pribadi Anda dari
+                        akses, pengungkapan, atau perusakan yang tidak sah.
+                        Informasi Anda disimpan di server yang aman dengan akses
+                        terbatas. Pembagian Informasi kepada Pihak Ketiga Kami
+                        tidak akan menjual, menukar, atau mentransfer informasi
+                        pribadi Anda kepada pihak ketiga tanpa izin Anda,
+                        kecuali untuk: Kepatuhan hukum: Mematuhi perintah
+                        pengadilan atau proses hukum lainnya. Perlindungan hak:
+                        Melindungi hak, properti, atau keselamatan kami atau
+                        orang lain. Persetujuan Dengan menggunakan layanan kami,
+                        Anda menyetujui pengumpulan dan penggunaan informasi
+                        pribadi Anda seperti yang dijelaskan dalam kebijakan
+                        privasi ini. Perubahan Kebijakan Privasi Kami dapat
+                        memperbarui kebijakan privasi ini dari waktu ke waktu.
+                        Perubahan akan diinformasikan melalui situs web kami
+                        atau melalui email. Kami mendorong Anda untuk secara
+                        berkala meninjau kebijakan privasi ini untuk mengetahui
+                        perubahan terbaru. Hubungi Kami Jika Anda memiliki
+                        pertanyaan atau kekhawatiran tentang kebijakan privasi
+                        kami, silakan hubungi kami di: Email: email@example.com
+                        Telepon: +62 123 456 7890 Dengan mengklik "Daftar" dan
+                        mengirimkan informasi Anda, Anda menyatakan bahwa Anda
+                        telah membaca, memahami, dan menyetujui kebijakan
+                        privasi ini.
+                      </h3>
+                    </div>
 
-              <div className="text-neutral-900 overflow-y-auto font-normal text-[12px]">
+                    <div
+                      onClick={handleAgree}
+                      className="bg-primary-700 text-center cursor-pointer w-4/12 rounded-full text-neutral-50 py-1 px-5">
+                      Setuju
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              <div className="text-neutral-900 font-normal text-[12px]">
                 Dengan mendaftar, Anda menyetujui Syarat & Ketentuan kami dan
                 Anda telah membaca Kebijakan Privasi kami.
               </div>
