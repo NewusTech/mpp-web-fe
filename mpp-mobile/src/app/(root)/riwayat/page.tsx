@@ -74,15 +74,27 @@ export default function RiwayatPage() {
           {isDesktop ? (
             <div className="md:flex md:w-full md:mt-[26px]">
               <TabsList className="md:flex md:justify-start md:items-start md:gap-10">
-                <TabsTrigger value="antrian">Antrian</TabsTrigger>
-                <TabsTrigger value="permohonan">Permohonan</TabsTrigger>
+                <TabsTrigger
+                  value="antrian"
+                  className="text-[16px] md:text-[20px] font-normal">
+                  Antrian
+                </TabsTrigger>
+                <TabsTrigger
+                  value="permohonan"
+                  className="text-[16px] md:text-[20px] font-normal">
+                  Permohonan
+                </TabsTrigger>
               </TabsList>
             </div>
           ) : (
             <div className="flex mt-[26px]">
               <TabsList className="grid grid-cols-2 w-full gap-[10px]">
-                <TabsTrigger value="antrian">Antrian</TabsTrigger>
-                <TabsTrigger value="permohonan">Permohonan</TabsTrigger>
+                <TabsTrigger value="antrian" className="font-normal">
+                  Antrian
+                </TabsTrigger>
+                <TabsTrigger value="permohonan" className="font-normal">
+                  Permohonan
+                </TabsTrigger>
               </TabsList>
             </div>
           )}

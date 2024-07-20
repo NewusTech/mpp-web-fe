@@ -558,59 +558,7 @@ export default function RegisterScreen() {
                 </DialogTrigger>
                 <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 md:w-4/12 max-h-[600px]">
                   <div className="m-3 px-4 flex flex-col items-center w-full verticalScroll gap-y-6">
-                    <div>
-                      <h3>
-                        Kebijakan Privasi Kami berkomitmen untuk melindungi
-                        privasi dan keamanan informasi pribadi Anda. Kebijakan
-                        privasi ini menjelaskan bagaimana kami mengumpulkan,
-                        menggunakan, dan melindungi informasi pribadi yang Anda
-                        berikan kepada kami. Dengan menggunakan layanan kami,
-                        Anda menyetujui pengumpulan dan penggunaan informasi
-                        sesuai dengan kebijakan privasi ini. Informasi yang Kami
-                        Kumpulkan Kami dapat mengumpulkan informasi pribadi
-                        berikut dari Anda: Nama lengkap: Untuk identifikasi dan
-                        pengelolaan akun Anda. NIK (Nomor Induk Kependudukan):
-                        Untuk keperluan verifikasi identitas. Nomor telepon:
-                        Untuk menghubungi Anda mengenai akun atau layanan.
-                        Alamat email: Untuk komunikasi dan pemberitahuan terkait
-                        layanan. Informasi domisili: Kecamatan, desa, RT, RW,
-                        dan alamat lengkap untuk keperluan pengiriman atau
-                        verifikasi. Kata sandi: Untuk mengamankan akun Anda.
-                        Penggunaan Informasi Informasi pribadi yang Anda berikan
-                        akan digunakan untuk: Memproses pendaftaran: Membuat dan
-                        mengelola akun Anda. Verifikasi identitas: Memastikan
-                        bahwa informasi yang Anda berikan akurat dan sah.
-                        Komunikasi: Menghubungi Anda mengenai layanan,
-                        pembaruan, dan dukungan. Pemenuhan layanan: Memastikan
-                        layanan kami memenuhi kebutuhan Anda. Kepatuhan hukum:
-                        Memenuhi persyaratan hukum yang berlaku. Perlindungan
-                        Informasi Kami menerapkan langkah-langkah keamanan yang
-                        wajar untuk melindungi informasi pribadi Anda dari
-                        akses, pengungkapan, atau perusakan yang tidak sah.
-                        Informasi Anda disimpan di server yang aman dengan akses
-                        terbatas. Pembagian Informasi kepada Pihak Ketiga Kami
-                        tidak akan menjual, menukar, atau mentransfer informasi
-                        pribadi Anda kepada pihak ketiga tanpa izin Anda,
-                        kecuali untuk: Kepatuhan hukum: Mematuhi perintah
-                        pengadilan atau proses hukum lainnya. Perlindungan hak:
-                        Melindungi hak, properti, atau keselamatan kami atau
-                        orang lain. Persetujuan Dengan menggunakan layanan kami,
-                        Anda menyetujui pengumpulan dan penggunaan informasi
-                        pribadi Anda seperti yang dijelaskan dalam kebijakan
-                        privasi ini. Perubahan Kebijakan Privasi Kami dapat
-                        memperbarui kebijakan privasi ini dari waktu ke waktu.
-                        Perubahan akan diinformasikan melalui situs web kami
-                        atau melalui email. Kami mendorong Anda untuk secara
-                        berkala meninjau kebijakan privasi ini untuk mengetahui
-                        perubahan terbaru. Hubungi Kami Jika Anda memiliki
-                        pertanyaan atau kekhawatiran tentang kebijakan privasi
-                        kami, silakan hubungi kami di: Email: email@example.com
-                        Telepon: +62 123 456 7890 Dengan mengklik "Daftar" dan
-                        mengirimkan informasi Anda, Anda menyatakan bahwa Anda
-                        telah membaca, memahami, dan menyetujui kebijakan
-                        privasi ini.
-                      </h3>
-                    </div>
+                    <div>{term && parse(term?.privasi_text)}</div>
 
                     <div
                       onClick={handleAgree}
