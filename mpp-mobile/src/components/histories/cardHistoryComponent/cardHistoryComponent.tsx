@@ -4,6 +4,7 @@ import { formatLongDate } from "@/helpers/logout/formatted";
 interface PermohonanType {
   permohonan: {
     id: number;
+    no_request: string;
     instansi_name: string;
     layanan_name: string;
     noPermohonan: string;
@@ -57,7 +58,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {permohonan.id}
+            : {permohonan.no_request}
           </p>
         </div>
 

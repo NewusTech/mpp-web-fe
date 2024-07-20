@@ -58,6 +58,7 @@ export interface PermohonanDataType {
   layanan_id: number;
   layanan_name: string;
   noPermohonan: string;
+  no_request: string;
   instansi: string;
   tanggal: string;
   status: number;
@@ -132,6 +133,7 @@ export interface TermType {
   id: number;
   desc: string;
   privasi: string;
+  privasi_text: string;
 }
 
 export interface ErrorType {
@@ -324,6 +326,19 @@ export interface KecamatanType {
 export interface DesaType {
   id: number;
   name: string;
+}
+
+export interface DocumentTerbitType {
+  layanan_name: string;
+  fileoutput: string;
+  no_request: string;
+  tgl_selesai: string;
+  createdAt: string;
+}
+
+export interface DocumentResultType {
+  instansi_name: string;
+  dokumen: DocumentTerbitType[];
 }
 
 export type InfoType = {

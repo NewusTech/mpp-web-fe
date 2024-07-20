@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ProfileNewType } from "@/types/type";
+import { DocumentResultType, ProfileNewType } from "@/types/type";
 import { Label } from "@radix-ui/react-label";
 import Image from "next/image";
 import {
@@ -17,10 +17,13 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CardDocumentInstansi from "@/components/profiles/cardDocumentInstansi/cardocumentInstansi";
+import fetchHistoryDoc from "@/components/fetching/historyDoc/historyDoc";
 
 export default function ProfilePage() {
   const token = Cookies.get("Authorization");
   const [profile, setProfile] = useState<ProfileNewType>();
+  const [documents, setDocuments] = useState<DocumentResultType[]>();
   const [modalImage, setModalImage] = useState<string>();
 
   const handleImageClick = (image: string) => {
@@ -30,8 +33,10 @@ export default function ProfilePage() {
   const fetchProfiles = async () => {
     try {
       const result = await fetchProfile();
+      const docs = await fetchHistoryDoc();
 
       setProfile(result.data);
+      setDocuments(docs.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
@@ -160,17 +165,17 @@ export default function ProfilePage() {
               className="flex flex-col md:gap-y-0 px-1">
               <TabsList className="py-0 w-full md:flex md:flex-row justify-between md:justify-start items-center">
                 <TabsTrigger
-                  className="font-semibold w-5/12 md:w-full px-0 text-primary-500 md:text-[20px]"
+                  className="font-semibold w-5/12 py-4 rounded-l-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-0 text-primary-700 md:text-[20px]"
                   value="Data Diri">
                   <div>Data Diri</div>
                 </TabsTrigger>
                 <TabsTrigger
-                  className="font-semibold w-5/12 md:w-full px-3 text-primary-500 md:text-[20px]"
+                  className="font-semibold w-5/12 py-4 rounded-none bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-3 text-primary-700 md:text-[20px]"
                   value="Dokumen Pendukung">
                   <div>Dokumen Pendukung</div>
                 </TabsTrigger>
                 <TabsTrigger
-                  className="font-semibold w-5/12 md:w-full px-2 text-primary-500 md:text-[20px]"
+                  className="font-semibold w-5/12 py-4 rounded-r-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-2 text-primary-700 md:text-[20px]"
                   value="Dokumen Terbit">
                   <div>Dokumen Terbit</div>
                 </TabsTrigger>
@@ -580,8 +585,10 @@ export default function ProfilePage() {
               </div>
 
               <TabsContent value="Dokumen Terbit">
-                <div className="md:grid md:grid-rows-7 gap-2 md:mt-6 px-4 md:px-0">
-                  Hello
+                <div className="flex flex-col w-full md:mt-0 mb-6 md:mb-0 px-4 md:px-0 gap-y-2">
+                  {documents?.map((document: DocumentResultType, i: number) => {
+                    return <CardDocumentInstansi key={i} document={document} />;
+                  })}
                 </div>
               </TabsContent>
             </Tabs>

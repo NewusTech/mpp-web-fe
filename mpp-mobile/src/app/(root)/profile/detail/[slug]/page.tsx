@@ -410,16 +410,16 @@ export default function ProfileEditPage({
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">
           <Tabs defaultValue="Data Diri" className="pt-6">
-            <TabsList className="gap-x-3 flex flex-row justify-around md:justify-start">
+            <TabsList className="py-0 w-full grid grid-cols-2 md:flex md:flex-row justify-between md:justify-start items-center">
               <TabsTrigger
-                className="font-semibold text-primary-500 md:text-[20px]"
+                className="font-semibold rounded-l-lg w-full py-4 bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 px-0 text-primary-700 md:text-[20px]"
                 value="Data Diri">
-                Data Diri
+                <div>Data Diri</div>
               </TabsTrigger>
               <TabsTrigger
-                className="font-semibold text-primary-500 md:text-[20px]"
+                className="font-semibold rounded-r-lg w-full py-4 bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 px-3 text-primary-700 md:text-[20px]"
                 value="Dokumen Pendukung">
-                Dokumen Pendukung
+                <div>Dokumen Pendukung</div>
               </TabsTrigger>
             </TabsList>
 
