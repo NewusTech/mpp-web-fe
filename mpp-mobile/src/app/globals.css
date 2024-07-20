@@ -42,3 +42,13 @@ body {
   height: 100%;
   object-fit: cover;
 }
+
+.verticalScroll {
+  width: 100%;
+  overflow-y: scroll;
+  scrollbar-color: transparent transparent;
+}
+
+.verticalScroll::-webkit-scrollbar {
+  display: none;
+}

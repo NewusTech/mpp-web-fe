@@ -220,6 +220,11 @@ export default function HasilPermohonan({
             Silahkan mengisi survey kepuasan masyarakat (SKM) terlebih dahulu
             agar dapat mengunduh hasil permohonan.
           </Link>
+        ) : permohonan?.status === 4 ? (
+          <p className="hidden text-[12px] text-warning-700 font-normal mt-[12px]">
+            Silahkan mengisi survey kepuasan masyarakat (SKM) terlebih dahulu
+            agar dapat mengunduh hasil permohonan.
+          </p>
         ) : (
           <p className="text-[12px] text-warning-700 font-normal mt-[12px]">
             Silahkan mengisi survey kepuasan masyarakat (SKM) terlebih dahulu
@@ -229,16 +234,23 @@ export default function HasilPermohonan({
       </div>
 
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
-        {permohonan?.input_skm === false || permohonan?.status !== 3 ? (
+        {permohonan?.input_skm === true && permohonan?.status === 3 ? (
           <Button
-            disabled
+            onClick={() => openModal()}
             type="submit"
             className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
             Lihat
           </Button>
+        ) : permohonan?.status === 4 ? (
+          <Button
+            disabled
+            type="submit"
+            className="hidden text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+            Lihat
+          </Button>
         ) : (
           <Button
-            onClick={() => openModal()}
+            disabled
             type="submit"
             className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
             Lihat
@@ -282,7 +294,7 @@ export default function HasilPermohonan({
           </Button>
         ) : permohonan?.status === 4 ? (
           <Button
-            className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
+            className="hidden text-[12px] md:w-2/12 text-neutral-50 font-normal"
             disabled>
             Unduh
           </Button>
