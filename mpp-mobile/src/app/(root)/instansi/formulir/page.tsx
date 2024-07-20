@@ -361,7 +361,6 @@ export default function FormulirPage() {
                 <Button
                   variant="success"
                   onClick={handleClick}
-                  // disabled={isLoading ? true : false}>
                   disabled={isButtonDisabled || isLoading}>
                   {isLoading ? (
                     <Loader className="animate-spin" />
