@@ -11,12 +11,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@radix-ui/react-label";
+import parse from "html-react-parser";
 import {
   DesaType,
   KecamatanType,
   TermType,
   UpdateUserType,
 } from "@/types/type";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -57,6 +59,7 @@ export default function DataDiriPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [opacity, setOpacity] = useState(false);
   const [errors, setErrors] = useState<any>({});
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const fetchUser = async () => {
     try {
@@ -140,9 +143,10 @@ export default function DataDiriPage() {
     setOpacity(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
     setIsLoading(true);
+    setIsDialogOpen(false);
 
     try {
       schema.parse(formData);
@@ -165,7 +169,7 @@ export default function DataDiriPage() {
 
       if (response.ok) {
         toast.success("Berhasil mengupdate profile!");
-        setIsLoading(false);
+        // setIsLoading(false);
         router.push("/instansi/formulir");
       }
     } catch (error: any) {
@@ -182,12 +186,6 @@ export default function DataDiriPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleButtonClick = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await handleSubmit(e);
-    window.open(terms?.privasi, "_blank");
   };
 
   return (
@@ -226,9 +224,7 @@ export default function DataDiriPage() {
               </h5>
 
               <div className="flex flex-col w-full px-4 md:px-16 pt-4 md:pt-8 md:mt-4 md:mb-8">
-                <form
-                  onSubmit={handleButtonClick}
-                  className="flex flex-col w-full mt-2 md:mt-4">
+                <form className="flex flex-col w-full mt-2 md:mt-4">
                   <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
                     <div className="flex flex-col w-full md:mb-4">
                       <ProfileEditInput
@@ -674,17 +670,30 @@ export default function DataDiriPage() {
                   </div>
 
                   <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-12">
-                    <Button
-                      className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
-                      type="submit"
-                      variant="success"
-                      disabled={isLoading ? true : false}>
-                      {isLoading ? (
-                        <Loader className="animate-spin" />
-                      ) : (
-                        "Simpan"
-                      )}
-                    </Button>
+                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                      <DialogTrigger>
+                        <div className="w-full bg-primary-700 flex justify-center items-center rounded-full text-neutral-50 hover:bg-primary-600 px-5 py-1 h-[30px] md:h-[40px] text-[12px] md:text-[16px]">
+                          Simpan
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 md:w-4/12 max-h-[600px]">
+                        <div className="m-3 px-4 flex flex-col items-center w-full verticalScroll gap-y-6">
+                          <div>{terms && parse(terms?.privasi_text)}</div>
+
+                          <Button
+                            onClick={handleSubmit}
+                            className="w-4/12 h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                            variant="success"
+                            disabled={isLoading ? true : false}>
+                            {isLoading ? (
+                              <Loader className="animate-spin" />
+                            ) : (
+                              "Setuju"
+                            )}
+                          </Button>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </form>
               </div>
