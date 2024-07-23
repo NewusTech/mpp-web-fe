@@ -1,5 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { toast } from "sonner";
+import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 
 interface PermissionType {

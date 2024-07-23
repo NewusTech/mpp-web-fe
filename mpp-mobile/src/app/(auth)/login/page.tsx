@@ -24,12 +24,11 @@ const raleway = Raleway({
 
 const formSchema = z.object({
   nik: z
-    .string({ message: "NIK can not be empty" })
-    .min(16, { message: "NIK must be at least 16 characters" })
-    .max(16, { message: "NIK must be less than 16 characters" }),
+    .string({ message: "Email/NIK/No-Telepon Tidak Boleh Kosong!" })
+    .min(5, { message: "Email/NIK/No-Telepon harus lebih dari 5 karakter" }),
   password: z
-    .string({ message: "Password must be more than 6 characters" })
-    .min(6, { message: "Password must be more than 6 characters" }),
+    .string({ message: "Password harus lebih dari 6 karakter" })
+    .min(6, { message: "Password harus lebih dari 6 karakter" }),
 });
 
 export default function LoginScreen() {
@@ -144,7 +143,7 @@ export default function LoginScreen() {
                       form={form.control}
                       classStyle="rounded-[50px] border-none outline-none text-[14px] w-full h-[38px] pl-[15px] py-[10px] font-normal placeholder:text-[14px] focus:outline-none active:border-none focus:border-none active:outline-none placeholder:text-neutral-700"
                       labelStyle="text-[12px] text-neutral-900 font-semibold"
-                      placeholder="NIK"
+                      placeholder="Email/NIK/No-Telepon"
                       label="login"
                       type="text"
                       name="nik"

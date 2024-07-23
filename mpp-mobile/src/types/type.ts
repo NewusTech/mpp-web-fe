@@ -90,6 +90,15 @@ export interface AntrianDataType {
   };
 }
 
+export interface SurveiDataType {
+  id: number;
+  date: string;
+  instansi_name: string;
+  layanan_name: string;
+  kritiksaran: string;
+  no_skm: number;
+}
+
 export interface PengaduanType {
   id: number;
   judul: string;

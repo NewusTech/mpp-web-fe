@@ -3,7 +3,7 @@
 import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import fetchNews from "@/components/fetching/berita/berita";
 import { Berita, Instansi } from "@/types/type";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   Select,
@@ -19,6 +19,8 @@ import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
 import LoadingComponent from "@/components/loading/LoadingComponent";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
@@ -118,49 +120,71 @@ export default function BeritaPage() {
         Berita
       </h3>
 
-      <div className="flex w-full flex-row md:self-start md:items-start rounded-xl gap-4 mb-4">
-        <div
-          onClick={handleAllClick}
-          className={`flex items-center justify-center w-1/2 md:w-1/12 text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
-            selectedInstansiId === null
-              ? "bg-primary-200 border-primary-700 text-primary-700"
-              : "border-neutral-700 text-neutral-700"
-          }`}>
-          Semua
+      <div className="flex w-full md:flex-row flex-col md:self-start md:items-start rounded-xl gap-4 mb-4">
+        <div className="flex flex-row w-full gap-x-2">
+          <div
+            onClick={handleAllClick}
+            className={`flex items-center justify-center w-1/2 md:w-4/12 text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
+              selectedInstansiId === null
+                ? "bg-primary-200 border-primary-700 text-primary-700"
+                : "border-neutral-700 text-neutral-700"
+            }`}>
+            Semua
+          </div>
+
+          <div className="flex items-center w-full md:w-8/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+            <Select onValueChange={handleInstansiChange}>
+              <SelectTrigger
+                className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
+                  selectedInstansiId !== null
+                    ? "text-primary-700"
+                    : "opacity-50"
+                }`}>
+                <SelectValue
+                  placeholder="Pilih Instansi"
+                  className="text-neutral-800 w-full"
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <div className="pt-2">
+                  <div className="w-full px-2 mb-2">
+                    <SearchComponent
+                      change={handleSearchChange}
+                      search={search}
+                    />
+                  </div>
+                  {instansis?.map((instansi: Instansi, i: number) => {
+                    return (
+                      <SelectItem
+                        className={`w-full px-4`}
+                        key={i}
+                        value={String(instansi.id)}>
+                        {instansi.name}
+                      </SelectItem>
+                    );
+                  })}
+                </div>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div className="flex items-center w-full md:w-1/4 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
-          <Select onValueChange={handleInstansiChange}>
-            <SelectTrigger
-              className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
-                selectedInstansiId !== null ? "text-primary-700" : "opacity-50"
-              }`}>
-              <SelectValue
-                placeholder="Pilih Instansi"
-                className="text-neutral-800 w-full"
-              />
-            </SelectTrigger>
-            <SelectContent>
-              <div className="pt-2">
-                <div className="w-full px-2 mb-2">
-                  <SearchComponent
-                    change={handleSearchChange}
-                    search={search}
-                  />
-                </div>
-                {instansis?.map((instansi: Instansi, i: number) => {
-                  return (
-                    <SelectItem
-                      className={`w-full px-4`}
-                      key={i}
-                      value={String(instansi.id)}>
-                      {instansi.name}
-                    </SelectItem>
-                  );
-                })}
-              </div>
-            </SelectContent>
-          </Select>
+        <div className="w-full md:w-full">
+          <SearchComponent />
+        </div>
+
+        <div className="flex flex-col md:flex-row w-full md:w-8/12 gap-y-2">
+          <div className="flex flex-row justify-center items-center w-full gap-x-2 md:gap-x-3">
+            <Input
+              type="date"
+              className="w-full h-[40px] block border border-neutral-700 px-2"
+            />
+            <p className="text-center">TO</p>
+            <Input
+              type="date"
+              className="w-full h-[40px] block border border-neutral-700 px-2"
+            />
+          </div>
         </div>
       </div>
 

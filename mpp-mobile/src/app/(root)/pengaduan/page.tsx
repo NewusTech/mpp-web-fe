@@ -44,6 +44,7 @@ import { formatLongDate } from "@/helpers/logout/formatted";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import PengaduanHasil from "./[id]/pengaduan-hasil/page";
 import Link from "next/link";
+import { Input } from "@/components/ui/input";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -351,7 +352,23 @@ export default function PengaduanScreen() {
         </h1>
 
         <div className="w-full mt-4">
-          <div className="md:flex md:justify-end md:mb-6">
+          <div className="md:flex md:flex-row md:justify-end md:mb-6 gap-x-3">
+            <div className="flex flex-row justify-center items-center w-full md:w-8/12 gap-x-3">
+              <Input
+                type="date"
+                className="w-full h-[40px] block border border-neutral-700 px-2"
+              />
+              <p className="text-center">TO</p>
+              <Input
+                type="date"
+                className="w-full h-[40px] block border border-neutral-700 px-2"
+              />
+            </div>
+
+            <div className="w-full md:w-4/12 mt-2 md:mt-0 mb-2 md:mb-0">
+              <SearchComponent />
+            </div>
+
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <div

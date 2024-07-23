@@ -25,6 +25,7 @@ import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstan
 import { Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
+import formatDate, { getTodayDate } from "@/helpers/logout/formatted";
 
 type DataDinasType = {
   id: number;
@@ -213,6 +214,7 @@ export default function SurveySkmPage() {
                     type="date"
                     name="tanggal"
                     value={date ? date : "Pilih Tanggal"}
+                    min={getTodayDate()}
                     onChange={handleChangeDate}
                     className={`w-full pl-4 pr-1 h-10 bg-neutral-50 appearance-none block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
@@ -242,6 +244,7 @@ export default function SurveySkmPage() {
                   type="date"
                   name="tanggal"
                   value={date ? date : "Pilih Tanggal"}
+                  min={getTodayDate()}
                   onChange={handleChangeDate}
                   className={`w-full pl-4 pr-1 h-10 bg-neutral-50 appearance-none block rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${

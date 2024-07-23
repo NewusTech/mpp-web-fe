@@ -3,42 +3,47 @@ import Cookies from "js-cookie";
 
 interface PermissionType {
   id: number;
-  userinfo_id: number;
-  name: string;
-  status: number;
-  layanan_id: number;
-  layanan_name: string;
-  layanan_image: string;
+  code: number;
   instansi_id: number;
-  instansi_name: string;
-  instansi_image: string;
+  layanan_id: number;
+  userinfo_id: number;
+  status: boolean;
+  tanggal: string;
+  waktu: string;
+  Instansi: {
+    name: string;
+  };
+  Layanan: {
+    name: string;
+  };
+  createdAt: string;
 }
 
-interface HistoryPermissiontype {
+interface HistorySurveiType {
   data: PermissionType[];
 }
 
-const initialState: HistoryPermissiontype = {
+const initialState: HistorySurveiType = {
   data: [],
 };
 
-export const HistoryPermohonanSlice = createSlice({
-  name: "riwayatPermohonan",
+export const HistorySurveiSlice = createSlice({
+  name: "riwayatSurvei",
   initialState,
   reducers: {
-    setHistoryPermohonan: (state, action) => {
+    setHistorySurvei: (state, action) => {
       state.data = action.payload;
     },
   },
 });
 
-export const { setHistoryPermohonan } = HistoryPermohonanSlice.actions;
+export const { setHistorySurvei } = HistorySurveiSlice.actions;
 
-export function fetchRiwayatPermohonan() {
+export function fetchRiwayatSurvei() {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/historyform`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userhistorysurvey`,
         {
           method: "GET",
           headers: {
@@ -51,11 +56,11 @@ export function fetchRiwayatPermohonan() {
 
       const result = await response.json();
 
-      dispatch(setHistoryPermohonan(result.data));
+      dispatch(setHistorySurvei(result.data));
     } catch (error) {
       console.log(error);
     }
   };
 }
 
-export default HistoryPermohonanSlice.reducer;
+export default HistorySurveiSlice.reducer;
