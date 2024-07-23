@@ -12,6 +12,8 @@ import WebsitePermohonanHistories from "@/components/histories/results/permohona
 import MobilePermohonanHistories from "@/components/histories/results/permohonans/mobiles/mobilePermohonanHistories";
 import WebsiteAntrianHistories from "@/components/histories/results/antrians/websites/websiteAntrianHistories";
 import MobileAntrianHistories from "@/components/histories/results/antrians/mobiles/mobileAntrianHistories";
+import { fetchRiwayatSurvei } from "@/store/action/actionHistorySurvei";
+import WebsiteSurveiHistories from "@/components/histories/results/surveis/websites/websiteSurveiHistories";
 
 export default function RiwayatPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,9 +23,13 @@ export default function RiwayatPage() {
   const historyAntrianData = useSelector(
     (state: RootState) => state.historyAntrian.data
   );
+  const historySurveiData = useSelector(
+    (state: RootState) => state.historySurvei.data
+  );
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [antrianPage, setAntrianPage] = useState<number>(1);
   const [permohonanPage, setPermohonanPage] = useState<number>(1);
+  const [surveiPage, setSurveiPage] = useState<number>(1);
   const itemsPerPage = 10;
   const token = Cookies.get("Authorization");
 
@@ -31,8 +37,11 @@ export default function RiwayatPage() {
     if (!token) {
       redirect("/login");
     }
-    dispatch(fetchRiwayatPermohonan());
-    dispatch(fetchRiwayatAntrian());
+    const fetchInterval = setInterval(() => {
+      dispatch(fetchRiwayatPermohonan());
+      dispatch(fetchRiwayatAntrian());
+      dispatch(fetchRiwayatSurvei());
+    }, 3000);
 
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 678);
@@ -40,7 +49,10 @@ export default function RiwayatPage() {
 
     handleResize();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearInterval(fetchInterval);
+    };
   }, [dispatch, token]);
 
   const paginate = (items: any[], pageNumber: number, itemsPerPage: number) => {
@@ -56,6 +68,11 @@ export default function RiwayatPage() {
   const currentPermohonans = paginate(
     historyData || [],
     permohonanPage,
+    itemsPerPage
+  );
+  const currentSurveis = paginate(
+    historySurveiData || [],
+    surveiPage,
     itemsPerPage
   );
 
@@ -84,16 +101,24 @@ export default function RiwayatPage() {
                   className="text-[16px] md:text-[20px] font-normal">
                   Permohonan
                 </TabsTrigger>
+                <TabsTrigger
+                  value="survei"
+                  className="text-[16px] md:text-[20px] font-normal">
+                  Survei
+                </TabsTrigger>
               </TabsList>
             </div>
           ) : (
             <div className="flex mt-[26px]">
-              <TabsList className="grid grid-cols-2 w-full gap-[10px]">
+              <TabsList className="grid grid-cols-3 w-full gap-[10px]">
                 <TabsTrigger value="antrian" className="font-normal">
                   Antrian
                 </TabsTrigger>
                 <TabsTrigger value="permohonan" className="font-normal">
                   Permohonan
+                </TabsTrigger>
+                <TabsTrigger value="survei" className="font-normal">
+                  Survei
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -119,6 +144,16 @@ export default function RiwayatPage() {
                     currentPage={permohonanPage}
                     onPageChange={setPermohonanPage}
                     totalItems={historyData.length}
+                  />
+                </TabsContent>
+
+                <TabsContent value="survei">
+                  <WebsiteSurveiHistories
+                    currentSurveis={currentSurveis}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={surveiPage}
+                    onPageChange={setSurveiPage}
+                    totalItems={historySurveiData.length}
                   />
                 </TabsContent>
               </>

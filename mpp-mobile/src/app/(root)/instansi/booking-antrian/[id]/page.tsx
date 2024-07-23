@@ -20,6 +20,7 @@ import { z } from "zod";
 import { Loader } from "lucide-react";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import AntrianCheck from "@/components/fetching/antrianCheck/antrianCheck";
+import { getCurrentTime, getTodayDate } from "@/helpers/logout/formatted";
 
 export default function BookingAntrianPage({
   params,
@@ -148,7 +149,7 @@ export default function BookingAntrianPage({
   };
 
   const handleChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTanggal(e.target.value);
+    setJam(e.target.value);
     setChangeOpacity(true);
     setAntrian((prevAntrian) => ({
       ...prevAntrian,
@@ -157,7 +158,7 @@ export default function BookingAntrianPage({
   };
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setJam(e.target.value);
+    setTanggal(e.target.value);
     setChangeOpacity(true);
     setAntrian((prevAntrian) => ({
       ...prevAntrian,
@@ -179,6 +180,18 @@ export default function BookingAntrianPage({
       HandleAntrianCheck(antrian?.layanan_id);
     }
   }, [antrian?.layanan_id]);
+
+  const isToday = tanggal === getTodayDate();
+
+  useEffect(() => {
+    if (isToday && jam && jam < getCurrentTime()) {
+      setJam(getCurrentTime());
+      setAntrian((prevAntrian) => ({
+        ...prevAntrian,
+        waktu: getCurrentTime(),
+      }));
+    }
+  }, [tanggal, jam]);
 
   return (
     <div className="w-full bg-primary-100 md:mb-0">
@@ -237,6 +250,7 @@ export default function BookingAntrianPage({
                       id="tanggal"
                       type="date"
                       value={antrian.tanggal}
+                      min={getTodayDate()}
                       name="tanggal"
                       className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
@@ -267,6 +281,7 @@ export default function BookingAntrianPage({
                     type="date"
                     name="tanggal"
                     value={antrian.tanggal}
+                    min={getTodayDate()}
                     className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
@@ -298,6 +313,7 @@ export default function BookingAntrianPage({
                       type="time"
                       name="waktu"
                       value={antrian.waktu}
+                      min={isToday ? getCurrentTime() : undefined}
                       className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity
@@ -327,6 +343,7 @@ export default function BookingAntrianPage({
                     type="time"
                     name="waktu"
                     value={antrian.waktu}
+                    min={isToday ? getCurrentTime() : undefined}
                     className={`w-full pl-4 h-[40px] bg-neutral-50 appearance-none rounded-none border-b border-neutral-800 placeholder:text-[12px] focus:outline-none
                   ${
                     changeOpacity

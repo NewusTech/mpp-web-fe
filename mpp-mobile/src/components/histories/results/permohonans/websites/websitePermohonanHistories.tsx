@@ -8,10 +8,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Image from "next/legacy/image";
 import { PermohonanDataType } from "@/types/type";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import TablePermohonanComponent from "@/components/histories/others/tablePermohonanComponent/tablePermohonanComponent";
+import SearchComponent from "@/components/others/searchComponent/searchComponent";
+import { Input } from "@/components/ui/input";
+import { statusDatas } from "@/data/data";
 
 export default function WebsitePermohonanHistories({
   currentPermohonans,
@@ -27,7 +37,53 @@ export default function WebsitePermohonanHistories({
   totalItems: number;
 }) {
   return (
-    <>
+    <div className="flex flex-col w-full gap-y-4">
+      <div className="flex flex-row w-full gap-x-2">
+        <div className="flex items-center w-full md:w-4/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+          <Select>
+            <SelectTrigger
+              className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+              <SelectValue
+                placeholder="Pilih By Status"
+                className="text-neutral-800 w-full"
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <div className="pt-2">
+                {statusDatas &&
+                  statusDatas.map(
+                    (status: { id: number; value: string }, i: number) => {
+                      return (
+                        <SelectItem
+                          key={i}
+                          className={`w-full px-4`}
+                          value={status.id.toString()}>
+                          {status.value}
+                        </SelectItem>
+                      );
+                    }
+                  )}
+              </div>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="w-6/12">
+          <SearchComponent />
+        </div>
+
+        <div className="flex flex-row justify-center items-center w-full gap-x-3">
+          <Input
+            type="date"
+            className="w-full h-[40px] block border border-neutral-700 px-2"
+          />
+          <p className="text-center">TO</p>
+          <Input
+            type="date"
+            className="w-full h-[40px] block border border-neutral-700 px-2"
+          />
+        </div>
+      </div>
       {currentPermohonans && currentPermohonans.length > 0 ? (
         <>
           <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
@@ -66,6 +122,6 @@ export default function WebsitePermohonanHistories({
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }

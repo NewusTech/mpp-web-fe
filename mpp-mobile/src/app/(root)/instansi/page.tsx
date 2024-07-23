@@ -2,6 +2,13 @@
 
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
@@ -9,6 +16,7 @@ import CardLayananComponent from "@/components/services/others/cardLayananCompon
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import { Layanantype } from "@/types/type";
 import LoadingComponent from "@/components/loading/LoadingComponent";
+import { statusInstansis } from "@/data/data";
 
 export default function LayananPage() {
   const [instansi, setInstansi] = useState([]);
@@ -54,8 +62,99 @@ export default function LayananPage() {
       </h4>
 
       <div className="flex w-full flex-col md:w-full justify-center gap-[36px]">
-        <div className="w-full md:self-end md:w-1/3 md:pr-[60px]">
-          <SearchComponent change={change} search={search} />
+        <div className="flex flex-col md:flex-row w-full gap-x-3 gap-y-3">
+          <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+            <Select>
+              <SelectTrigger
+                className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+                <SelectValue
+                  placeholder="Pilih By Instansi"
+                  className="text-neutral-800 w-full"
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <div className="pt-2">
+                  {statusInstansis &&
+                    statusInstansis.map(
+                      (status: { id: number; value: string }, i: number) => {
+                        return (
+                          <SelectItem
+                            key={i}
+                            className={`w-full px-4`}
+                            value={status.id.toString()}>
+                            {status.value}
+                          </SelectItem>
+                        );
+                      }
+                    )}
+                </div>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+            <Select>
+              <SelectTrigger
+                className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+                <SelectValue
+                  placeholder="Pilih By Layanan"
+                  className="text-neutral-800 w-full"
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <div className="pt-2">
+                  {statusInstansis &&
+                    statusInstansis.map(
+                      (status: { id: number; value: string }, i: number) => {
+                        return (
+                          <SelectItem
+                            key={i}
+                            className={`w-full px-4`}
+                            value={status.id.toString()}>
+                            {status.value}
+                          </SelectItem>
+                        );
+                      }
+                    )}
+                </div>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-row w-full gap-x-2">
+            <div className="flex items-center w-full h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+              <Select>
+                <SelectTrigger
+                  className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+                  <SelectValue
+                    placeholder="Pilih By Status"
+                    className="text-neutral-800 w-full"
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <div className="pt-2">
+                    {statusInstansis &&
+                      statusInstansis.map(
+                        (status: { id: number; value: string }, i: number) => {
+                          return (
+                            <SelectItem
+                              key={i}
+                              className={`w-full px-4`}
+                              value={status.id.toString()}>
+                              {status.value}
+                            </SelectItem>
+                          );
+                        }
+                      )}
+                  </div>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full">
+              <SearchComponent change={change} search={search} />
+            </div>
+          </div>
         </div>
 
         <div className="flex w-full flex-col md:w-full md:justify-center gap-[16px]">

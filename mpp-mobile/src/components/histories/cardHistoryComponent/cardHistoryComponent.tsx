@@ -90,16 +90,16 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
             {permohonan.status === 0
               ? "Belum diproses"
               : permohonan.status === 1
-              ? "Sedang ditindak lanjuti"
+              ? "Sedang diproses"
               : permohonan.status === 2
-              ? "Sudah ditindak lanjuti"
+              ? "Sudah diproses"
               : permohonan.status === 3
               ? "Selesai"
               : permohonan.status === 4
               ? "Ditolak"
               : permohonan.status === 5
               ? "Butuh Perbaikan"
-              : "Sudah Diperbaiki"}
+              : "Menunggu Validasi"}
           </p>
         </div>
       </div>

@@ -26,9 +26,9 @@ export default function TablePermohonanComponent({
   } else if (permohonan.status === 4) {
     permohonanStatus = "Ditolak";
   } else if (permohonan.status === 5) {
-    permohonanStatus = "Butuh Perbaiki";
+    permohonanStatus = "Butuh Perbaikan";
   } else {
-    permohonanStatus = "Sudah Diperbaiki";
+    permohonanStatus = "Menunggu Validasi";
   }
 
   let statusColor = "";

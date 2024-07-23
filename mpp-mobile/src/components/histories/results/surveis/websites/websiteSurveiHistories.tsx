@@ -1,13 +1,15 @@
 "use client";
 
 import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import { AntrianDataType } from "@/types/type";
+import SearchComponent from "@/components/others/searchComponent/searchComponent";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
+  TableCell,
 } from "@/components/ui/table";
 import {
   Select,
@@ -16,22 +18,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Image from "next/legacy/image";
-import PaginationComponent from "@/components/pagination/paginationComponent";
-import TableAntrianComponent from "@/components/histories/others/tableAntrianComponent/tableAntrianComponent";
-import SearchComponent from "@/components/others/searchComponent/searchComponent";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { statusDatas } from "@/data/data";
+import { SurveiDataType } from "@/types/type";
+import PaginationComponent from "@/components/pagination/paginationComponent";
+import Image from "next/legacy/image";
+import TableSurveiComponent from "@/components/histories/others/tableSurveiComponent/tableSurveiComponent";
 
-export default function WebsiteAntrianHistories({
-  currentAntrians,
+export default function WebsiteSurveiHistories({
+  currentSurveis,
   itemsPerPage,
   currentPage,
   onPageChange,
   totalItems,
 }: {
-  currentAntrians: AntrianDataType[];
+  currentSurveis: SurveiDataType[];
   itemsPerPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
@@ -85,21 +85,22 @@ export default function WebsiteAntrianHistories({
           />
         </div>
       </div>
-      {currentAntrians && currentAntrians.length > 0 ? (
+      {currentSurveis && currentSurveis.length > 0 ? (
         <>
           <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
             <TableHeader className="md:flex md:w-full">
               <TableRow className="md:flex md:flex-row md:w-full">
-                <TableHead className="w-1/2">Nomor Antrian</TableHead>
-                <TableHead className="w-full">Instansi</TableHead>
-                <TableHead className="w-1/2">Waktu</TableHead>
-                <TableHead className="w-1/2">Tanggal</TableHead>
+                <TableHead className="w-4/12">Nomor SKM</TableHead>
+                <TableHead className="w-7/12">Instansi</TableHead>
+                <TableHead className="w-7/12">Layanan</TableHead>
+                <TableHead className="w-4/12">Tanggal</TableHead>
+                <TableHead className="w-full">Kritik dan Saran</TableHead>
                 <TableHead className="w-3/12">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentAntrians?.map((antrian: AntrianDataType, i: number) => {
-                return <TableAntrianComponent key={i} antrian={antrian} />;
+              {currentSurveis?.map((survei: SurveiDataType, i: number) => {
+                return <TableSurveiComponent survei={survei} key={i} />;
               })}
             </TableBody>
           </Table>

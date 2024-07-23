@@ -194,6 +194,15 @@ export default function MppNext({
                   <p className="text-[16px]">Pengaduan</p>
                 </Link>
               </Button>
+
+              <Link
+                href={`https://www.lapor.go.id`}
+                target="_blank"
+                className="w-10/12 flex justify-center rounded-full h-[40px] items-center gap-x-4 bg-secondary-700 hover:bg-secondary-600 text-neutral-50 px-5">
+                <Ticket className="w-5" />
+
+                <p className="text-[16px]">Lapor</p>
+              </Link>
             </div>
           </div>
         </div>

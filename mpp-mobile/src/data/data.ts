@@ -116,3 +116,41 @@ export const golonganDarahs = [
     value: "O",
   },
 ];
+
+export const statusInstansis = [
+  {
+    id: 1,
+    value: "Buka",
+  },
+  {
+    id: 2,
+    value: "Tutup",
+  },
+];
+
+export const statusDatas = [
+  {
+    id: 1,
+    value: "Belum diproses",
+  },
+  {
+    id: 2,
+    value: "Sudah diproses",
+  },
+  {
+    id: 3,
+    value: "Selesai",
+  },
+  {
+    id: 4,
+    value: "Ditolak",
+  },
+  {
+    id: 5,
+    value: "Butuh perbaikan",
+  },
+  {
+    id: 6,
+    value: "Menunggu validasi",
+  },
+];
