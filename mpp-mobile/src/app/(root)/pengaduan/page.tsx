@@ -45,6 +45,9 @@ import LoadingComponent from "@/components/loading/LoadingComponent";
 import PengaduanHasil from "./[id]/pengaduan-hasil/page";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
+import fetchInstansiPengaduan from "@/components/fetching/instansi/pengaduanInstansi";
+import LayananPengaduan from "@/components/fetching/layanan/layananPengaduan/layananPengaduan";
+import { statusPengaduans } from "@/data/data";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -68,6 +71,7 @@ export default function PengaduanScreen() {
     judul: "",
     image: "",
   });
+  const [status, setStatus] = useState<string>("");
   const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
   const [pengaduanImage, setPengaduanImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -75,6 +79,13 @@ export default function PengaduanScreen() {
   const [service, setService] = useState<JenisLayananType[]>([]);
   const [search, setSearch] = useState("");
   const debounceSearch = useDebounce(search);
+  const [filterDate, setFilterDate] = useState<{
+    startDate: string;
+    endDate: string;
+  }>({
+    startDate: "",
+    endDate: "",
+  });
   const [isOpen, setIsOpen] = useState(false);
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>("");
@@ -122,10 +133,24 @@ export default function PengaduanScreen() {
     }
   }, []);
 
-  const fetchPengaduanList = async (page: number, limit: number) => {
+  const fetchPengaduanList = async (
+    page: number,
+    limit: number,
+    search: string,
+    startDate: string,
+    endDate: string,
+    status: string
+  ) => {
     setLoadingData(true);
     try {
-      const pengaduans = await fetchPengaduanLists(page, limit);
+      const pengaduans = await fetchPengaduanLists(
+        page,
+        limit,
+        search,
+        startDate,
+        endDate,
+        status
+      );
 
       setPengaduanLists(pengaduans.data);
       setLoadingData(false);
@@ -137,8 +162,15 @@ export default function PengaduanScreen() {
   };
 
   useEffect(() => {
-    fetchPengaduanList(1, limitData);
-  }, []);
+    fetchPengaduanList(
+      1,
+      limitData,
+      debounceSearch,
+      filterDate.startDate,
+      filterDate.endDate,
+      status
+    );
+  }, [debounceSearch, filterDate.startDate, filterDate.endDate, status]);
 
   const paginate = (
     items: PengaduanType[],
@@ -155,9 +187,13 @@ export default function PengaduanScreen() {
     itemsPerPage
   );
 
-  const fetchInstance = async (search: string) => {
+  const fetchInstance = async (
+    page: number,
+    limit: number,
+    pengaduan: boolean
+  ) => {
     try {
-      const res = await fetchInstansi(search, 1, limitData);
+      const res = await fetchInstansiPengaduan(page, limit, pengaduan);
 
       setInstansi(res.data || []);
     } catch (error) {
@@ -166,17 +202,32 @@ export default function PengaduanScreen() {
   };
 
   useEffect(() => {
-    fetchInstance(debounceSearch);
-  }, [debounceSearch]);
+    fetchInstance(1, limitData, true);
+  }, []);
 
-  const fetchLayanan = async (id: number) => {
+  const fetchLayanan = async (id: number, pengaduan: boolean) => {
     try {
-      const layananByInstansi = await ByInstansi(id);
+      const layananByInstansi = await LayananPengaduan(id, pengaduan);
 
       setService(layananByInstansi.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterDate({
+      ...filterDate,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSelectStatusChange = (statusPengaduan: string) => {
+    setStatus(statusPengaduan);
   };
 
   const handleInstansiChange = (selectedInstansiId: string): void => {
@@ -189,7 +240,7 @@ export default function PengaduanScreen() {
     }));
 
     if (instansiId) {
-      fetchLayanan(instansiId);
+      fetchLayanan(instansiId, true);
     } else {
       setService([]);
     }
@@ -247,7 +298,7 @@ export default function PengaduanScreen() {
           });
           setPreviewImage("");
           setIsOpen(false);
-          fetchPengaduanList(1, limitData);
+          fetchPengaduanList(1, limitData, "", "", "", status);
           setFormErrors({});
         } else {
           setIsOpen(true);
@@ -353,20 +404,55 @@ export default function PengaduanScreen() {
 
         <div className="w-full mt-4">
           <div className="md:flex md:flex-row md:justify-end md:mb-6 gap-x-3">
-            <div className="flex flex-row justify-center items-center w-full md:w-8/12 gap-x-3">
+            <div className="flex items-center w-full md:w-3/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px] mb-2 md:mb-0">
+              <Select onValueChange={handleSelectStatusChange}>
+                <SelectTrigger
+                  className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+                  <SelectValue
+                    placeholder="Pilih By Status"
+                    className="text-neutral-800 w-full"
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <div className="pt-2">
+                    {statusPengaduans &&
+                      statusPengaduans.map(
+                        (status: { id: number; value: string }, i: number) => {
+                          return (
+                            <SelectItem
+                              key={i}
+                              className={`w-full px-4`}
+                              value={status.id.toString()}>
+                              {status.value}
+                            </SelectItem>
+                          );
+                        }
+                      )}
+                  </div>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-row justify-center items-center w-full md:w-5/12 gap-x-3">
               <Input
                 type="date"
+                name="startDate"
+                onChange={handleDateChange}
+                value={filterDate.startDate}
                 className="w-full h-[40px] block border border-neutral-700 px-2"
               />
               <p className="text-center">TO</p>
               <Input
                 type="date"
+                name="endDate"
+                onChange={handleDateChange}
+                value={filterDate.endDate}
                 className="w-full h-[40px] block border border-neutral-700 px-2"
               />
             </div>
 
             <div className="w-full md:w-4/12 mt-2 md:mt-0 mb-2 md:mb-0">
-              <SearchComponent />
+              <SearchComponent change={handleSearch} search={search} />
             </div>
 
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -407,15 +493,6 @@ export default function PengaduanScreen() {
                         </SelectTrigger>
                         <SelectContent className="w-full md:w-full">
                           <div>
-                            <div className="w-full px-2 mt-2">
-                              <SearchComponent
-                                change={(
-                                  e: React.ChangeEvent<HTMLInputElement>
-                                ) => setSearch(e.target.value)}
-                                search={search}
-                              />
-                            </div>
-
                             {instansi.map((item: Instansi, i: number) => (
                               <SelectItem
                                 key={i}
@@ -660,7 +737,6 @@ export default function PengaduanScreen() {
                           pengaduanPaginate?.map(
                             (pengaduan: PengaduanType, i: number) => {
                               const datePengaduan = pengaduan.createdAt;
-                              const dateEnd = pengaduan.updatedAt;
                               const date = new Date(datePengaduan);
                               const daysInIndonesian = [
                                 "Minggu",
@@ -680,13 +756,6 @@ export default function PengaduanScreen() {
                                 );
                               }
 
-                              let dateEndPengaduanFormatted = "";
-                              if (dateEnd) {
-                                dateEndPengaduanFormatted = formatLongDate(
-                                  `${dateEnd}`
-                                );
-                              }
-
                               let statusColor = "";
 
                               switch (pengaduan?.status) {
@@ -699,11 +768,8 @@ export default function PengaduanScreen() {
                                 case 0:
                                   statusColor = "text-primary-700";
                                   break;
-                                case 4:
-                                  statusColor = "text-success-700";
-                                  break;
                                 case 3:
-                                  statusColor = "text-error-700";
+                                  statusColor = "text-success-700";
                                   break;
                                 default:
                                   statusColor = "text-gray-500";
@@ -735,12 +801,10 @@ export default function PengaduanScreen() {
                                       ? "Sedang ditindak lanjuti"
                                       : pengaduan.status === 2
                                       ? "Sudah ditindak lanjuti"
-                                      : pengaduan.status === 3
-                                      ? "Gagal"
                                       : "Selesai"}
                                   </TableCell>
                                   <TableCell className="w-3/12">
-                                    {pengaduan.status !== 4 ? (
+                                    {pengaduan.status !== 3 ? (
                                       <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-not-allowed text-center rounded-full bg-neutral-700 hover:bg-neutral-600">
                                         Lihat
                                       </div>

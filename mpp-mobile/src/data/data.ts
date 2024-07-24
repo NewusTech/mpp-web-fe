@@ -154,3 +154,22 @@ export const statusDatas = [
     value: "Menunggu validasi",
   },
 ];
+
+export const statusPengaduans = [
+  {
+    id: 0,
+    value: "Belum diproses",
+  },
+  {
+    id: 1,
+    value: "Sedang ditindak lanjuti",
+  },
+  {
+    id: 2,
+    value: "Sudah ditindak lanjuti",
+  },
+  {
+    id: 3,
+    value: "Selesai",
+  },
+];

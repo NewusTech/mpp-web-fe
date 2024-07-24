@@ -5,7 +5,8 @@ import Cookies from "js-cookie";
 export default async function fetchInstansi(
   search: string,
   page = 1,
-  limit = 8
+  limit = 8,
+  status?: string
 ) {
   const token = Cookies.get("Authorization");
 

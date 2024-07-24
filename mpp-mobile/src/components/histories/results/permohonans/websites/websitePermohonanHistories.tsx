@@ -29,18 +29,31 @@ export default function WebsitePermohonanHistories({
   currentPage,
   onPageChange,
   totalItems,
+  search,
+  change,
+  handleDateChange,
+  filterDate,
+  handleSelectStatusChange,
 }: {
   currentPermohonans: PermohonanDataType[];
   itemsPerPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
   totalItems: number;
+  search: string;
+  change: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  filterDate: {
+    startDate: string;
+    endDate: string;
+  };
+  handleSelectStatusChange: (e: string) => void;
 }) {
   return (
     <div className="flex flex-col w-full gap-y-4">
       <div className="flex flex-row w-full gap-x-2">
         <div className="flex items-center w-full md:w-4/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
-          <Select>
+          <Select onValueChange={handleSelectStatusChange}>
             <SelectTrigger
               className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
               <SelectValue
@@ -69,16 +82,22 @@ export default function WebsitePermohonanHistories({
         </div>
 
         <div className="w-6/12">
-          <SearchComponent />
+          <SearchComponent change={change} search={search} />
         </div>
 
         <div className="flex flex-row justify-center items-center w-full gap-x-3">
           <Input
+            value={filterDate.startDate}
+            onChange={handleDateChange}
+            name="startDate"
             type="date"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
           <p className="text-center">TO</p>
           <Input
+            onChange={handleDateChange}
+            name="endDate"
+            value={filterDate.endDate}
             type="date"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />

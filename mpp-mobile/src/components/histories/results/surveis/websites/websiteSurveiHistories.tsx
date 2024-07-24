@@ -30,17 +30,28 @@ export default function WebsiteSurveiHistories({
   currentPage,
   onPageChange,
   totalItems,
+  search,
+  change,
+  handleDateChange,
+  filterDate,
 }: {
   currentSurveis: SurveiDataType[];
   itemsPerPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
   totalItems: number;
+  search: string;
+  change: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  filterDate: {
+    startDate: string;
+    endDate: string;
+  };
 }) {
   return (
     <div className="flex flex-col w-full gap-y-4">
       <div className="flex flex-row w-full gap-x-2">
-        <div className="flex items-center w-full md:w-4/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+        {/* <div className="flex items-center w-full md:w-4/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
           <Select>
             <SelectTrigger
               className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
@@ -67,20 +78,26 @@ export default function WebsiteSurveiHistories({
               </div>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         <div className="w-6/12">
-          <SearchComponent />
+          <SearchComponent change={change} search={search} />
         </div>
 
         <div className="flex flex-row justify-center items-center w-full gap-x-3">
           <Input
             type="date"
+            onChange={handleDateChange}
+            value={filterDate?.startDate}
+            name="startDate"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
           <p className="text-center">TO</p>
           <Input
             type="date"
+            onChange={handleDateChange}
+            value={filterDate?.endDate}
+            name="endDate"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
         </div>

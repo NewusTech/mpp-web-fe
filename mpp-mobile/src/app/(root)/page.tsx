@@ -49,7 +49,7 @@ function Home() {
 
   const fetchAll = async (search: string) => {
     try {
-      const news = await fetchNews(page, 3);
+      const news = await fetchNews(page, 3, "", "", "");
 
       const layanan = await fetchInstansi(search, page, 10);
 
@@ -90,15 +90,15 @@ function Home() {
 
   let date = "";
 
-  if (berita?.data[0].createdAt) {
+  if (berita?.data[0]?.createdAt) {
     date = formatDate(`${berita?.data[berita.data.length - 1].createdAt}`);
   }
 
-  const image = berita?.data[berita.data.length - 1].image;
-  const slug = berita?.data[berita.data.length - 1].slug;
-  const desc = berita?.data[berita.data.length - 1].desc;
-  const title = berita?.data[berita.data.length - 1].title;
-  const instansi = berita?.data[berita.data.length - 1].Instansi?.name;
+  const image = berita?.data[berita.data.length - 1]?.image;
+  const slug = berita?.data[berita.data.length - 1]?.slug;
+  const desc = berita?.data[berita.data.length - 1]?.desc;
+  const title = berita?.data[berita.data.length - 1]?.title;
+  const instansi = berita?.data[berita.data.length - 1]?.Instansi?.name;
 
   const truncateDesc = truncateTitle(desc ?? "", 750);
 
