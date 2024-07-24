@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useRef, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import ProfileEditInput from "@/components/others/profileEditIput/profileEditInput";
 import {
   Select,
@@ -27,11 +27,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
-import SearchComponent from "@/components/others/searchComponent/searchComponent";
-import { z } from "zod";
-import { schemaUpdateDiri } from "@/lib/zodSchema";
 import { ChevronDown, Loader, Trash } from "lucide-react";
-import { useDebounce } from "@/hooks/useDebounce/useDebounce";
+import LoadingComponent from "@/components/loading/LoadingComponent";
 
 export default function ProfileEditPage({
   params,
@@ -40,6 +37,7 @@ export default function ProfileEditPage({
 }) {
   const router = useRouter();
   const token = Cookies.get("Authorization");
+  const searchParams = useSearchParams();
   const dropRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState<UpdateUserType | null>(null);
   const [kecamatans, setKecamatans] = useState<KecamatanType[]>();
@@ -56,6 +54,17 @@ export default function ProfileEditPage({
   const [previewFotos, setPreviewFotos] = useState<string>("");
   const [previewAktalahir, setPreviewAktalahir] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isTabs, setIsTabs] = useState<string | undefined>(undefined);
+
+  const search = searchParams.get("tabs");
+
+  useEffect(() => {
+    if (search == "data-diri") {
+      setIsTabs("Data Diri");
+    } else if (search == "dokumen-pendukung") {
+      setIsTabs("Dokumen Pendukung");
+    }
+  }, [search]);
 
   const fetchUser = async () => {
     try {
@@ -72,6 +81,7 @@ export default function ProfileEditPage({
     if (!token) {
       redirect("/login");
     }
+
     fetchUser();
   }, []);
 
@@ -234,7 +244,7 @@ export default function ProfileEditPage({
       toast("Failed to update profile!");
     } finally {
       setIsLoading(false);
-      router.push("/profile");
+      router.push(`/profile?tabs=${"data-diri"}`);
     }
   };
 
@@ -282,7 +292,7 @@ export default function ProfileEditPage({
       toast("Failed to update profile!");
     } finally {
       setIsLoading(false);
-      router.push("/profile");
+      router.push(`/profile?tabs=${"dokumen-pendukung"}`);
     }
   };
 
@@ -399,6 +409,16 @@ export default function ProfileEditPage({
     setFormData({ ...formData, aktalahir: "" });
   };
 
+  if (isTabs === undefined) {
+    return (
+      <div className="flex justify-center items-center mt-32">
+        <div className="flex flex-row justify-center items-center self-center w-4/12">
+          <LoadingComponent />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section className="flex items-center justify-center pb-32 bg-primary-100 mt-6 md:mt-0 md:pt-6 md:mb-0 md:pb-[120px]">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
@@ -409,7 +429,7 @@ export default function ProfileEditPage({
         </div>
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">
-          <Tabs defaultValue="Data Diri" className="pt-6">
+          <Tabs defaultValue={isTabs} className="pt-6">
             <TabsList className="py-0 w-full grid grid-cols-2 md:flex md:flex-row justify-between md:justify-start items-center">
               <TabsTrigger
                 className="font-semibold rounded-l-lg w-full py-4 bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 px-0 text-primary-700 md:text-[20px]"

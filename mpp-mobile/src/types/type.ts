@@ -299,6 +299,7 @@ export interface ProfileNewType {
   fileijazahlain?: string;
   aktalahir?: string;
   foto?: string;
+  fotoprofil?: string;
 }
 
 export interface UpdateUserType {
@@ -327,6 +328,7 @@ export interface UpdateUserType {
   slug?: string;
   foto?: string;
   aktalahir?: string;
+  fotoprofil?: string;
 }
 
 export interface KecamatanType {
