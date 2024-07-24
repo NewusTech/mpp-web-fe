@@ -32,8 +32,6 @@ import {
 } from "@/types/type";
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
-import fetchInstansi from "@/components/fetching/instansi/instansi";
-import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import Cookies from "js-cookie";
 import { redirect, useRouter } from "next/navigation";
 import fetchPengaduanLists from "@/components/fetching/pengaduan/pengaduan";
@@ -42,7 +40,6 @@ import Image from "next/image";
 import z from "zod";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import LoadingComponent from "@/components/loading/LoadingComponent";
-import PengaduanHasil from "./[id]/pengaduan-hasil/page";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import fetchInstansiPengaduan from "@/components/fetching/instansi/pengaduanInstansi";

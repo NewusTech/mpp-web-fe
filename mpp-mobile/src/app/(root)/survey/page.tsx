@@ -142,6 +142,8 @@ export default function SurveySkmPage() {
         toast("Pengecekan Survei Berhasil!");
         setIsLoading(false);
         router.push("/survey/skm");
+      } else {
+        toast("Anda Telah Mengisi Survei!");
       }
     } catch (error) {
       toast("Anda Telah Mengisi Survei!");

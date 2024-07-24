@@ -1,13 +1,18 @@
 "use client";
 
+import picture from "@/../../public/assets/profile-picture.png";
 import fetchProfile from "@/components/fetching/profile/profile";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
-import { redirect } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DocumentResultType, ProfileNewType } from "@/types/type";
+import {
+  DocumentResultType,
+  ProfileNewType,
+  UpdateUserType,
+} from "@/types/type";
 import { Label } from "@radix-ui/react-label";
 import Image from "next/image";
 import {
@@ -19,12 +24,33 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CardDocumentInstansi from "@/components/profiles/cardDocumentInstansi/cardocumentInstansi";
 import fetchHistoryDoc from "@/components/fetching/historyDoc/historyDoc";
+import { StaticImageData } from "next/legacy/image";
+import { Loader } from "lucide-react";
 
 export default function ProfilePage() {
+  const router = useRouter();
   const token = Cookies.get("Authorization");
+  const searchParams = useSearchParams();
+  const dropRef = useRef<HTMLDivElement>(null);
   const [profile, setProfile] = useState<ProfileNewType>();
+  const [newProfile, setNewProfile] = useState<UpdateUserType>();
   const [documents, setDocuments] = useState<DocumentResultType[]>();
   const [modalImage, setModalImage] = useState<string>();
+  const [isTabs, setIsTabs] = useState<string>("Data Diri");
+  const [fotoProfile, setFotoProfile] = useState<File | null>(null);
+  const [previewPPImage, setPreviewPPImage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const search = searchParams.get("tabs");
+
+  useEffect(() => {
+    if (search == "data-diri") {
+      setIsTabs("Data Diri");
+    } else if (search == "dokumen-pendukung") {
+      setIsTabs("Dokumen Pendukung");
+    }
+  }, [search]);
 
   const handleImageClick = (image: string) => {
     setModalImage(image);
@@ -36,6 +62,7 @@ export default function ProfilePage() {
       const docs = await fetchHistoryDoc();
 
       setProfile(result.data);
+      setNewProfile(result.data);
       setDocuments(docs.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
@@ -149,6 +176,86 @@ export default function ProfilePage() {
       break;
   }
 
+  const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData();
+
+    if (fotoProfile) {
+      formData.append("fotoprofil", fotoProfile);
+    }
+
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/updatefoto/${profile?.slug}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          body: formData,
+          cache: "no-store",
+        }
+      );
+
+      await response.json();
+
+      if (response.ok) {
+        toast.success("Berhasil mengupdate foto profil!");
+        setIsOpen(false);
+        setIsLoading(false);
+        fetchProfiles();
+      } else {
+        setIsOpen(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      router.push("/profile");
+    }
+  };
+
+  const handleFilePPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFotoProfile(file);
+      setNewProfile({
+        ...newProfile,
+        fotoprofil: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewPPImage(fileUrl);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDropPP = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      setFotoProfile(file);
+      setNewProfile({
+        ...newProfile,
+        fotoprofil: file.name,
+      });
+      const fileUrl = URL.createObjectURL(file);
+      setPreviewPPImage(fileUrl);
+    }
+  };
+
   return (
     <section className="flex items-center justify-center w-full px-4 md:px-0 mb-32 pt-6 md:pb-16 bg-primary-100">
       <div className="flex flex-col items-center w-full md:mx-[200px]">
@@ -161,7 +268,8 @@ export default function ProfilePage() {
         <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md md:px-[75px] md:pt-8">
           <div className="flex flex-col pt-4">
             <Tabs
-              defaultValue="Data Diri"
+              value={isTabs ? isTabs : "Data Diri"}
+              onValueChange={(value) => setIsTabs(value)}
               className="flex flex-col md:gap-y-0 px-1">
               <TabsList className="py-0 w-full md:flex md:flex-row justify-between md:justify-start items-center">
                 <TabsTrigger
@@ -169,17 +277,120 @@ export default function ProfilePage() {
                   value="Data Diri">
                   <div>Data Diri</div>
                 </TabsTrigger>
+
                 <TabsTrigger
                   className="font-semibold w-5/12 py-4 rounded-none bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-3 text-primary-700 md:text-[20px]"
                   value="Dokumen Pendukung">
                   <div>Dokumen Pendukung</div>
                 </TabsTrigger>
+
                 <TabsTrigger
                   className="font-semibold w-5/12 py-4 rounded-r-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-2 text-primary-700 md:text-[20px]"
                   value="Dokumen Terbit">
                   <div>Dokumen Terbit</div>
                 </TabsTrigger>
               </TabsList>
+
+              <div className="relative flex flex-col justify-center items-center w-full mt-4">
+                <div className="relative w-3/12">
+                  <Image
+                    src={
+                      profile?.fotoprofil
+                        ? profile?.fotoprofil ||
+                          (picture as StaticImageData).src
+                        : (picture as StaticImageData).src
+                    }
+                    alt="Profile"
+                    width={100}
+                    height={100}
+                    className="w-full h-full"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                      <DialogTrigger asChild>
+                        <div
+                          onClick={() => setIsOpen(true)}
+                          className="w-6/12 md:w-4/12 flex items-center cursor-pointer justify-center bg-neutral-900 hover:bg-neutral-900 opacity-50 hover:opacity-80 rounded-md h-[30px] text-neutral-50 outline-none">
+                          <h2 className="text-[14px] text-center w-full font-normal">
+                            Edit
+                          </h2>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
+                        <form
+                          onSubmit={updateProfile}
+                          className="flex flex-col w-full mt-2 md:mt-4">
+                          <div className="flex flex-col w-full h-full mt-2 p-4">
+                            <Label className="text-[20px] text-neutral-900 font-semibold text-start mb-2">
+                              Foto Profil
+                            </Label>
+                            <div className="flex flex-col w-full gap-y-5">
+                              {(previewPPImage ||
+                                newProfile?.fotoprofil ||
+                                picture) && (
+                                <div className="relative flex items-center self-center w-3/12 min-h-[150px] border-2 border-dashed border-neutral-800 rounded-full">
+                                  <img
+                                    src={
+                                      previewPPImage ||
+                                      newProfile?.fotoprofil ||
+                                      (picture as StaticImageData)?.src
+                                    }
+                                    alt="Preview"
+                                    className="max-h-full rounded-full max-w-full object-cover"
+                                  />
+                                </div>
+                              )}
+
+                              <div
+                                ref={dropRef}
+                                onDragOver={handleDragOver}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDropPP}
+                                className={`w-full h-[100px] border-2 border-dashed border-neutral-800 rounded-xl mt-1 flex flex-col items-center justify-center `}>
+                                <>
+                                  <input
+                                    type="file"
+                                    id="file-input-pp"
+                                    name="fotoprofil"
+                                    accept="image/*"
+                                    onChange={handleFilePPChange}
+                                    className="hidden"
+                                  />
+                                  <label
+                                    htmlFor="file-input-pp"
+                                    className="text-[16px] text-center text-neutral-800 p-2 md:p-4 font-light cursor-pointer">
+                                    Drag and drop file here or click to select
+                                    file
+                                  </label>
+                                </>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-4">
+                            <Button
+                              className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                              type="submit"
+                              variant="success"
+                              disabled={isLoading ? true : false}>
+                              {isLoading ? (
+                                <Loader className="animate-spin" />
+                              ) : (
+                                "Simpan"
+                              )}
+                            </Button>
+                          </div>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </div>
+
+                <div className="flex flex-row justify-center items-center mt-2">
+                  <Label className="font-semibold text-neutral-900 text-[20px]">
+                    Foto Profile
+                  </Label>
+                </div>
+              </div>
 
               <div className="flex flex-col pt-4">
                 <TabsContent value="Data Diri">
@@ -372,6 +583,21 @@ export default function ProfilePage() {
                         {profile?.alamat}
                       </label>
                     </div>
+                  </div>
+
+                  <div className="flex flex-row justify-center">
+                    <Link
+                      href={`/profile/detail/${
+                        profile?.slug
+                      }?tabs=${"data-diri"}`}
+                      className="h-[40px] w-4/12 flex justify-center px-4 md:px-0 rounded-[50px] items-end md:items-center self-end md:self-center mb-8 md:mt-8">
+                      <Button
+                        className="w-full md:w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
+                        type="submit"
+                        variant="secondary">
+                        Edit
+                      </Button>
+                    </Link>
                   </div>
                 </TabsContent>
 
@@ -581,28 +807,32 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   </div>
+
+                  <div className="flex flex-row justify-center">
+                    <Link
+                      href={`/profile/detail/${
+                        profile?.slug
+                      }?tabs=${"dokumen-pendukung"}`}
+                      className="h-[40px] w-4/12 flex justify-center px-4 md:px-0 rounded-[50px] items-end md:items-center self-end md:self-center mb-8 md:mt-8">
+                      <Button
+                        className="w-full md:w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
+                        type="submit"
+                        variant="secondary">
+                        Edit
+                      </Button>
+                    </Link>
+                  </div>
                 </TabsContent>
               </div>
 
               <TabsContent value="Dokumen Terbit">
-                <div className="flex flex-col w-full md:mt-0 mb-6 md:mb-0 px-4 md:px-0 gap-y-2">
+                <div className="flex flex-col w-full md:mt-0 mb-6 px-4 md:px-0 gap-y-2">
                   {documents?.map((document: DocumentResultType, i: number) => {
                     return <CardDocumentInstansi key={i} document={document} />;
                   })}
                 </div>
               </TabsContent>
             </Tabs>
-
-            <Link
-              href={`/profile/detail/${profile?.slug}`}
-              className="h-[40px] w-4/12 flex justify-center px-4 md:px-0 rounded-[50px] items-end md:items-center self-end md:self-center mb-8 md:mt-8">
-              <Button
-                className="w-full md:w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
-                type="submit"
-                variant="secondary">
-                Edit
-              </Button>
-            </Link>
           </div>
         </div>
       </div>
