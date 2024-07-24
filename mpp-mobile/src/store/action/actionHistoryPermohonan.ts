@@ -34,11 +34,16 @@ export const HistoryPermohonanSlice = createSlice({
 
 export const { setHistoryPermohonan } = HistoryPermohonanSlice.actions;
 
-export function fetchRiwayatPermohonan() {
+export function fetchRiwayatPermohonan(
+  search?: string,
+  start_date?: string,
+  end_date?: string,
+  status?: string
+) {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/historyform`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/historyform?search=${search}&start_date=${start_date}&end_date=${end_date}&status=${status}`,
         {
           method: "GET",
           headers: {

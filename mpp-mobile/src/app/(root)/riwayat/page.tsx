@@ -26,6 +26,15 @@ export default function RiwayatPage() {
   const historySurveiData = useSelector(
     (state: RootState) => state.historySurvei.data
   );
+  const [search, setSearch] = useState<string>("");
+  const [filterDate, setFilterDate] = useState<{
+    startDate: string;
+    endDate: string;
+  }>({
+    startDate: "",
+    endDate: "",
+  });
+  const [status, setStatus] = useState<string>("");
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [antrianPage, setAntrianPage] = useState<number>(1);
   const [permohonanPage, setPermohonanPage] = useState<number>(1);
@@ -38,10 +47,21 @@ export default function RiwayatPage() {
       redirect("/login");
     }
     const fetchInterval = setInterval(() => {
-      dispatch(fetchRiwayatPermohonan());
-      dispatch(fetchRiwayatAntrian());
-      dispatch(fetchRiwayatSurvei());
-    }, 3000);
+      dispatch(
+        fetchRiwayatPermohonan(
+          search,
+          filterDate.startDate,
+          filterDate.endDate,
+          status
+        )
+      );
+      dispatch(
+        fetchRiwayatAntrian(search, filterDate.startDate, filterDate.endDate)
+      );
+      dispatch(
+        fetchRiwayatSurvei(search, filterDate.startDate, filterDate.endDate)
+      );
+    }, 1000);
 
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 678);
@@ -53,7 +73,29 @@ export default function RiwayatPage() {
       window.removeEventListener("resize", handleResize);
       clearInterval(fetchInterval);
     };
-  }, [dispatch, token]);
+  }, [
+    dispatch,
+    token,
+    search,
+    filterDate.startDate,
+    filterDate.endDate,
+    status,
+  ]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterDate({
+      ...filterDate,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSelectStatusChange = (statusPermohonan: string) => {
+    setStatus(statusPermohonan);
+  };
 
   const paginate = (items: any[], pageNumber: number, itemsPerPage: number) => {
     const startIndex = (pageNumber - 1) * itemsPerPage;
@@ -129,6 +171,10 @@ export default function RiwayatPage() {
               <>
                 <TabsContent value="antrian">
                   <WebsiteAntrianHistories
+                    handleDateChange={handleDateChange}
+                    filterDate={filterDate}
+                    change={handleSearch}
+                    search={search}
                     currentAntrians={currentAntrians}
                     itemsPerPage={itemsPerPage}
                     currentPage={antrianPage}
@@ -139,6 +185,11 @@ export default function RiwayatPage() {
 
                 <TabsContent value="permohonan">
                   <WebsitePermohonanHistories
+                    handleSelectStatusChange={handleSelectStatusChange}
+                    handleDateChange={handleDateChange}
+                    filterDate={filterDate}
+                    change={handleSearch}
+                    search={search}
                     currentPermohonans={currentPermohonans}
                     itemsPerPage={itemsPerPage}
                     currentPage={permohonanPage}
@@ -149,6 +200,10 @@ export default function RiwayatPage() {
 
                 <TabsContent value="survei">
                   <WebsiteSurveiHistories
+                    handleDateChange={handleDateChange}
+                    filterDate={filterDate}
+                    change={handleSearch}
+                    search={search}
                     currentSurveis={currentSurveis}
                     itemsPerPage={itemsPerPage}
                     currentPage={surveiPage}
@@ -161,6 +216,10 @@ export default function RiwayatPage() {
               <>
                 <TabsContent value="antrian">
                   <MobileAntrianHistories
+                    handleDateChange={handleDateChange}
+                    filterDate={filterDate}
+                    change={handleSearch}
+                    search={search}
                     currentAntrians={currentAntrians}
                     itemsPerPage={itemsPerPage}
                     currentPage={antrianPage}
@@ -171,6 +230,11 @@ export default function RiwayatPage() {
 
                 <TabsContent className="flex flex-col gap-4" value="permohonan">
                   <MobilePermohonanHistories
+                    handleSelectStatusChange={handleSelectStatusChange}
+                    handleDateChange={handleDateChange}
+                    filterDate={filterDate}
+                    change={handleSearch}
+                    search={search}
                     currentPermohonans={currentPermohonans}
                     itemsPerPage={itemsPerPage}
                     currentPage={permohonanPage}

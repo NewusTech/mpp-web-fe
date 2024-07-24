@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -10,8 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import fetchInstansi from "@/components/fetching/instansi/instansi";
-import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
@@ -20,12 +17,13 @@ import {
   setLayananId,
   setTanggal,
 } from "@/store/action/actionSurvei";
-import { redirect } from "next/navigation";
-import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
+import { redirect, useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
-import formatDate, { getTodayDate } from "@/helpers/logout/formatted";
+import { getTodayDate } from "@/helpers/logout/formatted";
+import fetchInstansiSurvei from "@/components/fetching/instansi/surveiInstansi";
+import LayananSurvei from "@/components/fetching/layanan/layananSurvei/layananSurvei";
 
 type DataDinasType = {
   id: number;
@@ -44,32 +42,32 @@ type DataLayananType = {
 
 export default function SurveySkmPage() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [instances, setInstances] = useState<DataDinasType[]>();
   const [instanceId, setInstanceId] = useState<number>(1);
   const [service, setService] = useState<DataLayananType[]>();
   const [selected, setSelected] = useState(null);
   const [selectedDinas, setSelectedDinas] = useState<number | null>(null);
   const [selectedLayanan, setSelectedLayanan] = useState<number | null>(null);
-  const [search, setSearch] = useState("");
-  const debounceSearch = useDebounce(search);
   const [date, setDate] = useState("");
   const [changeOpacity, setChangeOpacity] = useState(false);
   const token = Cookies.get("Authorization");
+  const [survei, setSurvei] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState(false);
   const isMobile = useMediaQuery("(max-width: 767px)");
 
-  const fetchDinas = async (search: string, page: number, limit: number) => {
+  const fetchDinas = async (page: number, limit: number, skm: boolean) => {
     try {
-      const instansis = await fetchInstansi(search, page, limit);
+      const instansis = await fetchInstansiSurvei(page, limit, skm);
       setInstances(instansis.data);
     } catch (error) {
       toast("Gagal Memuat Data!");
     }
   };
 
-  const fetchLayanan = async (id: number) => {
+  const fetchLayanan = async (id: number, skm: boolean) => {
     try {
-      const layanan = await ByInstansi(id);
+      const layanan = await LayananSurvei(id, skm);
       setService(layanan.data);
     } catch (error) {
       toast("Gagal Memuat Data!");
@@ -80,7 +78,7 @@ export default function SurveySkmPage() {
     if (!token) {
       redirect("/login");
     }
-    fetchDinas(debounceSearch, 1, 1000000);
+    fetchDinas(1, 1000000, survei);
 
     const storedDinasId = localStorage.getItem("dinasId");
     const storedLayananId = localStorage.getItem("layananId");
@@ -99,11 +97,11 @@ export default function SurveySkmPage() {
       setDate(storedDate);
       setChangeOpacity(true);
     }
-  }, [debounceSearch]);
+  }, []);
 
   useEffect(() => {
     if (instanceId) {
-      fetchLayanan(instanceId);
+      fetchLayanan(instanceId, survei);
     }
   }, [instanceId]);
 
@@ -126,11 +124,32 @@ export default function SurveySkmPage() {
     dispatch(setTanggal(e.target.value));
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/getCheckUserSKM/${selectedLayanan}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
+        }
+      );
+
+      if (response.ok) {
+        toast("Pengecekan Survei Berhasil!");
+        setIsLoading(false);
+        router.push("/survey/skm");
+      }
+    } catch (error) {
+      toast("Anda Telah Mengisi Survei!");
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
+    }
   };
 
   return (
@@ -263,16 +282,14 @@ export default function SurveySkmPage() {
             </div>
 
             <div className="flex self-end justify-end items-end mb-8 mt-4">
-              <Link href="/survey/skm">
-                <Button
-                  className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
-                  type="submit"
-                  variant="warning"
-                  disabled={isLoading ? true : false}
-                  onClick={handleButtonClick}>
-                  {isLoading ? <Loader className="animate-spin" /> : "Isi SKM"}
-                </Button>
-              </Link>
+              <Button
+                className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
+                type="submit"
+                variant="warning"
+                disabled={isLoading ? true : false}
+                onClick={handleButtonClick}>
+                {isLoading ? <Loader className="animate-spin" /> : "Isi SKM"}
+              </Button>
             </div>
           </div>
         </div>

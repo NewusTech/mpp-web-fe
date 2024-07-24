@@ -37,11 +37,15 @@ export const HistoryAntrianSlice = createSlice({
 
 export const { setHistoryAntrian } = HistoryAntrianSlice.actions;
 
-export function fetchRiwayatAntrian() {
+export function fetchRiwayatAntrian(
+  search?: string,
+  start_date?: string,
+  end_date?: string
+) {
   return async (dispatch: any) => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/bookingantrian/getforuser`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/bookingantrian/getforuser?search=${search}&start_date=${start_date}&end_date=${end_date}`,
         {
           method: "GET",
           headers: {

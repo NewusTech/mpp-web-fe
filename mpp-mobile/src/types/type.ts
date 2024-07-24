@@ -49,6 +49,8 @@ export interface ContactType {
   telp: string;
   latitude: string;
   longitude: string;
+  website: string;
+  desc: string;
 }
 
 export interface PermohonanDataType {

@@ -20,17 +20,21 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
   const [news, setNews] = useState<Berita[]>();
   const [filteredNews, setFilteredNews] = useState<Berita[]>([]);
   const [instansis, setInstansis] = useState<Instansi[]>();
-  const [selectedInstansiId, setSelectedInstansiId] = useState<number | null>(
-    null
-  );
+  const [selectedInstansiId, setSelectedInstansiId] = useState<string>();
   const [search, setSearch] = useState<string>("");
+  const [filterDate, setFilterDate] = useState<{
+    startDate: string;
+    endDate: string;
+  }>({
+    startDate: "",
+    endDate: "",
+  });
   const searchDebounce = useDebounce(search, 500);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,38 +52,43 @@ export default function BeritaPage() {
   };
 
   useEffect(() => {
-    fetchDinas(searchDebounce, currentPage, limitData);
-  }, [searchDebounce]);
+    fetchDinas("", currentPage, limitData);
+  }, []);
 
-  const fetchBerita = async () => {
+  const fetchBerita = async (
+    page: number,
+    limit: number,
+    searchNews: string,
+    startDate: string,
+    endDate: string,
+    instansiId: string
+  ) => {
     try {
-      const berita = await fetchNews(currentPage, limitData);
+      const berita = await fetchNews(
+        page,
+        limit,
+        searchNews,
+        startDate,
+        endDate,
+        instansiId
+      );
       setNews(berita.data);
-      setFilteredNews(berita.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      if (selectedInstansiId !== null && news) {
-        const filtered = news.filter(
-          (berita) => berita.instansi_id === selectedInstansiId
-        );
-        setFilteredNews(filtered);
-      } else {
-        setFilteredNews(news || []);
-      }
-      setIsLoading(false);
-      return () => clearTimeout(timer);
-    }, 500);
-  }, [selectedInstansiId, news]);
-
-  useEffect(() => {
-    fetchBerita();
-  }, []);
+    const instansiId = selectedInstansiId || "";
+    fetchBerita(
+      currentPage,
+      limitData,
+      searchDebounce,
+      filterDate.startDate,
+      filterDate.endDate,
+      instansiId
+    );
+  }, [searchDebounce, filterDate, currentPage, selectedInstansiId]);
 
   const paginate = (
     items: Berita[],
@@ -91,28 +100,25 @@ export default function BeritaPage() {
   };
 
   const handleInstansiChange = (instansi_id: string) => {
-    setSelectedInstansiId(instansi_id ? Number(instansi_id) : null);
+    setSelectedInstansiId(instansi_id);
   };
 
   const handleAllClick = () => {
-    setSelectedInstansiId(null);
+    setSelectedInstansiId("");
     setSearch("");
+    setFilterDate({ startDate: "", endDate: "" });
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setSearch(value);
+  const currentDataBerita = paginate(news || [], currentPage, itemsPerPage);
 
-    if (value === "") {
-      setFilteredNews(news || []);
-    }
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
   };
 
-  const currentDataBerita = paginate(
-    filteredNews || [],
-    currentPage,
-    itemsPerPage
-  );
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFilterDate((prev) => ({ ...prev, [name]: value }));
+  };
 
   return (
     <section className="flex flex-col items-center pt-6 px-9 bg-primary-100 pb-32 md:pb-48 md:px-[70px]">
@@ -125,7 +131,7 @@ export default function BeritaPage() {
           <div
             onClick={handleAllClick}
             className={`flex items-center justify-center w-1/2 md:w-4/12 text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
-              selectedInstansiId === null
+              Number(selectedInstansiId) === null
                 ? "bg-primary-200 border-primary-700 text-primary-700"
                 : "border-neutral-700 text-neutral-700"
             }`}>
@@ -136,7 +142,7 @@ export default function BeritaPage() {
             <Select onValueChange={handleInstansiChange}>
               <SelectTrigger
                 className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
-                  selectedInstansiId !== null
+                  Number(selectedInstansiId) !== null
                     ? "text-primary-700"
                     : "opacity-50"
                 }`}>
@@ -147,12 +153,6 @@ export default function BeritaPage() {
               </SelectTrigger>
               <SelectContent>
                 <div className="pt-2">
-                  <div className="w-full px-2 mb-2">
-                    <SearchComponent
-                      change={handleSearchChange}
-                      search={search}
-                    />
-                  </div>
                   {instansis?.map((instansi: Instansi, i: number) => {
                     return (
                       <SelectItem
@@ -170,18 +170,24 @@ export default function BeritaPage() {
         </div>
 
         <div className="w-full md:w-full">
-          <SearchComponent />
+          <SearchComponent change={handleSearch} search={search} />
         </div>
 
         <div className="flex flex-col md:flex-row w-full md:w-8/12 gap-y-2">
           <div className="flex flex-row justify-center items-center w-full gap-x-2 md:gap-x-3">
             <Input
               type="date"
+              name="startDate"
+              onChange={handleDateChange}
+              value={filterDate.startDate}
               className="w-full h-[40px] block border border-neutral-700 px-2"
             />
             <p className="text-center">TO</p>
             <Input
               type="date"
+              name="endDate"
+              onChange={handleDateChange}
+              value={filterDate.endDate}
               className="w-full h-[40px] block border border-neutral-700 px-2"
             />
           </div>

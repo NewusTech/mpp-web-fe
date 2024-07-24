@@ -63,7 +63,7 @@ export default function LayananPage() {
 
       <div className="flex w-full flex-col md:w-full justify-center gap-[36px]">
         <div className="flex flex-col md:flex-row w-full gap-x-3 gap-y-3">
-          <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+          {/* <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
             <Select>
               <SelectTrigger
                 className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
@@ -90,9 +90,9 @@ export default function LayananPage() {
                 </div>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
 
-          <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+          {/* <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
             <Select>
               <SelectTrigger
                 className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
@@ -119,10 +119,10 @@ export default function LayananPage() {
                 </div>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
 
-          <div className="flex flex-row w-full gap-x-2">
-            <div className="flex items-center w-full h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
+          <div className="flex flex-row justify-between w-full gap-x-2">
+            <div className="flex items-center w-full md:w-4/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
               <Select>
                 <SelectTrigger
                   className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
@@ -151,7 +151,7 @@ export default function LayananPage() {
               </Select>
             </div>
 
-            <div className="w-full">
+            <div className="w-full md:w-4/12">
               <SearchComponent change={change} search={search} />
             </div>
           </div>
