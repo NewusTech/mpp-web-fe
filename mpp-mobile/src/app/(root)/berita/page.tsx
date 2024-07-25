@@ -20,6 +20,7 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import { Input } from "@/components/ui/input";
+import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
 export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
@@ -63,6 +64,7 @@ export default function BeritaPage() {
     endDate: string,
     instansiId: string
   ) => {
+    setIsLoading(true);
     try {
       const berita = await fetchNews(
         page,
@@ -75,6 +77,8 @@ export default function BeritaPage() {
       setNews(berita.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -106,7 +110,7 @@ export default function BeritaPage() {
   const handleAllClick = () => {
     setSelectedInstansiId("");
     setSearch("");
-    setFilterDate({ startDate: "", endDate: "" });
+    setFilterDate({ startDate: getStartOfMonth(), endDate: getToday() });
   };
 
   const currentDataBerita = paginate(news || [], currentPage, itemsPerPage);
@@ -131,7 +135,7 @@ export default function BeritaPage() {
           <div
             onClick={handleAllClick}
             className={`flex items-center justify-center w-1/2 md:w-4/12 text-[14px] self-center h-[40px] border bg-neutral-50 active:border-primary-700 rounded-[50px] cursor-pointer ${
-              Number(selectedInstansiId) === null
+              !selectedInstansiId
                 ? "bg-primary-200 border-primary-700 text-primary-700"
                 : "border-neutral-700 text-neutral-700"
             }`}>
@@ -141,7 +145,7 @@ export default function BeritaPage() {
           <div className="flex items-center w-full md:w-8/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
             <Select onValueChange={handleInstansiChange}>
               <SelectTrigger
-                className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
+                className={`w-full rounded-xl overflow-auto border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none ${
                   Number(selectedInstansiId) !== null
                     ? "text-primary-700"
                     : "opacity-50"
@@ -179,7 +183,9 @@ export default function BeritaPage() {
               type="date"
               name="startDate"
               onChange={handleDateChange}
-              value={filterDate.startDate}
+              value={
+                filterDate.startDate ? filterDate.startDate : getStartOfMonth()
+              }
               className="w-full h-[40px] block border border-neutral-700 px-2"
             />
             <p className="text-center">TO</p>
@@ -187,7 +193,7 @@ export default function BeritaPage() {
               type="date"
               name="endDate"
               onChange={handleDateChange}
-              value={filterDate.endDate}
+              value={filterDate.endDate ? filterDate.endDate : getToday()}
               className="w-full h-[40px] block border border-neutral-700 px-2"
             />
           </div>

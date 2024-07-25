@@ -25,8 +25,8 @@ export default function CardDocumentPendukung({
             </DialogTrigger>
             <DialogContent className="flex flex-col justify-between w-full bg-neutral-50">
               <div className="fixed inset-0 flex items-center justify-center bg-neutral-900 bg-opacity-50 z-50">
-                <div className="bg-primary-100 rounded-xl shadow-md w-10/12 md:max-w-full">
-                  <div className="w-full h-full p-4 rounded-xl">
+                <div className="bg-primary-100 rounded-xl shadow-md w-10/12 md:w-6/12">
+                  <div className="flex justify-center w-full h-full p-4 rounded-xl">
                     {document && (
                       <Image
                         src={document?.value}
@@ -41,13 +41,6 @@ export default function CardDocumentPendukung({
               </div>
             </DialogContent>
           </Dialog>
-          {/* <Link
-              href={"/documents"}
-              // href={document.fileoutput}
-              target="_blank"
-              className="flex items-center w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] bg-primary-700 hover:bg-primary-600 hover:text-neutral-50 text-neutral-50 py-[10px] cursor-pointer">
-              Lihat
-            </Link> */}
         </div>
       </div>
     </div>

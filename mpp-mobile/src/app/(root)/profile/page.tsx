@@ -61,10 +61,6 @@ export default function ProfilePage() {
     }
   }, [search]);
 
-  const handleImageClick = (image: string) => {
-    setModalImage(image);
-  };
-
   const fetchProfiles = async () => {
     try {
       const result = await fetchProfile();
@@ -199,10 +195,6 @@ export default function ProfilePage() {
     if (fotoProfile) {
       formData.append("fotoprofil", fotoProfile);
     }
-
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
 
     try {
       const response = await fetch(
@@ -663,14 +655,14 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-row justify-center mt-8 md:mt-4 md:mb-8 md:gap-x-4">
+                  <div className="flex flex-row justify-center my-8 md:my-0 md:mt-4 md:mb-8 md:gap-x-4">
                     <Link
                       href={`/profile/detail/${
                         profile?.slug
                       }?tabs=${"data-diri"}`}
                       className="h-[40px] w-4/12 flex justify-center px-4 md:px-0 rounded-[50px] items-end md:items-center self-end md:self-center">
                       <Button
-                        className="w-full md:w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
+                        className="w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
                         type="submit"
                         variant="secondary">
                         Edit
@@ -679,7 +671,7 @@ export default function ProfilePage() {
 
                     <Button
                       onClick={() => setIsSeen((prevState) => !prevState)}
-                      className="w-full md:w-4/12 font-normal border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50">
+                      className="w-4/12 font-normal border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50">
                       Ganti Kata Sandi
                     </Button>
                   </div>
@@ -741,7 +733,7 @@ export default function ProfilePage() {
         </div>
 
         {isSeen && (
-          <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md md:px-[75px] md:pt-8 md:mt-6">
+          <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md md:px-[75px] mt-4 p-4 md:pt-8 md:mt-6">
             <div className="flex self-start mb-6">
               <h5 className="text-[16px] md:text-[22px] font-semibold text-primary-800">
                 Ganti Kata Sandi

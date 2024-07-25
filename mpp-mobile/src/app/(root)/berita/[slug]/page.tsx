@@ -25,7 +25,7 @@ export default async function DetailBeritaPage({
   params: { slug: string };
 }) {
   const detail = await fetchDetailNews(params.slug);
-  const news = await fetchNews(1, 1000000, detail.data.id);
+  const news = await fetchNews(1, 1000000, "", "", "", detail.data.id);
 
   const sortedNews = news.data.sort((a: any, b: any) => {
     const dateA = new Date(a.publishedAt).getTime();
@@ -43,7 +43,7 @@ export default async function DetailBeritaPage({
   return (
     <section className="flex flex-col items-center justify-center mt-6 md:mt-8 md:mx-0 pt-3 pb-32 md:mb-0 md:pb-[150px] bg-primary-100">
       <div className="flex flex-col w-10/12 items-center justify-center gap-6">
-        <div className="w-full flex flex-col self-center">
+        <div className="w-full md:w-10/12 flex flex-col self-center">
           <Image
             src={detail.data?.image}
             className="w-full h-full object-cover rounded-xl"

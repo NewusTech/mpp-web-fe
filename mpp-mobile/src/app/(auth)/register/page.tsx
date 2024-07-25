@@ -254,7 +254,7 @@ export default function RegisterScreen() {
           <form onSubmit={onSubmit} className="flex flex-col md:w-full">
             <div className="flex flex-col md:w-full md:flex-none md:grid md:grid-cols-2">
               <div className="flex flex-col">
-                <h5 className="text-[12px] md:text-[16px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
+                <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
                   Data Diri
                 </h5>
 

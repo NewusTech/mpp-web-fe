@@ -141,7 +141,7 @@ export default function SurveySKMPage() {
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
-        router.push("/survey");
+        router.push(`/riwayat?tabs=${"survei"}`);
       }
     }
   };
@@ -149,13 +149,6 @@ export default function SurveySKMPage() {
   useEffect(() => {
     setFormValid(Object.keys(errors).length === 0);
   }, [errors]);
-
-  const isButtonDisabled = () => {
-    return (
-      Object.keys(input).length !== (surveis?.Surveyforms?.length || 0) ||
-      kritissaran.trim() === ""
-    );
-  };
 
   return (
     <section className="flex items-center justify-center md:w-full bg-primary-100 mt-6 md:mt-0 md:pt-6 mb-6 pb-32 md:mb-0 md:pb-[150px]">

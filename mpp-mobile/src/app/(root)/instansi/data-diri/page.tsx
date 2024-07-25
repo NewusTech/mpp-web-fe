@@ -38,7 +38,6 @@ import {
 import { schema } from "@/lib/zodSchema";
 import { z } from "zod";
 import TermCondition from "@/components/fetching/termCond/termCond";
-import Link from "next/link";
 
 const steps = [
   { id: 1, title: "1" },
@@ -144,12 +143,12 @@ export default function DataDiriPage() {
   };
 
   const handleSubmit = async () => {
-    // e.preventDefault();
     setIsLoading(true);
     setIsDialogOpen(false);
 
     try {
       schema.parse(formData);
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/userinfo/update/${formData?.slug}`,
         {
@@ -169,13 +168,14 @@ export default function DataDiriPage() {
 
       if (response.ok) {
         toast.success("Berhasil mengupdate profile!");
-        // setIsLoading(false);
         router.push("/instansi/formulir");
       }
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         const formattedErrors = error.errors.reduce((acc: any, curr: any) => {
+          // if (curr.path[0] !== "goldar") {
           acc[curr.path[0]] = curr.message;
+          // }
           return acc;
         }, {});
         setErrors(formattedErrors);

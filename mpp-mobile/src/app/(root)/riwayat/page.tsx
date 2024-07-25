@@ -6,7 +6,7 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { fetchRiwayatAntrian } from "@/store/action/actionHistoryAntrian";
 import WebsitePermohonanHistories from "@/components/histories/results/permohonans/websites/websitePermohonanHistories";
 import MobilePermohonanHistories from "@/components/histories/results/permohonans/mobiles/mobilePermohonanHistories";
@@ -35,6 +35,8 @@ export default function RiwayatPage() {
     startDate: "",
     endDate: "",
   });
+  const searchParams = useSearchParams();
+  const [isTabs, setIsTabs] = useState<string>("permohonan");
   const [status, setStatus] = useState<string>("");
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
   const [antrianPage, setAntrianPage] = useState<number>(1);
@@ -42,6 +44,16 @@ export default function RiwayatPage() {
   const [surveiPage, setSurveiPage] = useState<number>(1);
   const itemsPerPage = 10;
   const token = Cookies.get("Authorization");
+
+  const searchTabs = searchParams.get("tabs");
+
+  useEffect(() => {
+    if (searchTabs == "permohonan") {
+      setIsTabs("permohonan");
+    } else if (searchTabs == "survei") {
+      setIsTabs("survei");
+    }
+  }, [search]);
 
   useEffect(() => {
     if (!token) {
@@ -127,7 +139,8 @@ export default function RiwayatPage() {
 
       <div className="flex flex-row w-full gap-[12px] md:px-[38px] md:bg-primary-50 md:pb-[50px] md:rounded-xl md:shadow-md">
         <Tabs
-          defaultValue="permohonan"
+          value={isTabs ? isTabs : "permohonan"}
+          onValueChange={(value) => setIsTabs(value)}
           className="flex flex-col w-full gap-[10px]">
           {isDesktop ? (
             <div className="md:flex md:w-full md:mt-[26px]">
