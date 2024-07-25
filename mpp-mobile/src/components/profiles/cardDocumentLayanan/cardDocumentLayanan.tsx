@@ -9,7 +9,6 @@ export default function CardDocumentLayanan({
 }: {
   document: DocumentTerbitType;
 }) {
-  console.log(document, "documents");
   return (
     <div className="flex flex-row justify-between w-full h-[80px] rounded-xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
       <div className="flex flex-col w-full justify-center gap-[9px]">

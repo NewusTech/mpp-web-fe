@@ -55,3 +55,19 @@ export const getCurrentTime = () => {
   const minutes = String(now.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;
 };
+
+export const getStartOfMonth = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+
+  const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+
+  const startDay = lastDayOfMonth === 31 ? 2 : 1;
+
+  return new Date(year, month, startDay).toISOString().split("T")[0];
+};
+
+export const getToday = () => {
+  return new Date().toISOString().split("T")[0];
+};

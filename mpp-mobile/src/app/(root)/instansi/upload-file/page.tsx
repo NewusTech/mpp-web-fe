@@ -149,7 +149,7 @@ export default function UploadFilePage() {
       toast.error("An error occurred while submitting the form.");
     } finally {
       setIsLoading(false);
-      router.push("/riwayat");
+      router.push(`/riwayat?tabs=${"permohonan"}`);
     }
   };
 

@@ -56,7 +56,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
 
   return (
     <div className="flex flex-col h-full justify-center items-start bg-neutral-50 rounded-xl shadow-md w-full">
-      <div className="grid grid-rows-5 justify-center p-4 gap-2 h-full w-full gap-y-4">
+      <div className="grid grid-rows-6 justify-center p-4 gap-2 h-full w-full gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
             No Permohonan
@@ -74,6 +74,16 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
             : {permohonan.instansi_name}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2">
+          <h6 className="text-[14px] font-semibold text-primary-800">
+            Layanan
+          </h6>
+
+          <p className="text-[14px] pl-2 font-normal text-primary-800">
+            : {permohonan.layanan_name}
           </p>
         </div>
 

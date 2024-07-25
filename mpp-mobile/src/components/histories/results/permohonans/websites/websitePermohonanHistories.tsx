@@ -110,6 +110,7 @@ export default function WebsitePermohonanHistories({
               <TableRow className="md:flex md:flex-row md:w-full">
                 <TableHead className="w-1/2">Nomor Permohonan</TableHead>
                 <TableHead className="w-full">Instansi</TableHead>
+                <TableHead className="w-full">Layanan</TableHead>
                 <TableHead className="w-1/2">Tanggal</TableHead>
                 <TableHead className="w-1/2">Waktu</TableHead>
                 <TableHead className="w-1/2">Status</TableHead>
