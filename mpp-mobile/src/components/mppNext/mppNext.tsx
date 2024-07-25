@@ -16,7 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "../ui/button";
-import { Landmark, Send, Ticket } from "lucide-react";
+import { Landmark, MessageCircleWarning, Send, Ticket } from "lucide-react";
 import CardAplikasiPendukung from "../landing/aboutScreen/cardAplikasiPendukung/cardAplikasiPendukung";
 import { AlurType, AppType, FacilityType, VideoType } from "@/types/type";
 import Link from "next/link";
@@ -199,7 +199,7 @@ export default function MppNext({
                 href={`https://www.lapor.go.id`}
                 target="_blank"
                 className="w-10/12 flex justify-center rounded-full h-[40px] items-center gap-x-4 bg-secondary-700 hover:bg-secondary-600 text-neutral-50 px-5">
-                <Ticket className="w-5" />
+                <MessageCircleWarning className="w-5" />
 
                 <p className="text-[16px]">Lapor</p>
               </Link>

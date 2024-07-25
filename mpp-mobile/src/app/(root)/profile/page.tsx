@@ -26,6 +26,9 @@ import CardDocumentInstansi from "@/components/profiles/cardDocumentInstansi/car
 import fetchHistoryDoc from "@/components/fetching/historyDoc/historyDoc";
 import { StaticImageData } from "next/legacy/image";
 import { Loader } from "lucide-react";
+import { formatLongDate } from "@/helpers/logout/formatted";
+import CardDocumentPendukung from "@/components/profiles/cardDocumentPendukung/cardDocumentPendukung";
+import { Input } from "@/components/ui/input";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -41,6 +44,12 @@ export default function ProfilePage() {
   const [previewPPImage, setPreviewPPImage] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSeen, setIsSeen] = useState(false);
+  const [keys, setKeys] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
 
   const search = searchParams.get("tabs");
 
@@ -176,6 +185,12 @@ export default function ProfilePage() {
       break;
   }
 
+  let profileDate = "";
+
+  if (profile?.tgl_lahir) {
+    profileDate = formatLongDate(profile?.tgl_lahir);
+  }
+
   const updateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -256,6 +271,70 @@ export default function ProfilePage() {
     }
   };
 
+  const documentPictures = [
+    {
+      name: "Pas Foto",
+      value: profile?.foto,
+    },
+    {
+      name: "Kartu Tanda Penduduk",
+      value: profile?.filektp,
+    },
+    {
+      name: "Akta Kelahiran",
+      value: profile?.aktalahir,
+    },
+    {
+      name: "Kartu Keluarga",
+      value: profile?.filekk,
+    },
+    {
+      name: "Ijazah Terakhir",
+      value: profile?.fileijazahlain,
+    },
+  ];
+
+  const SubmitNewKeys = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/changepassword/${profile?.slug}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("Authorization")}`,
+          },
+          body: JSON.stringify(keys),
+          cache: "no-store",
+        }
+      );
+
+      await response.json();
+
+      if (response.ok) {
+        toast.success("Berhasil Memperbarui Kata Sandi!");
+        setIsLoading(false);
+        setIsSeen(false);
+        router.push("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChangeKeys = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setKeys({
+      ...keys,
+      [name]: value,
+    });
+  };
+
   return (
     <section className="flex items-center justify-center w-full px-4 md:px-0 mb-32 pt-6 md:pb-16 bg-primary-100">
       <div className="flex flex-col items-center w-full md:mx-[200px]">
@@ -270,7 +349,7 @@ export default function ProfilePage() {
             <Tabs
               value={isTabs ? isTabs : "Data Diri"}
               onValueChange={(value) => setIsTabs(value)}
-              className="flex flex-col md:gap-y-0 px-1">
+              className="flex flex-col md:gap-y-6 px-1">
               <TabsList className="py-0 w-full md:flex md:flex-row justify-between md:justify-start items-center">
                 <TabsTrigger
                   className="font-semibold w-5/12 py-4 rounded-l-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-0 text-primary-700 md:text-[20px]"
@@ -291,109 +370,109 @@ export default function ProfilePage() {
                 </TabsTrigger>
               </TabsList>
 
-              <div className="relative flex flex-col justify-center items-center w-full mt-4">
-                <div className="relative w-3/12">
-                  <Image
-                    src={
-                      profile?.fotoprofil
-                        ? profile?.fotoprofil ||
-                          (picture as StaticImageData).src
-                        : (picture as StaticImageData).src
-                    }
-                    alt="Profile"
-                    width={100}
-                    height={100}
-                    className="w-full h-full"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                      <DialogTrigger asChild>
-                        <div
-                          onClick={() => setIsOpen(true)}
-                          className="w-6/12 md:w-4/12 flex items-center cursor-pointer justify-center bg-neutral-900 hover:bg-neutral-900 opacity-50 hover:opacity-80 rounded-md h-[30px] text-neutral-50 outline-none">
-                          <h2 className="text-[14px] text-center w-full font-normal">
-                            Edit
-                          </h2>
-                        </div>
-                      </DialogTrigger>
-                      <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
-                        <form
-                          onSubmit={updateProfile}
-                          className="flex flex-col w-full mt-2 md:mt-4">
-                          <div className="flex flex-col w-full h-full mt-2 p-4">
-                            <Label className="text-[20px] text-neutral-900 font-semibold text-start mb-2">
-                              Foto Profil
-                            </Label>
-                            <div className="flex flex-col w-full gap-y-5">
-                              {(previewPPImage ||
-                                newProfile?.fotoprofil ||
-                                picture) && (
-                                <div className="relative flex items-center self-center w-3/12 min-h-[150px] border-2 border-dashed border-neutral-800 rounded-full">
-                                  <img
-                                    src={
-                                      previewPPImage ||
-                                      newProfile?.fotoprofil ||
-                                      (picture as StaticImageData)?.src
-                                    }
-                                    alt="Preview"
-                                    className="max-h-full rounded-full max-w-full object-cover"
-                                  />
-                                </div>
-                              )}
-
-                              <div
-                                ref={dropRef}
-                                onDragOver={handleDragOver}
-                                onDragLeave={handleDragLeave}
-                                onDrop={handleDropPP}
-                                className={`w-full h-[100px] border-2 border-dashed border-neutral-800 rounded-xl mt-1 flex flex-col items-center justify-center `}>
-                                <>
-                                  <input
-                                    type="file"
-                                    id="file-input-pp"
-                                    name="fotoprofil"
-                                    accept="image/*"
-                                    onChange={handleFilePPChange}
-                                    className="hidden"
-                                  />
-                                  <label
-                                    htmlFor="file-input-pp"
-                                    className="text-[16px] text-center text-neutral-800 p-2 md:p-4 font-light cursor-pointer">
-                                    Drag and drop file here or click to select
-                                    file
-                                  </label>
-                                </>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-4">
-                            <Button
-                              className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
-                              type="submit"
-                              variant="success"
-                              disabled={isLoading ? true : false}>
-                              {isLoading ? (
-                                <Loader className="animate-spin" />
-                              ) : (
-                                "Simpan"
-                              )}
-                            </Button>
-                          </div>
-                        </form>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </div>
-
-                <div className="flex flex-row justify-center items-center mt-2">
-                  <Label className="font-semibold text-neutral-900 text-[20px]">
-                    Foto Profile
-                  </Label>
-                </div>
-              </div>
-
-              <div className="flex flex-col pt-4">
+              <div className="flex flex-col">
                 <TabsContent value="Data Diri">
+                  <div className="relative flex flex-col justify-center items-center w-full mt-6">
+                    <div className="relative w-[150px] h-[150px] md:w-[200px] md:h-[200px] border-2 border-dashed border-neutral-700 rounded-full shadow-md">
+                      <Image
+                        src={
+                          profile?.fotoprofil
+                            ? profile?.fotoprofil ||
+                              (picture as StaticImageData).src
+                            : (picture as StaticImageData).src
+                        }
+                        alt="Profile"
+                        width={200}
+                        height={200}
+                        className="w-full h-full rounded-full object-cover object-center"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                          <DialogTrigger asChild>
+                            <div
+                              onClick={() => setIsOpen(true)}
+                              className="w-6/12 md:w-4/12 flex items-center cursor-pointer justify-center bg-neutral-900 hover:bg-neutral-900 opacity-50 hover:opacity-80 rounded-md h-[30px] text-neutral-50 outline-none">
+                              <h2 className="text-[14px] text-center w-full font-normal">
+                                Edit
+                              </h2>
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
+                            <form
+                              onSubmit={updateProfile}
+                              className="flex flex-col w-full mt-2 md:mt-4">
+                              <div className="flex flex-col w-full h-full mt-2 p-4">
+                                <Label className="text-[20px] md:text-[32px] text-neutral-900 font-semibold text-start mb-2">
+                                  Foto Profil
+                                </Label>
+                                <div className="flex flex-col w-full gap-y-5">
+                                  {(previewPPImage ||
+                                    newProfile?.fotoprofil ||
+                                    picture) && (
+                                    <div className="relative flex items-center self-center w-[150px] md:w-[200px] h-[150px] md:h-[200px] border-2 border-dashed border-neutral-800 rounded-full">
+                                      <img
+                                        src={
+                                          previewPPImage ||
+                                          newProfile?.fotoprofil ||
+                                          (picture as StaticImageData)?.src
+                                        }
+                                        alt="Preview"
+                                        className="h-full rounded-full w-full object-cover object-center"
+                                      />
+                                    </div>
+                                  )}
+
+                                  <div
+                                    ref={dropRef}
+                                    onDragOver={handleDragOver}
+                                    onDragLeave={handleDragLeave}
+                                    onDrop={handleDropPP}
+                                    className={`w-full h-[100px] border-2 border-dashed border-neutral-800 rounded-xl mt-1 flex flex-col items-center justify-center `}>
+                                    <>
+                                      <input
+                                        type="file"
+                                        id="file-input-pp"
+                                        name="fotoprofil"
+                                        accept="image/*"
+                                        onChange={handleFilePPChange}
+                                        className="hidden"
+                                      />
+                                      <label
+                                        htmlFor="file-input-pp"
+                                        className="text-[16px] text-center text-neutral-800 p-2 md:p-4 font-light cursor-pointer">
+                                        Drag and drop file here or click to
+                                        select file
+                                      </label>
+                                    </>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-4 pr-2 md:pr-0">
+                                <Button
+                                  className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                                  type="submit"
+                                  variant="success"
+                                  disabled={isLoading ? true : false}>
+                                  {isLoading ? (
+                                    <Loader className="animate-spin" />
+                                  ) : (
+                                    "Simpan"
+                                  )}
+                                </Button>
+                              </div>
+                            </form>
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row justify-center items-center mt-4">
+                      <Label className="font-semibold text-neutral-900 text-[20px]">
+                        Foto Profil
+                      </Label>
+                    </div>
+                  </div>
+
                   <div className="md:grid md:grid-rows-7 gap-2 md:mt-6 px-4 md:px-0">
                     <div className="md:grid md:grid-cols-2">
                       <div className="flex flex-col w-full mb-2 pt-4 md:pt-0">
@@ -469,8 +548,7 @@ export default function ProfilePage() {
                         </label>
 
                         <label className="text-[12px] md:text-[14px] text-neutral-900">
-                          {profile?.tgl_lahir ||
-                            "Harap Perbarui Data Diri Anda!"}
+                          {profileDate || "Harap Perbarui Data Diri Anda!"}
                         </label>
                       </div>
 
@@ -585,12 +663,12 @@ export default function ProfilePage() {
                     </div>
                   </div>
 
-                  <div className="flex flex-row justify-center">
+                  <div className="flex flex-row justify-center mt-8 md:mt-4 md:mb-8 md:gap-x-4">
                     <Link
                       href={`/profile/detail/${
                         profile?.slug
                       }?tabs=${"data-diri"}`}
-                      className="h-[40px] w-4/12 flex justify-center px-4 md:px-0 rounded-[50px] items-end md:items-center self-end md:self-center mb-8 md:mt-8">
+                      className="h-[40px] w-4/12 flex justify-center px-4 md:px-0 rounded-[50px] items-end md:items-center self-end md:self-center">
                       <Button
                         className="w-full md:w-full border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50"
                         type="submit"
@@ -598,217 +676,43 @@ export default function ProfilePage() {
                         Edit
                       </Button>
                     </Link>
+
+                    <Button
+                      onClick={() => setIsSeen((prevState) => !prevState)}
+                      className="w-full md:w-4/12 font-normal border border-primary-700 h-full md:h-[40px] text-[12px] md:text-[16px] hover:text-neutral-50">
+                      Ganti Kata Sandi
+                    </Button>
                   </div>
                 </TabsContent>
 
                 <TabsContent value="Dokumen Pendukung">
-                  <div className="flex flex-col w-full md:mt-0 mb-6 md:mb-0 px-4 md:px-0">
-                    <div className="md:grid md:grid-cols-2 mt-3">
-                      <div className="flex flex-col">
-                        <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                          Pas Foto
-                        </Label>
-
-                        {profile?.foto && (
-                          <div className="w-full h-full cursor-pointer">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <div
-                                  onClick={() =>
-                                    handleImageClick(profile?.foto || "")
-                                  }>
-                                  <Image
-                                    src={profile?.foto}
-                                    className="w-6/12 h-full object-cover rounded-xl"
-                                    alt="Ijazah Terakhir"
-                                    width={100}
-                                    height={100}
-                                  />
-                                </div>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <div className="min-w-[400px] md:min-w-[800px]">
-                                  <Image
-                                    src={modalImage || ""}
-                                    className="w-full h-full object-cover rounded-xl"
-                                    alt="Preview"
-                                    width={500}
-                                    height={500}
-                                  />
-                                </div>
-
-                                <DialogClose />
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col mt-3">
-                        <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                          Kartu Tanda Penduduk (KTP)
-                        </Label>
-
-                        {profile?.filektp && (
-                          <div className="w-full h-full cursor-pointer">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <div
-                                  onClick={() =>
-                                    handleImageClick(profile?.filektp || "")
-                                  }>
-                                  <Image
-                                    src={profile.filektp}
-                                    className="w-6/12 h-full object-cover rounded-xl"
-                                    alt="KTP"
-                                    width={100}
-                                    height={100}
-                                  />
-                                </div>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <div className="min-w-[400px] md:min-w-[800px]">
-                                  <Image
-                                    src={modalImage || ""}
-                                    className="w-full h-full object-cover rounded-xl"
-                                    alt="Preview"
-                                    width={500}
-                                    height={500}
-                                  />
-                                </div>
-
-                                <DialogClose />
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col mt-3">
-                        <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                          Akte Lahir
-                        </Label>
-
-                        {profile?.aktalahir && (
-                          <div className="w-full h-full cursor-pointer">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <div
-                                  onClick={() =>
-                                    handleImageClick(profile?.aktalahir || "")
-                                  }>
-                                  <Image
-                                    src={profile?.aktalahir}
-                                    className="w-6/12 h-full object-cover rounded-xl"
-                                    alt="Ijazah Terakhir"
-                                    width={100}
-                                    height={100}
-                                  />
-                                </div>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <div className="min-w-[400px] md:min-w-[800px]">
-                                  <Image
-                                    src={modalImage || ""}
-                                    className="w-full h-full object-cover rounded-xl"
-                                    alt="Preview"
-                                    width={500}
-                                    height={500}
-                                  />
-                                </div>
-
-                                <DialogClose />
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col mt-3">
-                        <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                          Kartu Keluarga(KK)
-                        </Label>
-
-                        {profile?.filekk && (
-                          <div className="w-full h-full cursor-pointer">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <div
-                                  onClick={() =>
-                                    handleImageClick(profile?.filekk || "")
-                                  }>
-                                  <Image
-                                    src={profile.filekk}
-                                    className="w-6/12 h-full object-cover rounded-xl"
-                                    alt="KK"
-                                    width={100}
-                                    height={100}
-                                  />
-                                </div>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <div className="min-w-[400px] md:min-w-[800px]">
-                                  <Image
-                                    src={modalImage || ""}
-                                    className="w-full h-full object-cover rounded-xl"
-                                    alt="Preview"
-                                    width={500}
-                                    height={500}
-                                  />
-                                </div>
-
-                                <DialogClose />
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col mt-3">
-                        <Label className="text-[14px] md:text-[16px] text-neutral-900 font-semibold text-start mb-2">
-                          Ijazah Terakhir
-                        </Label>
-
-                        {profile?.fileijazahlain && (
-                          <div className="w-full h-full cursor-pointer">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <div
-                                  onClick={() =>
-                                    handleImageClick(
-                                      profile?.fileijazahlain || ""
-                                    )
-                                  }>
-                                  <Image
-                                    src={profile.fileijazahlain}
-                                    className="w-6/12 h-full object-cover rounded-xl"
-                                    alt="Ijazah Terakhir"
-                                    width={100}
-                                    height={100}
-                                  />
-                                </div>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <div className="min-w-[400px] md:min-w-[800px]">
-                                  <Image
-                                    src={modalImage || ""}
-                                    className="w-full h-full object-cover rounded-xl"
-                                    alt="Preview"
-                                    width={500}
-                                    height={500}
-                                  />
-                                </div>
-
-                                <DialogClose />
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                  <div className="flex flex-col w-full mt-6 mb-4 md:mb-0 px-4 md:px-0">
+                    {profile &&
+                      documentPictures?.map(
+                        (
+                          document: {
+                            name: string;
+                            value: string | undefined;
+                          },
+                          i: number
+                        ) => {
+                          return (
+                            <div
+                              key={i}
+                              className="flex flex-col w-full gap-y-8">
+                              <CardDocumentPendukung
+                                document={{
+                                  ...document,
+                                  value: document.value!,
+                                }}
+                              />
+                            </div>
+                          );
+                        }
+                      )}
                   </div>
 
-                  <div className="flex flex-row justify-center">
+                  <div className="flex flex-row justify-center mt-8 md:mt-4">
                     <Link
                       href={`/profile/detail/${
                         profile?.slug
@@ -826,7 +730,7 @@ export default function ProfilePage() {
               </div>
 
               <TabsContent value="Dokumen Terbit">
-                <div className="flex flex-col w-full md:mt-0 mb-6 px-4 md:px-0 gap-y-2">
+                <div className="flex flex-col w-full mt-6 md:mt-0 mb-6 px-4 md:px-0 gap-y-2">
                   {documents?.map((document: DocumentResultType, i: number) => {
                     return <CardDocumentInstansi key={i} document={document} />;
                   })}
@@ -835,6 +739,80 @@ export default function ProfilePage() {
             </Tabs>
           </div>
         </div>
+
+        {isSeen && (
+          <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md md:px-[75px] md:pt-8 md:mt-6">
+            <div className="flex self-start mb-6">
+              <h5 className="text-[16px] md:text-[22px] font-semibold text-primary-800">
+                Ganti Kata Sandi
+              </h5>
+            </div>
+
+            <div className="flex flex-col w-full gap-y-4">
+              <form
+                onSubmit={SubmitNewKeys}
+                className="flex flex-col w-full gap-y-4">
+                <div className="flex flex-col w-full mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Kata Sandi Lama
+                  </label>
+
+                  <Input
+                    type="password"
+                    name="oldPassword"
+                    value={keys.oldPassword}
+                    onChange={handleChangeKeys}
+                    placeholder="Kata Sandi Lama"
+                    autoComplete="off"
+                    className="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%] focus:outline-none active:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col w-full mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Kata Sandi Baru
+                  </label>
+
+                  <Input
+                    type="password"
+                    name="newPassword"
+                    value={keys.newPassword}
+                    onChange={handleChangeKeys}
+                    placeholder="Kata Sandi Baru"
+                    autoComplete="off"
+                    className="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%] focus:outline-none active:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col w-full mb-2">
+                  <label className="text-[14px] md:text-[16px] font-semibold text-neutral-900 space-y-2">
+                    Konfirmasi Kata Sandi Baru
+                  </label>
+
+                  <Input
+                    type="password"
+                    name="confirmNewPassword"
+                    value={keys.confirmNewPassword}
+                    onChange={handleChangeKeys}
+                    placeholder="Konfirmasi Kata Sandi Baru"
+                    autoComplete="off"
+                    className="w-full pl-4 mt-1 h-[40px] border border-neutral-700 placeholder:opacity-[70%] focus:outline-none active:outline-none"
+                  />
+                </div>
+
+                <div className="flex justify-center items-end self-end w-4/12 md:self-center my-4 md:pb-[30px] mt-4">
+                  <Button
+                    className="w-full h-[30px] md:h-[40px] text-[12px] md:text-[16px]"
+                    type="submit"
+                    variant="success"
+                    disabled={isLoading ? true : false}>
+                    {isLoading ? <Loader className="animate-spin" /> : "Simpan"}
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

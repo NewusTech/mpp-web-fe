@@ -35,35 +35,6 @@ export default function MobileAntrianHistories({
   return (
     <div className="flex flex-col w-full gap-y-4">
       <div className="flex flex-col w-full gap-y-2">
-        {/* <div className="flex items-center w-full md:w-4/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px]">
-          <Select>
-            <SelectTrigger
-              className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
-              <SelectValue
-                placeholder="Pilih By Instansi"
-                className="text-neutral-800 w-full"
-              />
-            </SelectTrigger>
-            <SelectContent>
-              <div className="pt-2">
-                {statusDatas &&
-                  statusDatas.map(
-                    (status: { id: number; value: string }, i: number) => {
-                      return (
-                        <SelectItem
-                          key={i}
-                          className={`w-full px-4`}
-                          value={status.id.toString()}>
-                          {status.value}
-                        </SelectItem>
-                      );
-                    }
-                  )}
-              </div>
-            </SelectContent>
-          </Select>
-        </div> */}
-
         <div className="w-full">
           <SearchComponent change={change} search={search} />
         </div>

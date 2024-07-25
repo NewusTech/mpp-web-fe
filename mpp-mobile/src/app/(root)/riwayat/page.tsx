@@ -14,6 +14,7 @@ import WebsiteAntrianHistories from "@/components/histories/results/antrians/web
 import MobileAntrianHistories from "@/components/histories/results/antrians/mobiles/mobileAntrianHistories";
 import { fetchRiwayatSurvei } from "@/store/action/actionHistorySurvei";
 import WebsiteSurveiHistories from "@/components/histories/results/surveis/websites/websiteSurveiHistories";
+import MobileSurveiHistories from "@/components/histories/results/surveis/mobiles/mobileSurveiHistories";
 
 export default function RiwayatPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,22 +47,21 @@ export default function RiwayatPage() {
     if (!token) {
       redirect("/login");
     }
-    const fetchInterval = setInterval(() => {
-      dispatch(
-        fetchRiwayatPermohonan(
-          search,
-          filterDate.startDate,
-          filterDate.endDate,
-          status
-        )
-      );
-      dispatch(
-        fetchRiwayatAntrian(search, filterDate.startDate, filterDate.endDate)
-      );
-      dispatch(
-        fetchRiwayatSurvei(search, filterDate.startDate, filterDate.endDate)
-      );
-    }, 1000);
+
+    dispatch(
+      fetchRiwayatPermohonan(
+        search,
+        filterDate.startDate,
+        filterDate.endDate,
+        status
+      )
+    );
+    dispatch(
+      fetchRiwayatAntrian(search, filterDate.startDate, filterDate.endDate)
+    );
+    dispatch(
+      fetchRiwayatSurvei(search, filterDate.startDate, filterDate.endDate)
+    );
 
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 678);
@@ -71,7 +71,6 @@ export default function RiwayatPage() {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-      clearInterval(fetchInterval);
     };
   }, [
     dispatch,
@@ -240,6 +239,20 @@ export default function RiwayatPage() {
                     currentPage={permohonanPage}
                     onPageChange={setPermohonanPage}
                     totalItems={historyData.length}
+                  />
+                </TabsContent>
+
+                <TabsContent className="flex flex-col gap-4" value="survei">
+                  <MobileSurveiHistories
+                    handleDateChange={handleDateChange}
+                    filterDate={filterDate}
+                    change={handleSearch}
+                    search={search}
+                    currentSurveis={currentSurveis}
+                    itemsPerPage={itemsPerPage}
+                    currentPage={surveiPage}
+                    onPageChange={setSurveiPage}
+                    totalItems={historySurveiData.length}
                   />
                 </TabsContent>
               </>

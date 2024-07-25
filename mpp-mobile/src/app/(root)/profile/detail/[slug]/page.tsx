@@ -27,7 +27,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
-import { ChevronDown, Loader, Trash } from "lucide-react";
+import { ChevronDown, ChevronLeft, Loader, Trash } from "lucide-react";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 
 export default function ProfileEditPage({
@@ -422,10 +422,14 @@ export default function ProfileEditPage({
   return (
     <section className="flex items-center justify-center pb-32 bg-primary-100 mt-6 md:mt-0 md:pt-6 md:mb-0 md:pb-[120px]">
       <div className="flex flex-col items-center w-full mx-[35px] md:mx-[200px]">
-        <div className="flex self-start mb-8">
-          <h5 className="text-[20px] md:text-[26px] font-bold text-primary-800">
+        <div className="flex flex-row items-center self-start mb-8">
+          <button onClick={() => router.back()}>
+            <ChevronLeft className="w-[40px] h-[40px] text-neutral-800 mr-4" />
+          </button>
+
+          <h4 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
             Edit Profile
-          </h5>
+          </h4>
         </div>
 
         <div className="flex flex-col w-full bg-neutral-50 rounded-xl shadow-md px-[15px] md:px-[75px] pt-4 md:pt-[8]">

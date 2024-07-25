@@ -8,11 +8,10 @@ import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
 import { toast } from "sonner";
-import { DataInputItem, LayananFormType, LayananType } from "@/types/type";
+import { DataInputItem, LayananType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { truncateTitle } from "@/utils/formatTitle";
-import { z, ZodObject, ZodSchema } from "zod";
 
 const steps = [
   { id: 1, title: "1" },

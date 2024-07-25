@@ -130,8 +130,12 @@ export const statusInstansis = [
 
 export const statusDatas = [
   {
-    id: 1,
+    id: 0,
     value: "Belum diproses",
+  },
+  {
+    id: 1,
+    value: "Sudah diproses",
   },
   {
     id: 2,

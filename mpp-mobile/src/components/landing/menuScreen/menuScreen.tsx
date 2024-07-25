@@ -11,6 +11,7 @@ import {
   CircleUserRound,
   Building,
   Smartphone,
+  UserRound,
 } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
@@ -142,14 +143,14 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
         </Link>
 
         <Link
-          href={`/profile/`}
+          href={`/kontak`}
           onClick={closeMenu}
           className="flex flex-row justify-end group gap-x-4 px-6">
           <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
-            Profile
+            kontak
           </p>
 
-          <CircleUserRound className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
+          <UserRound className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />
         </Link>
 
         {decoded ? (
