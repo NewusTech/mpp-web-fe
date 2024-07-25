@@ -1,26 +1,25 @@
-import { AntrianDataType } from "@/types/type";
-import PopAntrianComponent from "../others/popAntrianComponent/popAntrianComponent";
+import { SurveiDataType } from "@/types/type";
 import { formattedDate } from "@/helpers/logout/formatted";
-import { formatTime } from "@/utils/formatTime";
+import { formatCreateTime } from "@/utils/formatTime";
 
-export default function CardHistoryAntrian({
-  antrian,
+export default function CardHistorySurvei({
+  survei,
 }: {
-  antrian: AntrianDataType;
+  survei: SurveiDataType;
 }) {
-  const time = formatTime(antrian.waktu);
-  const date = formattedDate(antrian.tanggal);
+  const time = formatCreateTime(survei.createdAt);
+  const date = formattedDate(survei.date);
 
   return (
     <div className="flex flex-col h-full justify-center items-center bg-neutral-50 rounded-xl shadow-lg w-full mb-4">
-      <div className="grid grid-rows-5 justify-center p-4 gap-2 w-full h-full gap-y-4">
+      <div className="grid grid-rows-6 m-4 gap-2 w-full h-full p-4 gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
-            Nomor Antrian
+            Nomor Survei
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.Layanan.code}
+            : {survei.no_skm}
           </p>
         </div>
 
@@ -30,7 +29,7 @@ export default function CardHistoryAntrian({
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.Instansi.name}
+            : {survei.instansi_name}
           </p>
         </div>
 
@@ -40,7 +39,17 @@ export default function CardHistoryAntrian({
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {antrian.Layanan.name}
+            : {survei.layanan_name}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2">
+          <h6 className="text-[14px] font-semibold text-primary-800">
+            Tanggal
+          </h6>
+
+          <p className="text-[14px] pl-2 font-normal text-primary-800">
+            : {date}
           </p>
         </div>
 
@@ -54,18 +63,18 @@ export default function CardHistoryAntrian({
 
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
-            Tanggal
+            Kritik dan Saran
           </h6>
 
           <p className="text-[14px] pl-2 font-normal text-primary-800">
-            : {date}
+            : {survei.kritiksaran}
           </p>
         </div>
       </div>
 
-      <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
+      {/* <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
         <PopAntrianComponent antrian={antrian} />
-      </div>
+      </div> */}
     </div>
   );
 }

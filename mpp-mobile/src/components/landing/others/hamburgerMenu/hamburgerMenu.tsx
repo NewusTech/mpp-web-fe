@@ -1,6 +1,13 @@
 "use client";
-import { Home, Landmark, LayoutDashboard, Menu, UserRound } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  CircleUserRound,
+  Home,
+  Landmark,
+  LayoutDashboard,
+  Menu,
+  UserRound,
+} from "lucide-react";
+import { useState } from "react";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import MenuScreen from "../../menuScreen/menuScreen";
 import Link from "next/link";
@@ -76,23 +83,23 @@ export default function HamburgerMenu() {
       </Link>
 
       <Link
-        href={"/kontak"}
+        href={"/profile"}
         className={`${
-          pathName === "/kontak" ? "bg-primary-700 rounded-xl" : ""
+          pathName === "/profile" ? "bg-primary-700 rounded-xl" : ""
         } grid grid-rows-2 place-items-center gap-y-2 w-full p-2`}>
-        <UserRound
+        <CircleUserRound
           className={`w-5 h-5 ${
-            pathName === "/kontak" ? "text-neutral-50" : "text-primary-700"
+            pathName === "/profile" ? "text-neutral-50" : "text-primary-700"
           }`}
         />
 
         <p
           className={`${
-            pathName === "/kontak"
+            pathName === "/profile"
               ? "text-neutral-50 rounded-xl"
               : "text-primary-700"
           } font-normal text-[12px]`}>
-          Kontak
+          Profile
         </p>
       </Link>
 
@@ -103,7 +110,7 @@ export default function HamburgerMenu() {
               pathName !== "/" &&
               pathName !== "/mpp/tentang-mpp" &&
               pathName !== "/instansi" &&
-              pathName !== "/kontak"
+              pathName !== "/profile"
                 ? "bg-primary-700 rounded-xl"
                 : ""
             } grid grid-rows-2 place-items-center gap-y-2 w-full p-2`}>
@@ -112,7 +119,7 @@ export default function HamburgerMenu() {
                 pathName !== "/" &&
                 pathName !== "/mpp/tentang-mpp" &&
                 pathName !== "/instansi" &&
-                pathName !== "/kontak"
+                pathName !== "/profile"
                   ? "text-neutral-50"
                   : "text-primary-700"
               } w-5 h-5`}
@@ -123,7 +130,7 @@ export default function HamburgerMenu() {
                 pathName !== "/" &&
                 pathName !== "/mpp/tentang-mpp" &&
                 pathName !== "/instansi" &&
-                pathName !== "/kontak"
+                pathName !== "/profile"
                   ? "text-neutral-50"
                   : "text-primary-700"
               } font-normal text-[12px]`}>

@@ -45,6 +45,7 @@ import { Input } from "@/components/ui/input";
 import fetchInstansiPengaduan from "@/components/fetching/instansi/pengaduanInstansi";
 import LayananPengaduan from "@/components/fetching/layanan/layananPengaduan/layananPengaduan";
 import { statusPengaduans } from "@/data/data";
+import { formatCreateTime } from "@/utils/formatTime";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -711,6 +712,9 @@ export default function PengaduanScreen() {
                         <TableHead className="w-6/12 bg-primary-400">
                           Hari / Tanggal
                         </TableHead>
+                        <TableHead className="w-4/12 bg-primary-400">
+                          Waktu
+                        </TableHead>
                         <TableHead className="w-10/12 bg-primary-400">
                           Instansi
                         </TableHead>
@@ -753,6 +757,13 @@ export default function PengaduanScreen() {
                                 );
                               }
 
+                              let pengaduanTime = "";
+                              if (pengaduan.createdAt) {
+                                pengaduanTime = formatCreateTime(
+                                  pengaduan.createdAt
+                                );
+                              }
+
                               let statusColor = "";
 
                               switch (pengaduan?.status) {
@@ -780,6 +791,9 @@ export default function PengaduanScreen() {
                                   </TableCell>
                                   <TableCell className="w-6/12">
                                     {dayName}, {datePengaduanFormatted}
+                                  </TableCell>
+                                  <TableCell className="w-4/12">
+                                    {pengaduanTime} WIB
                                   </TableCell>
                                   <TableCell className="w-10/12">
                                     {pengaduan.Instansi.name}

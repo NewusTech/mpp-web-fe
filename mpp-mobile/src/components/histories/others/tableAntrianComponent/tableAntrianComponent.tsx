@@ -18,8 +18,9 @@ export default function TableAntrianComponent({
     <TableRow>
       <TableCell className="w-1/2">{antrian.Layanan.code}</TableCell>
       <TableCell className="w-full">{antrian.Instansi.name}</TableCell>
-      <TableCell className="w-1/2">{time} WIB</TableCell>
+      <TableCell className="w-full">{antrian.Layanan.name}</TableCell>
       <TableCell className="w-1/2">{date}</TableCell>
+      <TableCell className="w-1/2">{time} WIB</TableCell>
       <TableCell className="w-3/12">
         <PopAntrianComponent antrian={antrian} />
       </TableCell>

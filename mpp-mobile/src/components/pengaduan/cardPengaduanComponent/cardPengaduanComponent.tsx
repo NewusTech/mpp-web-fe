@@ -2,6 +2,7 @@ import { PengaduanType } from "@/types/type";
 import React from "react";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import Link from "next/link";
+import { formatCreateTime } from "@/utils/formatTime";
 
 export default function CardPengaduanComponent({
   pengaduan,
@@ -26,9 +27,14 @@ export default function CardPengaduanComponent({
     datePengaduanFormatted = formatLongDate(`${datePengaduan}`);
   }
 
+  let pengaduanTime = "";
+  if (pengaduan.createdAt) {
+    pengaduanTime = formatCreateTime(pengaduan.createdAt);
+  }
+
   return (
     <div className="bg-primary-100 rounded-xl shadow-md px-[16px] py-[29px] mt-[16px]">
-      <div className="grid grid-rows-3">
+      <div className="grid grid-rows-4">
         <div className="grid grid-cols-2 w-full h-[40px] mb-4">
           <p className="text-[12px] text-primary-800 font-semibold">Layanan</p>
 
@@ -54,6 +60,14 @@ export default function CardPengaduanComponent({
 
           <p className="text-[12px] text-primary-800 font-normal">
             : {dayName} / {datePengaduanFormatted}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 w-full h-[40px]">
+          <p className="text-[12px] text-primary-800 font-semibold">Wkatu</p>
+
+          <p className="text-[12px] text-primary-800 font-normal">
+            : {pengaduanTime} WIB
           </p>
         </div>
 

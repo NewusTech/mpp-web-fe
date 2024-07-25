@@ -188,16 +188,21 @@ export default function LoginScreen() {
                 )}
               </div>
 
-              <div className="flex flex-col md:flex-row md:gap-1 items-end justify-end mt-[8px] md:mt-[24px]">
-                <p className="flex flex-row gap-1 text-end text-neutral-800 font-normal text-[12px] md:text-[14px]">
-                  Belum Punya akun? Silahkan
-                </p>
-
+              <div className="flex flex-col md:flex-row md:justify-between md:gap-1 items-end justify-end mt-2">
                 <Link
-                  href="/register"
-                  className="text-[12px] md:text-[14px] font-bold text-primary-800 border-b border-b-primary-800">
-                  Daftar
+                  href="/forgot-password"
+                  className="text-[12px] md:text-[14px] underline font-normal text-primary-700">
+                  Lupa Kata Sandi?
                 </Link>
+
+                <div className="flex flex-row gap-1 text-end text-neutral-800 font-normal text-[12px] md:text-[14px]">
+                  Belum Punya akun? Silahkan
+                  <Link
+                    href="/register"
+                    className="text-[12px] md:text-[14px] font-bold text-primary-800 underline">
+                    Daftar
+                  </Link>
+                </div>
               </div>
 
               <div className="h-[72px] flex justify-center items-end">

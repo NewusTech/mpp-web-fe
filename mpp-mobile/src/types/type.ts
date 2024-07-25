@@ -99,6 +99,7 @@ export interface SurveiDataType {
   layanan_name: string;
   kritiksaran: string;
   no_skm: number;
+  createdAt: string;
 }
 
 export interface PengaduanType {

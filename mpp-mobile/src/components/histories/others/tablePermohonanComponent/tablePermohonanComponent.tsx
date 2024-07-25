@@ -3,6 +3,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import { PermohonanDataType } from "@/types/type";
+import { formatCreateTime } from "@/utils/formatTime";
 import Link from "next/link";
 
 export default function TablePermohonanComponent({
@@ -13,6 +14,11 @@ export default function TablePermohonanComponent({
   let permohonanDate = "";
   if (permohonan.createdAt) {
     permohonanDate = formatLongDate(`${permohonan.createdAt}`);
+  }
+
+  let permohonanTime = "";
+  if (permohonan.createdAt) {
+    permohonanTime = formatCreateTime(permohonan.createdAt);
   }
 
   let permohonanStatus;
@@ -62,6 +68,7 @@ export default function TablePermohonanComponent({
       <TableCell className="w-1/2">{permohonan.no_request}</TableCell>
       <TableCell className="w-full">{permohonan.instansi_name}</TableCell>
       <TableCell className="w-1/2">{permohonanDate}</TableCell>
+      <TableCell className="w-1/2">{permohonanTime} WIB</TableCell>
       <TableCell className={`w-1/2 ${statusColor}`}>
         {permohonanStatus}
       </TableCell>
