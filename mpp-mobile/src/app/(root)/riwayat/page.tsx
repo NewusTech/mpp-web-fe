@@ -191,7 +191,7 @@ export default function RiwayatPage() {
                     itemsPerPage={itemsPerPage}
                     currentPage={antrianPage}
                     onPageChange={setAntrianPage}
-                    totalItems={historyAntrianData.length}
+                    totalItems={historyAntrianData?.length}
                   />
                 </TabsContent>
 
@@ -206,7 +206,7 @@ export default function RiwayatPage() {
                     itemsPerPage={itemsPerPage}
                     currentPage={permohonanPage}
                     onPageChange={setPermohonanPage}
-                    totalItems={historyData.length}
+                    totalItems={historyData?.length}
                   />
                 </TabsContent>
 
@@ -220,7 +220,7 @@ export default function RiwayatPage() {
                     itemsPerPage={itemsPerPage}
                     currentPage={surveiPage}
                     onPageChange={setSurveiPage}
-                    totalItems={historySurveiData.length}
+                    totalItems={historySurveiData?.length}
                   />
                 </TabsContent>
               </>
@@ -236,7 +236,7 @@ export default function RiwayatPage() {
                     itemsPerPage={itemsPerPage}
                     currentPage={antrianPage}
                     onPageChange={setAntrianPage}
-                    totalItems={historyAntrianData.length}
+                    totalItems={historyAntrianData?.length}
                   />
                 </TabsContent>
 
@@ -251,7 +251,7 @@ export default function RiwayatPage() {
                     itemsPerPage={itemsPerPage}
                     currentPage={permohonanPage}
                     onPageChange={setPermohonanPage}
-                    totalItems={historyData.length}
+                    totalItems={historyData?.length}
                   />
                 </TabsContent>
 
@@ -265,7 +265,7 @@ export default function RiwayatPage() {
                     itemsPerPage={itemsPerPage}
                     currentPage={surveiPage}
                     onPageChange={setSurveiPage}
-                    totalItems={historySurveiData.length}
+                    totalItems={historySurveiData?.length}
                   />
                 </TabsContent>
               </>

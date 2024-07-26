@@ -473,3 +473,20 @@ export interface AntrianCheckType {
   AntrianNumber: number;
   LayananData: { code: string; name: string };
 }
+
+export interface DataFormatType {
+  id: number;
+  nilai: number;
+  surveyform_name: string;
+  surveyform_id: number;
+  surveyformnum_id: number;
+}
+
+export interface SurveyDetailType {
+  date: string;
+  formatteddata: DataFormatType[];
+  instansi_name: string;
+  layanan_name: string;
+  kritiksaran: string;
+  no_skm: string;
+}
