@@ -21,7 +21,6 @@ export const schemaRegister = z.object({
 export const schema = z.object({
   tgl_lahir: z.string({ message: "Tgl Lahir harus diisi" }),
   tempat_lahir: z.string({ message: "Tempat Lahir harus diisi" }),
-  goldar: z.string({ message: "Pilih Golongan Darah" }).optional(),
   status_kawin: z.string({ message: "Pilih Status Perkawinan" }),
   gender: z.string({ message: "Pilih Jenis Kelamin" }),
   agama: z.string({ message: "Pilih Agama" }),

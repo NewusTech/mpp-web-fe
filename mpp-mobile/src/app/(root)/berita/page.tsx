@@ -188,7 +188,7 @@ export default function BeritaPage() {
               }
               className="w-full h-[40px] block border border-neutral-700 px-2"
             />
-            <p className="text-center">TO</p>
+            <p className="text-center">to</p>
             <Input
               type="date"
               name="endDate"

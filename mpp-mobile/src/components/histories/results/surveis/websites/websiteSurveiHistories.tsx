@@ -14,6 +14,7 @@ import { SurveiDataType } from "@/types/type";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
 import TableSurveiComponent from "@/components/histories/others/tableSurveiComponent/tableSurveiComponent";
+import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
 
 export default function WebsiteSurveiHistories({
   currentSurveis,
@@ -50,15 +51,17 @@ export default function WebsiteSurveiHistories({
           <Input
             type="date"
             onChange={handleDateChange}
-            value={filterDate?.startDate}
+            value={
+              filterDate?.startDate ? filterDate?.startDate : getStartOfMonth()
+            }
             name="startDate"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
-          <p className="text-center">TO</p>
+          <p className="text-center">to</p>
           <Input
             type="date"
             onChange={handleDateChange}
-            value={filterDate?.endDate}
+            value={filterDate?.endDate ? filterDate?.endDate : getToday()}
             name="endDate"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />

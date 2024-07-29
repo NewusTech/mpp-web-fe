@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -16,9 +17,11 @@ const raleway = Raleway({
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const SubmitForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/forgotpassword`,
@@ -39,6 +42,8 @@ export default function ForgotPassword() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,8 +110,9 @@ export default function ForgotPassword() {
               <Button
                 className="text-[14px] font-normal"
                 type="submit"
-                variant="primary">
-                Kirim
+                variant="primary"
+                disabled={isLoading ? true : false}>
+                {isLoading ? <Loader className="animate-spin" /> : "Kirim"}
               </Button>
             </div>
           </form>

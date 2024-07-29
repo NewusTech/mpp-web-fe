@@ -33,9 +33,9 @@ export default function CardPengaduanComponent({
   }
 
   return (
-    <div className="bg-primary-100 rounded-xl shadow-md px-[16px] py-[29px] mt-[16px]">
-      <div className="grid grid-rows-4">
-        <div className="grid grid-cols-2 w-full h-[40px] mb-4">
+    <div className="bg-primary-100 rounded-xl shadow-md p-6 mt-[16px]">
+      <div className="flex flex-col w-full gap-y-4">
+        <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">Layanan</p>
 
           <p className="text-[12px] text-primary-800 font-normal">
@@ -43,7 +43,7 @@ export default function CardPengaduanComponent({
           </p>
         </div>
 
-        <div className="grid grid-cols-2 w-full h-[40px]">
+        <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">
             Judul Pengajuan
           </p>
@@ -53,7 +53,7 @@ export default function CardPengaduanComponent({
           </p>
         </div>
 
-        <div className="grid grid-cols-2 w-full h-[40px]">
+        <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">
             Hari / Tanggal
           </p>
@@ -63,15 +63,15 @@ export default function CardPengaduanComponent({
           </p>
         </div>
 
-        <div className="grid grid-cols-2 w-full h-[40px]">
-          <p className="text-[12px] text-primary-800 font-semibold">Wkatu</p>
+        <div className="grid grid-cols-2 w-full">
+          <p className="text-[12px] text-primary-800 font-semibold">Waktu</p>
 
           <p className="text-[12px] text-primary-800 font-normal">
             : {pengaduanTime} WIB
           </p>
         </div>
 
-        <div className="grid grid-cols-2 w-full h-[40px]">
+        <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">Status</p>
 
           <p className="text-[12px] text-primary-800 font-normal">
@@ -87,7 +87,7 @@ export default function CardPengaduanComponent({
         </div>
       </div>
 
-      <div className="flex w-full self-end justify-end">
+      <div className="flex w-full self-end justify-end mt-6">
         {pengaduan.status !== 3 ? (
           <div className="w-3/12 h-[18px] py-4 text-[14px] cursor-not-allowed flex items-center justify-center rounded-full bg-neutral-700 hover:bg-neutral-600">
             Lihat

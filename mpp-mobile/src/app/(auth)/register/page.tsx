@@ -371,7 +371,7 @@ export default function RegisterScreen() {
               </div>
 
               <div className="mt-[16px] md:mt-0 md:pl-4">
-                <h3 className="text-[12px] md:text-[16px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
+                <h3 className="text-[16px] md:text-[20px] text-primary-800 font-semibold mb-[16px] md:mb-[12px]">
                   Alamat
                 </h3>
 
@@ -394,7 +394,7 @@ export default function RegisterScreen() {
                       <SelectTrigger
                         className={`${
                           !selectedKecamatan ? "opacity-70" : ""
-                        } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                        } border border-neutral-700 rounded-[50px] mt-1 bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-2`}>
                         <SelectValue
                           placeholder="Pilih Kecamatan"
                           className={
@@ -444,7 +444,7 @@ export default function RegisterScreen() {
                       <SelectTrigger
                         className={`${
                           !selectedDesa ? "opacity-70" : ""
-                        } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-0`}>
+                        } border border-neutral-700 mt-1 rounded-[50px] bg-neutral-50 md:h-[40px] pl-4 w-full mx-0 pr-2`}>
                         <SelectValue
                           placeholder="Pilih Desa"
                           className={
@@ -570,8 +570,10 @@ export default function RegisterScreen() {
               </Dialog>
 
               <div className="text-neutral-900 font-normal text-[12px]">
-                Dengan mendaftar, Anda menyetujui Syarat & Ketentuan kami dan
-                Anda telah membaca Kebijakan Privasi kami.
+                Dengan mendaftar, Anda menyetujui{" "}
+                <span className="font-semibold">Syarat & Ketentuan</span> kami
+                dan Anda telah membaca{" "}
+                <span className="font-semibold">Kebijakan Privasi</span> kami.
               </div>
             </div>
 

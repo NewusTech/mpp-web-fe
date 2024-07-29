@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -15,6 +16,7 @@ const raleway = Raleway({
 });
 
 export default function NewPassword({ params }: { params: { token: string } }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [newPw, setNewPw] = useState({
     newPassword: "",
     confirmNewPassword: "",
@@ -22,6 +24,7 @@ export default function NewPassword({ params }: { params: { token: string } }) {
 
   const SubmitNewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/reset/${params.token}`,
@@ -42,6 +45,8 @@ export default function NewPassword({ params }: { params: { token: string } }) {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -121,8 +126,9 @@ export default function NewPassword({ params }: { params: { token: string } }) {
               <Button
                 className="text-[14px] font-normal"
                 type="submit"
-                variant="primary">
-                Simpan
+                variant="primary"
+                disabled={isLoading ? true : false}>
+                {isLoading ? <Loader className="animate-spin" /> : "Simpan"}
               </Button>
             </div>
           </form>

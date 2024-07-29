@@ -5,6 +5,7 @@ import CardHistoryAntrian from "@/components/histories/cardHistoryAntrian/cardHi
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import { Input } from "@/components/ui/input";
+import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
 import { AntrianDataType } from "@/types/type";
 import Image from "next/legacy/image";
 
@@ -43,15 +44,17 @@ export default function MobileAntrianHistories({
           <Input
             name="startDate"
             onChange={handleDateChange}
-            value={filterDate?.startDate}
+            value={
+              filterDate?.startDate ? filterDate?.startDate : getStartOfMonth()
+            }
             type="date"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
-          <p className="text-center">TO</p>
+          <p className="text-center">to</p>
           <Input
             onChange={handleDateChange}
             name="endDate"
-            value={filterDate?.endDate}
+            value={filterDate?.endDate ? filterDate?.endDate : getToday()}
             type="date"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
