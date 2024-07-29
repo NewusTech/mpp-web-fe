@@ -8,6 +8,7 @@ export default function CardDocumentPendukung({
 }: {
   document: { name: string; value: string };
 }) {
+  console.log(document, "document");
   return (
     <div className="flex flex-col w-full gap-y-2">
       <div className="flex flex-row justify-between w-full h-[80px] rounded-xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
@@ -18,11 +19,20 @@ export default function CardDocumentPendukung({
         </div>
         <div className="flex self-center items-center w-full justify-end">
           <Dialog>
-            <DialogTrigger>
-              <div className="flex items-center w-full px-4 h-[25px] md:h-[40px] rounded-full justify-center font-normal text-[12px] md:text-[14px] bg-primary-700 hover:bg-primary-600 text-neutral-50 py-2 cursor-pointer">
-                Lihat File
-              </div>
-            </DialogTrigger>
+            {document.value === null ? (
+              <DialogTrigger disabled>
+                <div className="flex items-center w-full px-4 h-[25px] md:h-[40px] rounded-full justify-center font-normal text-[12px] md:text-[14px] bg-neutral-700 text-neutral-50 py-2 cursor-pointer">
+                  Lihat File
+                </div>
+              </DialogTrigger>
+            ) : (
+              <DialogTrigger>
+                <div className="flex items-center w-full px-4 h-[25px] md:h-[40px] rounded-full justify-center font-normal text-[12px] md:text-[14px] bg-primary-700 hover:bg-primary-600 text-neutral-50 py-2 cursor-pointer">
+                  Lihat File
+                </div>
+              </DialogTrigger>
+            )}
+
             <DialogContent className="flex flex-col justify-between w-full bg-neutral-50">
               <div className="fixed inset-0 flex items-center justify-center bg-neutral-900 bg-opacity-50 z-50">
                 <div className="bg-primary-100 rounded-xl shadow-md w-10/12 md:w-6/12">

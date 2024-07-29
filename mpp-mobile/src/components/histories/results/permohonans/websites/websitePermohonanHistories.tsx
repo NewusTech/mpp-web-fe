@@ -22,6 +22,7 @@ import TablePermohonanComponent from "@/components/histories/others/tablePermoho
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { Input } from "@/components/ui/input";
 import { statusDatas } from "@/data/data";
+import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
 
 export default function WebsitePermohonanHistories({
   currentPermohonans,
@@ -87,17 +88,19 @@ export default function WebsitePermohonanHistories({
 
         <div className="flex flex-row justify-center items-center w-full gap-x-3">
           <Input
-            value={filterDate.startDate}
+            value={
+              filterDate.startDate ? filterDate.startDate : getStartOfMonth()
+            }
             onChange={handleDateChange}
             name="startDate"
             type="date"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />
-          <p className="text-center">TO</p>
+          <p className="text-center">to</p>
           <Input
             onChange={handleDateChange}
             name="endDate"
-            value={filterDate.endDate}
+            value={filterDate.endDate ? filterDate.endDate : getToday()}
             type="date"
             className="w-full h-[40px] block border border-neutral-700 px-2"
           />

@@ -1,5 +1,6 @@
 "use client";
 
+import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import picture from "@/../../public/assets/profile-picture.png";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { useEffect, useRef, useState } from "react";
@@ -15,17 +16,12 @@ import {
 } from "@/types/type";
 import { Label } from "@radix-ui/react-label";
 import Image from "next/image";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogClose,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CardDocumentInstansi from "@/components/profiles/cardDocumentInstansi/cardocumentInstansi";
 import fetchHistoryDoc from "@/components/fetching/historyDoc/historyDoc";
 import { StaticImageData } from "next/legacy/image";
-import { Loader } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import CardDocumentPendukung from "@/components/profiles/cardDocumentPendukung/cardDocumentPendukung";
 import { Input } from "@/components/ui/input";
@@ -38,7 +34,6 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileNewType>();
   const [newProfile, setNewProfile] = useState<UpdateUserType>();
   const [documents, setDocuments] = useState<DocumentResultType[]>();
-  const [modalImage, setModalImage] = useState<string>();
   const [isTabs, setIsTabs] = useState<string>("Data Diri");
   const [fotoProfile, setFotoProfile] = useState<File | null>(null);
   const [previewPPImage, setPreviewPPImage] = useState<string>("");
@@ -346,19 +341,23 @@ export default function ProfilePage() {
                 <TabsTrigger
                   className="font-semibold w-5/12 py-4 rounded-l-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-0 text-primary-700 md:text-[20px]"
                   value="Data Diri">
-                  <div>Data Diri</div>
+                  <div className="text-[12px] md:text-[14px]">Data Diri</div>
                 </TabsTrigger>
 
                 <TabsTrigger
                   className="font-semibold w-5/12 py-4 rounded-none bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-3 text-primary-700 md:text-[20px]"
                   value="Dokumen Pendukung">
-                  <div>Dokumen Pendukung</div>
+                  <div className="text-[12px] md:text-[14px]">
+                    Dokumen Pendukung
+                  </div>
                 </TabsTrigger>
 
                 <TabsTrigger
                   className="font-semibold w-5/12 py-4 rounded-r-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-2 text-primary-700 md:text-[20px]"
                   value="Dokumen Terbit">
-                  <div>Dokumen Terbit</div>
+                  <div className="text-[12px] md:text-[14px]">
+                    Dokumen Terbit
+                  </div>
                 </TabsTrigger>
               </TabsList>
 
@@ -393,10 +392,17 @@ export default function ProfilePage() {
                             <form
                               onSubmit={updateProfile}
                               className="flex flex-col w-full mt-2 md:mt-4">
-                              <div className="flex flex-col w-full h-full mt-2 p-4">
-                                <Label className="text-[20px] md:text-[32px] text-neutral-900 font-semibold text-start mb-2">
-                                  Foto Profil
-                                </Label>
+                              <div className="flex flex-col w-full h-full mt-2 px-4">
+                                <div className="flex flex-row w-full justify-between">
+                                  <Label className="text-[20px] md:text-[32px] text-neutral-900 font-semibold text-start mb-2">
+                                    Foto Profil
+                                  </Label>
+
+                                  <X
+                                    onClick={() => setIsOpen(false)}
+                                    className="w-6 h-6 md:w-10 md:h-10 cursor-pointer"
+                                  />
+                                </div>
                                 <div className="flex flex-col w-full gap-y-5">
                                   {(previewPPImage ||
                                     newProfile?.fotoprofil ||
@@ -431,7 +437,7 @@ export default function ProfilePage() {
                                       />
                                       <label
                                         htmlFor="file-input-pp"
-                                        className="text-[16px] text-center text-neutral-800 p-2 md:p-4 font-light cursor-pointer">
+                                        className="text-[16px] md:text-[20px] text-center text-neutral-800 p-2 md:p-4 font-light cursor-pointer">
                                         Drag and drop file here or click to
                                         select file
                                       </label>
@@ -723,9 +729,29 @@ export default function ProfilePage() {
 
               <TabsContent value="Dokumen Terbit">
                 <div className="flex flex-col w-full mt-6 md:mt-0 mb-6 px-4 md:px-0 gap-y-2">
-                  {documents?.map((document: DocumentResultType, i: number) => {
-                    return <CardDocumentInstansi key={i} document={document} />;
-                  })}
+                  {documents && documents.length > 0 ? (
+                    <>
+                      {documents &&
+                        documents.length > 0 &&
+                        documents?.map(
+                          (document: DocumentResultType, i: number) => {
+                            return (
+                              <CardDocumentInstansi
+                                key={i}
+                                document={document}
+                              />
+                            );
+                          }
+                        )}
+                    </>
+                  ) : (
+                    <div className="flex flex-col justify-center items-center h-[211px]">
+                      <Image src={sad} width={100} height={100} alt="sad" />
+                      <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
+                        Data tidak ditemukan!
+                      </p>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

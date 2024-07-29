@@ -17,9 +17,9 @@ export default function CardDocumentLayanan({
         </h6>
       </div>
       <div className="flex self-center items-center w-full justify-end">
-        {document && (
+        {document.fileoutput && (
           <Link
-            href={document.fileoutput}
+            href={document?.fileoutput}
             target="_blank"
             className="flex items-center w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] bg-primary-700 hover:bg-primary-600 hover:text-neutral-50 text-neutral-50 py-[10px] cursor-pointer">
             Lihat

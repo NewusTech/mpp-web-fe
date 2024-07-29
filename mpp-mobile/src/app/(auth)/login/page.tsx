@@ -103,8 +103,8 @@ export default function LoginScreen() {
   };
 
   return (
-    <section className="md:container md:mx-auto flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:min-w-full">
-      <div className="flex flex-col w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 mx-8 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
+    <section className="flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:w-screen">
+      <div className="flex flex-col w-11/12 md:w-5/12 gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 px-8 py-6 md:py-12 md:px-20">
         <Link
           href={"/"}
           className="flex flex-col items-center justify-center w-full gap-y-3">
@@ -209,7 +209,8 @@ export default function LoginScreen() {
                 <Button
                   className="text-[14px] font-normal"
                   type="submit"
-                  variant="primary">
+                  variant="primary"
+                  disabled={isLoading ? true : false}>
                   {isLoading ? <Loader className="animate-spin" /> : "Masuk"}
                 </Button>
               </div>

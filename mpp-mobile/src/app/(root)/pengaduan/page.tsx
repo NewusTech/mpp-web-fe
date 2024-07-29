@@ -38,7 +38,11 @@ import fetchPengaduanLists from "@/components/fetching/pengaduan/pengaduan";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/image";
 import z from "zod";
-import { formatLongDate } from "@/helpers/logout/formatted";
+import {
+  formatLongDate,
+  getStartOfMonth,
+  getToday,
+} from "@/helpers/logout/formatted";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -402,33 +406,42 @@ export default function PengaduanScreen() {
 
         <div className="w-full mt-4">
           <div className="md:flex md:flex-row md:justify-end md:mb-6 gap-x-3">
-            <div className="flex items-center w-full md:w-3/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px] mb-2 md:mb-0">
-              <Select onValueChange={handleSelectStatusChange}>
-                <SelectTrigger
-                  className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
-                  <SelectValue
-                    placeholder="Pilih By Status"
-                    className="text-neutral-800 w-full"
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <div className="pt-2">
-                    {statusPengaduans &&
-                      statusPengaduans.map(
-                        (status: { id: number; value: string }, i: number) => {
-                          return (
-                            <SelectItem
-                              key={i}
-                              className={`w-full px-4`}
-                              value={status.id.toString()}>
-                              {status.value}
-                            </SelectItem>
-                          );
-                        }
-                      )}
-                  </div>
-                </SelectContent>
-              </Select>
+            <div className="flex flex-row w-full gap-x-4">
+              <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px] mb-2 md:mb-0">
+                <Select onValueChange={handleSelectStatusChange}>
+                  <SelectTrigger
+                    className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+                    <SelectValue
+                      placeholder="Pilih By Status"
+                      className="text-neutral-800 w-full"
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <div className="pt-2">
+                      {statusPengaduans &&
+                        statusPengaduans.map(
+                          (
+                            status: { id: number; value: string },
+                            i: number
+                          ) => {
+                            return (
+                              <SelectItem
+                                key={i}
+                                className={`w-full px-4`}
+                                value={status.id.toString()}>
+                                {status.value}
+                              </SelectItem>
+                            );
+                          }
+                        )}
+                    </div>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="w-full">
+                <SearchComponent change={handleSearch} search={search} />
+              </div>
             </div>
 
             <div className="flex flex-row justify-center items-center w-full md:w-5/12 gap-x-3">
@@ -436,244 +449,246 @@ export default function PengaduanScreen() {
                 type="date"
                 name="startDate"
                 onChange={handleDateChange}
-                value={filterDate.startDate}
+                value={
+                  filterDate.startDate
+                    ? filterDate.startDate
+                    : getStartOfMonth()
+                }
                 className="w-full h-[40px] block border border-neutral-700 px-2"
               />
-              <p className="text-center">TO</p>
+              <p className="text-center">to</p>
               <Input
                 type="date"
                 name="endDate"
                 onChange={handleDateChange}
-                value={filterDate.endDate}
+                value={filterDate.endDate ? filterDate.endDate : getToday()}
                 className="w-full h-[40px] block border border-neutral-700 px-2"
               />
             </div>
 
-            <div className="w-full md:w-4/12 mt-2 md:mt-0 mb-2 md:mb-0">
-              <SearchComponent change={handleSearch} search={search} />
-            </div>
+            <div className="w-full md:w-4/12 flex flex-row justify-end mt-6 md:mt-0">
+              <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                <DialogTrigger asChild>
+                  <div
+                    onClick={() => setIsOpen(true)}
+                    className="w-6/12 md:w-full flex items-center cursor-pointer justify-center bg-primary-700 hover:bg-primary-800 rounded-[50px] h-[40px] text-neutral-50 outline outline-1 outline-neutral-500">
+                    <h2 className="text-[14px] text-center w-full font-normal">
+                      Ajukan Pegaduan
+                    </h2>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
+                  <form
+                    onSubmit={handlePengaduan}
+                    className="flex flex-col w-full">
+                    <div className="flex flex-col w-full px-4 md:px-[105px]">
+                      <div className="flex flex-col w-full mb-[10px] md:mb-1 mx-[1px] mt-6">
+                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                          Pilih Instansi
+                        </Label>
 
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <div
-                  onClick={() => setIsOpen(true)}
-                  className="w-6/12 md:w-2/12 flex items-center cursor-pointer justify-center bg-primary-700 hover:bg-primary-800 rounded-[50px] h-[40px] text-neutral-50 outline outline-1 outline-neutral-500">
-                  <h2 className="text-[14px] text-center w-full font-normal">
-                    Ajukan Pegaduan
-                  </h2>
-                </div>
-              </DialogTrigger>
-              <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
-                <form
-                  onSubmit={handlePengaduan}
-                  className="flex flex-col w-full">
-                  <div className="flex flex-col w-full px-4 md:px-[105px]">
-                    <div className="flex flex-col w-full mb-[10px] md:mb-1 mx-[1px] mt-6">
-                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                        Pilih Instansi
-                      </Label>
-
-                      <Select
-                        name="instansi_id"
-                        onValueChange={handleInstansiChange}>
-                        <SelectTrigger
-                          className={`${
-                            !pengaduan.instansi_id ? "opacity-50" : ""
-                          } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
-                          <SelectValue
-                            placeholder="Pilih Dinas"
-                            className={
-                              pengaduan.instansi_id
-                                ? ""
-                                : "placeholder:opacity-50"
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent className="w-full md:w-full">
-                          <div>
-                            {instansi.map((item: Instansi, i: number) => (
-                              <SelectItem
-                                key={i}
-                                value={item.id.toString()}
-                                className="pr-none">
-                                {item.name}
-                              </SelectItem>
-                            ))}
-                          </div>
-                        </SelectContent>
-                      </Select>
-
-                      {hasSubmitted && errors?.instansi_id?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.instansi_id._errors[0]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col mx-[1px] md:mt-4">
-                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                        Pilih Layanan
-                      </Label>
-
-                      <Select
-                        name="layanan_id"
-                        onValueChange={handleLayananChange}>
-                        <SelectTrigger
-                          className={`${
-                            !pengaduan.layanan_id ? "opacity-50" : ""
-                          } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
-                          <SelectValue
-                            placeholder="Pilih Jenis Layanan"
-                            className={
-                              pengaduan.layanan_id
-                                ? ""
-                                : "placeholder:opacity-50"
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent className="w-full md:w-full">
-                          <div>
-                            {service.map(
-                              (item: JenisLayananType, i: number) => (
+                        <Select
+                          name="instansi_id"
+                          onValueChange={handleInstansiChange}>
+                          <SelectTrigger
+                            className={`${
+                              !pengaduan.instansi_id ? "opacity-50" : ""
+                            } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
+                            <SelectValue
+                              placeholder="Pilih Dinas"
+                              className={
+                                pengaduan.instansi_id
+                                  ? ""
+                                  : "placeholder:opacity-50"
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent className="w-full md:w-full">
+                            <div>
+                              {instansi.map((item: Instansi, i: number) => (
                                 <SelectItem
                                   key={i}
                                   value={item.id.toString()}
                                   className="pr-none">
                                   {item.name}
                                 </SelectItem>
-                              )
-                            )}
+                              ))}
+                            </div>
+                          </SelectContent>
+                        </Select>
+
+                        {hasSubmitted && errors?.instansi_id?._errors && (
+                          <div className="text-error-700 text-[12px] md:text-[14px]">
+                            {errors.instansi_id._errors[0]}
                           </div>
-                        </SelectContent>
-                      </Select>
-
-                      {hasSubmitted && errors?.layanan_id?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.layanan_id._errors[0]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">
-                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                        Judul Pengaduan
-                      </Label>
-
-                      <input
-                        type="text"
-                        name="judul"
-                        value={pengaduan.judul}
-                        onChange={handleChange}
-                        placeholder="Judul Pengaduan"
-                        className={`w-full pl-4 h-[40px] border border-neutral-700 rounded-[50px] pr-2 placeholder:text-[14px] focus:outline-none appearance-none`}
-                      />
-
-                      {hasSubmitted && errors?.judul?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.judul._errors[0]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col mx-[1px]">
-                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                        Aduan
-                      </Label>
-
-                      <Textarea
-                        name="aduan"
-                        value={pengaduan.aduan}
-                        onChange={handleChange}
-                        className="w-full text-[14px] placeholder:text-[14px] border border-neutral-700 placeholder:opacity-[40%]"
-                        placeholder="Aduan"
-                      />
-
-                      {formErrors["aduan"] && (
-                        <p className="text-error-700 text-[12px] mt-1 text-center">
-                          {formErrors["aduan"]}
-                        </p>
-                      )}
-
-                      {hasSubmitted && errors?.aduan?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.aduan._errors[0]}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col my-[10px] md:mt-3 mx-[1px]">
-                      <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                        Dokumen
-                      </Label>
-
-                      <div
-                        ref={dropRef}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                        className={`w-full h-[100px] border-2 border-dashed border-neutral-700 rounded-xl mt-1 flex flex-col items-center justify-center ${
-                          changeOpacity ? "opacity-50" : "opacity-100"
-                        }`}>
-                        {previewImage ? (
-                          <div className="relative max-w-full max-h-full">
-                            <img
-                              src={previewImage}
-                              alt="Preview"
-                              className="max-h-full rounded-xl p-2 max-w-full object-contain"
-                            />
-
-                            <button
-                              type="button"
-                              onClick={handleRemoveFile}
-                              className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
-                              <CircleX />
-                            </button>
-                          </div>
-                        ) : (
-                          <>
-                            <input
-                              type="file"
-                              id="file-input"
-                              name="image"
-                              accept="image/*,.pdf"
-                              onChange={handleFileChange}
-                              className="hidden"
-                            />
-                            <label
-                              htmlFor="file-input"
-                              className="text-[16px] text-center text-neutral-600 font-light cursor-pointer">
-                              {pengaduan.image
-                                ? pengaduan.image
-                                : "Drag and drop file here or click to select file"}
-                            </label>
-                          </>
                         )}
                       </div>
 
-                      {hasSubmitted && errors?.image?._errors && (
-                        <div className="text-error-700 text-[12px] md:text-[14px]">
-                          {errors.image._errors[0]}
-                        </div>
-                      )}
-                    </div>
+                      <div className="flex flex-col mx-[1px] md:mt-4">
+                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                          Pilih Layanan
+                        </Label>
 
-                    <div className="flex justify-center mb-[32px] mt-[16px]">
-                      <Button
-                        className="text-[14px] text-neutral-50 w-[120px] md:w-[235px] h-[40px] md:h-[40px]"
-                        type="submit"
-                        disabled={!formValid || isLoading}
-                        variant="warning">
-                        {isLoading ? (
-                          <Loader className="animate-spin" />
-                        ) : (
-                          "Ajukan"
+                        <Select
+                          name="layanan_id"
+                          onValueChange={handleLayananChange}>
+                          <SelectTrigger
+                            className={`${
+                              !pengaduan.layanan_id ? "opacity-50" : ""
+                            } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
+                            <SelectValue
+                              placeholder="Pilih Jenis Layanan"
+                              className={
+                                pengaduan.layanan_id
+                                  ? ""
+                                  : "placeholder:opacity-50"
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent className="w-full md:w-full">
+                            <div>
+                              {service.map(
+                                (item: JenisLayananType, i: number) => (
+                                  <SelectItem
+                                    key={i}
+                                    value={item.id.toString()}
+                                    className="pr-none">
+                                    {item.name}
+                                  </SelectItem>
+                                )
+                              )}
+                            </div>
+                          </SelectContent>
+                        </Select>
+
+                        {hasSubmitted && errors?.layanan_id?._errors && (
+                          <div className="text-error-700 text-[12px] md:text-[14px]">
+                            {errors.layanan_id._errors[0]}
+                          </div>
                         )}
-                      </Button>
+                      </div>
+
+                      <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">
+                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                          Judul Pengaduan
+                        </Label>
+
+                        <input
+                          type="text"
+                          name="judul"
+                          value={pengaduan.judul}
+                          onChange={handleChange}
+                          placeholder="Judul Pengaduan"
+                          className={`w-full pl-4 h-[40px] border border-neutral-700 rounded-[50px] pr-2 placeholder:text-[14px] focus:outline-none appearance-none`}
+                        />
+
+                        {hasSubmitted && errors?.judul?._errors && (
+                          <div className="text-error-700 text-[12px] md:text-[14px]">
+                            {errors.judul._errors[0]}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col mx-[1px]">
+                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                          Aduan
+                        </Label>
+
+                        <Textarea
+                          name="aduan"
+                          value={pengaduan.aduan}
+                          onChange={handleChange}
+                          className="w-full text-[14px] placeholder:text-[14px] border border-neutral-700 placeholder:opacity-[40%]"
+                          placeholder="Aduan"
+                        />
+
+                        {formErrors["aduan"] && (
+                          <p className="text-error-700 text-[12px] mt-1 text-center">
+                            {formErrors["aduan"]}
+                          </p>
+                        )}
+
+                        {hasSubmitted && errors?.aduan?._errors && (
+                          <div className="text-error-700 text-[12px] md:text-[14px]">
+                            {errors.aduan._errors[0]}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col my-[10px] md:mt-3 mx-[1px]">
+                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                          Dokumen
+                        </Label>
+
+                        <div
+                          ref={dropRef}
+                          onDragOver={handleDragOver}
+                          onDragLeave={handleDragLeave}
+                          onDrop={handleDrop}
+                          className={`w-full h-[100px] border-2 border-dashed border-neutral-700 rounded-xl mt-1 flex flex-col items-center justify-center ${
+                            changeOpacity ? "opacity-50" : "opacity-100"
+                          }`}>
+                          {previewImage ? (
+                            <div className="relative max-w-full max-h-full">
+                              <img
+                                src={previewImage}
+                                alt="Preview"
+                                className="max-h-full rounded-xl p-2 max-w-full object-contain"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={handleRemoveFile}
+                                className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
+                                <CircleX />
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              <input
+                                type="file"
+                                id="file-input"
+                                name="image"
+                                accept="image/*,.pdf"
+                                onChange={handleFileChange}
+                                className="hidden"
+                              />
+                              <label
+                                htmlFor="file-input"
+                                className="text-[16px] text-center text-neutral-600 font-light cursor-pointer">
+                                {pengaduan.image
+                                  ? pengaduan.image
+                                  : "Drag and drop file here or click to select file"}
+                              </label>
+                            </>
+                          )}
+                        </div>
+
+                        {hasSubmitted && errors?.image?._errors && (
+                          <div className="text-error-700 text-[12px] md:text-[14px]">
+                            {errors.image._errors[0]}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex justify-center mb-[32px] mt-[16px]">
+                        <Button
+                          className="text-[14px] text-neutral-50 w-[120px] md:w-[235px] h-[40px] md:h-[40px]"
+                          type="submit"
+                          disabled={!formValid || isLoading}
+                          variant="warning">
+                          {isLoading ? (
+                            <Loader className="animate-spin" />
+                          ) : (
+                            "Ajukan"
+                          )}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </form>
-              </DialogContent>
-            </Dialog>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
           {pengaduanlists && pengaduanlists?.length > 0 ? (
