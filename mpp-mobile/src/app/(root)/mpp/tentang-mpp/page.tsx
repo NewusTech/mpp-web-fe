@@ -145,7 +145,9 @@ export default function MppPage() {
               <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
                 {book?.dokumen && (
                   <iframe
+                    allowFullScreen
                     src={book.dokumen}
+                    title="Manual Book"
                     className="rounded-b-xl w-full h-full">
                     {book.id}
                   </iframe>

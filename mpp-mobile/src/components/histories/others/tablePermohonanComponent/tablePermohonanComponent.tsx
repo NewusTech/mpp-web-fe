@@ -81,7 +81,7 @@ export default function TablePermohonanComponent({
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}
-              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1.5 px-5 text-neutral-50">
               Lihat
             </Link>
           </div>

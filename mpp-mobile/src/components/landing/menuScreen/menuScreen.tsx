@@ -147,7 +147,7 @@ export default function MenuScreen({ closeMenu }: { closeMenu: any }) {
           onClick={closeMenu}
           className="flex flex-row justify-end group gap-x-4 px-6">
           <p className="text-neutral-50 group-hover:text-secondary-700 text-[14px]">
-            kontak
+            Kontak
           </p>
 
           <UserRound className="text-neutral-50 group-hover:text-secondary-700 w-5 h-5" />

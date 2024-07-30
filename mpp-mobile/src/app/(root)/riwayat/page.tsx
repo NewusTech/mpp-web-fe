@@ -15,6 +15,7 @@ import MobileAntrianHistories from "@/components/histories/results/antrians/mobi
 import { fetchRiwayatSurvei } from "@/store/action/actionHistorySurvei";
 import WebsiteSurveiHistories from "@/components/histories/results/surveis/websites/websiteSurveiHistories";
 import MobileSurveiHistories from "@/components/histories/results/surveis/mobiles/mobileSurveiHistories";
+import { formatDateArrange } from "@/helpers/logout/formatted";
 
 export default function RiwayatPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,6 +29,10 @@ export default function RiwayatPage() {
     (state: RootState) => state.historySurvei.data
   );
   const [search, setSearch] = useState<string>("");
+  const now = new Date();
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const [startDate, setStartDate] = useState<Date | undefined>(firstDayOfMonth);
+  const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const [filterDate, setFilterDate] = useState<{
     startDate: string;
     endDate: string;
@@ -55,25 +60,40 @@ export default function RiwayatPage() {
     }
   }, [search]);
 
+  const startDateFormatted = startDate
+    ? formatDateArrange(new Date(startDate))
+    : undefined;
+  const endDateFormatted = endDate
+    ? formatDateArrange(new Date(endDate))
+    : undefined;
+
   useEffect(() => {
     if (!token) {
       redirect("/login");
     }
 
-    dispatch(
-      fetchRiwayatPermohonan(
-        search,
-        filterDate.startDate,
-        filterDate.endDate,
-        status
-      )
-    );
-    dispatch(
-      fetchRiwayatAntrian(search, filterDate.startDate, filterDate.endDate)
-    );
-    dispatch(
-      fetchRiwayatSurvei(search, filterDate.startDate, filterDate.endDate)
-    );
+    const fetchStatus = status === "7" ? "" : status;
+
+    if (startDateFormatted && endDateFormatted) {
+      dispatch(
+        fetchRiwayatPermohonan(
+          search,
+          startDateFormatted,
+          endDateFormatted,
+          fetchStatus
+        )
+      );
+    }
+    if (startDateFormatted && endDateFormatted) {
+      dispatch(
+        fetchRiwayatAntrian(search, startDateFormatted, endDateFormatted)
+      );
+    }
+    if (startDateFormatted && endDateFormatted) {
+      dispatch(
+        fetchRiwayatSurvei(search, startDateFormatted, endDateFormatted)
+      );
+    }
 
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 678);
@@ -84,14 +104,7 @@ export default function RiwayatPage() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [
-    dispatch,
-    token,
-    search,
-    filterDate.startDate,
-    filterDate.endDate,
-    status,
-  ]);
+  }, [dispatch, token, search, startDateFormatted, endDateFormatted, status]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -110,7 +123,7 @@ export default function RiwayatPage() {
 
   const paginate = (items: any[], pageNumber: number, itemsPerPage: number) => {
     const startIndex = (pageNumber - 1) * itemsPerPage;
-    return items.slice(startIndex, startIndex + itemsPerPage);
+    return items?.slice(startIndex, startIndex + itemsPerPage);
   };
 
   const currentAntrians = paginate(
@@ -130,7 +143,7 @@ export default function RiwayatPage() {
   );
 
   return (
-    <section className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-3 md:mb-0 pb-32 md:pb-[120px] mx-[35px] md:mx-0 md:px-[167px]">
+    <section className="flex flex-col justify-center bg-primary-100 pt-4 md:mt-3 md:mb-0 pb-32 md:pb-[120px] mx-[35px] md:mx-0 md:px-[100px]">
       <div className="flex self-start md:mb-9">
         <h5 className="text-[20px] md:text-[26px] font-semibold text-primary-800">
           History
@@ -183,8 +196,10 @@ export default function RiwayatPage() {
               <>
                 <TabsContent value="antrian">
                   <WebsiteAntrianHistories
-                    handleDateChange={handleDateChange}
-                    filterDate={filterDate}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
                     change={handleSearch}
                     search={search}
                     currentAntrians={currentAntrians}
@@ -198,8 +213,10 @@ export default function RiwayatPage() {
                 <TabsContent value="permohonan">
                   <WebsitePermohonanHistories
                     handleSelectStatusChange={handleSelectStatusChange}
-                    handleDateChange={handleDateChange}
-                    filterDate={filterDate}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
                     change={handleSearch}
                     search={search}
                     currentPermohonans={currentPermohonans}
@@ -212,8 +229,10 @@ export default function RiwayatPage() {
 
                 <TabsContent value="survei">
                   <WebsiteSurveiHistories
-                    handleDateChange={handleDateChange}
-                    filterDate={filterDate}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
                     change={handleSearch}
                     search={search}
                     currentSurveis={currentSurveis}
@@ -228,8 +247,10 @@ export default function RiwayatPage() {
               <>
                 <TabsContent value="antrian">
                   <MobileAntrianHistories
-                    handleDateChange={handleDateChange}
-                    filterDate={filterDate}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
                     change={handleSearch}
                     search={search}
                     currentAntrians={currentAntrians}
@@ -243,8 +264,10 @@ export default function RiwayatPage() {
                 <TabsContent className="flex flex-col gap-4" value="permohonan">
                   <MobilePermohonanHistories
                     handleSelectStatusChange={handleSelectStatusChange}
-                    handleDateChange={handleDateChange}
-                    filterDate={filterDate}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
                     change={handleSearch}
                     search={search}
                     currentPermohonans={currentPermohonans}
@@ -257,8 +280,10 @@ export default function RiwayatPage() {
 
                 <TabsContent className="flex flex-col gap-4" value="survei">
                   <MobileSurveiHistories
-                    handleDateChange={handleDateChange}
-                    filterDate={filterDate}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
                     change={handleSearch}
                     search={search}
                     currentSurveis={currentSurveis}

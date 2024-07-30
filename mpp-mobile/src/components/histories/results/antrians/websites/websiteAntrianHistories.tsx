@@ -13,8 +13,7 @@ import Image from "next/legacy/image";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import TableAntrianComponent from "@/components/histories/others/tableAntrianComponent/tableAntrianComponent";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
-import { Input } from "@/components/ui/input";
-import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
+import InputDate from "@/components/others/inputDate/inputDate";
 
 export default function WebsiteAntrianHistories({
   currentAntrians,
@@ -24,8 +23,10 @@ export default function WebsiteAntrianHistories({
   totalItems,
   search,
   change,
-  handleDateChange,
-  filterDate,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
 }: {
   currentAntrians: AntrianDataType[];
   itemsPerPage: number;
@@ -34,11 +35,10 @@ export default function WebsiteAntrianHistories({
   totalItems: number;
   search: string;
   change: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  filterDate: {
-    startDate: string;
-    endDate: string;
-  };
+  startDate: Date | undefined;
+  setStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  endDate: Date | undefined;
+  setEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }) {
   return (
     <div className="flex flex-col w-full gap-y-4">
@@ -48,22 +48,14 @@ export default function WebsiteAntrianHistories({
         </div>
 
         <div className="flex flex-row justify-center items-center w-full gap-x-3">
-          <Input
-            name="startDate"
-            onChange={handleDateChange}
-            value={
-              filterDate?.startDate ? filterDate?.startDate : getStartOfMonth()
-            }
-            type="date"
-            className="w-full h-[40px] block border border-neutral-700 px-2"
+          <InputDate
+            date={startDate ?? null}
+            setDate={(e) => setStartDate(e ?? undefined)}
           />
           <p className="text-center">to</p>
-          <Input
-            onChange={handleDateChange}
-            name="endDate"
-            value={filterDate?.endDate ? filterDate?.endDate : getToday()}
-            type="date"
-            className="w-full h-[40px] block border border-neutral-700 px-2"
+          <InputDate
+            date={endDate ?? null}
+            setDate={(e) => setEndDate(e ?? undefined)}
           />
         </div>
       </div>

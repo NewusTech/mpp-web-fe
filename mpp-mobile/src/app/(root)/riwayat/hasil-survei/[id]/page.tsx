@@ -30,8 +30,6 @@ export default function SurveiDetailPage({
     getSurveiId(params.id);
   }, [params.id]);
 
-  console.log(survei, "survei");
-
   let surveiDate = "";
   if (survei) {
     surveiDate = formatLongDate(survei?.date);

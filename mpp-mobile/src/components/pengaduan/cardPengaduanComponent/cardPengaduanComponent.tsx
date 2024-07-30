@@ -32,8 +32,28 @@ export default function CardPengaduanComponent({
     pengaduanTime = formatCreateTime(pengaduan.createdAt);
   }
 
+  let statusColor = "";
+
+  switch (pengaduan?.status) {
+    case 1:
+      statusColor = "text-secondary-700";
+      break;
+    case 2:
+      statusColor = "text-warning-700";
+      break;
+    case 0:
+      statusColor = "text-primary-700";
+      break;
+    case 3:
+      statusColor = "text-success-700";
+      break;
+    default:
+      statusColor = "text-gray-500";
+      break;
+  }
+
   return (
-    <div className="bg-primary-100 rounded-xl shadow-md p-6 mt-[16px]">
+    <div className="bg-primary-50 rounded-xl shadow-md p-6 mt-4">
       <div className="flex flex-col w-full gap-y-4">
         <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">Layanan</p>
@@ -74,8 +94,8 @@ export default function CardPengaduanComponent({
         <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">Status</p>
 
-          <p className="text-[12px] text-primary-800 font-normal">
-            :
+          <p className={`text-[12px] ${statusColor} font-normal`}>
+            :{" "}
             {pengaduan.status === 0
               ? "Belum diproses"
               : pengaduan.status === 1
