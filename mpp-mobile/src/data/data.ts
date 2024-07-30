@@ -130,12 +130,16 @@ export const statusInstansis = [
 
 export const statusDatas = [
   {
+    id: 7,
+    value: "Semua Data",
+  },
+  {
     id: 0,
     value: "Belum diproses",
   },
   {
     id: 1,
-    value: "Sudah diproses",
+    value: "Sedang diproses",
   },
   {
     id: 2,
@@ -160,6 +164,10 @@ export const statusDatas = [
 ];
 
 export const statusPengaduans = [
+  {
+    id: 4,
+    value: "Semua Data",
+  },
   {
     id: 0,
     value: "Belum diproses",

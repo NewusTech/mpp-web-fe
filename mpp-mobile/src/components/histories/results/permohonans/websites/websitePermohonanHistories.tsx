@@ -20,9 +20,8 @@ import { PermohonanDataType } from "@/types/type";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import TablePermohonanComponent from "@/components/histories/others/tablePermohonanComponent/tablePermohonanComponent";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
-import { Input } from "@/components/ui/input";
 import { statusDatas } from "@/data/data";
-import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
+import InputDate from "@/components/others/inputDate/inputDate";
 
 export default function WebsitePermohonanHistories({
   currentPermohonans,
@@ -32,8 +31,10 @@ export default function WebsitePermohonanHistories({
   totalItems,
   search,
   change,
-  handleDateChange,
-  filterDate,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
   handleSelectStatusChange,
 }: {
   currentPermohonans: PermohonanDataType[];
@@ -43,11 +44,10 @@ export default function WebsitePermohonanHistories({
   totalItems: number;
   search: string;
   change: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  filterDate: {
-    startDate: string;
-    endDate: string;
-  };
+  startDate: Date | undefined;
+  setStartDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  endDate: Date | undefined;
+  setEndDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
   handleSelectStatusChange: (e: string) => void;
 }) {
   return (
@@ -87,31 +87,25 @@ export default function WebsitePermohonanHistories({
         </div>
 
         <div className="flex flex-row justify-center items-center w-full gap-x-3">
-          <Input
-            value={
-              filterDate.startDate ? filterDate.startDate : getStartOfMonth()
-            }
-            onChange={handleDateChange}
-            name="startDate"
-            type="date"
-            className="w-full h-[40px] block border border-neutral-700 px-2"
+          <InputDate
+            date={startDate ?? null}
+            setDate={(e) => setStartDate(e ?? undefined)}
           />
           <p className="text-center">to</p>
-          <Input
-            onChange={handleDateChange}
-            name="endDate"
-            value={filterDate.endDate ? filterDate.endDate : getToday()}
-            type="date"
-            className="w-full h-[40px] block border border-neutral-700 px-2"
+          <InputDate
+            date={endDate ?? null}
+            setDate={(e) => setEndDate(e ?? undefined)}
           />
         </div>
       </div>
       {currentPermohonans && currentPermohonans.length > 0 ? (
         <>
           <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
-            <TableHeader className="md:flex md:w-full">
-              <TableRow className="md:flex md:flex-row md:w-full">
-                <TableHead className="w-1/2">Nomor Permohonan</TableHead>
+            <TableHeader className="w-full">
+              <TableRow className="flex flex-row justify-center w-full">
+                <TableHead className="text-start w-1/2">
+                  Nomor Permohonan
+                </TableHead>
                 <TableHead className="w-full">Instansi</TableHead>
                 <TableHead className="w-full">Layanan</TableHead>
                 <TableHead className="w-1/2">Tanggal</TableHead>

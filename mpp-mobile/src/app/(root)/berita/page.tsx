@@ -19,8 +19,8 @@ import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/legacy/image";
 import LoadingComponent from "@/components/loading/LoadingComponent";
-import { Input } from "@/components/ui/input";
-import { getStartOfMonth, getToday } from "@/helpers/logout/formatted";
+import { formatDateArrange } from "@/helpers/logout/formatted";
+import InputDate from "@/components/others/inputDate/inputDate";
 export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
@@ -29,13 +29,10 @@ export default function BeritaPage() {
   const [instansis, setInstansis] = useState<Instansi[]>();
   const [selectedInstansiId, setSelectedInstansiId] = useState<string>();
   const [search, setSearch] = useState<string>("");
-  const [filterDate, setFilterDate] = useState<{
-    startDate: string;
-    endDate: string;
-  }>({
-    startDate: "",
-    endDate: "",
-  });
+  const now = new Date();
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const [startDate, setStartDate] = useState<Date | undefined>(firstDayOfMonth);
+  const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const searchDebounce = useDebounce(search, 500);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -82,17 +79,32 @@ export default function BeritaPage() {
     }
   };
 
+  const startDateFormatted = startDate
+    ? formatDateArrange(new Date(startDate))
+    : undefined;
+  const endDateFormatted = endDate
+    ? formatDateArrange(new Date(endDate))
+    : undefined;
+
   useEffect(() => {
     const instansiId = selectedInstansiId || "";
-    fetchBerita(
-      currentPage,
-      limitData,
-      searchDebounce,
-      filterDate.startDate,
-      filterDate.endDate,
-      instansiId
-    );
-  }, [searchDebounce, filterDate, currentPage, selectedInstansiId]);
+    if (startDateFormatted && endDateFormatted) {
+      fetchBerita(
+        currentPage,
+        limitData,
+        searchDebounce,
+        startDateFormatted,
+        endDateFormatted,
+        instansiId
+      );
+    }
+  }, [
+    searchDebounce,
+    startDateFormatted,
+    endDateFormatted,
+    currentPage,
+    selectedInstansiId,
+  ]);
 
   const paginate = (
     items: Berita[],
@@ -110,18 +122,12 @@ export default function BeritaPage() {
   const handleAllClick = () => {
     setSelectedInstansiId("");
     setSearch("");
-    setFilterDate({ startDate: getStartOfMonth(), endDate: getToday() });
   };
 
   const currentDataBerita = paginate(news || [], currentPage, itemsPerPage);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-  };
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilterDate((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -177,24 +183,16 @@ export default function BeritaPage() {
           <SearchComponent change={handleSearch} search={search} />
         </div>
 
-        <div className="flex flex-col md:flex-row w-full md:w-8/12 gap-y-2">
+        <div className="flex flex-col md:flex-row w-full md:w-10/12 gap-y-2">
           <div className="flex flex-row justify-center items-center w-full gap-x-2 md:gap-x-3">
-            <Input
-              type="date"
-              name="startDate"
-              onChange={handleDateChange}
-              value={
-                filterDate.startDate ? filterDate.startDate : getStartOfMonth()
-              }
-              className="w-full h-[40px] block border border-neutral-700 px-2"
+            <InputDate
+              date={startDate ?? null}
+              setDate={(e) => setStartDate(e ?? undefined)}
             />
             <p className="text-center">to</p>
-            <Input
-              type="date"
-              name="endDate"
-              onChange={handleDateChange}
-              value={filterDate.endDate ? filterDate.endDate : getToday()}
-              className="w-full h-[40px] block border border-neutral-700 px-2"
+            <InputDate
+              date={endDate ?? null}
+              setDate={(e) => setEndDate(e ?? undefined)}
             />
           </div>
         </div>

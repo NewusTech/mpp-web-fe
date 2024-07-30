@@ -38,11 +38,7 @@ import fetchPengaduanLists from "@/components/fetching/pengaduan/pengaduan";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import Image from "next/image";
 import z from "zod";
-import {
-  formatLongDate,
-  getStartOfMonth,
-  getToday,
-} from "@/helpers/logout/formatted";
+import { formatDateArrange, formatLongDate } from "@/helpers/logout/formatted";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -50,6 +46,7 @@ import fetchInstansiPengaduan from "@/components/fetching/instansi/pengaduanInst
 import LayananPengaduan from "@/components/fetching/layanan/layananPengaduan/layananPengaduan";
 import { statusPengaduans } from "@/data/data";
 import { formatCreateTime } from "@/utils/formatTime";
+import InputDate from "@/components/others/inputDate/inputDate";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -81,13 +78,6 @@ export default function PengaduanScreen() {
   const [service, setService] = useState<JenisLayananType[]>([]);
   const [search, setSearch] = useState("");
   const debounceSearch = useDebounce(search);
-  const [filterDate, setFilterDate] = useState<{
-    startDate: string;
-    endDate: string;
-  }>({
-    startDate: "",
-    endDate: "",
-  });
   const [isOpen, setIsOpen] = useState(false);
   const [changeOpacity, setChangeOpacity] = useState(false);
   const [previewImage, setPreviewImage] = useState<string>("");
@@ -101,6 +91,10 @@ export default function PengaduanScreen() {
   const [formValid, setFormValid] = useState(false);
   const token = Cookies.get("Authorization");
   const [loadingData, setLoadingData] = useState(false);
+  const now = new Date();
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const [startDate, setStartDate] = useState<Date | undefined>(firstDayOfMonth);
+  const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
   const validateForm = async () => {
     try {
@@ -135,6 +129,13 @@ export default function PengaduanScreen() {
     }
   }, []);
 
+  const startDateFormatted = startDate
+    ? formatDateArrange(new Date(startDate))
+    : undefined;
+  const endDateFormatted = endDate
+    ? formatDateArrange(new Date(endDate))
+    : undefined;
+
   const fetchPengaduanList = async (
     page: number,
     limit: number,
@@ -164,15 +165,19 @@ export default function PengaduanScreen() {
   };
 
   useEffect(() => {
-    fetchPengaduanList(
-      1,
-      limitData,
-      debounceSearch,
-      filterDate.startDate,
-      filterDate.endDate,
-      status
-    );
-  }, [debounceSearch, filterDate.startDate, filterDate.endDate, status]);
+    const fetchStatus = status === "4" ? "" : status;
+
+    if (startDateFormatted && endDateFormatted) {
+      fetchPengaduanList(
+        1,
+        limitData,
+        debounceSearch,
+        startDateFormatted,
+        endDateFormatted,
+        fetchStatus
+      );
+    }
+  }, [debounceSearch, startDateFormatted, endDateFormatted, status]);
 
   const paginate = (
     items: PengaduanType[],
@@ -219,13 +224,6 @@ export default function PengaduanScreen() {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-  };
-
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterDate({
-      ...filterDate,
-      [e.target.name]: e.target.value,
-    });
   };
 
   const handleSelectStatusChange = (statusPengaduan: string) => {
@@ -410,7 +408,7 @@ export default function PengaduanScreen() {
               <div className="flex items-center w-full md:w-6/12 h-[40px] justify-between bg-neutral-50 border border-neutral-700 rounded-[50px] mb-2 md:mb-0">
                 <Select onValueChange={handleSelectStatusChange}>
                   <SelectTrigger
-                    className={`w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
+                    className={`w-full px-2 md:px-4 text-[14px] rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none`}>
                     <SelectValue
                       placeholder="Pilih By Status"
                       className="text-neutral-800 w-full"
@@ -444,25 +442,15 @@ export default function PengaduanScreen() {
               </div>
             </div>
 
-            <div className="flex flex-row justify-center items-center w-full md:w-5/12 gap-x-3">
-              <Input
-                type="date"
-                name="startDate"
-                onChange={handleDateChange}
-                value={
-                  filterDate.startDate
-                    ? filterDate.startDate
-                    : getStartOfMonth()
-                }
-                className="w-full h-[40px] block border border-neutral-700 px-2"
+            <div className="flex flex-row justify-center items-center w-full md:w-5/12 gap-x-1 md:gap-x-3">
+              <InputDate
+                date={startDate ?? null}
+                setDate={(e) => setStartDate(e ?? undefined)}
               />
               <p className="text-center">to</p>
-              <Input
-                type="date"
-                name="endDate"
-                onChange={handleDateChange}
-                value={filterDate.endDate ? filterDate.endDate : getToday()}
-                className="w-full h-[40px] block border border-neutral-700 px-2"
+              <InputDate
+                date={endDate ?? null}
+                setDate={(e) => setEndDate(e ?? undefined)}
               />
             </div>
 
@@ -477,173 +465,158 @@ export default function PengaduanScreen() {
                     </h2>
                   </div>
                 </DialogTrigger>
-                <DialogContent className="flex flex-col justify-between w-10/12 md:w-6/12 bg-neutral-50 rounded-xl">
-                  <form
-                    onSubmit={handlePengaduan}
-                    className="flex flex-col w-full">
-                    <div className="flex flex-col w-full px-4 md:px-[105px]">
-                      <div className="flex flex-col w-full mb-[10px] md:mb-1 mx-[1px] mt-6">
-                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                          Pilih Instansi
-                        </Label>
+                <DialogContent className="flex flex-col justify-between max-h-[600px] md:max-h-[700px] w-10/12 md:w-5/12 bg-neutral-50 rounded-xl">
+                  <div className="flex flex-col w-full verticalScroll">
+                    <form
+                      onSubmit={handlePengaduan}
+                      className="flex flex-col w-full">
+                      <div className="flex flex-col w-full px-4 md:px-[80px]">
+                        <div className="flex flex-col w-full mb-[10px] md:mb-1 mx-[1px] mt-6">
+                          <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                            Pilih Instansi
+                          </Label>
 
-                        <Select
-                          name="instansi_id"
-                          onValueChange={handleInstansiChange}>
-                          <SelectTrigger
-                            className={`${
-                              !pengaduan.instansi_id ? "opacity-50" : ""
-                            } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
-                            <SelectValue
-                              placeholder="Pilih Dinas"
-                              className={
-                                pengaduan.instansi_id
-                                  ? ""
-                                  : "placeholder:opacity-50"
-                              }
-                            />
-                          </SelectTrigger>
-                          <SelectContent className="w-full md:w-full">
-                            <div>
-                              {instansi.map((item: Instansi, i: number) => (
-                                <SelectItem
-                                  key={i}
-                                  value={item.id.toString()}
-                                  className="pr-none">
-                                  {item.name}
-                                </SelectItem>
-                              ))}
-                            </div>
-                          </SelectContent>
-                        </Select>
-
-                        {hasSubmitted && errors?.instansi_id?._errors && (
-                          <div className="text-error-700 text-[12px] md:text-[14px]">
-                            {errors.instansi_id._errors[0]}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col mx-[1px] md:mt-4">
-                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                          Pilih Layanan
-                        </Label>
-
-                        <Select
-                          name="layanan_id"
-                          onValueChange={handleLayananChange}>
-                          <SelectTrigger
-                            className={`${
-                              !pengaduan.layanan_id ? "opacity-50" : ""
-                            } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
-                            <SelectValue
-                              placeholder="Pilih Jenis Layanan"
-                              className={
-                                pengaduan.layanan_id
-                                  ? ""
-                                  : "placeholder:opacity-50"
-                              }
-                            />
-                          </SelectTrigger>
-                          <SelectContent className="w-full md:w-full">
-                            <div>
-                              {service.map(
-                                (item: JenisLayananType, i: number) => (
+                          <Select
+                            name="instansi_id"
+                            onValueChange={handleInstansiChange}>
+                            <SelectTrigger
+                              className={`${
+                                !pengaduan.instansi_id ? "opacity-50" : ""
+                              } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
+                              <SelectValue
+                                placeholder="Pilih Dinas"
+                                className={
+                                  pengaduan.instansi_id
+                                    ? ""
+                                    : "placeholder:opacity-50"
+                                }
+                              />
+                            </SelectTrigger>
+                            <SelectContent className="w-full md:w-full">
+                              <div>
+                                {instansi.map((item: Instansi, i: number) => (
                                   <SelectItem
                                     key={i}
                                     value={item.id.toString()}
                                     className="pr-none">
                                     {item.name}
                                   </SelectItem>
-                                )
-                              )}
+                                ))}
+                              </div>
+                            </SelectContent>
+                          </Select>
+
+                          {hasSubmitted && errors?.instansi_id?._errors && (
+                            <div className="text-error-700 text-[12px] md:text-[14px]">
+                              {errors.instansi_id._errors[0]}
                             </div>
-                          </SelectContent>
-                        </Select>
+                          )}
+                        </div>
 
-                        {hasSubmitted && errors?.layanan_id?._errors && (
-                          <div className="text-error-700 text-[12px] md:text-[14px]">
-                            {errors.layanan_id._errors[0]}
-                          </div>
-                        )}
-                      </div>
+                        <div className="flex flex-col mx-[1px] md:mt-4">
+                          <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                            Pilih Layanan
+                          </Label>
 
-                      <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">
-                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                          Judul Pengaduan
-                        </Label>
-
-                        <input
-                          type="text"
-                          name="judul"
-                          value={pengaduan.judul}
-                          onChange={handleChange}
-                          placeholder="Judul Pengaduan"
-                          className={`w-full pl-4 h-[40px] border border-neutral-700 rounded-[50px] pr-2 placeholder:text-[14px] focus:outline-none appearance-none`}
-                        />
-
-                        {hasSubmitted && errors?.judul?._errors && (
-                          <div className="text-error-700 text-[12px] md:text-[14px]">
-                            {errors.judul._errors[0]}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col mx-[1px]">
-                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                          Aduan
-                        </Label>
-
-                        <Textarea
-                          name="aduan"
-                          value={pengaduan.aduan}
-                          onChange={handleChange}
-                          className="w-full text-[14px] placeholder:text-[14px] border border-neutral-700 placeholder:opacity-[40%]"
-                          placeholder="Aduan"
-                        />
-
-                        {formErrors["aduan"] && (
-                          <p className="text-error-700 text-[12px] mt-1 text-center">
-                            {formErrors["aduan"]}
-                          </p>
-                        )}
-
-                        {hasSubmitted && errors?.aduan?._errors && (
-                          <div className="text-error-700 text-[12px] md:text-[14px]">
-                            {errors.aduan._errors[0]}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col my-[10px] md:mt-3 mx-[1px]">
-                        <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
-                          Dokumen
-                        </Label>
-
-                        <div
-                          ref={dropRef}
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                          className={`w-full h-[100px] border-2 border-dashed border-neutral-700 rounded-xl mt-1 flex flex-col items-center justify-center ${
-                            changeOpacity ? "opacity-50" : "opacity-100"
-                          }`}>
-                          {previewImage ? (
-                            <div className="relative max-w-full max-h-full">
-                              <img
-                                src={previewImage}
-                                alt="Preview"
-                                className="max-h-full rounded-xl p-2 max-w-full object-contain"
+                          <Select
+                            name="layanan_id"
+                            onValueChange={handleLayananChange}>
+                            <SelectTrigger
+                              className={`${
+                                !pengaduan.layanan_id ? "opacity-50" : ""
+                              } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
+                              <SelectValue
+                                placeholder="Pilih Jenis Layanan"
+                                className={
+                                  pengaduan.layanan_id
+                                    ? ""
+                                    : "placeholder:opacity-50"
+                                }
                               />
+                            </SelectTrigger>
+                            <SelectContent className="w-full md:w-full">
+                              <div>
+                                {service.map(
+                                  (item: JenisLayananType, i: number) => (
+                                    <SelectItem
+                                      key={i}
+                                      value={item.id.toString()}
+                                      className="pr-none">
+                                      {item.name}
+                                    </SelectItem>
+                                  )
+                                )}
+                              </div>
+                            </SelectContent>
+                          </Select>
 
-                              <button
-                                type="button"
-                                onClick={handleRemoveFile}
-                                className="absolute bg-none -top-1 -right-28 text-neutral-800 p-1">
-                                <CircleX />
-                              </button>
+                          {hasSubmitted && errors?.layanan_id?._errors && (
+                            <div className="text-error-700 text-[12px] md:text-[14px]">
+                              {errors.layanan_id._errors[0]}
                             </div>
-                          ) : (
+                          )}
+                        </div>
+
+                        <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">
+                          <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                            Judul Pengaduan
+                          </Label>
+
+                          <input
+                            type="text"
+                            name="judul"
+                            value={pengaduan.judul}
+                            onChange={handleChange}
+                            placeholder="Judul Pengaduan"
+                            className={`w-full pl-4 h-[40px] border border-neutral-700 rounded-[50px] pr-2 placeholder:text-[14px] focus:outline-none appearance-none`}
+                          />
+
+                          {hasSubmitted && errors?.judul?._errors && (
+                            <div className="text-error-700 text-[12px] md:text-[14px]">
+                              {errors.judul._errors[0]}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col mx-[1px]">
+                          <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                            Aduan
+                          </Label>
+
+                          <Textarea
+                            name="aduan"
+                            value={pengaduan.aduan}
+                            onChange={handleChange}
+                            className="w-full text-[14px] placeholder:text-[14px] border border-neutral-700 placeholder:opacity-[40%]"
+                            placeholder="Aduan"
+                          />
+
+                          {formErrors["aduan"] && (
+                            <p className="text-error-700 text-[12px] mt-1 text-center">
+                              {formErrors["aduan"]}
+                            </p>
+                          )}
+
+                          {hasSubmitted && errors?.aduan?._errors && (
+                            <div className="text-error-700 text-[12px] md:text-[14px]">
+                              {errors.aduan._errors[0]}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col my-[10px] md:mt-3 mx-[1px]">
+                          <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                            Dokumen
+                          </Label>
+
+                          <div
+                            ref={dropRef}
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                            className={`w-full h-[100px] border-2 border-dashed border-neutral-700 rounded-xl mt-1 flex flex-col items-center justify-center ${
+                              changeOpacity ? "opacity-50" : "opacity-100"
+                            }`}>
                             <>
                               <input
                                 type="file"
@@ -661,31 +634,48 @@ export default function PengaduanScreen() {
                                   : "Drag and drop file here or click to select file"}
                               </label>
                             </>
+                          </div>
+
+                          {hasSubmitted && errors?.image?._errors && (
+                            <div className="text-error-700 text-[12px] md:text-[14px]">
+                              {errors.image._errors[0]}
+                            </div>
                           )}
                         </div>
 
-                        {hasSubmitted && errors?.image?._errors && (
-                          <div className="text-error-700 text-[12px] md:text-[14px]">
-                            {errors.image._errors[0]}
+                        {previewImage && (
+                          <div className="relative flex flex-row justify-center max-w-full max-h-full">
+                            <img
+                              src={previewImage}
+                              alt="Preview"
+                              className="max-h-full rounded-xl p-2 max-w-full object-contain"
+                            />
+
+                            <button
+                              type="button"
+                              onClick={handleRemoveFile}
+                              className="absolute bg-none -top-1 -right-5 text-neutral-800 p-1">
+                              <CircleX />
+                            </button>
                           </div>
                         )}
-                      </div>
 
-                      <div className="flex justify-center mb-[32px] mt-[16px]">
-                        <Button
-                          className="text-[14px] text-neutral-50 w-[120px] md:w-[235px] h-[40px] md:h-[40px]"
-                          type="submit"
-                          disabled={!formValid || isLoading}
-                          variant="warning">
-                          {isLoading ? (
-                            <Loader className="animate-spin" />
-                          ) : (
-                            "Ajukan"
-                          )}
-                        </Button>
+                        <div className="flex justify-center mb-[32px] mt-[16px]">
+                          <Button
+                            className="text-[14px] text-neutral-50 w-[120px] md:w-[235px] h-[40px] md:h-[40px]"
+                            type="submit"
+                            disabled={!formValid || isLoading}
+                            variant="warning">
+                            {isLoading ? (
+                              <Loader className="animate-spin" />
+                            ) : (
+                              "Ajukan"
+                            )}
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>

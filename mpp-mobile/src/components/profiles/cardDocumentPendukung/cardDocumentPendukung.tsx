@@ -8,7 +8,6 @@ export default function CardDocumentPendukung({
 }: {
   document: { name: string; value: string };
 }) {
-  console.log(document, "document");
   return (
     <div className="flex flex-col w-full gap-y-2">
       <div className="flex flex-row justify-between w-full h-[80px] rounded-xl mb-[8px] bg-neutral-50 border border-primary-700 px-4">
