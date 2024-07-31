@@ -173,9 +173,7 @@ export default function DataDiriPage() {
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         const formattedErrors = error.errors.reduce((acc: any, curr: any) => {
-          // if (curr.path[0] !== "goldar") {
           acc[curr.path[0]] = curr.message;
-          // }
           return acc;
         }, {});
         setErrors(formattedErrors);
@@ -239,7 +237,7 @@ export default function DataDiriPage() {
                       />
                     </div>
 
-                    <div className="flex flex-col w-full md:mb-4">
+                    <div className="flex flex-col w-full md:mb-4 mt-1.5 md:mt-0">
                       <Label className="text-[12px] text-neutral-900 font-semibold">
                         Jenis Kelamin
                       </Label>
@@ -282,8 +280,8 @@ export default function DataDiriPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4">
-                    <div className="flex flex-col w-full mb-4">
+                  <div className="grid grid-rows-2 md:grid-rows-none md:grid-cols-2 w-full md:gap-4 mt-3 md:mt-0">
+                    <div className="flex flex-col w-full md:mb-4">
                       <ProfileEditInput
                         names="nik"
                         types="number"

@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -16,6 +17,7 @@ const raleway = Raleway({
 });
 
 export default function NewPassword({ params }: { params: { token: string } }) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [newPw, setNewPw] = useState({
     newPassword: "",
@@ -41,7 +43,8 @@ export default function NewPassword({ params }: { params: { token: string } }) {
       await response.json();
 
       if (response.ok) {
-        toast("Silahkan cek email anda");
+        toast("Kata Sandi berhasil diubah, Silahkan Login!");
+        router.push("/login");
       }
     } catch (error) {
       console.log(error);
@@ -60,9 +63,7 @@ export default function NewPassword({ params }: { params: { token: string } }) {
   return (
     <section className="md:container md:mx-auto flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:min-w-full">
       <div className="flex flex-col w-full gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 mx-8 my-[70px] md:my-0 p-[32px] md:py-[70px] md:px-[120px] md:mx-[300px]">
-        <Link
-          href={"/"}
-          className="flex flex-col items-center justify-center w-full gap-y-3">
+        <div className="flex flex-col items-center justify-center w-full gap-y-3">
           <div className="w-full flex flex-row justify-center">
             <Image
               src={logo}
@@ -84,7 +85,7 @@ export default function NewPassword({ params }: { params: { token: string } }) {
               Kabupaten Lampung Timur
             </h3>
           </div>
-        </Link>
+        </div>
 
         <div className="flex flex-col w-full justify-center mt-8 md:mt-12 gap-y-10">
           <div className="flex flex-row justify-center">

@@ -1,6 +1,7 @@
 import { SurveiDataType } from "@/types/type";
 import { formattedDate } from "@/helpers/logout/formatted";
 import { formatCreateTime } from "@/utils/formatTime";
+import Link from "next/link";
 
 export default function CardHistorySurvei({
   survei,
@@ -12,7 +13,7 @@ export default function CardHistorySurvei({
 
   return (
     <div className="flex flex-col h-full justify-center items-center bg-neutral-50 rounded-xl shadow-lg w-full mb-4">
-      <div className="grid grid-rows-6 m-4 gap-2 w-full h-full p-4 gap-y-4">
+      <div className="grid grid-rows-6 gap-2 w-full h-full p-4 gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
             Nomor Survei
@@ -72,9 +73,13 @@ export default function CardHistorySurvei({
         </div>
       </div>
 
-      {/* <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
-        <PopAntrianComponent antrian={antrian} />
-      </div> */}
+      <div className="flex flex-row mb-4 w-full justify-end pr-4">
+        <Link
+          href={`riwayat/hasil-survei/${survei.id}`}
+          className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+          Lihat
+        </Link>
+      </div>
     </div>
   );
 }
