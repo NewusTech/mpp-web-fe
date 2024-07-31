@@ -345,18 +345,22 @@ export default function ProfilePage() {
                 </TabsTrigger>
 
                 <TabsTrigger
-                  className="font-semibold w-5/12 py-4 rounded-none bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-3 text-primary-700 md:text-[20px]"
+                  className="font-semibold w-5/12 py-1.5 rounded-none bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-3 text-primary-700 md:text-[20px]"
                   value="Dokumen Pendukung">
-                  <div className="text-[12px] md:text-[14px]">
-                    Dokumen Pendukung
+                  <div className="text-[12px] md:text-[14px] text-center">
+                    Dokumen
+                    <br />
+                    Pendukung
                   </div>
                 </TabsTrigger>
 
                 <TabsTrigger
-                  className="font-semibold w-5/12 py-4 rounded-r-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-2 text-primary-700 md:text-[20px]"
+                  className="font-semibold w-5/12 py-1.5 rounded-r-lg bg-neutral-200 data-[state=active]:bg-primary-700 data-[state=active]:text-neutral-50 border border-neutral-400 md:w-full px-2 text-primary-700 md:text-[20px]"
                   value="Dokumen Terbit">
-                  <div className="text-[12px] md:text-[14px]">
-                    Dokumen Terbit
+                  <div className="text-[12px] md:text-[14px] text-center">
+                    Dokumen
+                    <br />
+                    Terbit
                   </div>
                 </TabsTrigger>
               </TabsList>

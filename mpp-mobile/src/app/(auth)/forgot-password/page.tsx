@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -16,6 +17,7 @@ const raleway = Raleway({
 });
 
 export default function ForgotPassword() {
+  const router = useRouter();
   const [email, setEmail] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,6 +41,7 @@ export default function ForgotPassword() {
 
       if (response.ok) {
         toast("Silahkan cek email anda");
+        router.push("/login");
       }
     } catch (error) {
       console.log(error);

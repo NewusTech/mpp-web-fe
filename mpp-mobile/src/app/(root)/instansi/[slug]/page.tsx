@@ -223,7 +223,7 @@ export default function InstansiDetail({
               {!token ? (
                 <Dialog>
                   <DialogTrigger asChild>
-                    <div className="bg-primary-700 px-5 font-normal text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
+                    <div className="bg-primary-700 px-5 text-center font-normal text-[12px] md:text-[16px] flex items-center justify-center hover:bg-primary-600 text-neutral-50 w-full h-[40px] rounded-full">
                       Permohonan Layanan
                     </div>
                   </DialogTrigger>
@@ -257,15 +257,15 @@ export default function InstansiDetail({
                 <>
                   {detailins?.status === true ? (
                     <Link
-                      className="w-full h-[40px] md:w-full flex justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
+                      className="w-full h-[40px] flex flex-col justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
                       href={`/instansi/permohonan-layanan/${detailins?.id}`}>
-                      <Button className="font-normal">
+                      <div className="font-normal text-center">
                         Permohonan Layanan
-                      </Button>
+                      </div>
                     </Link>
                   ) : (
                     <Link
-                      className="w-full h-[40px] flex justify-center items-center font-normal rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
+                      className="w-full h-[40px] flex flex-col justify-center items-center font-normal rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
                       href={`/instansi/${detailins?.slug}`}>
                       <Button className="font-normal" disabled>
                         Permohonan Layanan
@@ -335,11 +335,11 @@ export default function InstansiDetail({
                             Persyaratan
                           </h5>
 
-                          <ul>
-                            <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
+                          <div>
+                            <div className="text-neutral-900 font-normal text-[12px] md:text-[16px] ml-2">
                               {item.syarat && parse(item?.syarat)}
-                            </li>
-                          </ul>
+                            </div>
+                          </div>
                         </div>
                       )}
 
@@ -349,11 +349,11 @@ export default function InstansiDetail({
                             Dasar Hukum
                           </h5>
 
-                          <ul>
-                            <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
+                          <div>
+                            <div className="text-neutral-900 font-normal text-[12px] md:text-[16px] ml-2">
                               {item.dasarhukum && parse(item?.dasarhukum)}
-                            </li>
-                          </ul>
+                            </div>
+                          </div>
                         </div>
                       )}
 
@@ -363,11 +363,11 @@ export default function InstansiDetail({
                             Pelayanan
                           </h5>
 
-                          <ul>
-                            <li className="text-neutral-900 font-normal text-[12px] md:text-[16px] list-disc ml-6">
+                          <div>
+                            <div className="text-neutral-900 font-normal text-[12px] md:text-[16px] ml-2">
                               {item.desc && parse(item?.desc)}
-                            </li>
-                          </ul>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
