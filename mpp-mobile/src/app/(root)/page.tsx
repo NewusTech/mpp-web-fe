@@ -47,35 +47,69 @@ function Home() {
   const [page, setPage] = useState(1);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const fetchAll = async (search: string) => {
+  const fetchCarousels = async () => {
     try {
-      const news = await fetchNews(page, 3, "", "", "");
+      const carousel = await fetchCarousel();
+      setCarousel(carousel.data);
+    } catch (error) {
+      toast("Gagal mendapatkan data!");
+    }
+  };
 
+  useEffect(() => {
+    fetchCarousels();
+  }, []);
+
+  const fetchFirst = async (search: string) => {
+    try {
+      const dashboard = await fetchInformasi();
       const layanan = await fetchInstansi(search, page, 10);
 
-      const fasilitas = await facilitiesFetch(1, 8);
+      setInfoLanding(dashboard.data);
+      setLayanan(layanan);
+    } catch (error) {
+      toast("Gagal mendapatkan data!");
+    }
+  };
 
-      const dashboard = await fetchInformasi();
+  useEffect(() => {
+    fetchFirst(search);
+  }, [search]);
 
-      const carousel = await fetchCarousel();
-
+  const fetchSecond = async () => {
+    try {
       const videos = await fetchVideo();
 
       const alurMpp = await fetchAlurMpp();
 
-      const app = await fetchAppSupport(1, 6);
+      const fasilitas = await facilitiesFetch(1, 8);
 
-      setBerita(news);
-      setLayanan(layanan);
-      setFacilities(fasilitas.data);
-      setInfoLanding(dashboard.data);
-      setCarousel(carousel.data);
       if (videos.data) {
         setVideo(videos.data);
       }
+
       if (alurMpp.data) {
         setAlur(alurMpp.data);
       }
+
+      setFacilities(fasilitas.data);
+    } catch (error) {
+      toast("Gagal mendapatkan data!");
+    }
+  };
+
+  useEffect(() => {
+    fetchSecond();
+  }, []);
+
+  const fetchAll = async () => {
+    try {
+      const news = await fetchNews(page, 3, "", "", "");
+
+      const app = await fetchAppSupport(1, 6);
+
+      setBerita(news);
+
       if (app) {
         setApps(app.data);
       }
@@ -85,8 +119,8 @@ function Home() {
   };
 
   useEffect(() => {
-    fetchAll(search);
-  }, [search]);
+    fetchAll();
+  }, []);
 
   let date = "";
 
@@ -185,7 +219,7 @@ function Home() {
                     <div className="md:flex md:flex-col md:gap-[8px]">
                       <Link
                         href={`/berita/${slug}`}
-                        className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold hover:underline">
+                        className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold hover:underline hover:text-primary-700">
                         {title}
                       </Link>
 

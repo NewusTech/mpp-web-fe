@@ -81,6 +81,19 @@ body {
   animation: slide-up 0.5s ease-out forwards;
 }
 
+@keyframes zoom-in {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+.zoom-in-animation:hover {
+  animation: zoom-in 0.3s forwards;
+}
+
 @keyframes slide-left {
   from {
     transform: translateX(-100%);

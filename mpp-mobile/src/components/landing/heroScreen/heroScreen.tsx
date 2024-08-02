@@ -8,7 +8,7 @@ import { CarouselType } from "@/types/type";
 
 export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
   return (
-    <div className="md:items-center md:flex md:justify-between w-dvw md:w-full bg-primary-700">
+    <div className="md:items-center md:flex md:justify-between w-dvw md:w-full bg-primary-700 slide-right-animation">
       <div className="w-full md:self-end md:flex md:h-full">
         <Swiper
           pagination={{ clickable: true }}
