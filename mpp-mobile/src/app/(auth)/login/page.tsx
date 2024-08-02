@@ -1,6 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { EyeOff, Eye, UserRound, Loader } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import Image from "next/legacy/image";
 import { Raleway } from "next/font/google";
@@ -14,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormComponents from "@/components/others/formComponents/formComponents";
 import Cookies from "js-cookie";
+import parse from "html-react-parser";
 import { TermType } from "@/types/type";
 import TermCondition from "@/components/fetching/termCond/termCond";
 
@@ -36,6 +43,7 @@ export default function LoginScreen() {
   const [seen, setSeen] = useState(true);
   const [term, setTerm] = useState<TermType>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -100,6 +108,10 @@ export default function LoginScreen() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleAgree = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -221,21 +233,45 @@ export default function LoginScreen() {
         <div className="w-full text-center text-primary-700 text-[14px] mt-8">
           Dengan mendaftar, Anda menyetujui{" "}
           {term && (
-            <Link
-              href={term?.desc}
-              target="_blank"
-              className="text-primary-800 font-semibold hover:underline">
-              Syarat & Ketentuan{" "}
-            </Link>
+            <Dialog open={isDialogOpen}>
+              <DialogTrigger
+                className="text-primary-800 font-semibold hover:underline"
+                onClick={() => setIsDialogOpen(true)}>
+                Syarat & Ketentuan
+              </DialogTrigger>
+              <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 md:w-4/12 max-h-[550px]">
+                <div className="m-3 px-4 flex flex-col items-center w-full verticalScroll gap-y-6">
+                  <div>{term && parse(term?.desc_text)}</div>
+
+                  <div
+                    onClick={handleAgree}
+                    className="bg-primary-700 text-center cursor-pointer w-4/12 rounded-full text-neutral-50 py-1 px-5">
+                    Setuju
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           )}{" "}
           kami dan Anda telah membaca{" "}
           {term && (
-            <Link
-              href={term?.privasi}
-              target="_blank"
-              className="text-primary-800 font-semibold hover:underline">
-              Kebijakan Privasi{" "}
-            </Link>
+            <Dialog open={isDialogOpen}>
+              <DialogTrigger
+                className="text-primary-800 font-semibold hover:underline"
+                onClick={() => setIsDialogOpen(true)}>
+                Kebijakan Privasi
+              </DialogTrigger>
+              <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 md:w-4/12 max-h-[550px]">
+                <div className="m-3 px-4 flex flex-col items-center w-full verticalScroll gap-y-6">
+                  <div>{term && parse(term?.privasi_text)}</div>
+
+                  <div
+                    onClick={handleAgree}
+                    className="bg-primary-700 text-center cursor-pointer w-4/12 rounded-full text-neutral-50 py-1 px-5">
+                    Setuju
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           )}{" "}
           kami.
         </div>

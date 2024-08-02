@@ -12,7 +12,7 @@ export default function CardHistoryAntrian({
   const date = formattedDate(antrian.tanggal);
 
   return (
-    <div className="flex flex-col h-full justify-center items-center bg-neutral-50 rounded-xl shadow-lg w-full mb-4">
+    <div className="flex flex-col h-full justify-center items-center bg-neutral-50 rounded-xl shadow-lg w-full mb-4 slide-up-animation">
       <div className="grid grid-rows-5 justify-center p-4 gap-2 w-full h-full gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">

@@ -22,7 +22,7 @@ export default function CardAplikasiPendukung({ app }: { app: AppType }) {
         />
       </div>
 
-      <div className="flex flex-col col-span-3 md:mt-0 w-full">
+      <div className="flex flex-col col-span-3 md:mt-0 w-full text-primary-700 hover:underline">
         <p className="font-semibold text-primary-700 text-[18px]">
           {formatName}
         </p>

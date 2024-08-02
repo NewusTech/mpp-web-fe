@@ -56,10 +56,10 @@ export default function BeritaPage() {
   const fetchBerita = async (
     page: number,
     limit: number,
-    searchNews: string,
-    startDate: string,
-    endDate: string,
-    instansiId: string
+    searchNews?: string,
+    startDate?: string,
+    endDate?: string,
+    instansiId?: string
   ) => {
     setIsLoading(true);
     try {

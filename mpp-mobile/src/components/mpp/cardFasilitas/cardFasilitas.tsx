@@ -21,7 +21,7 @@ export default function CardFasilitas({
   };
 
   return (
-    <div className="flex flex-col w-full bg-neutral-50 rounded-xl">
+    <div className="flex flex-col w-full bg-neutral-50 rounded-xl slide-right-animation">
       <div className="w-full h-full" onClick={openModal}>
         <Image
           src={fasilitas.image}

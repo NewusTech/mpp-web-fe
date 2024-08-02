@@ -144,6 +144,7 @@ export interface JenisLayananType {
 export interface TermType {
   id: number;
   desc: string;
+  desc_text: string;
   privasi: string;
   privasi_text: string;
 }
@@ -464,7 +465,7 @@ export interface DataRiwayatPermohonan {
 
 export type DataInputItem = {
   layananform_id: string;
-  data: string;
+  data: string | string[number];
 };
 
 export interface AntrianCheckType {

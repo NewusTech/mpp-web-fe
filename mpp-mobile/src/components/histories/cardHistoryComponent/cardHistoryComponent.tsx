@@ -55,7 +55,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
   }
 
   return (
-    <div className="flex flex-col h-full justify-center items-start bg-neutral-50 rounded-xl shadow-md w-full">
+    <div className="flex flex-col h-full justify-center items-start bg-neutral-50 rounded-xl shadow-md w-full slide-up-animation">
       <div className="grid grid-rows-6 justify-center p-4 gap-2 h-full w-full gap-y-4">
         <div className="grid grid-cols-2">
           <h6 className="text-[14px] font-semibold text-primary-800">
