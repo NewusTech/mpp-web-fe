@@ -14,7 +14,7 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
   const descTruncate = truncateTitle(news.desc, 180);
 
   return (
-    <div className="flex flex-col px-5 pt-4 bg-neutral-50 max-w-[350px] md:max-w-full md:min-h-[500px] shadow-md rounded-xl gap-[16px] hover:transform hover:-translate-y-2 hover:ease-in-out hover:duration-300 slide-left-animation">
+    <div className="flex flex-col px-5 pt-4 bg-neutral-50 max-w-[350px] md:max-w-full md:min-h-[500px] shadow-md rounded-xl gap-[16px] slide-up-animation">
       <Link
         href={`/berita/${news.slug}`}
         className="flex relative flex-col w-full h-[200px] md:min-h-[240px] rounded-xl">
@@ -44,8 +44,8 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
       <div className="w-full h-full md:items-start pb-4 md:pb-0">
         <Link
           href={`/berita/${news.slug}`}
-          className="flex flex-row md:self-start hover:underline">
-          <p className="text-[14px] w-full flex flex-row text-neutral-900 font-semibold">
+          className="flex flex-row md:self-start hover:underline hover:text-primary-700">
+          <p className="text-[14px] w-full flex flex-row text-neutral-900 font-semibold hover:text-primary-700">
             {truncate}
           </p>
 
