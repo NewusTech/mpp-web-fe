@@ -208,11 +208,11 @@ export default function MppNext({
         </div>
 
         <div className="flex flex-col px-10 md:px-14 py-8 mt-4 md:mt-0 bg-primary-200 w-full rounded-xl">
-          <h3 className="text-primary-800 text-[20px] md:text-[26px] mb-8 font-semibold">
+          <h3 className="text-primary-800 text-[20px] md:text-[26px] mb-2 font-semibold">
             Fasilitas Mal Pelayanan Publik
           </h3>
 
-          <Accordion type="single" collapsible>
+          <Accordion type="single" collapsible defaultValue={`item-${0}`}>
             {facilities &&
               facilities.map((facility: FacilityType, i: number) => {
                 return (
@@ -222,7 +222,7 @@ export default function MppNext({
                     </AccordionTrigger>
                     <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
                       <div
-                        className="w-full md:h-4/5 flex justify-center items-center"
+                        className="w-full md:h-4/5 flex justify-center items-center cursor-pointer"
                         onClick={openModal}>
                         <Image
                           src={facility.image}

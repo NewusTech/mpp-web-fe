@@ -12,7 +12,6 @@ import parse from "html-react-parser";
 import Image from "next/legacy/image";
 import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
 import fetchVideo from "@/components/fetching/video/video";
-import PdfView from "@/components/pdfViews/pdfView";
 import ManualBooks from "@/components/fetching/manualBook/manualBook";
 
 export default function MppPage() {

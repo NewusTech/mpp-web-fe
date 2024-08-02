@@ -53,7 +53,7 @@ export default function CardPengaduanComponent({
   }
 
   return (
-    <div className="bg-primary-50 rounded-xl shadow-md p-6 mt-4">
+    <div className="slide-up-animation bg-primary-50 rounded-xl shadow-md p-6 mt-4">
       <div className="flex flex-col w-full gap-y-4">
         <div className="grid grid-cols-2 w-full">
           <p className="text-[12px] text-primary-800 font-semibold">Layanan</p>

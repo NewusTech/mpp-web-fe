@@ -185,7 +185,7 @@ function Home() {
                     <div className="md:flex md:flex-col md:gap-[8px]">
                       <Link
                         href={`/berita/${slug}`}
-                        className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold">
+                        className="md:text-neutral-900 md:text-start md:text-[24px] md:font-semibold hover:underline">
                         {title}
                       </Link>
 

@@ -22,7 +22,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
   return (
     <div className="flex justify-center mt-4">
       <button
-        className="px-2 py-1 mx-1 bg-gray-200 rounded"
+        className="px-2 py-1 mx-1 bg-gray-200 rounded cursor-pointer"
         onClick={() => handleClick(currentPage - 1)}
         disabled={currentPage === 1}>
         Previous
@@ -38,7 +38,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
         </button>
       ))}
       <button
-        className="px-2 py-1 mx-1 bg-gray-200 rounded"
+        className="px-2 py-1 mx-1 bg-gray-200 rounded cursor-pointer"
         onClick={() => handleClick(currentPage + 1)}
         disabled={currentPage === totalPages}>
         Next

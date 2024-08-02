@@ -169,9 +169,7 @@ export default function PermohonanUpdateHistory({
         String(input.layananform_id)
       );
       if (Array.isArray(input.data)) {
-        input.data.forEach((val, idx) => {
-          data.append(`datainput[${index}][data][${idx}]`, String(val));
-        });
+        data.append(`datainput[${index}][data]`, JSON.stringify(input.data));
       } else {
         data.append(`datainput[${index}][data]`, String(input.data));
       }

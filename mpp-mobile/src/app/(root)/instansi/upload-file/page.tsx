@@ -114,7 +114,14 @@ export default function UploadFilePage() {
         `datainput[${index}][layananform_id]`,
         input.layananform_id
       );
-      formData.append(`datainput[${index}][data]`, input.data);
+      if (Array.isArray(input.data)) {
+        formData.append(
+          `datainput[${index}][data]`,
+          JSON.stringify(input.data)
+        );
+      } else {
+        formData.append(`datainput[${index}][data]`, input.data);
+      }
     });
 
     formDataArray[0].datafile.forEach((file, index) => {

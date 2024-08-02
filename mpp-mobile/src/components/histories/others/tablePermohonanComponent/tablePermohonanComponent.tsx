@@ -65,12 +65,12 @@ export default function TablePermohonanComponent({
 
   return (
     <TableRow>
-      <TableCell className="w-1/2">{permohonan.no_request}</TableCell>
+      <TableCell className="w-1/2 pr-5">{permohonan.no_request}</TableCell>
       <TableCell className="w-full">{permohonan.instansi_name}</TableCell>
       <TableCell className="w-full">{permohonan.layanan_name}</TableCell>
-      <TableCell className="w-1/2">{permohonanDate}</TableCell>
+      <TableCell className="w-1/2 pr-5">{permohonanDate}</TableCell>
       <TableCell className="w-1/2">{permohonanTime} WIB</TableCell>
-      <TableCell className={`w-1/2 ${statusColor}`}>
+      <TableCell className={`w-1/2 pr-5 ${statusColor}`}>
         {permohonanStatus}
       </TableCell>
       <TableCell className="w-3/12">

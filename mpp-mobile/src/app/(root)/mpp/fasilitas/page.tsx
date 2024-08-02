@@ -39,7 +39,7 @@ export default function Fasilitas() {
   const FasilitasData = paginate(fasilitas || [], currentPage, itemsPerPage);
 
   return (
-    <section className="flex flex-col md:w-full pt-6 px-8 md:px-20 bg-primary-100 mb-32 md:mb-0 md:pb-36">
+    <section className="flex flex-col md:w-full pt-6 px-8 md:px-20 bg-primary-100 mb-32 md:mb-0 md:pb-36 fade-in-animation duration-500">
       <div className="flex flex-col md:grid md:grid-cols-3 gap-x-3 gap-y-4">
         {FasilitasData &&
           FasilitasData.map((item: FacilityType, i: number) => {

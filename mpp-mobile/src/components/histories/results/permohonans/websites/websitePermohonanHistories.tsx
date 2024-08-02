@@ -103,14 +103,14 @@ export default function WebsitePermohonanHistories({
           <Table className="md:flex md:flex-col md:w-full md:pb-6 md:pt-4">
             <TableHeader className="w-full">
               <TableRow className="flex flex-row justify-center w-full">
-                <TableHead className="text-start w-1/2">
+                <TableHead className="text-start w-1/2 pr-5">
                   Nomor Permohonan
                 </TableHead>
                 <TableHead className="w-full">Instansi</TableHead>
                 <TableHead className="w-full">Layanan</TableHead>
-                <TableHead className="w-1/2">Tanggal</TableHead>
+                <TableHead className="w-1/2 pr-5">Tanggal</TableHead>
                 <TableHead className="w-1/2">Waktu</TableHead>
-                <TableHead className="w-1/2">Status</TableHead>
+                <TableHead className="w-1/2 pr-5">Status</TableHead>
                 <TableHead className="w-3/12">Aksi</TableHead>
               </TableRow>
             </TableHeader>
