@@ -29,6 +29,7 @@ import { z } from "zod";
 import parse from "html-react-parser";
 import { schemaRegister } from "@/lib/zodSchema";
 import TermCondition from "@/components/fetching/termCond/termCond";
+import Swal from "sweetalert2";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -182,17 +183,38 @@ export default function RegisterScreen() {
         const result = await response.json();
 
         if (response.ok) {
-          toast.success("Berhasil membuat akun, silahkan login", {
-            duration: 1000,
+          // toast.success("Berhasil membuat akun, silahkan login", {
+          //   duration: 1000,
+          // });
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil membuat akun, Silahkan Login!",
+            timer: 2000,
+            showConfirmButton: false,
+            position: "center",
           });
           return router.push("/login");
         } else {
-          toast.error(result.message || "Gagal membuat akun!");
+          // toast.error(result.message || "Gagal membuat akun!");
+          Swal.fire({
+            icon: "error",
+            title: `${result.message} || Gagal membuat akun!`,
+            timer: 2000,
+            showConfirmButton: false,
+            position: "center",
+          });
         }
       } catch (error: any) {
         console.log(error);
 
-        toast(error.message);
+        // toast(error.message);
+        Swal.fire({
+          icon: "error",
+          title: `${error.message}`,
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);

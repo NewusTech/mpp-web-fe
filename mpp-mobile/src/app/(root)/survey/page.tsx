@@ -24,6 +24,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import { getTodayDate } from "@/helpers/logout/formatted";
 import fetchInstansiSurvei from "@/components/fetching/instansi/surveiInstansi";
 import LayananSurvei from "@/components/fetching/layanan/layananSurvei/layananSurvei";
+import Swal from "sweetalert2";
 
 type DataDinasType = {
   id: number;
@@ -139,14 +140,35 @@ export default function SurveySkmPage() {
       );
 
       if (response.ok) {
-        toast("Pengecekan Survei Berhasil!");
+        // toast("Pengecekan Survei Berhasil!");
+        Swal.fire({
+          icon: "success",
+          title: "Pengecekan survei berhasil!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         setIsLoading(false);
         router.push("/survey/skm");
       } else {
-        toast("Anda Telah Mengisi Survei!");
+        // toast("Anda Telah Mengisi Survei!");
+        Swal.fire({
+          icon: "warning",
+          title: "Anda telah mengisi survei!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error) {
-      toast("Anda Telah Mengisi Survei!");
+      // toast("Anda Telah Mengisi Survei!");
+      Swal.fire({
+        icon: "warning",
+        title: "Anda telah mengisi survei!",
+        timer: 2000,
+        showConfirmButton: false,
+        position: "center",
+      });
     } finally {
       setTimeout(() => {
         setIsLoading(false);

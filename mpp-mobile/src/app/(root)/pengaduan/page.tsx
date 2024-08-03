@@ -47,6 +47,8 @@ import LayananPengaduan from "@/components/fetching/layanan/layananPengaduan/lay
 import { statusPengaduans } from "@/data/data";
 import { formatCreateTime } from "@/utils/formatTime";
 import InputDate from "@/components/others/inputDate/inputDate";
+import Swal from "sweetalert2";
+import DataNotFound from "@/components/loading/dataNotFound";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -287,7 +289,14 @@ export default function PengaduanScreen() {
         );
 
         if (response.ok) {
-          toast.success("Berhasil mengajukan pengaduan!");
+          // toast.success("Berhasil mengajukan pengaduan!");
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil mengajukan pengaduan!",
+            timer: 2000,
+            showConfirmButton: false,
+            position: "center",
+          });
           setPengaduan({
             instansi_id: 0,
             layanan_id: 0,
@@ -312,11 +321,25 @@ export default function PengaduanScreen() {
             );
             setFormErrors(errors);
           } else {
-            toast.error("Gagal mengajukan pengaduan!");
+            // toast.error("Gagal mengajukan pengaduan!");
+            Swal.fire({
+              icon: "error",
+              title: "Gagal mengajukan pengaduan!",
+              timer: 2000,
+              showConfirmButton: false,
+              position: "center",
+            });
           }
         }
       } catch (error) {
-        toast("Gagal mengajukan pengaduan!");
+        // toast("Gagal mengajukan pengaduan!");
+        Swal.fire({
+          icon: "error",
+          title: "Gagal mengajukan pengaduan!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
@@ -711,13 +734,13 @@ export default function PengaduanScreen() {
                   <Table className="flex flex-col w-full">
                     <TableHeader className="flex w-full">
                       <TableRow className="flex flex-row w-full">
-                        <TableHead className="w-1/12 bg-primary-400">
+                        <TableHead className="w-2/12 bg-primary-400 flex justify-center">
                           No
                         </TableHead>
-                        <TableHead className="w-6/12 bg-primary-400">
+                        <TableHead className="w-1/2 bg-primary-400">
                           Hari / Tanggal
                         </TableHead>
-                        <TableHead className="w-4/12 bg-primary-400">
+                        <TableHead className="w-1/3 bg-primary-400">
                           Waktu
                         </TableHead>
                         <TableHead className="w-10/12 bg-primary-400">
@@ -729,7 +752,7 @@ export default function PengaduanScreen() {
                         <TableHead className="w-full bg-primary-400">
                           Judul Pengaduan
                         </TableHead>
-                        <TableHead className="w-5/12 bg-primary-400">
+                        <TableHead className="w-1/2 bg-primary-400 pr-4">
                           Status
                         </TableHead>
                         <TableHead className="w-3/12 bg-primary-400">
@@ -791,13 +814,13 @@ export default function PengaduanScreen() {
 
                               return (
                                 <TableRow key={i}>
-                                  <TableCell className="w-1/12">
+                                  <TableCell className="w-2/12 flex justify-center">
                                     {i + 1}
                                   </TableCell>
-                                  <TableCell className="w-6/12">
+                                  <TableCell className="w-1/2">
                                     {dayName}, {datePengaduanFormatted}
                                   </TableCell>
-                                  <TableCell className="w-4/12">
+                                  <TableCell className="w-1/3">
                                     {pengaduanTime} WIB
                                   </TableCell>
                                   <TableCell className="w-10/12">
@@ -809,8 +832,7 @@ export default function PengaduanScreen() {
                                   <TableCell className="w-full">
                                     {pengaduan.judul}
                                   </TableCell>
-                                  <TableCell
-                                    className={`w-5/12 ${statusColor}`}>
+                                  <TableCell className={`w-1/2 ${statusColor}`}>
                                     {pengaduan.status === 0
                                       ? "Belum diproses"
                                       : pengaduan.status === 1
@@ -858,12 +880,7 @@ export default function PengaduanScreen() {
                   <LoadingComponent />
                 </div>
               ) : (
-                <div className="container mx-auto flex flex-col md:w-full justify-center items-center mt-8 w-full h-full">
-                  <Image src={backHome} width={300} height={300} alt="sad" />
-                  <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
-                    Data tidak ditemukan!
-                  </p>
-                </div>
+                <DataNotFound />
               )}
             </>
           )}

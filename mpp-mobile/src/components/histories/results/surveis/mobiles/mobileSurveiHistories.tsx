@@ -2,6 +2,7 @@
 
 import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import CardHistorySurvei from "@/components/histories/cardHistorySurvei/cardHistorySurvei";
+import DataNotFound from "@/components/loading/dataNotFound";
 import InputDate from "@/components/others/inputDate/inputDate";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import PaginationComponent from "@/components/pagination/paginationComponent";
@@ -65,10 +66,7 @@ export default function MobileSurveiHistories({
         </>
       ) : (
         <div className="flex flex-col justify-center items-center h-[311px]">
-          <Image src={sad} width={100} height={100} alt="sad" />
-          <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-            Data tidak ditemukan!
-          </p>
+          <DataNotFound />
         </div>
       )}
       <PaginationComponent

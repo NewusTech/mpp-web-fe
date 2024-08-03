@@ -12,6 +12,7 @@ import { DataInputItem, LayananType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { truncateTitle } from "@/utils/formatTitle";
+import Swal from "sweetalert2";
 
 const steps = [
   { id: 1, title: "1" },
@@ -147,7 +148,13 @@ export default function UploadFilePage() {
       const data = await response.json();
 
       if (response.ok) {
-        toast(data.message);
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil membuat permohonan!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         localStorage.clear();
       } else {
         toast.error(data.message);

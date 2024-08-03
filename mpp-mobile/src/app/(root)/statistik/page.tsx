@@ -326,7 +326,7 @@ export default function StatisticsPage() {
                   </Select>
                 ) : (
                   <Select>
-                    <SelectTrigger className="w-full rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
+                    <SelectTrigger className="w-full text-[12px] md:text-[14px] rounded-xl border-none items-center active:border-none active:outline-none focus:border-none focus:outline-none">
                       <SelectValue
                         placeholder={
                           filterType === "" ? "Semua Data" : placeHolder
@@ -359,32 +359,34 @@ export default function StatisticsPage() {
                 <Table className="flex flex-col w-full">
                   <TableHeader className="flex w-full">
                     <TableRow className="flex flex-row w-full">
-                      <TableHead className="w-full bg-neutral-300">
+                      <TableHead className="w-full bg-neutral-300 pl-2">
                         Instansi
                       </TableHead>
-                      <TableHead className="w-1/5">Total</TableHead>
-                      <TableHead className="w-1/5">Antrian</TableHead>
-                      <TableHead className="w-1/5">Permohonan</TableHead>
-                      <TableHead className="w-1/5">SKM</TableHead>
+                      <TableHead className="w-1/5 flex justify-center">
+                        Antrian
+                      </TableHead>
+                      <TableHead className="w-1/5 flex justify-center">
+                        Permohonan
+                      </TableHead>
+                      <TableHead className="w-1/5 flex justify-center">
+                        SKM
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {currentDataGrafik.map((data: DataStatistik, i: number) => {
                       return (
                         <TableRow key={i} className="flex flex-row w-full">
-                          <TableCell className="w-full">{data.name}</TableCell>
-                          <TableCell className="w-1/5">
-                            {data.skm_count +
-                              data.antrian_count +
-                              data.permohonan_count}
+                          <TableCell className="w-full pl-2">
+                            {data.name}
                           </TableCell>
-                          <TableCell className="w-1/5">
+                          <TableCell className="w-1/5 flex justify-center">
                             {data.antrian_count}
                           </TableCell>
-                          <TableCell className="w-1/5">
+                          <TableCell className="w-1/5 flex justify-center">
                             {data.permohonan_count}
                           </TableCell>
-                          <TableCell className="w-1/5">
+                          <TableCell className="w-1/5 flex justify-center">
                             {data.skm_count}
                           </TableCell>
                         </TableRow>

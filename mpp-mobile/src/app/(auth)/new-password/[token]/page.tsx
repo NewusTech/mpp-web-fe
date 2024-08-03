@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -43,7 +44,14 @@ export default function NewPassword({ params }: { params: { token: string } }) {
       await response.json();
 
       if (response.ok) {
-        toast("Kata Sandi berhasil diubah, Silahkan Login!");
+        // toast("Kata Sandi berhasil diubah, Silahkan Login!");
+        Swal.fire({
+          icon: "success",
+          title: "Kata Sandi berhasil diubah, Silahkan Login!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         router.push("/login");
       }
     } catch (error) {

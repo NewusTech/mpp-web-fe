@@ -23,6 +23,7 @@ import Cookies from "js-cookie";
 import parse from "html-react-parser";
 import { TermType } from "@/types/type";
 import TermCondition from "@/components/fetching/termCond/termCond";
+import Swal from "sweetalert2";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -98,12 +99,33 @@ export default function LoginScreen() {
       if (result?.data?.token) {
         Cookies.set("Authorization", result?.data?.token);
         router.push("/");
-        toast.success("Login berhasil!", { duration: 1000 });
+        // toast.success("Login berhasil!", { duration: 1000 });
+        Swal.fire({
+          icon: "success",
+          title: "Login berhasil!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       } else {
-        toast.error("Login gagal. Periksa NIK dan password Anda.");
+        // toast.error("Login gagal. Periksa NIK dan password Anda.");
+        Swal.fire({
+          icon: "error",
+          title: "Login gagal. Periksa NIK dan password Anda.",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error: any) {
-      toast.error(error.message);
+      // toast.error(error.message);
+      Swal.fire({
+        icon: "error",
+        title: `${error.message}`,
+        timer: 2000,
+        showConfirmButton: false,
+        position: "center",
+      });
       console.log(error);
     } finally {
       setIsLoading(false);

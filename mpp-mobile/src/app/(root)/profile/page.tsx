@@ -25,6 +25,8 @@ import { Loader, X } from "lucide-react";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import CardDocumentPendukung from "@/components/profiles/cardDocumentPendukung/cardDocumentPendukung";
 import { Input } from "@/components/ui/input";
+import Swal from "sweetalert2";
+import DataNotFound from "@/components/loading/dataNotFound";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -207,7 +209,15 @@ export default function ProfilePage() {
       await response.json();
 
       if (response.ok) {
-        toast.success("Berhasil mengupdate foto profil!");
+        // toast.success("Berhasil mengupdate foto profil!");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil mengupdate foto profile!",
+          text: "Berhasil mengupdate foto profile!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         setIsOpen(false);
         setIsLoading(false);
         fetchProfiles();
@@ -302,7 +312,14 @@ export default function ProfilePage() {
       await response.json();
 
       if (response.ok) {
-        toast.success("Berhasil Memperbarui Kata Sandi!");
+        // toast.success("Berhasil Memperbarui Kata Sandi!");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil Memperbarui Kata Sandi!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         setIsLoading(false);
         setIsSeen(false);
         router.push("/profile");
@@ -750,10 +767,7 @@ export default function ProfilePage() {
                     </>
                   ) : (
                     <div className="flex flex-col justify-center items-center h-[211px]">
-                      <Image src={sad} width={100} height={100} alt="sad" />
-                      <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-                        Data tidak ditemukan!
-                      </p>
+                      <DataNotFound />
                     </div>
                   )}
                 </div>

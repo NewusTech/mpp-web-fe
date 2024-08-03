@@ -19,6 +19,7 @@ import Image from "next/legacy/image";
 import { truncateTitle } from "@/utils/formatTitle";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 export default function PermohonanUpdateHistory({
   params,
@@ -204,13 +205,34 @@ export default function PermohonanUpdateHistory({
       const dataInput = await response.json();
 
       if (response.ok) {
-        toast(dataInput.message);
+        // toast(dataInput.message);
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil memperbarui permohonan!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         localStorage.clear();
       } else {
-        toast.error(dataInput.message);
+        // toast.error(dataInput.message);
+        Swal.fire({
+          icon: "error",
+          title: `${dataInput.message}`,
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error) {
-      toast.error("An error occurred while submitting the form.");
+      // toast.error("An error occurred while submitting the form.");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal memperbarui permohonan!",
+        timer: 2000,
+        showConfirmButton: false,
+        position: "center",
+      });
     } finally {
       setIsLoading(false);
       router.push("/riwayat");

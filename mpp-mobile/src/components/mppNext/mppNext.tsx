@@ -217,7 +217,7 @@ export default function MppNext({
               facilities.map((facility: FacilityType, i: number) => {
                 return (
                   <AccordionItem key={i} className="mb-2" value={`item-${i}`}>
-                    <AccordionTrigger className="md:h-full">
+                    <AccordionTrigger className="md:h-full text-[14px]">
                       {facility.title}
                     </AccordionTrigger>
                     <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
@@ -261,7 +261,7 @@ export default function MppNext({
           <div className="flex self-end h-full">
             <Link
               href={"/mpp/fasilitas"}
-              className="self-end border-b text-[12px] md:text-[16px] hover:underline text-primary-800">
+              className="self-end border-b text-[14px] md:text-[16px] hover:underline text-primary-800">
               Lihat Selengkapnya...
             </Link>
           </div>

@@ -22,6 +22,7 @@ import Cookies from "js-cookie";
 import { LogIn } from "lucide-react";
 import wrapText from "@/utils/formatText";
 import parse from "html-react-parser";
+import { formatTime } from "@/utils/formatTime";
 
 interface detailType {
   id?: number;
@@ -80,6 +81,9 @@ export default function InstansiDetail({
   }, [params.slug]);
 
   const email = wrapText(detailins?.email || "", 15);
+
+  const buka = formatTime(detailins?.jam_buka || "");
+  const tutup = formatTime(detailins?.jam_tutup || "");
 
   return (
     <div className="bg-primary-100 md:h-full pb-32">
@@ -152,7 +156,7 @@ export default function InstansiDetail({
               </h6>
 
               <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
-                {detailins?.jam_buka} - {detailins?.jam_tutup}
+                {buka} WIB - {tutup} WIB
               </p>
             </div>
 
@@ -292,7 +296,7 @@ export default function InstansiDetail({
                   key={i}
                   className="w-full h-full mb-2"
                   value={`item-${i}`}>
-                  <AccordionTrigger className="text-[12px]">
+                  <AccordionTrigger className="text-[12px] hover:underline">
                     {item.name}
                   </AccordionTrigger>
                   <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">

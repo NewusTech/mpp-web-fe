@@ -38,6 +38,7 @@ import {
 import { schema } from "@/lib/zodSchema";
 import { z } from "zod";
 import TermCondition from "@/components/fetching/termCond/termCond";
+import Swal from "sweetalert2";
 
 const steps = [
   { id: 1, title: "1" },
@@ -167,7 +168,14 @@ export default function DataDiriPage() {
       );
 
       if (response.ok) {
-        toast.success("Berhasil mengupdate profile!");
+        // toast.success("Berhasil mengupdate profile!");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil mengupdate profile!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         router.push("/instansi/formulir");
       }
     } catch (error: any) {
@@ -179,7 +187,14 @@ export default function DataDiriPage() {
         setErrors(formattedErrors);
       } else {
         console.log(error, "error");
-        toast("Failed to update profile!");
+        // toast("Failed to update profile!");
+        Swal.fire({
+          icon: "error",
+          title: "Failed to update profile!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } finally {
       setIsLoading(false);
