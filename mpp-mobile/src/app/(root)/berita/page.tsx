@@ -21,6 +21,7 @@ import Image from "next/legacy/image";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import { formatDateArrange } from "@/helpers/logout/formatted";
 import InputDate from "@/components/others/inputDate/inputDate";
+import DataNotFound from "@/components/loading/dataNotFound";
 export const dynamic = "force-dynamic";
 
 export default function BeritaPage() {
@@ -218,12 +219,7 @@ export default function BeritaPage() {
           />
         </>
       ) : (
-        <div className="container mx-auto flex flex-col md:w-full justify-center items-center w-full h-full">
-          <Image src={backHome} width={200} height={200} alt="sad" />
-          <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
-            Data tidak ditemukan!
-          </p>
-        </div>
+        <DataNotFound />
       )}
     </section>
   );

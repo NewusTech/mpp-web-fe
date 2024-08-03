@@ -21,6 +21,7 @@ import { Loader } from "lucide-react";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import AntrianCheck from "@/components/fetching/antrianCheck/antrianCheck";
 import { getCurrentTime, getTodayDate } from "@/helpers/logout/formatted";
+import Swal from "sweetalert2";
 
 export default function BookingAntrianPage({
   params,
@@ -113,7 +114,14 @@ export default function BookingAntrianPage({
         const result = await response.json();
 
         if (response.ok) {
-          toast.success("Berhasil membooking antrian!");
+          // toast.success("Berhasil membooking antrian!");
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil membuat antrian!",
+            timer: 2000,
+            showConfirmButton: false,
+            position: "center",
+          });
           setAntrian({
             instansi_id: 0,
             layanan_id: 0,
@@ -125,10 +133,24 @@ export default function BookingAntrianPage({
             `/instansi/booking-antrian/booking-result/${result.data.id}`
           );
         } else {
-          toast("Gagal booking antrian!");
+          // toast("Gagal booking antrian!");
+          Swal.fire({
+            icon: "error",
+            title: "Gagal membuat antrian!",
+            timer: 2000,
+            showConfirmButton: false,
+            position: "center",
+          });
         }
       } catch (error) {
-        toast("Gagal booking antrian!");
+        // toast("Gagal booking antrian!");
+        Swal.fire({
+          icon: "success",
+          title: "Gagal membuat antrian!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);

@@ -175,7 +175,7 @@ function Home() {
             <Link
               href="/instansi"
               className="flex justify-center items-center rounded-[50px] w-5/12 md:w-3/12 h-[40px] bg-neutral-50 group hover:bg-primary-700 shadow-md border border-neutral-500 mt-[16px]">
-              <p className="text-center text-[12px] text-primary-700 group-hover:text-neutral-50 font-light">
+              <p className="text-center text-[12px] md:text-[16px] text-primary-700 group-hover:text-neutral-50 font-light">
                 Lihat Semua Instansi
               </p>
             </Link>
@@ -260,7 +260,7 @@ function Home() {
               <Link
                 href="/berita"
                 className="flex md:mt-[40px] justify-center items-center rounded-[50px] w-full h-[40px] bg-neutral-50 group hover:bg-primary-700 shadow-md border border-neutral-500 mt-[16px]">
-                <p className="text-center text-[12px] text-primary-700 group-hover:text-neutral-50 font-light">
+                <p className="text-center text-[12px] md:text-[16px] text-primary-700 group-hover:text-neutral-50 font-light">
                   Lihat Semua Berita
                 </p>
               </Link>

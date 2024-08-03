@@ -54,7 +54,9 @@ export default function FAQScreen() {
                   key={index}
                   className="w-full h-full mb-2"
                   value={`item-${index}`}>
-                  <AccordionTrigger>{faq.question}</AccordionTrigger>
+                  <AccordionTrigger className="text-[12px] h-[50px] md:h-full">
+                    {faq.question}
+                  </AccordionTrigger>
                   <AccordionContent className="md:text-start text-justify w-full h-full md:px-[70px]">
                     {faq.answer}
                   </AccordionContent>

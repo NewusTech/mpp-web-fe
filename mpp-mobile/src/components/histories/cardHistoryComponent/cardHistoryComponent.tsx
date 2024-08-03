@@ -135,7 +135,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}
-              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+              className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1.5 px-6 text-neutral-50">
               Lihat
             </Link>
           </div>
@@ -143,7 +143,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
           <div>
             <button
               disabled
-              className="bg-gray-400 rounded-full py-1 px-5 text-neutral-50 text-[12px] cursor-not-allowed">
+              className="bg-gray-400 rounded-full py-1.5 px-6 text-neutral-50 text-[12px] cursor-not-allowed">
               Lihat
             </button>
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import fetchInstansi from "@/components/fetching/instansi/instansi";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -17,6 +17,7 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 import { Layanantype } from "@/types/type";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import { statusInstansis } from "@/data/data";
+import DataNotFound from "@/components/loading/dataNotFound";
 
 export default function LayananPage() {
   const [instansi, setInstansi] = useState([]);
@@ -75,9 +76,9 @@ export default function LayananPage() {
         </div>
 
         <div className="flex w-full flex-col md:w-full md:justify-center gap-[16px]">
-          {instansi.length > 0 ? (
+          {currentDataInstansi.length > 0 ? (
             <>
-              <div className="flex w-full flex-col md:flex-none md:grid md:grid-cols-5 md:flex-wrap md:justify-center md:gap-[16px] md:flex-row gap-[16px]">
+              <div className="flex w-full flex-col md:flex-none md:grid md:grid-cols-5 md:flex-wrap md:justify-center md:gap-[16px] md:flex-row gap-[16px] slide-up-animation">
                 {currentDataInstansi.map((layanan: Layanantype, i: number) => {
                   return <CardLayananComponent key={i} layanan={layanan} />;
                 })}
@@ -90,6 +91,8 @@ export default function LayananPage() {
                 onPageChange={setCurrentPage}
               />
             </>
+          ) : search ? (
+            <DataNotFound />
           ) : (
             <div className="container mx-auto flex flex-col md:w-full justify-center items-center w-full h-full">
               <LoadingComponent />

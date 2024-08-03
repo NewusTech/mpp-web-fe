@@ -14,6 +14,7 @@ import PaginationComponent from "@/components/pagination/paginationComponent";
 import TableAntrianComponent from "@/components/histories/others/tableAntrianComponent/tableAntrianComponent";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import InputDate from "@/components/others/inputDate/inputDate";
+import DataNotFound from "@/components/loading/dataNotFound";
 
 export default function WebsiteAntrianHistories({
   currentAntrians,
@@ -88,10 +89,7 @@ export default function WebsiteAntrianHistories({
         </>
       ) : (
         <div className="flex flex-col justify-center items-center h-[311px]">
-          <Image src={sad} width={100} height={100} alt="sad" />
-          <p className="text-center text-neutral-900 text-[12px] font-thin mt-4">
-            Data tidak ditemukan!
-          </p>
+          <DataNotFound />
         </div>
       )}
     </div>

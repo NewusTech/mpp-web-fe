@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -40,7 +41,14 @@ export default function ForgotPassword() {
       await response.json();
 
       if (response.ok) {
-        toast("Silahkan cek email anda");
+        // toast("Silahkan cek email anda");
+        Swal.fire({
+          icon: "success",
+          title: "Silahkan cek email anda!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         router.push("/login");
       }
     } catch (error) {

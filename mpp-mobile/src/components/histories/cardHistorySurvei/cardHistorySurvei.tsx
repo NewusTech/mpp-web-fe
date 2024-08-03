@@ -76,7 +76,7 @@ export default function CardHistorySurvei({
       <div className="flex flex-row mb-4 w-full justify-end pr-4">
         <Link
           href={`riwayat/hasil-survei/${survei.id}`}
-          className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1 px-5 text-neutral-50">
+          className="bg-primary-700 hover:bg-primary-600 rounded-full text-[12px] py-1.5 px-6 text-neutral-50">
           Lihat
         </Link>
       </div>

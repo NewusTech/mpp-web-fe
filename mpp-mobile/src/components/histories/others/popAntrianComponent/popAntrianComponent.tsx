@@ -12,7 +12,7 @@ export default function PopAntrianComponent({
   return (
     <Dialog>
       <DialogTrigger>
-        <div className="bg-primary-700 rounded-full py-1 px-5 text-neutral-50 text-[12px] cursor-pointer">
+        <div className="bg-primary-700 rounded-full py-1.5 px-6 text-neutral-50 text-[12px] cursor-pointer">
           Lihat
         </div>
       </DialogTrigger>

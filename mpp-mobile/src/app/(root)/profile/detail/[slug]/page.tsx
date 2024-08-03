@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { toast } from "sonner";
+import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import {
   agamas,
@@ -236,7 +237,15 @@ export default function ProfileEditPage({
       await response.json();
 
       if (response.ok) {
-        toast.success("Berhasil mengupdate profile!");
+        // toast.success("Berhasil mengupdate profile!");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil mengupdate profile!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
+
         setIsLoading(false);
       }
     } catch (error) {
@@ -284,7 +293,14 @@ export default function ProfileEditPage({
       );
 
       if (response.ok) {
-        toast.success("Berhasil mengupdate profile!");
+        // toast.success("Berhasil mengupdate profile!");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil mengupdate dokumen!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         setIsLoading(false);
       }
     } catch (error) {

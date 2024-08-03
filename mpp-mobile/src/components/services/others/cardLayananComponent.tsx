@@ -32,7 +32,7 @@ export default function CardLayananComponent({
   }
 
   return (
-    <div className="slide-up-animation flex flex-col items-center justify-center w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-md rounded-xl">
+    <div className="zoom-in-animation flex flex-col items-center justify-center w-full outline outline-2 outline-neutral-700 bg-neutral-50 shadow-md rounded-xl">
       <div className="flex flex-row md:flex-col items-center justify-center p-4 md:p-0 w-full md:w-10/12 md:min-h-[270px]">
         <Link
           href={`/instansi/${layanan.slug}`}

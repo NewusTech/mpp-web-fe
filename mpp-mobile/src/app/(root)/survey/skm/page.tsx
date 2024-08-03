@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { schemaSkm } from "@/lib/zodSchema";
 import z from "zod";
 import { Loader } from "lucide-react";
+import Swal from "sweetalert2";
 
 type SurveiFormType = {
   id: number;
@@ -134,10 +135,24 @@ export default function SurveySKMPage() {
 
         await response.json();
 
-        toast("Terimakasih telah mengisi survei!", { duration: 2000 });
+        // toast("Terimakasih telah mengisi survei!", { duration: 2000 });
+        Swal.fire({
+          icon: "success",
+          title: "Terimakasih telah mengisi survei!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         localStorage.clear();
       } catch (error) {
-        toast("Gagal mengisi survey!");
+        // toast("Gagal mengisi survey!");
+        Swal.fire({
+          icon: "error",
+          title: "Gagal mengisi survei!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       } finally {
         setIsLoading(false);
         setHasSubmitted(false);
