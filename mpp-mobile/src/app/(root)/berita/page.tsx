@@ -31,7 +31,7 @@ export default function BeritaPage() {
   const [selectedInstansiId, setSelectedInstansiId] = useState<string>();
   const [search, setSearch] = useState<string>("");
   const now = new Date();
-  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const firstDayOfMonth = new Date(now.getFullYear(), 0, 1);
   const [startDate, setStartDate] = useState<Date | undefined>(firstDayOfMonth);
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const searchDebounce = useDebounce(search, 500);

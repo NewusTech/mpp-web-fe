@@ -81,7 +81,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
       <div className="flex flex-row w-full gap-x-4 items-center">
         <ChevronLeft
           onClick={() => router.back()}
-          className="w-8 h-8 text-neutral-900"
+          className="w-8 h-8 text-neutral-900 cursor-pointer"
         />
 
         <h3 className="text-primary-700 font-semibold text-[24px]">

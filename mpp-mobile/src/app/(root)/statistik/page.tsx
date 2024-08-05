@@ -182,6 +182,7 @@ export default function StatisticsPage() {
 
   const handleMonthChange = (month: string) => {
     setSelectedMonth(month);
+    setSelectedYear(null);
   };
 
   const handleYearChange = (year: string) => {

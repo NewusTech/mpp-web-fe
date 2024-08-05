@@ -29,10 +29,18 @@ import {
   Instansi,
   MyBerita,
   MyInstansi,
+  TermType,
   VideoType,
 } from "@/types/type";
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 import { truncateTitle } from "@/utils/formatTitle";
+import TermCondition from "@/components/fetching/termCond/termCond";
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
@@ -43,9 +51,11 @@ function Home() {
   const [video, setVideo] = useState<VideoType>();
   const [alur, setAlur] = useState<AlurType[]>();
   const [apps, setApps] = useState<AppType[] | undefined>();
+  const [term, setTerm] = useState<TermType>();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const fetchCarousels = async () => {
     try {
@@ -108,11 +118,15 @@ function Home() {
 
       const app = await fetchAppSupport(1, 6);
 
+      const terms = await TermCondition();
+
       setBerita(news);
 
       if (app) {
         setApps(app.data);
       }
+
+      setTerm(terms.data);
     } catch (error) {
       toast("Gagal mendapatkan data!");
     }
@@ -139,6 +153,10 @@ function Home() {
   const photos = layanan?.data.map((service: Instansi) => {
     return service.image;
   });
+
+  const handleAgree = () => {
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20">
@@ -269,6 +287,58 @@ function Home() {
         </div>
 
         <FAQScreen />
+
+        <div className="flex flex-col md:hidden items-center justify-between w-full text-center mt-8 gap-y-1.5 mb-6">
+          <div className="w-full text-center text-primary-700 text-[12px]">
+            {term && (
+              <Dialog open={isDialogOpen}>
+                <DialogTrigger
+                  className="text-primary-700 font-semibold hover:underline"
+                  onClick={() => setIsDialogOpen(true)}>
+                  Syarat dan Ketentuan
+                </DialogTrigger>
+                <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 max-h-[700px]">
+                  <div className="m-3 md:py-4 px-4 md:px-8 flex flex-col items-center w-full verticalScroll gap-y-6">
+                    <div>{term && parse(term?.desc_text)}</div>
+
+                    <div
+                      onClick={handleAgree}
+                      className="bg-primary-700 text-center cursor-pointer md:w-2/12 rounded-full text-neutral-50 py-1 px-5">
+                      Setuju
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
+            ,{" "}
+            {term && (
+              <Dialog open={isDialogOpen}>
+                <DialogTrigger
+                  className="text-primary-700 font-semibold hover:underline"
+                  onClick={() => setIsDialogOpen(true)}>
+                  Kebijakan Privasi
+                </DialogTrigger>
+                <DialogContent className="flex flex-col bg-neutral-50 rounded-xl p-1 justify-center items-center w-10/12 max-h-[700px]">
+                  <div className="m-3 md:py-4 px-4 md:px-8 flex flex-col items-center w-full verticalScroll gap-y-6">
+                    <div>{term && parse(term?.privasi_text)}</div>
+
+                    <div
+                      onClick={handleAgree}
+                      className="bg-primary-700 text-center cursor-pointer md:w-2/12 rounded-full text-neutral-50 py-1 px-5">
+                      Setuju
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
+
+          <p className="text-[12px] text-primary-700 font-normal">
+            Copyright &copy; 2024
+            <span className="text-[12px] font-bold"> MPP Lampung Timur</span>.
+            All rights reserved
+          </p>
+        </div>
       </div>
     </div>
   );

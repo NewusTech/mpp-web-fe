@@ -40,6 +40,8 @@ interface detailType {
   Layanans?: LayanansType[];
   status: boolean;
   slug: string;
+  active_online?: boolean;
+  active_offline?: boolean;
 }
 
 interface LayanansType {
@@ -206,7 +208,7 @@ export default function InstansiDetail({
                 </Dialog>
               ) : (
                 <>
-                  {detailins?.status === true ? (
+                  {detailins?.active_offline === true ? (
                     <Button className="w-full flex justify-center font-normal items-center rounded-full bg-secondary-700 hover:bg-secondary-600 text-neutral-50 p-3">
                       <Link href={`/instansi/booking-antrian/${detailins?.id}`}>
                         Booking Antrian
@@ -259,7 +261,7 @@ export default function InstansiDetail({
                 </Dialog>
               ) : (
                 <>
-                  {detailins?.status === true ? (
+                  {detailins?.active_online === true ? (
                     <Link
                       className="w-full h-[40px] flex flex-col justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
                       href={`/instansi/permohonan-layanan/${detailins?.id}`}>
@@ -268,13 +270,13 @@ export default function InstansiDetail({
                       </div>
                     </Link>
                   ) : (
-                    <Link
-                      className="w-full h-[40px] flex flex-col justify-center items-center font-normal rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3"
-                      href={`/instansi/${detailins?.slug}`}>
-                      <Button className="font-normal" disabled>
+                    <Button
+                      disabled
+                      className="w-full flex justify-center font-normal items-center rounded-full bg-primary-700 hover:bg-primary-600 text-neutral-50 p-3">
+                      <Link href={`/instansi/${detailins?.slug}`}>
                         Permohonan Layanan
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                   )}
                 </>
               )}

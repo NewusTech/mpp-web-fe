@@ -40,7 +40,7 @@ export default function FAQScreen() {
           FAQ MPP
         </h3>
 
-        <p className="text-[10px] md:text-[16px] text-primary-700 font-light px-[30px] text-center">
+        <p className="text-[12px] md:text-[20px] text-primary-700 font-light px-[30px] text-center">
           Pertanyaan yang sering diajukan terkait dengan Mal Pelayanan Publik
         </p>
       </div>

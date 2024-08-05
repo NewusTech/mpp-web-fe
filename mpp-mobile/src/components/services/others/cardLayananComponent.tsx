@@ -23,7 +23,7 @@ export default function CardLayananComponent({
   let bgStatus = "";
   let textStatus = "";
 
-  if (layanan.active_online === true) {
+  if (layanan.active_offline === true) {
     bgStatus = "bg-success-700";
     textStatus = "Buka";
   } else {
