@@ -94,7 +94,7 @@ export default function PengaduanScreen() {
   const token = Cookies.get("Authorization");
   const [loadingData, setLoadingData] = useState(false);
   const now = new Date();
-  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const firstDayOfMonth = new Date(now.getFullYear(), 0, 1);
   const [startDate, setStartDate] = useState<Date | undefined>(firstDayOfMonth);
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
@@ -808,7 +808,7 @@ export default function PengaduanScreen() {
                                   statusColor = "text-success-700";
                                   break;
                                 default:
-                                  statusColor = "text-gray-500";
+                                  statusColor = "text-success-700";
                                   break;
                               }
 
@@ -842,14 +842,16 @@ export default function PengaduanScreen() {
                                       : "Selesai"}
                                   </TableCell>
                                   <TableCell className="w-3/12">
-                                    {pengaduan.status !== 3 ? (
+                                    {pengaduan.status === 0 ||
+                                    pengaduan.status === 1 ||
+                                    pengaduan.status === 2 ? (
                                       <div className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-not-allowed text-center rounded-full bg-neutral-700 hover:bg-neutral-600">
                                         Lihat
                                       </div>
                                     ) : (
                                       <Link
                                         href={`/pengaduan/${pengaduan.id}/pengaduan-hasil`}
-                                        className="w-full flex items-center justify-center text-[14px] px-6 py-4 h-[20px] cursor-pointer text-center rounded-full bg-secondary-700 hover:bg-secondary-600">
+                                        className="w-full flex items-center justify-center text-neutral-900 text-[14px] px-6 py-4 h-[20px] cursor-pointer text-center rounded-full bg-secondary-700 hover:bg-secondary-600">
                                         Lihat
                                       </Link>
                                     )}

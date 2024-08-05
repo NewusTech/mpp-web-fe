@@ -99,7 +99,6 @@ export default function LoginScreen() {
       if (result?.data?.token) {
         Cookies.set("Authorization", result?.data?.token);
         router.push("/");
-        // toast.success("Login berhasil!", { duration: 1000 });
         Swal.fire({
           icon: "success",
           title: "Login berhasil!",
@@ -108,7 +107,6 @@ export default function LoginScreen() {
           position: "center",
         });
       } else {
-        // toast.error("Login gagal. Periksa NIK dan password Anda.");
         Swal.fire({
           icon: "error",
           title: "Login gagal. Periksa NIK dan password Anda.",
@@ -118,7 +116,6 @@ export default function LoginScreen() {
         });
       }
     } catch (error: any) {
-      // toast.error(error.message);
       Swal.fire({
         icon: "error",
         title: `${error.message}`,

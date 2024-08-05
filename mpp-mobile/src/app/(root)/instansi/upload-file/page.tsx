@@ -13,6 +13,7 @@ import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { truncateTitle } from "@/utils/formatTitle";
 import Swal from "sweetalert2";
+import DataNotFound from "@/components/loading/dataNotFound";
 
 const steps = [
   { id: 1, title: "1" },
@@ -313,12 +314,7 @@ export default function UploadFilePage() {
                 </div>
               </form>
             ) : (
-              <div className="container mx-auto mt-7 flex flex-col md:w-full justify-center items-center w-full h-full pb-16">
-                <Image src={backHome} width={300} height={300} alt="sad" />
-                <p className="text-center text-neutral-900 text-[20px] md:text-[32px] font-thin mt-8 mb-10">
-                  Data tidak ditemukan!
-                </p>
-              </div>
+              <DataNotFound />
             )}
           </div>
         </div>

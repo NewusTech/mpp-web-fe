@@ -48,7 +48,7 @@ export default function CardPengaduanComponent({
       statusColor = "text-success-700";
       break;
     default:
-      statusColor = "text-gray-500";
+      statusColor = "text-success-700";
       break;
   }
 
@@ -108,14 +108,16 @@ export default function CardPengaduanComponent({
       </div>
 
       <div className="flex w-full self-end justify-end mt-6">
-        {pengaduan.status !== 3 ? (
+        {pengaduan.status === 0 ||
+        pengaduan.status === 1 ||
+        pengaduan.status === 2 ? (
           <div className="w-3/12 h-[18px] py-4 text-[14px] cursor-not-allowed flex items-center justify-center rounded-full bg-neutral-700 hover:bg-neutral-600">
             Lihat
           </div>
         ) : (
           <Link
             href={`/pengaduan/${pengaduan.id}/pengaduan-hasil`}
-            className="w-3/12 h-[18px] py-4 px-5 flex items-center justify-center rounded-full text-[14px] bg-secondary-700 hover:bg-secondary-600">
+            className="w-3/12 h-[18px] py-4 px-5 text-neutral-900 flex items-center justify-center rounded-full text-[14px] bg-secondary-700 hover:bg-secondary-600">
             Lihat
           </Link>
         )}

@@ -16,6 +16,7 @@ import { schemaSkm } from "@/lib/zodSchema";
 import z from "zod";
 import { Loader } from "lucide-react";
 import Swal from "sweetalert2";
+import DataNotFound from "@/components/loading/dataNotFound";
 
 type SurveiFormType = {
   id: number;
@@ -267,12 +268,7 @@ export default function SurveySKMPage() {
                 </div>
               </form>
             ) : (
-              <div className="container mx-auto flex flex-col justify-center items-center w-full h-full">
-                <Image src={backHome} width={400} height={400} alt="sad" />
-                <p className="text-center text-neutral-900 text-[12px] md:text-[32px] font-thin mt-4">
-                  Data tidak ditemukan!
-                </p>
-              </div>
+              <DataNotFound />
             )}
           </div>
         </div>
