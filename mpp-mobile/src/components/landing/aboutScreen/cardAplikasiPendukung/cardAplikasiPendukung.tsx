@@ -11,19 +11,19 @@ export default function CardAplikasiPendukung({ app }: { app: AppType }) {
     <Link
       href={app.link}
       target="_blank"
-      className="slide-up-animation bg-neutral-50 w-full md:h-full md:flex-none grid grid-cols-4 place-items-center p-4 gap-x-4 rounded-xl shadow-md">
-      <div className="max-w-max md:h-full col-span-1 flex items-center justify-center p-2">
+      className="slide-up-animation bg-neutral-50 w-full flex flex-row items-center p-2 rounded-md shadow-md">
+      <div className="w-6/12 md:w-7/12 flex items-center justify-center p-2">
         <Image
           src={app.image}
-          width={100}
-          height={100}
-          className="w-full h-full object-contain rounded-full"
+          width={300}
+          height={300}
+          className="w-full h-full object-cover"
           alt="permohonan & antrian"
         />
       </div>
 
-      <div className="flex flex-col col-span-3 md:mt-0 w-full text-primary-700 hover:underline">
-        <p className="font-semibold text-primary-700 text-[18px]">
+      <div className="flex flex-col md:mt-0 w-full text-primary-700 hover:underline pl-2">
+        <p className="font-semibold text-primary-700 md:text-[16px]">
           {formatName}
         </p>
       </div>

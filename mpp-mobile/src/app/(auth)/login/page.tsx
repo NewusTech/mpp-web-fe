@@ -1,12 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { EyeOff, Eye, UserRound, Loader } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import Image from "next/legacy/image";
 import { Raleway } from "next/font/google";
