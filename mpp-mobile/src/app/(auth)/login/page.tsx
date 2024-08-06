@@ -8,7 +8,6 @@ import { Raleway } from "next/font/google";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { z } from "zod";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -61,7 +60,7 @@ export default function LoginScreen() {
       const terms = await TermCondition();
       setTerm(terms.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 

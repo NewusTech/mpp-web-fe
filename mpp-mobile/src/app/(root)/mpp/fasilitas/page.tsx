@@ -5,7 +5,6 @@ import CardFasilitas from "@/components/mpp/cardFasilitas/cardFasilitas";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import { FacilityType } from "@/types/type";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 const itemsPerPage = 12;
 const limitData = 1000000;
 
@@ -19,7 +18,7 @@ export default function Fasilitas() {
 
       setFasilitas(fasilitas.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 

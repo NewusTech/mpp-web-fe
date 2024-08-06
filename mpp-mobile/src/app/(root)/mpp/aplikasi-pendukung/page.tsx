@@ -5,7 +5,6 @@ import CardAplikasiPendukung from "@/components/landing/aboutScreen/cardAplikasi
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import { AppType } from "@/types/type";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export default function AplikasiPendukung() {
   const [apps, setApps] = useState<AppType[]>();
@@ -18,7 +17,7 @@ export default function AplikasiPendukung() {
 
       setApps(app.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 

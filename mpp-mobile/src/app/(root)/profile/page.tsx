@@ -1,12 +1,10 @@
 "use client";
 
-import sad from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import picture from "@/../../public/assets/profile-picture.png";
 import fetchProfile from "@/components/fetching/profile/profile";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -67,7 +65,7 @@ export default function ProfilePage() {
       setNewProfile(result.data);
       setDocuments(docs.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -209,7 +207,6 @@ export default function ProfilePage() {
       await response.json();
 
       if (response.ok) {
-        // toast.success("Berhasil mengupdate foto profil!");
         Swal.fire({
           icon: "success",
           title: "Berhasil mengupdate foto profile!",
@@ -312,7 +309,6 @@ export default function ProfilePage() {
       await response.json();
 
       if (response.ok) {
-        // toast.success("Berhasil Memperbarui Kata Sandi!");
         Swal.fire({
           icon: "success",
           title: "Berhasil Memperbarui Kata Sandi!",

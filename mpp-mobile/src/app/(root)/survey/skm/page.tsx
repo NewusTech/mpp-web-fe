@@ -8,9 +8,6 @@ import Cookies from "js-cookie";
 import { setDataSurvei } from "@/store/action/actionSurvei";
 import { Label } from "@radix-ui/react-label";
 import { redirect, useRouter } from "next/navigation";
-import { toast } from "sonner";
-import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
-import Image from "next/legacy/image";
 import { Textarea } from "@/components/ui/textarea";
 import { schemaSkm } from "@/lib/zodSchema";
 import z from "zod";
@@ -136,7 +133,6 @@ export default function SurveySKMPage() {
 
         await response.json();
 
-        // toast("Terimakasih telah mengisi survei!", { duration: 2000 });
         Swal.fire({
           icon: "success",
           title: "Terimakasih telah mengisi survei!",
@@ -146,7 +142,6 @@ export default function SurveySKMPage() {
         });
         localStorage.clear();
       } catch (error) {
-        // toast("Gagal mengisi survey!");
         Swal.fire({
           icon: "error",
           title: "Gagal mengisi survei!",

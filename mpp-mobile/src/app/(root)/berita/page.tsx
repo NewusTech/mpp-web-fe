@@ -1,10 +1,8 @@
 "use client";
 
-import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import fetchNews from "@/components/fetching/berita/berita";
 import { Berita, Instansi } from "@/types/type";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -17,7 +15,6 @@ import fetchInstansi from "@/components/fetching/instansi/instansi";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import PaginationComponent from "@/components/pagination/paginationComponent";
-import Image from "next/legacy/image";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import { formatDateArrange } from "@/helpers/logout/formatted";
 import InputDate from "@/components/others/inputDate/inputDate";
@@ -46,7 +43,7 @@ export default function BeritaPage() {
 
       setInstansis(dinas.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 
@@ -74,7 +71,7 @@ export default function BeritaPage() {
       );
       setNews(berita.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

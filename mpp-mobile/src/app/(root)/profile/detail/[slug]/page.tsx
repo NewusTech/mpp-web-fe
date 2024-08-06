@@ -15,7 +15,6 @@ import { Label } from "@radix-ui/react-label";
 import { Textarea } from "@/components/ui/textarea";
 import { DesaType, KecamatanType, UpdateUserType } from "@/types/type";
 import fetchProfile from "@/components/fetching/profile/profile";
-import { toast } from "sonner";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import {
@@ -73,8 +72,7 @@ export default function ProfileEditPage({
       setFormData(user.data);
       setKecamatanId(user.data.kecamatan_id);
     } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -91,8 +89,7 @@ export default function ProfileEditPage({
       const kecamatanDatas = await kecamatanFetch(search, limit);
       setKecamatans(kecamatanDatas.data);
     } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data kecamatan!");
+      console.log(error);
     }
   };
 
@@ -105,8 +102,7 @@ export default function ProfileEditPage({
       const desaDatas = await desaFetch(search, limit, kecamatan_id);
       setDesas(desaDatas.data);
     } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data desa!");
+      console.log(error);
     }
   };
 
@@ -237,7 +233,6 @@ export default function ProfileEditPage({
       await response.json();
 
       if (response.ok) {
-        // toast.success("Berhasil mengupdate profile!");
         Swal.fire({
           icon: "success",
           title: "Berhasil mengupdate profile!",
@@ -249,8 +244,7 @@ export default function ProfileEditPage({
         setIsLoading(false);
       }
     } catch (error) {
-      console.log(error, "error");
-      toast("Failed to update profile!");
+      console.log(error);
     } finally {
       setIsLoading(false);
       router.push(`/profile?tabs=${"data-diri"}`);
@@ -293,7 +287,6 @@ export default function ProfileEditPage({
       );
 
       if (response.ok) {
-        // toast.success("Berhasil mengupdate profile!");
         Swal.fire({
           icon: "success",
           title: "Berhasil mengupdate dokumen!",
@@ -304,8 +297,7 @@ export default function ProfileEditPage({
         setIsLoading(false);
       }
     } catch (error) {
-      console.log(error, "error");
-      toast("Failed to update profile!");
+      console.log(error);
     } finally {
       setIsLoading(false);
       router.push(`/profile?tabs=${"dokumen-pendukung"}`);

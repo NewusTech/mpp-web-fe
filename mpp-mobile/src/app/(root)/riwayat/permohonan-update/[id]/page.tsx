@@ -4,17 +4,10 @@ import fetchInputForm from "@/components/fetching/updatePermohonan/updatePermoho
 import LayoutInput from "@/components/layoutForms/layoutForm";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import {
-  DataInputItem,
-  DataRiwayatPermohonan,
-  LayananFormPermohonanType,
-  LayananFormType,
-  LayananType,
-} from "@/types/type";
+import { DataRiwayatPermohonan, LayananFormPermohonanType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
-import { toast } from "sonner";
 import Image from "next/legacy/image";
 import { truncateTitle } from "@/utils/formatTitle";
 import { Button } from "@/components/ui/button";
@@ -67,7 +60,6 @@ export default function PermohonanUpdateHistory({
       setFileName(initialFileNames);
     } catch (error) {
       console.log(error);
-      toast("Gagal Memuat Data!");
     }
   };
 
@@ -205,7 +197,6 @@ export default function PermohonanUpdateHistory({
       const dataInput = await response.json();
 
       if (response.ok) {
-        // toast(dataInput.message);
         Swal.fire({
           icon: "success",
           title: "Berhasil memperbarui permohonan!",
@@ -215,7 +206,6 @@ export default function PermohonanUpdateHistory({
         });
         localStorage.clear();
       } else {
-        // toast.error(dataInput.message);
         Swal.fire({
           icon: "error",
           title: `${dataInput.message}`,
@@ -225,7 +215,6 @@ export default function PermohonanUpdateHistory({
         });
       }
     } catch (error) {
-      // toast.error("An error occurred while submitting the form.");
       Swal.fire({
         icon: "error",
         title: "Gagal memperbarui permohonan!",

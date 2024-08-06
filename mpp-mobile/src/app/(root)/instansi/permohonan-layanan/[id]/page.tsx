@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/select";
 import { useDispatch } from "react-redux";
 import { setId } from "@/store/action/actionPermohonanLayanan";
-import { toast } from "sonner";
 import Steps from "@/components/steps/steps";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
 import { JenisLayananType } from "@/types/type";
@@ -69,7 +68,7 @@ export default function PermohonanLayananFirstScreen({
         setSelectedService(selected);
       }
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 

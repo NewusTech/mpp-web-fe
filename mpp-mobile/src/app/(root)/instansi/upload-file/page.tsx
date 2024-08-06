@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { ChangeEvent, useEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
-import backHome from "@/../../public/assets/undraw_feeling_blue_-4-b7q.svg";
 import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
 import { toast } from "sonner";
@@ -161,7 +160,7 @@ export default function UploadFilePage() {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error("An error occurred while submitting the form.");
+      console.log(error);
     } finally {
       setIsLoading(false);
       router.push(`/riwayat?tabs=${"permohonan"}`);

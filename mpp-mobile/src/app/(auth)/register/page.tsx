@@ -11,7 +11,6 @@ import {
 import { Raleway } from "next/font/google";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Cookies from "js-cookie";
@@ -30,11 +29,6 @@ import parse from "html-react-parser";
 import { schemaRegister } from "@/lib/zodSchema";
 import TermCondition from "@/components/fetching/termCond/termCond";
 import Swal from "sweetalert2";
-
-const raleway = Raleway({
-  subsets: ["latin"],
-  weight: ["400", "500", "700", "700", "800", "900"],
-});
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -113,7 +107,7 @@ export default function RegisterScreen() {
 
       setTerm(terms.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 
@@ -127,7 +121,7 @@ export default function RegisterScreen() {
 
       setKecamatan(kecamatans.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 
@@ -136,7 +130,7 @@ export default function RegisterScreen() {
       const desa = await desaFetch(search, limit, id);
       setDesa(desa.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 
@@ -183,9 +177,6 @@ export default function RegisterScreen() {
         const result = await response.json();
 
         if (response.ok) {
-          // toast.success("Berhasil membuat akun, silahkan login", {
-          //   duration: 1000,
-          // });
           Swal.fire({
             icon: "success",
             title: "Berhasil membuat akun, Silahkan Login!",
@@ -195,7 +186,6 @@ export default function RegisterScreen() {
           });
           return router.push("/login");
         } else {
-          // toast.error(result.message || "Gagal membuat akun!");
           Swal.fire({
             icon: "error",
             title: `${result.message} || Gagal membuat akun!`,
@@ -206,8 +196,6 @@ export default function RegisterScreen() {
         }
       } catch (error: any) {
         console.log(error);
-
-        // toast(error.message);
         Swal.fire({
           icon: "error",
           title: `${error.message}`,
