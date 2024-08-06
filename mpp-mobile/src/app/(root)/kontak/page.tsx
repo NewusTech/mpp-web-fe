@@ -3,9 +3,7 @@
 import fetchContact from "@/components/fetching/contact/contact";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import { ContactType } from "@/types/type";
-import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 export const dynamic = "force-dynamic";
 
 export default function KontakPage() {
@@ -19,7 +17,7 @@ export default function KontakPage() {
 
       setKontak(contact.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

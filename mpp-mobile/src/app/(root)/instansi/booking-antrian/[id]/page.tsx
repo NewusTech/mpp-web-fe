@@ -12,7 +12,6 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AntrianCheckType, AntrianFormType } from "@/types/type";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { redirect, useRouter } from "next/navigation";
 import { schemaBooking } from "@/lib/zodSchema";
@@ -77,7 +76,7 @@ export default function BookingAntrianPage({
 
       setServices(layananByInstansi.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -114,7 +113,6 @@ export default function BookingAntrianPage({
         const result = await response.json();
 
         if (response.ok) {
-          // toast.success("Berhasil membooking antrian!");
           Swal.fire({
             icon: "success",
             title: "Berhasil membuat antrian!",
@@ -133,7 +131,6 @@ export default function BookingAntrianPage({
             `/instansi/booking-antrian/booking-result/${result.data.id}`
           );
         } else {
-          // toast("Gagal booking antrian!");
           Swal.fire({
             icon: "error",
             title: "Gagal membuat antrian!",
@@ -143,7 +140,6 @@ export default function BookingAntrianPage({
           });
         }
       } catch (error) {
-        // toast("Gagal booking antrian!");
         Swal.fire({
           icon: "success",
           title: "Gagal membuat antrian!",

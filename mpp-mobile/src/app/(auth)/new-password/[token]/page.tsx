@@ -4,10 +4,8 @@ import { Button } from "@/components/ui/button";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import Image from "next/legacy/image";
 import { Raleway } from "next/font/google";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
@@ -44,7 +42,6 @@ export default function NewPassword({ params }: { params: { token: string } }) {
       await response.json();
 
       if (response.ok) {
-        // toast("Kata Sandi berhasil diubah, Silahkan Login!");
         Swal.fire({
           icon: "success",
           title: "Kata Sandi berhasil diubah, Silahkan Login!",

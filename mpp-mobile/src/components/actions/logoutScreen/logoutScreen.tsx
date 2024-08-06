@@ -2,7 +2,6 @@
 
 import { LogOut } from "lucide-react";
 import Cookies from "js-cookie";
-import { toast } from "sonner";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import Swal from "sweetalert2";
 
@@ -14,7 +13,6 @@ export default function LogoutScreen({
   const handleLogoutClick = () => {
     Cookies.remove("Authorization");
     handleLogout();
-    // toast.success("Logout berhasil!", { duration: 1000 });
     Swal.fire({
       icon: "success",
       title: "Berhasil logout, silahkan login kembali!",

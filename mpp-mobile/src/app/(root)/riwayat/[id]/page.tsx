@@ -2,7 +2,6 @@
 
 import { PermohonanDataType } from "@/types/type";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { formatLongDate } from "@/helpers/logout/formatted";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import Link from "next/link";
 import { ChevronLeft, Loader } from "lucide-react";
 import { redirect, useRouter } from "next/navigation";
 import Image from "next/legacy/image";
+import Swal from "sweetalert2";
 
 export default function HasilPermohonan({
   params,
@@ -59,7 +59,7 @@ export default function HasilPermohonan({
 
       setPermohonan(result.data);
     } catch (error) {
-      toast.error("Terjadi kesalahan");
+      console.log(error);
     }
   };
 
@@ -147,11 +147,17 @@ export default function HasilPermohonan({
       a.remove();
 
       if (response.ok) {
-        toast("Berhasil download laporan");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil download laporan!",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
         setIsLoading(false);
       }
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import {
@@ -62,7 +61,7 @@ export default function SurveySkmPage() {
       const instansis = await fetchInstansiSurvei(page, limit, skm);
       setInstances(instansis.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 
@@ -71,7 +70,7 @@ export default function SurveySkmPage() {
       const layanan = await LayananSurvei(id, skm);
       setService(layanan.data);
     } catch (error) {
-      toast("Gagal Memuat Data!");
+      console.log(error);
     }
   };
 
@@ -140,7 +139,6 @@ export default function SurveySkmPage() {
       );
 
       if (response.ok) {
-        // toast("Pengecekan Survei Berhasil!");
         Swal.fire({
           icon: "success",
           title: "Pengecekan survei berhasil!",
@@ -151,7 +149,6 @@ export default function SurveySkmPage() {
         setIsLoading(false);
         router.push("/survey/skm");
       } else {
-        // toast("Anda Telah Mengisi Survei!");
         Swal.fire({
           icon: "warning",
           title: "Anda telah mengisi survei!",
@@ -161,7 +158,6 @@ export default function SurveySkmPage() {
         });
       }
     } catch (error) {
-      // toast("Anda Telah Mengisi Survei!");
       Swal.fire({
         icon: "warning",
         title: "Anda telah mengisi survei!",

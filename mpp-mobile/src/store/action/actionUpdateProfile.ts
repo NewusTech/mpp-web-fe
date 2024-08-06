@@ -1,7 +1,6 @@
 import { UpdateUserType } from "@/types/type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import { toast } from "sonner";
 
 interface UserData {
   id?: number;
@@ -60,7 +59,7 @@ export function updateProfileUser(profileUser: UpdateUserType, slug: string) {
 
       dispatch(setUpdateProfile(result.data));
     } catch (error) {
-      toast("Tidak berhasil mengupdate profile!");
+      console.log(error);
     }
   };
 }

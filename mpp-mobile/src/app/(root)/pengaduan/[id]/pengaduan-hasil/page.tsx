@@ -8,7 +8,6 @@ import { ChevronLeft } from "lucide-react";
 import Image from "next/legacy/image";
 import { redirect, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 
 export default function PengaduanHasil({ params }: { params: { id: number } }) {
@@ -22,7 +21,7 @@ export default function PengaduanHasil({ params }: { params: { id: number } }) {
 
       setPengaduan(pengaduan.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 

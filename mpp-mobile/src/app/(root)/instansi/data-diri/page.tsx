@@ -20,7 +20,6 @@ import {
 } from "@/types/type";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import fetchProfile from "@/components/fetching/profile/profile";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 import kecamatanFetch from "@/components/fetching/kecamatan/kecamatan";
 import desaFetch from "@/components/fetching/desa/desa";
@@ -69,8 +68,7 @@ export default function DataDiriPage() {
       setKecamatanId(user.data.kecamatan_id);
       setTerms(term.data);
     } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -86,8 +84,7 @@ export default function DataDiriPage() {
       const kecamatanDatas = await kecamatanFetch(search, limit);
       setKecamatans(kecamatanDatas.data);
     } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data kecamatan!");
+      console.log(error);
     }
   };
 
@@ -100,8 +97,7 @@ export default function DataDiriPage() {
       const desaDatas = await desaFetch(search, limit, kecamatan_id);
       setDesas(desaDatas.data);
     } catch (error) {
-      console.log(error, "error");
-      toast("Gagal mendapatkan data desa!");
+      console.log(error);
     }
   };
 
@@ -168,7 +164,6 @@ export default function DataDiriPage() {
       );
 
       if (response.ok) {
-        // toast.success("Berhasil mengupdate profile!");
         Swal.fire({
           icon: "success",
           title: "Berhasil mengupdate profile!",
@@ -186,8 +181,7 @@ export default function DataDiriPage() {
         }, {});
         setErrors(formattedErrors);
       } else {
-        console.log(error, "error");
-        // toast("Failed to update profile!");
+        console.log(error);
         Swal.fire({
           icon: "error",
           title: "Failed to update profile!",

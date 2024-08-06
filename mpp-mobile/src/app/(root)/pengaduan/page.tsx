@@ -31,18 +31,15 @@ import {
   PengaduanType,
   ProfileNewType,
 } from "@/types/type";
-import { toast } from "sonner";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
 import Cookies from "js-cookie";
 import { redirect, useRouter } from "next/navigation";
 import fetchPengaduanLists from "@/components/fetching/pengaduan/pengaduan";
 import PaginationComponent from "@/components/pagination/paginationComponent";
-import Image from "next/image";
 import z from "zod";
 import { formatDateArrange, formatLongDate } from "@/helpers/logout/formatted";
 import LoadingComponent from "@/components/loading/LoadingComponent";
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
 import fetchInstansiPengaduan from "@/components/fetching/instansi/pengaduanInstansi";
 import LayananPengaduan from "@/components/fetching/layanan/layananPengaduan/layananPengaduan";
 import { statusPengaduans } from "@/data/data";
@@ -164,7 +161,7 @@ export default function PengaduanScreen() {
       setPengaduanLists(pengaduans.data);
       setLoadingData(false);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     } finally {
       setLoadingData(false);
     }
@@ -226,7 +223,7 @@ export default function PengaduanScreen() {
 
       setInstansi(res.data || []);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -240,7 +237,7 @@ export default function PengaduanScreen() {
 
       setService(layananByInstansi.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -297,10 +294,6 @@ export default function PengaduanScreen() {
     if (pengaduanImage) {
       formData.append("image", pengaduanImage);
     }
-
-    formData.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
 
     const isValid = await validateForm();
 

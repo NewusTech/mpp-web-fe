@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import Image from "next/legacy/image";
 import { AntrianDataType } from "@/types/type";
 import { useState } from "react";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
 import { Loader } from "lucide-react";
 import logo from "@/../public/assets/DesignLogoMpp.svg";
 import { Raleway } from "next/font/google";
 import { formatTime } from "@/utils/formatTime";
 import { formattedDate } from "@/helpers/logout/formatted";
+import Swal from "sweetalert2";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -52,10 +52,16 @@ export default function PopUpAntrianComponent({
       a.remove();
 
       if (response.ok) {
-        toast("Berhasil download laporan");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil download laporan",
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

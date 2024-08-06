@@ -1,22 +1,13 @@
 "use client";
 
 import fetchInstansi from "@/components/fetching/instansi/instansi";
-import { Suspense, useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useEffect, useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
-import { toast } from "sonner";
 import SearchComponent from "@/components/others/searchComponent/searchComponent";
 import CardLayananComponent from "@/components/services/others/cardLayananComponent";
 import PaginationComponent from "@/components/pagination/paginationComponent";
 import { Layanantype } from "@/types/type";
 import LoadingComponent from "@/components/loading/LoadingComponent";
-import { statusInstansis } from "@/data/data";
 import DataNotFound from "@/components/loading/dataNotFound";
 
 export default function LayananPage() {
@@ -33,7 +24,7 @@ export default function LayananPage() {
 
       setInstansi(res.data || []);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 

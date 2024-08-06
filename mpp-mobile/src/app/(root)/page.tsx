@@ -11,7 +11,6 @@ import fetchNews from "@/components/fetching/berita/berita";
 import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import facilitiesFetch from "@/components/fetching/facilities/facilities";
-import { toast } from "sonner";
 import Image from "next/legacy/image";
 import formatDate from "@/helpers/logout/formatted";
 import fetchInformasi from "@/components/fetching/infromasi/informasi";
@@ -32,12 +31,7 @@ import {
   TermType,
   VideoType,
 } from "@/types/type";
-import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 import { truncateTitle } from "@/utils/formatTitle";
 import TermCondition from "@/components/fetching/termCond/termCond";
@@ -62,7 +56,7 @@ function Home() {
       const carousel = await fetchCarousel();
       setCarousel(carousel.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -78,7 +72,7 @@ function Home() {
       setInfoLanding(dashboard.data);
       setLayanan(layanan);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -104,7 +98,7 @@ function Home() {
 
       setFacilities(fasilitas.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 
@@ -128,7 +122,7 @@ function Home() {
 
       setTerm(terms.data);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 

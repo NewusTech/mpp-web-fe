@@ -2,7 +2,6 @@
 
 import statistikFetch from "@/components/fetching/statistiks/statistik";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import {
   Chart as ChartJS,
@@ -67,7 +66,7 @@ export default function StatisticsPage() {
       updateChartData(result.data.countPerYear);
       calculateTotalCount(result.data.countPerYear);
     } catch (error) {
-      toast("Gagal mendapatkan data!");
+      console.log(error);
     }
   };
 

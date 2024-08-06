@@ -7,7 +7,6 @@ import { Raleway } from "next/font/google";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
@@ -41,7 +40,6 @@ export default function ForgotPassword() {
       await response.json();
 
       if (response.ok) {
-        // toast("Silahkan cek email anda");
         Swal.fire({
           icon: "success",
           title: "Silahkan cek email anda!",
