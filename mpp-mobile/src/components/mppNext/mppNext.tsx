@@ -56,7 +56,7 @@ export default function MppNext({
           <div className="p-4 md:h-full">
             {video && (
               <video
-                className="md:w-full md:h-full object-cover rounded-xl"
+                className="md:w-full md:h-full object-cover rounded-sm"
                 width={650}
                 height={310}
                 autoPlay
@@ -103,7 +103,7 @@ export default function MppNext({
                     {alur && (
                       <Image
                         src={alur.image}
-                        className="w-full h-full md:h-full object-fit rounded-xl"
+                        className="w-full h-full md:h-full object-fit rounded-sm"
                         width={960}
                         height={450}
                         alt="permohonan & antrian"

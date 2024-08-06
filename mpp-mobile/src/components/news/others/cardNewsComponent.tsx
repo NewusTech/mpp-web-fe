@@ -14,13 +14,13 @@ export default function CardNewsComponent({ news }: { news: Berita }) {
   const descTruncate = truncateTitle(news.desc, 180);
 
   return (
-    <div className="flex flex-col px-5 pt-4 bg-neutral-50 max-w-[350px] md:max-w-full md:min-h-[500px] shadow-md rounded-xl gap-[16px] slide-up-animation">
+    <div className="flex flex-col px-5 pt-4 bg-neutral-50 max-w-[350px] md:max-w-full md:min-h-[500px] shadow-md rounded-md gap-[16px] slide-up-animation">
       <Link
         href={`/berita/${news.slug}`}
-        className="flex relative flex-col w-full h-[200px] md:min-h-[240px] rounded-xl">
+        className="flex relative flex-col w-full h-[200px] md:min-h-[240px] rounded-md">
         <Image
           src={news.image}
-          className="w-full h-full object-fit rounded-xl"
+          className="w-full h-full object-center object-cover rounded-md"
           width={1000}
           height={1000}
           layout="fill"

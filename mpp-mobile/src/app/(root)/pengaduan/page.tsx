@@ -29,6 +29,7 @@ import {
   JenisLayananType,
   PengaduanFormType,
   PengaduanType,
+  ProfileNewType,
 } from "@/types/type";
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/useDebounce/useDebounce";
@@ -49,6 +50,7 @@ import { formatCreateTime } from "@/utils/formatTime";
 import InputDate from "@/components/others/inputDate/inputDate";
 import Swal from "sweetalert2";
 import DataNotFound from "@/components/loading/dataNotFound";
+import FetchLayananAdminName from "@/components/fetching/layananAdminName/layananAdminName";
 
 const schema = z.object({
   judul: z.string().refine((val) => val !== "", "Judul harus diisi"),
@@ -67,6 +69,7 @@ export default function PengaduanScreen() {
   const [pengaduan, setPengaduan] = useState<PengaduanFormType>({
     instansi_id: 0,
     layanan_id: 0,
+    admin_id: 0,
     status: 0,
     aduan: "",
     judul: "",
@@ -97,6 +100,7 @@ export default function PengaduanScreen() {
   const firstDayOfMonth = new Date(now.getFullYear(), 0, 1);
   const [startDate, setStartDate] = useState<Date | undefined>(firstDayOfMonth);
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+  const [layanans, setLayanans] = useState<ProfileNewType[]>();
 
   const validateForm = async () => {
     try {
@@ -181,6 +185,22 @@ export default function PengaduanScreen() {
     }
   }, [debounceSearch, startDateFormatted, endDateFormatted, status]);
 
+  const fetchLayananName = async (id: number) => {
+    try {
+      const layanans = await FetchLayananAdminName(id);
+
+      setLayanans(layanans.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (pengaduan.layanan_id) {
+      fetchLayananName(pengaduan.layanan_id);
+    }
+  }, [pengaduan.layanan_id]);
+
   const paginate = (
     items: PengaduanType[],
     pageNumber: number,
@@ -255,6 +275,13 @@ export default function PengaduanScreen() {
     }));
   };
 
+  const handleAdminChange = (selectedLayananId: string) => {
+    setPengaduan((prevState) => ({
+      ...prevState,
+      admin_id: parseInt(selectedLayananId),
+    }));
+  };
+
   const handlePengaduan = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -263,12 +290,17 @@ export default function PengaduanScreen() {
     const formData = new FormData();
     formData.append("instansi_id", String(pengaduan.instansi_id));
     formData.append("layanan_id", String(pengaduan.layanan_id));
+    formData.append("admin_id", String(pengaduan.admin_id));
     formData.append("status", String(0));
     formData.append("aduan", pengaduan.aduan);
     formData.append("judul", pengaduan.judul);
     if (pengaduanImage) {
       formData.append("image", pengaduanImage);
     }
+
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
 
     const isValid = await validateForm();
 
@@ -289,7 +321,6 @@ export default function PengaduanScreen() {
         );
 
         if (response.ok) {
-          // toast.success("Berhasil mengajukan pengaduan!");
           Swal.fire({
             icon: "success",
             title: "Berhasil mengajukan pengaduan!",
@@ -300,6 +331,7 @@ export default function PengaduanScreen() {
           setPengaduan({
             instansi_id: 0,
             layanan_id: 0,
+            admin_id: 0,
             status: 0,
             aduan: "",
             judul: "",
@@ -321,7 +353,6 @@ export default function PengaduanScreen() {
             );
             setFormErrors(errors);
           } else {
-            // toast.error("Gagal mengajukan pengaduan!");
             Swal.fire({
               icon: "error",
               title: "Gagal mengajukan pengaduan!",
@@ -332,7 +363,6 @@ export default function PengaduanScreen() {
           }
         }
       } catch (error) {
-        // toast("Gagal mengajukan pengaduan!");
         Swal.fire({
           icon: "error",
           title: "Gagal mengajukan pengaduan!",
@@ -578,6 +608,44 @@ export default function PengaduanScreen() {
                               {errors.layanan_id._errors[0]}
                             </div>
                           )}
+                        </div>
+
+                        <div className="flex flex-col mx-[1px] md:mt-4">
+                          <Label className="text-[12px] md:text-[14px] text-neutral-900 font-semibold text-start mb-2">
+                            Loket Admin
+                          </Label>
+
+                          <Select
+                            name="admin_id"
+                            onValueChange={handleAdminChange}>
+                            <SelectTrigger
+                              className={`${
+                                !pengaduan.admin_id ? "opacity-50" : ""
+                              } border border-neutral-800 rounded-[50px] w-full mx-0 pr-2`}>
+                              <SelectValue
+                                placeholder="Pilih Loket Admin"
+                                className={
+                                  pengaduan.admin_id
+                                    ? ""
+                                    : "placeholder:opacity-50"
+                                }
+                              />
+                            </SelectTrigger>
+                            <SelectContent className="w-full md:w-full">
+                              <div>
+                                {layanans?.map(
+                                  (item: ProfileNewType, i: number) => (
+                                    <SelectItem
+                                      key={i}
+                                      value={item.id.toString()}
+                                      className="pr-none">
+                                      {item.name}
+                                    </SelectItem>
+                                  )
+                                )}
+                              </div>
+                            </SelectContent>
+                          </Select>
                         </div>
 
                         <div className="flex flex-col my-[10px] md:my-4 mx-[1px]">

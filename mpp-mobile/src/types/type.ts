@@ -120,6 +120,7 @@ export interface PengaduanType {
 export interface PengaduanFormType {
   instansi_id: number;
   layanan_id: number;
+  admin_id: number;
   status: number;
   aduan: string;
   judul: string;
