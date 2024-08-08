@@ -7,6 +7,8 @@ import { truncateTitle } from "@/utils/formatTitle";
 export default function CardAplikasiPendukung({ app }: { app: AppType }) {
   const formatName = truncateTitle(app.name, 42);
 
+  console.log(app, "app dhdhd");
+
   return (
     <Link
       href={app.link}
@@ -22,9 +24,12 @@ export default function CardAplikasiPendukung({ app }: { app: AppType }) {
         />
       </div>
 
-      <div className="flex flex-col md:mt-0 w-full text-primary-700 hover:underline pl-2">
-        <p className="font-semibold text-primary-700 md:text-[16px]">
+      <div className="flex flex-col md:mt-0 w-full text-primary-700 pl-2">
+        <p className="font-semibold text-primary-700 md:text-[16px] hover:underline">
           {formatName}
+        </p>
+        <p className="font-normal text-neutral-900 md:text-[14px]">
+          {app.desc}
         </p>
       </div>
     </Link>
