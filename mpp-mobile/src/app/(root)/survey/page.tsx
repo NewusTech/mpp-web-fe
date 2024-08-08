@@ -306,7 +306,9 @@ export default function SurveySkmPage() {
                 className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
                 type="submit"
                 variant="warning"
-                disabled={isLoading || !selectedLayanan}
+                disabled={
+                  isLoading || !selectedDinas || !selectedLayanan || !date
+                }
                 onClick={handleButtonClick}>
                 {isLoading ? <Loader className="animate-spin" /> : "Isi SKM"}
               </Button>
