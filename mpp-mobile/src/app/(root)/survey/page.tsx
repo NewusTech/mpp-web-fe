@@ -185,7 +185,7 @@ export default function SurveySkmPage() {
           <div className="flex flex-col w-full px-6 md:px-[105px]">
             <div className="flex flex-col w-full items-center mb-[10px] md:mb-10 mx-[1px] mt-[62px]">
               <Select
-                name="layanan_id"
+                name="dinas_id"
                 onValueChange={handleSelectChangeDinas}
                 value={selectedDinas ? String(selectedDinas) : undefined}>
                 <SelectTrigger
@@ -306,7 +306,7 @@ export default function SurveySkmPage() {
                 className="text-[12px] text-neutral-50 w-[90px] md:w-[235px] h-[30px] md:h-[40px]"
                 type="submit"
                 variant="warning"
-                disabled={isLoading ? true : false}
+                disabled={isLoading || !selectedLayanan}
                 onClick={handleButtonClick}>
                 {isLoading ? <Loader className="animate-spin" /> : "Isi SKM"}
               </Button>
