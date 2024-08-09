@@ -6,7 +6,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 import Steps from "@/components/steps/steps";
 import Image from "next/legacy/image";
-import { toast } from "sonner";
 import { DataInputItem, LayananType } from "@/types/type";
 import { ChevronLeft, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -157,7 +156,13 @@ export default function UploadFilePage() {
         });
         localStorage.clear();
       } else {
-        toast.error(data.message);
+        Swal.fire({
+          icon: "success",
+          title: `${data?.message}`,
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error) {
       console.log(error);

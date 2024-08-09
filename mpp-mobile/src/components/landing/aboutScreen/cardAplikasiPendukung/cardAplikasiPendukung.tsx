@@ -7,8 +7,6 @@ import { truncateTitle } from "@/utils/formatTitle";
 export default function CardAplikasiPendukung({ app }: { app: AppType }) {
   const formatName = truncateTitle(app.name, 42);
 
-  console.log(app, "app dhdhd");
-
   return (
     <Link
       href={app.link}

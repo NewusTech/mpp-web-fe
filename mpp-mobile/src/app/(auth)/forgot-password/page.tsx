@@ -37,7 +37,7 @@ export default function ForgotPassword() {
         }
       );
 
-      await response.json();
+      const result = await response.json();
 
       if (response.ok) {
         Swal.fire({
@@ -48,6 +48,14 @@ export default function ForgotPassword() {
           position: "center",
         });
         router.push("/login");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: `${result?.message}`,
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error) {
       console.log(error);
