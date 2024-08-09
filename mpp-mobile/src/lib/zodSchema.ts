@@ -5,8 +5,8 @@ export const schemaRegister = z.object({
   nik: z.string().length(16, "NIK harus terdiri dari 16 karakter"),
   telepon: z
     .string()
-    .min(12, "Nomor telepon harus terdiri dari minimal 12 digit")
-    .max(13, "Nomor telepon harus terdiri dari maksimal 13 digit"),
+    .min(10, "Nomor telepon harus terdiri dari minimal 12 digit")
+    .max(15, "Nomor telepon harus terdiri dari maksimal 13 digit"),
   email: z.string().email("Email tidak valid"),
   kecamatan_id: z.string({ message: "Pilih Asal Kecamatan" }),
   desa_id: z.string({ message: "Pilih Asal Desa" }),
@@ -38,8 +38,8 @@ export const schemaDataDiri = z.object({
   email: z.string().email("Email tidak valid"),
   telepon: z
     .string()
-    .min(12, "Nomor telepon harus terdiri dari minimal 12 digit")
-    .max(13, "Nomor telepon harus terdiri dari maksimal 13 digit"),
+    .min(10, "Nomor telepon harus terdiri dari minimal 12 digit")
+    .max(15, "Nomor telepon harus terdiri dari maksimal 13 digit"),
   nik: z.string().length(16, "NIK harus terdiri dari 16 karakter"),
   gender: z.string({ message: "Pilih Jenis Kelamin" }),
   goldar: z.string({ message: "Pilih Golongan Darah" }),
@@ -69,8 +69,8 @@ export const schemaUpdateDiri = z.object({
   email: z.string().email("Email tidak valid"),
   telepon: z
     .string()
-    .min(12, "Nomor telepon harus terdiri dari minimal 12 digit")
-    .max(13, "Nomor telepon harus terdiri dari maksimal 13 digit"),
+    .min(10, "Nomor telepon harus terdiri dari minimal 12 digit")
+    .max(15, "Nomor telepon harus terdiri dari maksimal 13 digit"),
   nik: z.string().length(16, "NIK harus terdiri dari 16 karakter"),
   gender: z.string({ message: "Pilih Jenis Kelamin" }).optional(),
   goldar: z.string({ message: "Pilih Golongan Darah" }).optional(),

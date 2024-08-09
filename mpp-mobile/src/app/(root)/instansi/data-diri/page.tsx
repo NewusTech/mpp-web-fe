@@ -163,6 +163,8 @@ export default function DataDiriPage() {
         }
       );
 
+      const result = await response.json();
+
       if (response.ok) {
         Swal.fire({
           icon: "success",
@@ -172,6 +174,14 @@ export default function DataDiriPage() {
           position: "center",
         });
         router.push("/instansi/formulir");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: `${result?.message}`,
+          timer: 2000,
+          showConfirmButton: false,
+          position: "center",
+        });
       }
     } catch (error: any) {
       if (error instanceof z.ZodError) {

@@ -188,7 +188,7 @@ export default function RegisterScreen() {
         } else {
           Swal.fire({
             icon: "error",
-            title: `${result.message} || Gagal membuat akun!`,
+            title: `${result.message} dan Gagal membuat akun!`,
             timer: 2000,
             showConfirmButton: false,
             position: "center",
