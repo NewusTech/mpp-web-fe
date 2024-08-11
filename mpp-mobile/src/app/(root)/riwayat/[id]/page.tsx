@@ -267,14 +267,16 @@ export default function HasilPermohonan({
           <div
             className="fixed inset-0 bg-neutral-900 bg-opacity-50 flex items-center justify-center z-50"
             onClick={handleBackdropClick}>
-            <div className="bg-neutral-50 p-4 rounded-xl w-10/12 md:max-w-3xl mx-auto">
-              <Image
-                src={permohonan?.fileoutput || ""}
-                alt="Selected alur mpp"
-                className="w-full h-full object-cover rounded-xl"
-                width={1920}
-                height={1080}
-              />
+            <div className="bg-neutral-50 p-4 rounded-xl w-10/12 md:w-6/12 h-4/6">
+              {permohonan?.fileoutput && (
+                <iframe
+                  allowFullScreen
+                  src={permohonan?.fileoutput}
+                  title="Manual Book"
+                  className="w-full h-full rounded-md">
+                  {permohonan?.layanan_name}
+                </iframe>
+              )}
             </div>
           </div>
         )}
