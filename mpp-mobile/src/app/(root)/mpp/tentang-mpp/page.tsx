@@ -21,7 +21,7 @@ export default function MppPage() {
   });
   const [videos, setVideos] = useState<VideoType>();
   const [alurs, setAlurs] = useState<AlurType[]>();
-  const [book, setBook] = useState<ManualBookType>();
+  const [book, setBook] = useState<ManualBookType[]>();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -119,19 +119,23 @@ export default function MppPage() {
                 </h4>
               </div>
               <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
-                {book && (
-                  <video
-                    className="md:w-full md:h-full object-cover rounded-xl"
-                    width={650}
-                    height={310}
-                    autoPlay
-                    src={book.video}
-                    muted
-                    controls>
-                    <source src={book.video} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
+                {book &&
+                  book?.map((item: ManualBookType, i: number) => {
+                    return (
+                      <video
+                        key={i}
+                        className="md:w-full md:h-full object-cover rounded-xl"
+                        width={650}
+                        height={310}
+                        autoPlay
+                        src={item.video}
+                        muted
+                        controls>
+                        <source src={item.video} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    );
+                  })}
               </div>
             </div>
 
@@ -142,15 +146,19 @@ export default function MppPage() {
                 </h4>
               </div>
               <div className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
-                {book?.dokumen && (
-                  <iframe
-                    allowFullScreen
-                    src={book.dokumen}
-                    title="Manual Book"
-                    className="rounded-b-xl w-full h-full">
-                    {book.id}
-                  </iframe>
-                )}
+                {book &&
+                  book?.map((item: ManualBookType, i: number) => {
+                    return (
+                      <iframe
+                        key={i}
+                        allowFullScreen
+                        src={item.dokumen}
+                        title="Manual Book"
+                        className="rounded-b-xl w-full h-full">
+                        {item.id}
+                      </iframe>
+                    );
+                  })}
               </div>
             </div>
           </div>

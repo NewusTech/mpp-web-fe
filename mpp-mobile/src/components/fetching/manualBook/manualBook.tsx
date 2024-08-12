@@ -1,6 +1,6 @@
 export default async function ManualBooks() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/manualbook/get`,
+    `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/manualbook/get?search=User`,
     {
       method: "GET",
       headers: {
