@@ -72,30 +72,34 @@ function Home() {
 
   useEffect(() => {
     const auth = Cookies.get("Authorization");
+    let socket: Socket | null = null;
+  
     if (auth) {
-
       const decodedToken = jwtDecode<JwtPayload>(auth);
+  
       // Registrasi Service Worker
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
           .then(reg => console.log('Service Worker Registered'))
           .catch(err => console.log('Service Worker Registration Failed:', err));
       }
-
+  
       // Inisialisasi Socket.IO Client
       socket = io('https://backend-mpp.newus.id');
-
+  
       // Dengarkan event dari server
       socket.on('UpdateStatus', (pesansocket: any) => {
         if (pesansocket.iduser == decodedToken?.userId) {
-        sendNotification(pesansocket.pesansocket);
+          sendNotification(pesansocket.pesansocket);
         }
       });
     }
-
+  
     // Cleanup ketika komponen di-unmount
     return () => {
-      socket.disconnect();
+      if (socket) {
+        socket.disconnect();
+      }
     };
   }, []);
 
