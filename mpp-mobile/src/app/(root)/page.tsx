@@ -36,15 +36,15 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 import { truncateTitle } from "@/utils/formatTitle";
 import TermCondition from "@/components/fetching/termCond/termCond";
-import lambang from "@/../../public/assets/DesignLogoMpp.svg";
-import { io, Socket } from 'socket.io-client';
-import { jwtDecode } from 'jwt-decode';
+// import lambang from "@/../../public/assets/DesignLogoMpp.svg";
+// import { io, Socket } from 'socket.io-client';
+// import { jwtDecode } from 'jwt-decode';
 
-let socket: Socket;
+// let socket: Socket;
 
-interface JwtPayload {
-  userId: string;
-}
+// interface JwtPayload {
+//   userId: string;
+// }
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
@@ -70,60 +70,60 @@ function Home() {
     }
   };
 
-  useEffect(() => {
-    const auth = Cookies.get("Authorization");
-    let socket: Socket | null = null;
+  // useEffect(() => {
+  //   const auth = Cookies.get("Authorization");
+  //   let socket: Socket | null = null;
   
-    if (auth) {
-      const decodedToken = jwtDecode<JwtPayload>(auth);
+  //   if (auth) {
+  //     const decodedToken = jwtDecode<JwtPayload>(auth);
   
-      // Registrasi Service Worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('Service Worker Registered'))
-          .catch(err => console.log('Service Worker Registration Failed:', err));
-      }
+  //     // Registrasi Service Worker
+  //     if ('serviceWorker' in navigator) {
+  //       navigator.serviceWorker.register('/sw.js')
+  //         .then(reg => console.log('Service Worker Registered'))
+  //         .catch(err => console.log('Service Worker Registration Failed:', err));
+  //     }
   
-      // Inisialisasi Socket.IO Client
-      socket = io('https://backend-mpp.newus.id');
+  //     // Inisialisasi Socket.IO Client
+  //     socket = io('https://backend-mpp.newus.id');
   
-      // Dengarkan event dari server
-      socket.on('UpdateStatus', (pesansocket: any) => {
-        if (pesansocket.iduser == decodedToken?.userId) {
-          sendNotification(pesansocket.pesansocket);
-        }
-      });
-    }
+  //     // Dengarkan event dari server
+  //     socket.on('UpdateStatus', (pesansocket: any) => {
+  //       if (pesansocket.iduser == decodedToken?.userId) {
+  //         sendNotification(pesansocket.pesansocket);
+  //       }
+  //     });
+  //   }
   
-    // Cleanup ketika komponen di-unmount
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, []);
+  //   // Cleanup ketika komponen di-unmount
+  //   return () => {
+  //     if (socket) {
+  //       socket.disconnect();
+  //     }
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    if (window.Notification && Notification.permission !== 'granted') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          console.log('Notification permission granted.');
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Notification && Notification.permission !== 'granted') {
+  //     Notification.requestPermission().then(permission => {
+  //       if (permission === 'granted') {
+  //         console.log('Notification permission granted.');
+  //       }
+  //     });
+  //   }
+  // }, []);
 
 
-  const sendNotification = (pesansocket: any) => {
-    if (navigator.serviceWorker && window.Notification && Notification.permission === 'granted') {
-      navigator.serviceWorker.ready.then(function (registration) {
-        registration.showNotification(`Permohonan anda ${pesansocket}`, {
-          body: `Permohonan yang anda ajukan ${pesansocket}`,
-          icon: `${lambang.src}`,
-        });
-      });
-    }
-  };
+  // const sendNotification = (pesansocket: any) => {
+  //   if (navigator.serviceWorker && window.Notification && Notification.permission === 'granted') {
+  //     navigator.serviceWorker.ready.then(function (registration) {
+  //       registration.showNotification(`Permohonan anda ${pesansocket}`, {
+  //         body: `Permohonan yang anda ajukan ${pesansocket}`,
+  //         icon: `${lambang.src}`,
+  //       });
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     fetchCarousels();
