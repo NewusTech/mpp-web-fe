@@ -123,3 +123,25 @@ body {
 .slide-right-animation {
   animation: slide-right 0.5s ease-in forwards;
 }
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #0000ff !important;
+  width: 35px !important;
+  height: 35px !important;
+  position: relative !important;
+}
+
+.swiper-pagination-bullet {
+  display: none !important;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  margin-left: 3em;
+}
+
+.prose ul {
+  list-style-type: disc;
+  margin-left: 3em;
+}

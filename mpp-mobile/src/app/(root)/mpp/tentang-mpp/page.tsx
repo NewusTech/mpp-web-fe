@@ -8,11 +8,12 @@ import {
   VideoType,
   VisiMisiType,
 } from "@/types/type";
-import parse from "html-react-parser";
+// import parse from "html-react-parser";
 import Image from "next/legacy/image";
 import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
 import fetchVideo from "@/components/fetching/video/video";
 import ManualBooks from "@/components/fetching/manualBook/manualBook";
+// import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 
 export default function MppPage() {
   const [visimisi, setVisimisi] = useState<VisiMisiType>({
@@ -66,7 +67,7 @@ export default function MppPage() {
             </h4>
 
             <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-              {parse(visimisi.visi)}
+              {/* {visimisi && <RichTextDisplay content={visimisi.visi} />} */}
             </div>
           </div>
 
@@ -76,7 +77,7 @@ export default function MppPage() {
             </h4>
 
             <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-              {parse(visimisi.misi)}
+              {/* {visimisi && <RichTextDisplay content={visimisi.misi} />} */}
             </div>
           </div>
         </div>
@@ -87,22 +88,23 @@ export default function MppPage() {
           </h4>
 
           <div className="flex flex-col md:flex-row w-full mt-4 md:px-12 md:gap-x-6 gap-y-4 md:gap-y-0">
-            {alurs?.map((alur: AlurType, i: number) => {
-              return (
-                <div
-                  key={i}
-                  onClick={() => openModal(alur.image)}
-                  className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
-                  <Image
-                    src={alur.image}
-                    alt="alur mpp"
-                    className="w-full h-ful object-fit rounded-xl"
-                    width={1920}
-                    height={1080}
-                  />
-                </div>
-              );
-            })}
+            {alurs &&
+              alurs?.map((alur: AlurType, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    onClick={() => openModal(alur?.image)}
+                    className="flex flex-col w-full h-full bg-neutral-50 shadow-md rounded-xl">
+                    <Image
+                      src={alur?.image}
+                      alt="alur mpp"
+                      className="w-full h-ful object-fit rounded-xl"
+                      width={1920}
+                      height={1080}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
 

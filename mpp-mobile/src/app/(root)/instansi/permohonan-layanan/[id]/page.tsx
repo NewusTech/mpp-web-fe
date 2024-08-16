@@ -20,11 +20,17 @@ import { useDispatch } from "react-redux";
 import { setId } from "@/store/action/actionPermohonanLayanan";
 import Steps from "@/components/steps/steps";
 import ByInstansi from "@/components/fetching/layanan/layananByInstansi/byInstansi";
-import { JenisLayananType } from "@/types/type";
+import {
+  DownloadSyaratType,
+  JenisLayananType,
+  LayananFilesType,
+} from "@/types/type";
 import { Loader } from "lucide-react";
 import parse from "html-react-parser";
 import Cookies from "js-cookie";
 import { redirect, useRouter } from "next/navigation";
+import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
+import DocSyarat from "@/components/fetching/document-download-persyaratan/docSyarat";
 
 const steps = [
   { id: 1, title: "1" },
@@ -52,7 +58,14 @@ export default function PermohonanLayananFirstScreen({
   const token = Cookies.get("Authorization");
   const [service, setService] = useState<JenisLayananType[]>([]);
   const [selectedService, setSelectedService] = useState<JenisLayananType>();
+  const [syarats, setSyarats] = useState<LayananFilesType[]>();
   const [isLoading, setIsLoading] = useState(false);
+  const [myItem, setMyItem] = useState<any>();
+
+  useEffect(() => {
+    const item = localStorage.getItem("instanceId");
+    setMyItem(item);
+  }, []);
 
   const fetchLayanan = async (id: number) => {
     try {
@@ -60,10 +73,9 @@ export default function PermohonanLayananFirstScreen({
 
       setService(layananByInstansi.data);
 
-      const instanceId = localStorage.getItem("instanceId");
-      if (instanceId) {
-        const selected = layananByInstansi.data.find(
-          (el: JenisLayananType) => el.id.toString() === instanceId
+      if (myItem) {
+        const selected = layananByInstansi?.data?.find(
+          (el: JenisLayananType) => el?.id.toString() === myItem
         );
         setSelectedService(selected);
       }
@@ -79,9 +91,24 @@ export default function PermohonanLayananFirstScreen({
     fetchLayanan(params.id);
   }, [params.id]);
 
+  const fetchDownload = async (id: number) => {
+    try {
+      const downloadSyarat = await DocSyarat(id);
+      setSyarats(downloadSyarat.data.Layananfiles);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedService) {
+      fetchDownload(selectedService?.id);
+    }
+  }, [selectedService]);
+
   const handleSelectChange = (value: any) => {
     const selected = service.find(
-      (el: JenisLayananType) => el.id.toString() === value
+      (el: JenisLayananType) => el?.id.toString() === value
     );
     setSelectedService(selected);
   };
@@ -116,7 +143,7 @@ export default function PermohonanLayananFirstScreen({
 
   const handleButtonClick = () => {
     if (selectedService) {
-      dispatch(setId(selectedService.id));
+      dispatch(setId(selectedService?.id));
     }
     setIsLoading(true);
     setTimeout(() => {
@@ -153,29 +180,24 @@ export default function PermohonanLayananFirstScreen({
                   <Select
                     name="layanan_id"
                     onValueChange={handleSelectChange}
-                    defaultValue={localStorage.getItem("instanceId") || ""}>
+                    defaultValue={myItem || ""}>
                     <SelectTrigger
                       className={`w-full
-                        ${
-                          !selectedService &&
-                          !localStorage.getItem("instanceId")
-                            ? "opacity-50"
-                            : ""
-                        }
+                        ${!selectedService && !myItem ? "opacity-50" : ""}
                       `}>
                       <SelectValue placeholder="Pilih Layanan Permohonan" />
                     </SelectTrigger>
                     <SelectContent className="w-[96%] md:w-full">
                       {service?.map((el: JenisLayananType) => {
                         return (
-                          <div key={el.id} className="w-11/12 md:w-full">
-                            {el.active_online === false ? (
-                              <SelectItem disabled value={String(el.id)}>
-                                {el.name}
+                          <div key={el?.id} className="w-11/12 md:w-full">
+                            {el?.active_online === false ? (
+                              <SelectItem disabled value={String(el?.id)}>
+                                {el?.name}
                               </SelectItem>
                             ) : (
-                              <SelectItem value={String(el.id)}>
-                                {el.name}
+                              <SelectItem value={String(el?.id)}>
+                                {el?.name}
                               </SelectItem>
                             )}
                           </div>
@@ -217,12 +239,29 @@ export default function PermohonanLayananFirstScreen({
                       <div
                         key={i}
                         className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                        {parse(item)}
+                        {item && <RichTextDisplay content={item} />}
                       </div>
                     );
                   })}
                 </div>
               )}
+
+              {syarats &&
+                syarats.length > 0 &&
+                syarats?.map((syarat: LayananFilesType, i: number) => {
+                  return (
+                    <div key={i} className="w-full flex flex-row gap-x-2 mt-5">
+                      <p>{i + 1}.</p>
+
+                      <Link
+                        target="_blank"
+                        href={syarat?.file}
+                        className="underline text-primary-700 text-[12px] md:text-[16px]">
+                        Download persyaratan disini
+                      </Link>
+                    </div>
+                  );
+                })}
             </AccordionContent>
           </AccordionItem>
 
@@ -236,7 +275,7 @@ export default function PermohonanLayananFirstScreen({
                       <div
                         key={i}
                         className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                        {parse(item)}
+                        {item && <RichTextDisplay content={item} />}
                       </div>
                     );
                   })}
@@ -255,7 +294,7 @@ export default function PermohonanLayananFirstScreen({
                       <div
                         key={i}
                         className="text-[12px] md:text-[16px] text-neutral-800 font-normal">
-                        {parse(item)}
+                        {item && <RichTextDisplay content={item} />}
                       </div>
                     );
                   })}

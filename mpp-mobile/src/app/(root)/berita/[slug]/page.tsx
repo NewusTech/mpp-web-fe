@@ -90,7 +90,7 @@ export default async function DetailBeritaPage({
 
       <div className="flex flex-col md:px-[70px] mt-3 md:mt-5 md:grid md:grid-cols-3 md:flex-row md:flex-wrap md:w-full md:justify-start gap-y-3 md:gap-x-6">
         {latestNews.map((berita: Berita, i: number) => (
-          <CardNewsComponent key={i} news={berita} />
+          <CardNewsComponent key={i} berita={berita} />
         ))}
       </div>
     </section>

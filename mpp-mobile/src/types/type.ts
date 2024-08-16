@@ -142,6 +142,21 @@ export interface JenisLayananType {
   syarat: string;
 }
 
+export interface LayananFilesType {
+  id: number;
+  name: string;
+  layanan_id: number;
+  file: string;
+}
+
+export interface DownloadSyaratType {
+  id: number;
+  name: string;
+  desc: string;
+  image: string;
+  Layananfiles: LayananFilesType[];
+}
+
 export interface TermType {
   id: number;
   desc: string;

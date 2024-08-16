@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import facilitiesFetch from "@/components/fetching/facilities/facilities";
 import Image from "next/legacy/image";
-import formatDate from "@/helpers/logout/formatted";
+import formatDate, { formatLongDate } from "@/helpers/logout/formatted";
 import fetchInformasi from "@/components/fetching/infromasi/informasi";
 import fetchCarousel from "@/components/fetching/carousel/carousel";
 import fetchVideo from "@/components/fetching/video/video";
@@ -73,20 +73,20 @@ function Home() {
   // useEffect(() => {
   //   const auth = Cookies.get("Authorization");
   //   let socket: Socket | null = null;
-  
+
   //   if (auth) {
   //     const decodedToken = jwtDecode<JwtPayload>(auth);
-  
+
   //     // Registrasi Service Worker
   //     if ('serviceWorker' in navigator) {
   //       navigator.serviceWorker.register('/sw.js')
   //         .then(reg => console.log('Service Worker Registered'))
   //         .catch(err => console.log('Service Worker Registration Failed:', err));
   //     }
-  
+
   //     // Inisialisasi Socket.IO Client
   //     socket = io('https://backend-mpp.newus.id');
-  
+
   //     // Dengarkan event dari server
   //     socket.on('UpdateStatus', (pesansocket: any) => {
   //       if (pesansocket.iduser == decodedToken?.userId) {
@@ -94,7 +94,7 @@ function Home() {
   //       }
   //     });
   //   }
-  
+
   //   // Cleanup ketika komponen di-unmount
   //   return () => {
   //     if (socket) {
@@ -112,7 +112,6 @@ function Home() {
   //     });
   //   }
   // }, []);
-
 
   // const sendNotification = (pesansocket: any) => {
   //   if (navigator.serviceWorker && window.Notification && Notification.permission === 'granted') {
@@ -198,7 +197,7 @@ function Home() {
   let date = "";
 
   if (berita?.data[0]?.createdAt) {
-    date = formatDate(`${berita?.data[berita.data.length - 1].createdAt}`);
+    date = formatLongDate(`${berita?.data[berita.data.length - 1].createdAt}`);
   }
 
   const image = berita?.data[berita.data.length - 1]?.image;
@@ -329,7 +328,7 @@ function Home() {
           <div className="flex flex-col px-5 md:px-0 w-full items-center md:mt-6">
             <div className="flex flex-col w-full md:grid md:grid-cols-3 gap-[16px] md:justify-center md:gap-5">
               {berita?.data?.map((news: Berita, i: number) => {
-                return <CardNewsComponent key={i} news={news} />;
+                return <CardNewsComponent key={i} berita={news} />;
               })}
             </div>
 
