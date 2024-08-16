@@ -5,7 +5,7 @@ export default function formatDate(dateString: string): string {
     month: "2-digit",
     year: "numeric",
   };
-  const result = new Intl.DateTimeFormat("id-ID", options).format(date);
+  const result = new Intl.DateTimeFormat("id-ID", options)?.format(date);
   return result;
 }
 
@@ -16,7 +16,7 @@ export function formatLongDate(dateString: string): string {
     month: "long",
     year: "numeric",
   };
-  return new Intl.DateTimeFormat("id-ID", options).format(date);
+  return new Intl.DateTimeFormat("id-ID", options)?.format(date);
 }
 
 export function formattedDate(dateString: string) {

@@ -161,16 +161,17 @@ export default function BeritaPage() {
               </SelectTrigger>
               <SelectContent>
                 <div className="pt-2">
-                  {instansis?.map((instansi: Instansi, i: number) => {
-                    return (
-                      <SelectItem
-                        className={`w-full px-4`}
-                        key={i}
-                        value={String(instansi.id)}>
-                        {instansi.name}
-                      </SelectItem>
-                    );
-                  })}
+                  {instansis &&
+                    instansis?.map((instansi: Instansi, i: number) => {
+                      return (
+                        <SelectItem
+                          className={`w-full px-4`}
+                          key={i}
+                          value={String(instansi.id)}>
+                          {instansi.name}
+                        </SelectItem>
+                      );
+                    })}
                 </div>
               </SelectContent>
             </Select>
@@ -200,12 +201,13 @@ export default function BeritaPage() {
         <div className="flex justify-center items-center w-full md:w-3/12 h-48">
           <LoadingComponent />
         </div>
-      ) : news?.length ?? 0 > 0 ? (
+      ) : (news && news?.length) ?? 0 > 0 ? (
         <>
           <div className="flex flex-col md:grid md:grid-cols-4 md:w-full md:items-start justify-center gap-[20px] md:pb-5 md:gap-x-4 md:gap-y-8">
-            {currentDataBerita.map((berita: Berita, i: number) => (
-              <CardNewsComponent key={i} news={berita} />
-            ))}
+            {currentDataBerita &&
+              currentDataBerita?.map((berita: Berita, i: number) => (
+                <CardNewsComponent key={i} berita={berita} />
+              ))}
           </div>
 
           <PaginationComponent

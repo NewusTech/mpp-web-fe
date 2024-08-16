@@ -2,6 +2,7 @@
 
 import fetchContact from "@/components/fetching/contact/contact";
 import LoadingComponent from "@/components/loading/LoadingComponent";
+import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 import { ContactType } from "@/types/type";
 import React, { useEffect, useState } from "react";
 export const dynamic = "force-dynamic";
@@ -114,7 +115,7 @@ export default function KontakPage() {
           </h4>
 
           <p className="text-[12px] md:text-[16px] text-neutral-900 font-light">
-            {kontak?.desc}
+            {kontak?.desc && <RichTextDisplay content={kontak?.desc} />}
           </p>
         </div>
       </div>
