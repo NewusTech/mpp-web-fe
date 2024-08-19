@@ -6,11 +6,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   CircleUserRound,
   Send,
   ChevronDown,
   History,
   ClipboardList,
+  Bell,
 } from "lucide-react";
 
 import logo from "@/../public/assets/DesignLogoMpp.svg";
@@ -22,6 +28,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import LogoutScreen from "@/components/actions/logoutScreen/logoutScreen";
+import NotifikasiWebiste from "../others/notifikasi/notifikasi";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -103,7 +110,11 @@ export default function NavbarScreen() {
                     className={`text-center text-[20px] font-normal ${
                       pathName === "/mpp/tentang-mpp" ||
                       pathName === "/mpp/fasilitas" ||
-                      pathName === "/mpp/aplikasi-pendukung"
+                      pathName === "/mpp/aplikasi-pendukung" ||
+                      pathName ===
+                        "/mpp/maklumat-mal-pelayanan-publik-lampung-timur" ||
+                      pathName ===
+                        "/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur"
                         ? "text-secondary-700 group-hover:text-primary-800"
                         : "text-primary-800 group-hover:text-secondary-700"
                     }`}>
@@ -114,7 +125,11 @@ export default function NavbarScreen() {
                     className={`w-[24px] h-[24px] ${
                       pathName === "/mpp/tentang-mpp" ||
                       pathName === "/mpp/fasilitas" ||
-                      pathName === "/mpp/aplikasi-pendukung"
+                      pathName === "/mpp/aplikasi-pendukung" ||
+                      pathName ===
+                        "/mpp/maklumat-mal-pelayanan-publik-lampung-timur" ||
+                      pathName ===
+                        "/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur"
                         ? "text-secondary-700 group-hover:text-primary-800"
                         : "text-primary-800 group-hover:text-secondary-700"
                     }`}
@@ -178,6 +193,48 @@ export default function NavbarScreen() {
                     </p>
                   </DropdownMenuItem>
                 </Link>
+
+                <Link
+                  href={`/mpp/maklumat-mal-pelayanan-publik-lampung-timur`}
+                  className={`${
+                    pathName ===
+                    `/mpp/maklumat-mal-pelayanan-publik-lampung-timur`
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
+                  }`}>
+                  <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
+                    <p
+                      className={`${
+                        pathName ===
+                        `/mpp/maklumat-mal-pelayanan-publik-lampung-timur`
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
+                      Maklumat MPP
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
+
+                <Link
+                  href={`/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`}
+                  className={`${
+                    pathName ===
+                    `/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`
+                      ? "text-secondary-700 hover:text-neutral-700"
+                      : "text-neutral-700 hover:text-secondary-700"
+                  }`}>
+                  <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
+                    <p
+                      className={`${
+                        pathName ===
+                        `/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`
+                          ? "text-secondary-700 hover:text-neutral-700"
+                          : "text-neutral-700 hover:text-secondary-700"
+                      } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
+                      Standar Operasional
+                    </p>
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -223,6 +280,29 @@ export default function NavbarScreen() {
           </Link>
         </div>
 
+        <div className="flex flex-row justify-center ml-5">
+          <Popover>
+            <PopoverTrigger>
+              <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
+            </PopoverTrigger>
+            <PopoverContent className="min-w-[700px] bg-primary-500 bg-opacity-80 border border-primary-500 shadow-lg rounded-lg h-screen">
+              <div className="w-full flex flex-col gap-y-3">
+                <div className="w-full border-b border-neutral-900">
+                  <h3 className="text-neutral-900 font-semibold text-[20px]">
+                    Notifikasi
+                  </h3>
+                </div>
+
+                <div className="w-full flex flex-col overflow-y-auto gap-y-3 verticalScroll max-h-screen pb-36">
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
+                    <NotifikasiWebiste key={i} />
+                  ))}
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
+
         <div className="flex flex-row justify-center ml-[10px]">
           {decoded ? (
             <DropdownMenu>
@@ -231,7 +311,7 @@ export default function NavbarScreen() {
                   <CircleUserRound
                     className={`w-[24px] h-[24px] ${
                       pathName === "/profile" ||
-                      pathName === "/survey" ||
+                      pathName === "/survei" ||
                       pathName === "/pengaduan" ||
                       pathName === "/riwayat"
                         ? "text-secondary-700 group-hover:text-primary-800"
@@ -242,7 +322,7 @@ export default function NavbarScreen() {
                   <ChevronDown
                     className={`w-[24px] h-[24px] ${
                       pathName === "/profile" ||
-                      pathName === "/survey" ||
+                      pathName === "/survei" ||
                       pathName === "/pengaduan" ||
                       pathName === "/riwayat"
                         ? "text-secondary-700 group-hover:text-primary-800"
@@ -280,16 +360,16 @@ export default function NavbarScreen() {
                 </Link>
 
                 <Link
-                  href="/survey"
+                  href="/survei"
                   className={`${
-                    pathName === "/survey"
+                    pathName === "/survei"
                       ? "text-secondary-700 hover:text-neutral-700"
                       : "text-neutral-700 hover:text-secondary-700"
                   }`}>
                   <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <ClipboardList
                       className={`${
-                        pathName === "/survey"
+                        pathName === "/survei"
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
                       } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
@@ -297,7 +377,7 @@ export default function NavbarScreen() {
 
                     <p
                       className={`${
-                        pathName === "/survey"
+                        pathName === "/survei"
                           ? "text-secondary-700 hover:text-neutral-700"
                           : "text-neutral-700 hover:text-secondary-700"
                       } text-[16px] group-hover:text-secondary-700`}>

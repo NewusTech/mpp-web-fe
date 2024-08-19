@@ -31,40 +31,26 @@ import { LogIn } from "lucide-react";
 import wrapText from "@/utils/formatText";
 import parse from "html-react-parser";
 import { formatTime } from "@/utils/formatTime";
-import { AppType } from "@/types/type";
+import {
+  AppIntansiType,
+  AppType,
+  detailType,
+  InstansiSopType,
+  LayanansType,
+  SopDinasType,
+} from "@/types/type";
 import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 import { truncateTitle } from "@/utils/formatTitle";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 import CardStandarPelayanan from "@/components/fetching/instansi/cardStandarPelayanan";
 import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 import CardAplikasiTerkaitDinas from "@/components/fetching/instansi/cardAplikasiTerkaitDinas";
-
-interface detailType {
-  id?: number;
-  name?: string;
-  email?: string;
-  alamat?: string;
-  desc?: string;
-  telp?: string;
-  image?: string;
-  pj?: string;
-  jam_buka?: string;
-  jam_tutup?: string;
-  nip_pj?: string;
-  jmlLayanan?: number;
-  Layanans?: LayanansType[];
-  status: boolean;
-  slug: string;
-  active_online?: boolean;
-  active_offline?: boolean;
-}
-
-interface LayanansType {
-  name?: string;
-  dasarhukum?: string;
-  desc?: string;
-  syarat?: string;
-}
+import InstansiDetailFetch from "@/components/fetching/instansi/instansiDetail";
+import SopDinasFetch from "@/components/fetching/sopDinas/sopDinas";
+import {
+  formatFileNameAndDesc,
+  getFileExtension,
+} from "@/helpers/logout/ekstention";
 
 export default function InstansiDetail({
   params,
@@ -74,10 +60,12 @@ export default function InstansiDetail({
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [apps, setApps] = useState<AppType[]>();
   const [detailins, setDetailIns] = useState<detailType>();
+  const [sops, setSops] = useState<SopDinasType>();
   const [activeTab, setActiveTab] = useState("Persyaratan");
   const [token, setToken] = useState<string | undefined>(undefined);
   const limitData = 1000000;
   const [isSwiperInitialized, setIsSwiperInitialized] = useState(false);
+  const [isSwiperInitializedTwo, setIsSwiperInitializedTwo] = useState(false);
 
   const fetchPendukungApp = async (page: number, limit: number) => {
     try {
@@ -94,32 +82,47 @@ export default function InstansiDetail({
   }, []);
 
   useEffect(() => {
-    if (apps && apps.length > 0) {
+    if (detailins?.Apkinstansis && detailins?.Apkinstansis?.length > 0) {
       setIsSwiperInitialized(true);
     }
-  }, [apps]);
+  }, [detailins]);
+
+  useEffect(() => {
+    if (sops?.Sopinstansis && sops?.Sopinstansis?.length > 0) {
+      setIsSwiperInitializedTwo(true);
+    }
+  }, [sops]);
 
   const fetchDetail = async (slug: string) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/instansi/get/${slug}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-      }
-    );
+    try {
+      const result = await InstansiDetailFetch(slug);
 
-    const result = await response.json();
-
-    setDetailIns(result.data);
+      setDetailIns(result?.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     fetchDetail(params.slug);
     setToken(Cookies.get("Authorization"));
   }, [params.slug]);
+
+  const fetchSopInstansi = async (id: number) => {
+    try {
+      const result = await SopDinasFetch(id);
+
+      setSops(result?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (detailins?.id) {
+      fetchSopInstansi(detailins?.id);
+    }
+  }, [detailins?.id]);
 
   const email = wrapText(detailins?.email || "", 15);
 
@@ -128,30 +131,30 @@ export default function InstansiDetail({
 
   return (
     <div className="bg-primary-100 md:h-full pb-32">
-      <div className="flex flex-col bg-neutral-50 rounded-xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-4 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-9">
-        <div className="flex flex-col md:items-center md:flex-row w-full bg-neutral-50 p-4 rounded-xl">
-          <div className="flex flex-col items-center border border-neutral-700 w-full md:w-10/12 h-full md:min-h-full justify-center md:mx-0 bg-neutral-50 shadow-lg rounded-xl">
+      <div className="flex flex-col bg-neutral-50 rounded-xl md:shadow-md mx-8 md:mx-[70px] md:px-[70px] my-6 md:mt-4 md:my-0 items-center justify-center mb-[29px] md:pb-[30px] md:mb-0 md:pt-4">
+        <div className="flex flex-col md:items-center md:flex-row w-full bg-neutral-50 p-4 rounded-xl md:gap-x-10">
+          <div className="flex flex-col items-center border border-neutral-700 w-full md:w-10/12 h-full justify-center md:mx-0 bg-neutral-50 shadow-lg rounded-xl">
             {detailins?.image && (
-              <div className="flex items-center justify-center w-full h-full p-8 md:p-24">
+              <div className="flex w-full items-center justify-center min-h-[250px] md:min-h-[450px]">
                 <Image
                   src={detailins?.image}
                   className="w-full h-full object-contain"
                   alt={detailins?.name || ""}
-                  width={230}
+                  width={450}
                   height={230}
                 />
               </div>
             )}
 
-            <div className="grid grid-rows-1 w-full mt-2 bg-primary-700 place-items-center place-content-center rounded-b-xl py-5 px-3">
-              <h6 className="text-[20px] text-center text-neutral-50 font-normal">
+            <div className="grid grid-rows-1 w-full mt-2 bg-primary-700 place-items-center place-content-center rounded-b-xl py-3 md:py-5 px-3">
+              <h6 className="text-[16px] md:text-[20px] text-center text-neutral-50 font-normal">
                 {detailins?.name}
               </h6>
             </div>
           </div>
 
-          <div className="grid grid-rows-7 mt-8 md:ml-[70px]">
-            <div className="grid grid-cols-2 items-center mb-3">
+          <div className="md:grid md:grid-rows-7 flex flex-col gap-y-3 md:gap-y-0 mt-8">
+            <div className="grid grid-cols-2 items-start md:items-center mb-3">
               <h6 className="text-[12px] md:text-[16px] text-primary-800 font-semibold">
                 Alamat
               </h6>
@@ -207,9 +210,13 @@ export default function InstansiDetail({
                   />
                 </div>
 
-                <p className="text-[12px] underline md:text-[16px] text-primary-700 font-normal pl-2">
-                  Klik disini untuk melihat lokasi
-                </p>
+                {detailins && detailins?.linkmaps && (
+                  <Link href={detailins?.linkmaps} target="_blank">
+                    <p className="text-[12px] underline md:text-[16px] text-primary-700 font-normal pl-2">
+                      Klik disini untuk melihat lokasi
+                    </p>
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -363,13 +370,15 @@ export default function InstansiDetail({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="Aplikasi Dinas" className="mt-8">
-            {apps && apps?.length <= 6 ? (
-              <div className="w-full grid grid-cols-2 mt-8">
-                {apps &&
-                  apps?.map((app: AppType, i: number) => {
-                    return <CardAplikasiTerkaitDinas key={i} app={app} />;
-                  })}
+          <TabsContent value="Aplikasi Dinas" className="mt-4 md:mt-8">
+            {detailins?.Apkinstansis && detailins?.Apkinstansis?.length <= 6 ? (
+              <div className="w-full flex flex-col gap-y-3 md:grid md:grid-cols-3 mt-8 md:gap-x-5 md:pb-3">
+                {detailins?.Apkinstansis &&
+                  detailins?.Apkinstansis?.map(
+                    (app: AppIntansiType, i: number) => {
+                      return <CardAplikasiTerkaitDinas key={i} app={app} />;
+                    }
+                  )}
               </div>
             ) : (
               <>
@@ -377,8 +386,6 @@ export default function InstansiDetail({
                   <div className="w-full flex flex-row">
                     <Swiper
                       modules={[Grid, Pagination, Navigation, Autoplay]}
-                      pagination={{ clickable: true }}
-                      navigation={true}
                       grid={{ rows: 2, fill: "row" }}
                       className="mySwiper"
                       spaceBetween={10}
@@ -397,40 +404,45 @@ export default function InstansiDetail({
                           grid: { rows: 2 },
                         },
                       }}>
-                      {apps &&
-                        apps?.map((app: AppType, i: number) => {
-                          const formatName = truncateTitle(app.name, 42);
-                          const formatDesc = truncateTitle(app.desc, 30);
-                          const formatDescMobile = truncateTitle(app.desc, 40);
+                      {detailins?.Apkinstansis &&
+                        detailins.Apkinstansis?.map(
+                          (app: AppIntansiType, i: number) => {
+                            const formatName = truncateTitle(app?.name, 42);
+                            const formatDesc = truncateTitle(app?.desc, 30);
+                            const formatDescMobile = truncateTitle(
+                              app?.desc,
+                              40
+                            );
 
-                          return (
-                            <SwiperSlide key={i}>
-                              <Link
-                                href={app.link}
-                                target="_blank"
-                                className="slide-up-animation bg-neutral-50 min-h-[200px] md:min-h-[200px] w-full flex flex-col md:flex-row items-center p-1 md:p-4 rounded-md shadow-md">
-                                <div className="h-full flex justify-center">
-                                  <Image
-                                    src={app.image}
-                                    width={100}
-                                    height={100}
-                                    className="w-full h-full object-cover rounded-full"
-                                    alt={app.name}
-                                  />
-                                </div>
+                            return (
+                              <SwiperSlide key={i}>
+                                <Link
+                                  href={app?.link}
+                                  target="_blank"
+                                  className="slide-up-animation bg-neutral-50 min-h-[200px] md:min-h-[100px] w-full flex flex-col md:gap-x-5 md:flex-row items-center p-1 md:p-4 rounded-md shadow-md">
+                                  <div className="h-full flex justify-center">
+                                    <Image
+                                      src={app?.file}
+                                      width={100}
+                                      height={100}
+                                      className="w-full h-full object-cover rounded-full"
+                                      alt={app.name}
+                                    />
+                                  </div>
 
-                                <div className="flex flex-col text-center md:text-start">
-                                  <p className="font-semibold text-primary-700 text-[12px] md:text-[16px] hover:underline">
-                                    {formatName}
-                                  </p>
-                                  <p className="font-normal text-neutral-900 text-[10px] md:text-[14px]">
-                                    {isMobile ? formatDescMobile : formatDesc}
-                                  </p>
-                                </div>
-                              </Link>
-                            </SwiperSlide>
-                          );
-                        })}
+                                  <div className="flex flex-col text-center md:text-start">
+                                    <p className="font-semibold text-primary-700 text-[12px] md:text-[16px] hover:underline">
+                                      {formatName}
+                                    </p>
+                                    <p className="font-normal text-neutral-900 text-[10px] md:text-[14px]">
+                                      {isMobile ? formatDescMobile : formatDesc}
+                                    </p>
+                                  </div>
+                                </Link>
+                              </SwiperSlide>
+                            );
+                          }
+                        )}
                     </Swiper>
                   </div>
                 )}
@@ -490,72 +502,73 @@ export default function InstansiDetail({
           </h3>
         </div>
 
-        {apps && apps?.length <= 6 ? (
-          <div className="w-full grid grid-cols-2 mt-8">
-            {apps &&
-              apps?.map((app: AppType, i: number) => {
-                return <CardStandarPelayanan key={i} app={app} />;
+        {sops && sops?.Sopinstansis?.length <= 6 ? (
+          <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-5 mt-8">
+            {sops &&
+              sops?.Sopinstansis?.map((item: InstansiSopType, i: number) => {
+                return <CardStandarPelayanan key={i} item={item} />;
               })}
           </div>
         ) : (
           <div className="w-full flex flex-row mt-8">
-            {isSwiperInitialized && (
-              <div className="w-full flex flex-row">
+            {isSwiperInitializedTwo && (
+              <div className="w-full flex flex-row pb-2">
                 <Swiper
                   modules={[Grid, Pagination, Navigation, Autoplay]}
-                  pagination={{ clickable: true }}
-                  navigation={true}
-                  grid={{ rows: 2, fill: "row" }}
-                  className="mySwiper"
+                  className="mySwiper my-1.5"
+                  grid={{ rows: 4, fill: "row" }}
                   spaceBetween={10}
-                  slidesPerView={2}
+                  slidesPerView={4}
                   loop={true}
                   autoplay={{ delay: 3000 }}
                   breakpoints={{
                     768: {
-                      slidesPerView: 2,
+                      slidesPerView: 4,
                       spaceBetween: 5,
                       grid: { rows: 2 },
                     },
                     1024: {
-                      slidesPerView: 3,
+                      slidesPerView: 4,
                       spaceBetween: 10,
-                      grid: { rows: 2 },
+                      grid: { rows: 4 },
                     },
                   }}>
-                  {apps &&
-                    apps?.map((app: AppType, i: number) => {
-                      const formatName = truncateTitle(app.name, 42);
-                      const formatDesc = truncateTitle(app.desc, 20);
+                  {sops &&
+                    sops?.Sopinstansis?.map(
+                      (item: InstansiSopType, i: number) => {
+                        const extension = getFileExtension(item?.file);
+                        const { name, description, image } =
+                          formatFileNameAndDesc(extension);
 
-                      return (
-                        <SwiperSlide key={i}>
-                          <Link
-                            href={app.link}
-                            target="_blank"
-                            className="slide-up-animation bg-neutral-50 min-h-[200px] w-full flex flex-row items-center p-1 md:p-4 rounded-md shadow-md">
-                            <div className="flex justify-center">
-                              <Image
-                                src={app.image}
-                                width={150}
-                                height={150}
-                                className="w-full h-full object-cover rounded-full"
-                                alt={app.name}
-                              />
-                            </div>
+                        return (
+                          <SwiperSlide key={i}>
+                            <Link
+                              href={item?.file}
+                              target="_blank"
+                              className="slide-up-animation bg-neutral-50 w-full flex flex-row items-center p-1 md:p-4 gap-x-2 rounded-md shadow-md">
+                              <div className="w-1/12 md:w-4/12 flex justify-center">
+                                <Image
+                                  src={image}
+                                  width={100}
+                                  height={100}
+                                  className="w-full h-full object-cover rounded-full"
+                                  alt={name}
+                                />
+                              </div>
 
-                            <div className="flex flex-col text-start">
-                              <p className="font-semibold text-primary-700 text-[12px] md:text-[16px] hover:underline">
-                                {formatName}
-                              </p>
-                              <p className="font-normal text-neutral-900 text-[10px] md:text-[14px]">
-                                {isMobile ? formatDesc : app.desc}
-                              </p>
-                            </div>
-                          </Link>
-                        </SwiperSlide>
-                      );
-                    })}
+                              <div className="flex flex-col text-start">
+                                <p className="font-semibold text-primary-700 text-[12px] md:text-[16px] hover:underline">
+                                  {name}
+                                </p>
+                                <p className="font-normal text-neutral-900 text-[10px] md:text-[14px]">
+                                  {description}
+                                </p>
+                              </div>
+                            </Link>
+                          </SwiperSlide>
+                        );
+                      }
+                    )}
                 </Swiper>
               </div>
             )}
@@ -651,7 +664,7 @@ export default function InstansiDetail({
                             Pelayanan
                           </h5>
 
-                          <div>
+                          <div className="flex flex-row justify-start">
                             <div className="text-neutral-900 font-normal text-[12px] md:text-[16px] ml-2">
                               {item?.desc && (
                                 <RichTextDisplay content={item?.desc} />

@@ -13,12 +13,13 @@ import Image from "next/legacy/image";
 import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
 import fetchVideo from "@/components/fetching/video/video";
 import ManualBooks from "@/components/fetching/manualBook/manualBook";
-// import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
+import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 
 export default function MppPage() {
   const [visimisi, setVisimisi] = useState<VisiMisiType>({
     visi: "",
     misi: "",
+    motto: "",
   });
   const [videos, setVideos] = useState<VideoType>();
   const [alurs, setAlurs] = useState<AlurType[]>();
@@ -60,24 +61,36 @@ export default function MppPage() {
   return (
     <div className="bg-primary-100 md:mx-12 md:h-full">
       <div className="flex flex-col w-full items-center justify-center pb-32 pt-4 px-[35px] md:px-0 bg-primary-100 md:mx-0 mb-4 md:mb-0 md:pb-[150px]">
-        <div className="grid grid-rows-2 md:grid-cols-2 md:grid-rows-none place-items-center md:place-items-start md:mx-[35px] gap-[16px] md:mb-[62px]">
-          <div className="flex flex-col text-center gap-[16px] md:gap-[40px]">
-            <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
-              VISI
-            </h4>
+        <div className="flex flex-col md:grid md:grid-cols-2 md:mx-[35px] gap-[16px]">
+          <div className="flex flex-col text-center gap-[16px] md:gap-y-36">
+            <div className="flex flex-col text-center gap-[16px] md:gap-[40px]">
+              <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
+                Motto
+              </h4>
 
-            <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-              {/* {visimisi && <RichTextDisplay content={visimisi.visi} />} */}
+              <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
+                {visimisi && <RichTextDisplay content={visimisi.motto} />}
+              </div>
+            </div>
+
+            <div className="flex flex-col text-center gap-[16px] md:gap-[40px]">
+              <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
+                VISI
+              </h4>
+
+              <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
+                {visimisi && <RichTextDisplay content={visimisi.visi} />}
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col text-center gap-4 md:gap-[40px]">
+          <div className="flex flex-col justify-center text-center gap-4 md:gap-[40px]">
             <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
               MISI
             </h4>
 
             <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-              {/* {visimisi && <RichTextDisplay content={visimisi.misi} />} */}
+              {visimisi && <RichTextDisplay content={visimisi.misi} />}
             </div>
           </div>
         </div>

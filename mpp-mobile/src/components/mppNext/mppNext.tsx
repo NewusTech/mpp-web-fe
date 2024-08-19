@@ -1,14 +1,15 @@
 "use client";
 
 import Image from "next/legacy/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import permohonanantrian from "@/../../public/assets/permohonan&antrian.png";
 import pengaduan from "@/../../public/assets/pengaduan.png";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/grid";
 
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import { Pagination, Navigation, Autoplay, Grid } from "swiper/modules";
 import {
   Accordion,
   AccordionContent,
@@ -20,6 +21,8 @@ import { Landmark, MessageCircleWarning, Send, Ticket } from "lucide-react";
 import CardAplikasiPendukung from "../landing/aboutScreen/cardAplikasiPendukung/cardAplikasiPendukung";
 import { AlurType, AppType, FacilityType, VideoType } from "@/types/type";
 import Link from "next/link";
+import { truncateTitle } from "@/utils/formatTitle";
+import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
 
 export default function MppNext({
   facilities,
@@ -32,7 +35,9 @@ export default function MppNext({
   alurs: AlurType[];
   apps: AppType[];
 }) {
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSwiperInitialized, setIsSwiperInitialized] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -42,6 +47,12 @@ export default function MppNext({
       closeModal();
     }
   };
+
+  useEffect(() => {
+    if (apps && apps?.length > 0) {
+      setIsSwiperInitialized(true);
+    }
+  }, [apps]);
 
   return (
     <section className="flex flex-col justify-center mt-4 md:mt-0 mx-5 md:mx-8 md:rounded-xl md:pt-[25px]">
@@ -79,8 +90,8 @@ export default function MppNext({
 
           <div className="w-full p-4 md:self-end md:flex md:h-full rounded-xl">
             <Swiper
-              pagination={{ clickable: true }}
-              navigation={true}
+              // pagination={{ clickable: true }}
+              // navigation={true}
               modules={[Pagination, Navigation, Autoplay]}
               className="mySwiper"
               spaceBetween={10}
@@ -97,21 +108,22 @@ export default function MppNext({
                   spaceBetween: 50,
                 },
               }}>
-              {alurs.map((alur: AlurType, i: number) => (
-                <SwiperSlide key={i}>
-                  <div className="w-full h-full rounded-xl">
-                    {alur && (
-                      <Image
-                        src={alur.image}
-                        className="w-full h-full md:h-full object-fit rounded-sm"
-                        width={960}
-                        height={450}
-                        alt="permohonan & antrian"
-                      />
-                    )}
-                  </div>
-                </SwiperSlide>
-              ))}
+              {alurs &&
+                alurs?.map((alur: AlurType, i: number) => (
+                  <SwiperSlide key={i}>
+                    <div className="w-full h-full rounded-xl">
+                      {alur && (
+                        <Image
+                          src={alur.image}
+                          className="w-full h-full md:h-full object-cover rounded-sm"
+                          width={960}
+                          height={550}
+                          alt="permohonan & antrian"
+                        />
+                      )}
+                    </div>
+                  </SwiperSlide>
+                ))}
             </Swiper>
           </div>
         </div>
@@ -273,11 +285,117 @@ export default function MppNext({
           Aplikasi Pendukung Mal Pelayanan Publik
         </h3>
 
-        <div className="flex flex-col md:flex-none md:grid md:grid-cols-3 gap-x-2 gap-y-4">
-          {apps.map((app: AppType, i: number) => {
-            return <CardAplikasiPendukung key={i} app={app} />;
-          })}
-        </div>
+        {apps && apps.length <= 6 ? (
+          <div className="flex flex-col md:flex-none md:grid md:grid-cols-3 gap-x-2 gap-y-4">
+            {apps &&
+              apps?.map((app: AppType, i: number) => {
+                return <CardAplikasiPendukung key={i} app={app} />;
+              })}
+          </div>
+        ) : (
+          <>
+            {!isMobile ? (
+              <div className="w-full flex flex-row mt-8">
+                {isSwiperInitialized && (
+                  <div className="w-full flex flex-row">
+                    <Swiper
+                      modules={[Grid, Pagination, Navigation, Autoplay]}
+                      pagination={{ clickable: true }}
+                      navigation={true}
+                      grid={{ rows: 2, fill: "row" }}
+                      className="mySwiper"
+                      spaceBetween={10}
+                      slidesPerView={3}
+                      loop={true}
+                      autoplay={{ delay: 3000 }}>
+                      {apps &&
+                        apps?.map((app: AppType, i: number) => {
+                          const formatName = truncateTitle(app.name, 42);
+
+                          return (
+                            <SwiperSlide key={i}>
+                              <Link
+                                href={app.link}
+                                target="_blank"
+                                className="slide-up-animation bg-neutral-50 w-full h-full flex flex-row items-center p-2 rounded-md shadow-md">
+                                <div className="w-6/12 md:w-7/12 flex items-center justify-center p-2">
+                                  <Image
+                                    src={app.image}
+                                    width={300}
+                                    height={300}
+                                    className="w-full h-full object-cover"
+                                    alt="permohonan & antrian"
+                                  />
+                                </div>
+
+                                <div className="flex flex-col md:mt-0 w-full text-primary-700 pl-2">
+                                  <p className="font-semibold text-primary-700 md:text-[16px] hover:underline">
+                                    {formatName}
+                                  </p>
+                                  <p className="font-normal text-neutral-900 md:text-[14px]">
+                                    {app.desc}
+                                  </p>
+                                </div>
+                              </Link>
+                            </SwiperSlide>
+                          );
+                        })}
+                    </Swiper>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="w-full flex flex-col mt-8">
+                {isSwiperInitialized && (
+                  <div className="w-full flex flex-row">
+                    <Swiper
+                      modules={[Grid, Autoplay]}
+                      grid={{ rows: 4, fill: "row" }}
+                      className="mySwiper"
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      loop={true}
+                      autoplay={{ delay: 3000 }}>
+                      {apps &&
+                        apps?.map((app: AppType, i: number) => {
+                          const formatName = truncateTitle(app.name, 42);
+                          const formatDesc = truncateTitle(app.desc, 20);
+
+                          return (
+                            <SwiperSlide key={i}>
+                              <Link
+                                href={app?.link}
+                                target="_blank"
+                                className="slide-up-animation gap-x-2 bg-neutral-50 w-full h-[150px] flex flex-row items-center p-2 rounded-md shadow-md">
+                                <div className="w-7/12 h-full flex items-center justify-center p-1">
+                                  <Image
+                                    src={app.image}
+                                    width={100}
+                                    height={60}
+                                    className="w-full h-full object-cover"
+                                    alt="permohonan & antrian"
+                                  />
+                                </div>
+
+                                <div className="flex flex-col items-start md:mt-0 w-full text-primary-700">
+                                  <p className="font-semibold text-start text-primary-700 text-[14px] hover:underline">
+                                    {formatName}
+                                  </p>
+                                  <p className="font-normal text-start text-neutral-900 text-[12px]">
+                                    {app.desc}
+                                  </p>
+                                </div>
+                              </Link>
+                            </SwiperSlide>
+                          );
+                        })}
+                    </Swiper>
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

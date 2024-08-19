@@ -1,5 +1,6 @@
 "use client";
 
+import pengumuman from "@/../../public/assets/fotoalur.png";
 import HeroScreen from "@/components/landing/heroScreen/heroScreen";
 import AboutScreen from "@/components/landing/aboutScreen/aboutScreen";
 import CardLayananComponent from "@/components/services/others/cardLayananComponent";
@@ -12,7 +13,7 @@ import { useEffect, useState } from "react";
 import fetchInstansi from "@/components/fetching/instansi/instansi";
 import facilitiesFetch from "@/components/fetching/facilities/facilities";
 import Image from "next/legacy/image";
-import formatDate, { formatLongDate } from "@/helpers/logout/formatted";
+import { formatLongDate } from "@/helpers/logout/formatted";
 import fetchInformasi from "@/components/fetching/infromasi/informasi";
 import fetchCarousel from "@/components/fetching/carousel/carousel";
 import fetchVideo from "@/components/fetching/video/video";
@@ -36,6 +37,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 import { truncateTitle } from "@/utils/formatTitle";
 import TermCondition from "@/components/fetching/termCond/termCond";
+import { X } from "lucide-react";
 // import lambang from "@/../../public/assets/DesignLogoMpp.svg";
 // import { io, Socket } from 'socket.io-client';
 // import { jwtDecode } from 'jwt-decode';
@@ -60,6 +62,7 @@ function Home() {
   const [page, setPage] = useState(1);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAnnouncement, setIsAnnouncement] = useState(false);
 
   const fetchCarousels = async () => {
     try {
@@ -174,7 +177,7 @@ function Home() {
     try {
       const news = await fetchNews(page, 3, "", "", "");
 
-      const app = await fetchAppSupport(1, 6);
+      const app = await fetchAppSupport(1, 100000);
 
       const terms = await TermCondition();
 
@@ -216,8 +219,38 @@ function Home() {
     setIsDialogOpen(false);
   };
 
+  useEffect(() => {
+    setIsAnnouncement(true);
+  }, []);
+
+  const closeAnnouncement = () => {
+    setIsAnnouncement(false);
+  };
+
   return (
-    <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20">
+    <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20 relative">
+      {isAnnouncement && (
+        <div className="fixed top-72 left-1/2 transform -translate-x-1/2 bg-neutral-50 w-10/12 md:w-8/12 rounded-xl text-black p-4 shadow-xl z-50">
+          <div className="flex justify-between flex-row w-full p-2">
+            <h2 className="font-semibold text-neutral-900 text-[20px]">
+              Pengumuman
+            </h2>
+
+            <X
+              onClick={closeAnnouncement}
+              className="w-6 h-6 cursor-pointer text-primary-800 hover:text-secondary-700"
+            />
+          </div>
+
+          <div className="w-full flex flex-col p-2">
+            <p>
+              Pengumuman penting: Website ini menggunakan cookie untuk
+              meningkatkan pengalaman pengguna.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="bg-primary-50">
         {carousel && <HeroScreen carousel={carousel} />}
 
