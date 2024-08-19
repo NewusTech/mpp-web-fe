@@ -38,8 +38,8 @@ const nextConfig = {
         destination: "/statistik/:path*",
       },
       {
-        source: "/survey/:path*",
-        destination: "/survey/:path*",
+        source: "/survei/:path*",
+        destination: "/survei/:path*",
       },
       {
         source: "/instansi/booking-antrian/:path*",

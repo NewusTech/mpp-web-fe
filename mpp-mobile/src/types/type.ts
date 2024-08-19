@@ -254,9 +254,15 @@ export interface ManualBookType {
   video: string;
 }
 
+export interface SopMpp {
+  id: number;
+  file: string;
+}
+
 export interface VisiMisiType {
   visi: string;
   misi: string;
+  motto: string;
 }
 
 export type DataStatistik = {
@@ -506,4 +512,71 @@ export interface SurveyDetailType {
   layanan_name: string;
   kritiksaran: string;
   no_skm: string;
+}
+
+export interface detailType {
+  id?: number;
+  name?: string;
+  email?: string;
+  alamat?: string;
+  desc?: string;
+  telp?: string;
+  image?: string;
+  pj?: string;
+  jam_buka?: string;
+  jam_tutup?: string;
+  nip_pj?: string;
+  jmlLayanan?: number;
+  Layanans?: LayanansType[];
+  status: boolean;
+  slug: string;
+  active_online?: boolean;
+  active_offline?: boolean;
+  Apkinstansis?: AppIntansiType[];
+  linkmaps: string;
+}
+
+export interface LayanansType {
+  name?: string;
+  dasarhukum?: string;
+  desc?: string;
+  syarat?: string;
+}
+
+export interface AppIntansiType {
+  id: number;
+  desc: string;
+  file: string;
+  instansi_id: number;
+  link: string;
+  name: string;
+}
+
+export interface InstansiMaklumatType {
+  name: string;
+  image: string;
+}
+
+export interface MaklumatMppType {
+  maklumat: {
+    desc: string;
+  };
+  logo: {
+    logo_mpp: string;
+    logo_lamtim: string;
+  };
+  instansi: InstansiMaklumatType[];
+}
+
+export interface InstansiSopType {
+  id: number;
+  file: string;
+}
+
+export interface SopDinasType {
+  id: number;
+  name: string;
+  desc: string;
+  image: string;
+  Sopinstansis: InstansiSopType[];
 }

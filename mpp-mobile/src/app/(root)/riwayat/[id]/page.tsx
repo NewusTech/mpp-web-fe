@@ -221,7 +221,7 @@ export default function HasilPermohonan({
 
         {permohonan?.status === 3 && permohonan?.input_skm === false ? (
           <Link
-            href={"/survey"}
+            href={"/survei"}
             className="text-[12px] animate-bounce underline text-warning-700 font-normal mt-[12px]">
             Silahkan mengisi survey kepuasan masyarakat (SKM) terlebih dahulu
             agar dapat mengunduh hasil permohonan.

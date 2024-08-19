@@ -147,7 +147,7 @@ export default function SurveySkmPage() {
           position: "center",
         });
         setIsLoading(false);
-        router.push("/survey/skm");
+        router.push("/survei/submit-survei");
       } else {
         Swal.fire({
           icon: "warning",
