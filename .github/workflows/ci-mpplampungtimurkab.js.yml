@@ -30,5 +30,4 @@ jobs:
       working-directory: ./mpp-mobile
       run: npm run build --if-present
     - name : change repo
-      run : cd /home/lampungtimurkab-mpp/htdocs/mpp.lampungtimurkab.go.id/mpp-mobile/actions-runner/_work/mpp-web-fe/mpp-web-fe/mpp-mobile
-    - run : pm2 restart 8
+      run : pm2 restart 8
