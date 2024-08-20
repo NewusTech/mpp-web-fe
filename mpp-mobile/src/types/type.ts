@@ -580,3 +580,22 @@ export interface SopDinasType {
   image: string;
   Sopinstansis: InstansiSopType[];
 }
+
+export interface AnnouncementType {
+  id: number;
+  file: string;
+}
+
+export interface InformasyType {
+  id: number;
+  instansi_id: number;
+  title: string;
+  content: string;
+  image: string;
+}
+
+export interface InformatiDinasType {
+  id: number;
+  name: string;
+  Infoinstansi: InformasyType;
+}

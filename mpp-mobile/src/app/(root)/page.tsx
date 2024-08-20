@@ -21,6 +21,7 @@ import fetchAlurMpp from "@/components/fetching/alurMpp/alurMpp";
 import MppNext from "@/components/mppNext/mppNext";
 import {
   AlurType,
+  AnnouncementType,
   AppType,
   Berita,
   CarouselType,
@@ -38,6 +39,7 @@ import fetchAppSupport from "@/components/fetching/appSupport/appSupport";
 import { truncateTitle } from "@/utils/formatTitle";
 import TermCondition from "@/components/fetching/termCond/termCond";
 import { X } from "lucide-react";
+import AnnouncementFetch from "@/components/fetching/announcement";
 // import lambang from "@/../../public/assets/DesignLogoMpp.svg";
 // import { io, Socket } from 'socket.io-client';
 // import { jwtDecode } from 'jwt-decode';
@@ -63,11 +65,14 @@ function Home() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
+  const [announcement, setAnnouncement] = useState<AnnouncementType>();
 
   const fetchCarousels = async () => {
     try {
       const carousel = await fetchCarousel();
+      const res = await AnnouncementFetch();
       setCarousel(carousel.data);
+      setAnnouncement(res.data);
     } catch (error) {
       console.log(error);
     }
@@ -230,9 +235,9 @@ function Home() {
   return (
     <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20 relative">
       {isAnnouncement && (
-        <div className="fixed top-72 left-1/2 transform -translate-x-1/2 bg-neutral-50 w-10/12 md:w-8/12 rounded-xl text-black p-4 shadow-xl z-50">
+        <div className="fixed left-1/2 transform -translate-x-1/2 bg-neutral-50 w-11/12 md:w-8/12 rounded-xl border border-neutral-600 text-black p-4 shadow-xl z-50">
           <div className="flex justify-between flex-row w-full p-2">
-            <h2 className="font-semibold text-neutral-900 text-[20px]">
+            <h2 className="font-semibold text-neutral-900 text-[20px] md:text-[26px]">
               Pengumuman
             </h2>
 
@@ -242,11 +247,17 @@ function Home() {
             />
           </div>
 
-          <div className="w-full flex flex-col p-2">
-            <p>
-              Pengumuman penting: Website ini menggunakan cookie untuk
-              meningkatkan pengalaman pengguna.
-            </p>
+          <div className="w-full max-h-[300px] md:min-h-[500px] flex flex-col p-1 md:p-2">
+            {announcement && (
+              <Image
+                src={announcement?.file}
+                alt="Pengumuman MPP"
+                width={300}
+                height={500}
+                className="w-full h-full rounded-lg
+              "
+              />
+            )}
           </div>
         </div>
       )}
