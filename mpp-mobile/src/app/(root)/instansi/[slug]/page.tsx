@@ -35,6 +35,7 @@ import {
   AppIntansiType,
   AppType,
   detailType,
+  InformatiDinasType,
   InstansiSopType,
   LayanansType,
   SopDinasType,
@@ -51,6 +52,7 @@ import {
   formatFileNameAndDesc,
   getFileExtension,
 } from "@/helpers/logout/ekstention";
+import DinasInfomationFetch from "@/components/fetching/dinasInfomation";
 
 export default function InstansiDetail({
   params,
@@ -61,6 +63,7 @@ export default function InstansiDetail({
   const [apps, setApps] = useState<AppType[]>();
   const [detailins, setDetailIns] = useState<detailType>();
   const [sops, setSops] = useState<SopDinasType>();
+  const [info, setInfo] = useState<InformatiDinasType>();
   const [activeTab, setActiveTab] = useState("Persyaratan");
   const [token, setToken] = useState<string | undefined>(undefined);
   const limitData = 1000000;
@@ -111,8 +114,10 @@ export default function InstansiDetail({
   const fetchSopInstansi = async (id: number) => {
     try {
       const result = await SopDinasFetch(id);
+      const res = await DinasInfomationFetch(id);
 
       setSops(result?.data);
+      setInfo(res?.data);
     } catch (error) {
       console.log(error);
     }
@@ -451,46 +456,49 @@ export default function InstansiDetail({
           </TabsContent>
 
           <TabsContent value="Informasi Dinas" className="mt-8">
-            <div className="flex flex-col w-full items-center justify-center gap-6">
-              <div className="w-full md:w-full flex flex-col self-center">
-                <Image
-                  src={berita}
-                  className="w-full h-full object-cover rounded-xl"
-                  alt="Berita"
-                  width={150}
-                  height={400}
-                />
-              </div>
-
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-row">
-                    <p className="text-[12px] pr-4 md:text-[14px] text-neutral-900 font-normal">
-                      Polres
-                    </p>
-
-                    <ul>
-                      <li className="text-[12px] list-disc md:text-[14px] text-neutral-900 font-normal">
-                        Jumat, 20 Agustus 2024
-                      </li>
-                    </ul>
-                  </div>
-
-                  <h6 className="text-[16px] md:text-[26px] text-neutral-900 font-semibold">
-                    Berita Terbaru
-                  </h6>
+            {info && (
+              <div className="flex flex-col w-full items-center justify-center gap-6">
+                <div className="w-full md:w-full flex flex-col self-center">
+                  <Image
+                    src={info?.Infoinstansi?.image}
+                    className="w-full h-full object-contain rounded-xl"
+                    alt="Berita"
+                    width={250}
+                    height={250}
+                  />
                 </div>
 
-                <div className="flex justify-center items-center w-full">
-                  <div className="text-[10px] md:text-[16px] text-justify leading-8 font-normal text-neutral-900">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Commodi est amet iste eligendi! Dolor mollitia, consequuntur
-                    tempora odit adipisci, illum quos magni harum nesciunt
-                    debitis quibusdam iure ducimus quaerat reprehenderit.
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-row">
+                      <p className="text-[12px] pr-4 md:text-[14px] text-neutral-900 font-normal">
+                        {info && info?.name}
+                      </p>
+
+                      <ul>
+                        <li className="text-[12px] list-disc md:text-[14px] text-neutral-900 font-normal">
+                          Jumat, 20 Agustus 2024
+                        </li>
+                      </ul>
+                    </div>
+
+                    <h6 className="text-[16px] md:text-[26px] text-neutral-900 font-semibold">
+                      {info && info?.Infoinstansi?.title}
+                    </h6>
+                  </div>
+
+                  <div className="flex justify-center items-center w-full">
+                    <div className="text-[10px] md:text-[16px] text-justify leading-8 font-normal text-neutral-900">
+                      {info && (
+                        <RichTextDisplay
+                          content={info?.Infoinstansi?.content}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
