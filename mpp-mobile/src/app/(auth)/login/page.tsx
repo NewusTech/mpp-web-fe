@@ -1,4 +1,6 @@
 "use client";
+
+import google from "@/../../public/assets/google-color.png";
 import { Button } from "@/components/ui/button";
 import { EyeOff, Eye, UserRound, Loader } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -129,7 +131,7 @@ export default function LoginScreen() {
 
   return (
     <section className="flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:w-screen">
-      <div className="flex flex-col w-11/12 md:w-5/12 gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 px-8 py-6 md:py-12 md:px-20">
+      <div className="flex flex-col w-11/12 md:w-6/12 gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 px-8 py-6 md:py-12 md:px-20">
         <Link
           href={"/"}
           className="flex flex-col items-center justify-center w-full gap-y-3">
@@ -156,7 +158,7 @@ export default function LoginScreen() {
           </div>
         </Link>
 
-        <div className="flex flex-col w-full justify-center mt-8 md:mt-12">
+        <div className="flex flex-col w-full justify-center mt-8 md:mt-12 gap-y-3">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -230,7 +232,7 @@ export default function LoginScreen() {
                 </div>
               </div>
 
-              <div className="h-[72px] flex justify-center items-end">
+              <div className="flex justify-center items-start">
                 <Button
                   className="text-[14px] font-normal"
                   type="submit"
@@ -241,9 +243,37 @@ export default function LoginScreen() {
               </div>
             </form>
           </Form>
+
+          <div className="w-full flex flex-row items-center">
+            <div className="w-full h-[0.5px] bg-neutral-800"></div>
+
+            <div className="w-5/12">
+              <p className="text-center text-neutral-800">Atau</p>
+            </div>
+
+            <div className="w-full h-[0.5px] bg-neutral-800"></div>
+          </div>
+
+          <div className="w-8/12 flex items-center justify-center self-center">
+            <Button className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
+              <div className="w-2/12 flex items-center">
+                <Image
+                  src={google}
+                  alt="Google Login"
+                  width={30}
+                  height={30}
+                  className="w-full h-full"
+                />
+              </div>
+
+              <p className="text-primary-800 font-semibold text-[12px] md:text-[14px]">
+                Masuk Dengan Google
+              </p>
+            </Button>
+          </div>
         </div>
 
-        <div className="w-full text-center text-primary-700 text-[14px] mt-8">
+        <div className="w-full text-center text-primary-700 text-[14px] md:mt-8">
           Dengan mendaftar, Anda menyetujui{" "}
           {term && (
             <Dialog open={isDialogOpen}>

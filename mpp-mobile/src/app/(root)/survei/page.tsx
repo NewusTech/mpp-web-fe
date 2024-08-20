@@ -1,8 +1,17 @@
 "use client";
 
+import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -26,6 +35,8 @@ import {
   getBackgroundClass,
   getDescription,
 } from "@/helpers/logout/surveiHelp";
+import Image from "next/legacy/image";
+import { LogIn } from "lucide-react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -68,6 +79,7 @@ const ProgressBar = ({
 
 export default function SurveiScreenMpp() {
   const isMobile = useMediaQuery("(max-width: 767px)");
+  const [token, setToken] = useState<string | undefined>(undefined);
   const [dataChart, setDataChart] = useState<
     ChartData<"doughnut", number[], unknown>
   >({
@@ -85,6 +97,10 @@ export default function SurveiScreenMpp() {
 
   const now = new Date();
   const thisYear = now.getFullYear();
+
+  useEffect(() => {
+    setToken(Cookies.get("Authorization"));
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -153,11 +169,48 @@ export default function SurveiScreenMpp() {
               </p>
 
               <div className="w-full">
-                <Button className="w-full md:w-7/12 font-normal py-6 text-[14px] md:text-[16px]">
-                  <Link href={`/survei/survei-mpp`}>
-                    Isi Survey Kepuasan Masyarakat ( SKM )
-                  </Link>
-                </Button>
+                {!token ? (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <div className="w-full md:w-6/12 font-normal bg-primary-700 rounded-full py-4 text-[14px] md:text-[16px]">
+                        <p className="text-neutral-50 text-center">
+                          Isi Survey Kepuasan Masyarakat ( SKM )
+                        </p>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className="flex flex-col bg-neutral-50 rounded-xl items-center w-10/12 md:w-6/12 justify-center py-4">
+                      <DialogHeader>
+                        <div className="">
+                          <Image
+                            src={loginDong}
+                            alt="Login Dong"
+                            width={200}
+                            height={200}
+                          />
+
+                          <p className="text-[14px] text-neutral-900 font-semibold mt-2">
+                            Maaf, Anda tidak mempunyai akses!
+                          </p>
+                        </div>
+                      </DialogHeader>
+                      <DialogFooter className="w-full">
+                        <div className="flex flex-row w-full gap-2 items-center justify-center mt-4">
+                          <LogIn className="text-primary-800 w-[15px] h-[15px]" />
+
+                          <Link href={"/login"} className="text-primary-800">
+                            Login
+                          </Link>
+                        </div>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <Button className="w-full md:w-7/12 font-normal py-6 text-[14px] md:text-[16px]">
+                    <Link href={`/survei/survei-mpp`}>
+                      Isi Survey Kepuasan Masyarakat ( SKM )
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
 

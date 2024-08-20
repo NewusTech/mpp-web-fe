@@ -250,6 +250,16 @@ export default function NavbarScreen() {
           </Link>
 
           <Link
+            href="/survei"
+            className={`text-center w-full text-[20px] text-primary-800 ${
+              pathName === "/survei"
+                ? "text-secondary-700 hover:text-primary-800"
+                : "text-primary-800 hover:text-secondary-700"
+            } font-light`}>
+            SKM
+          </Link>
+
+          <Link
             href="/berita"
             className={`text-center w-full text-[20px] text-primary-800 ${
               pathName === "/berita"
@@ -359,7 +369,7 @@ export default function NavbarScreen() {
                   </DropdownMenuItem>
                 </Link>
 
-                <Link
+                {/* <Link
                   href="/survei"
                   className={`${
                     pathName === "/survei"
@@ -384,7 +394,7 @@ export default function NavbarScreen() {
                       SKM
                     </p>
                   </DropdownMenuItem>
-                </Link>
+                </Link> */}
 
                 <Link
                   href="/pengaduan"
