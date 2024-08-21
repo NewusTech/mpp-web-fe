@@ -62,6 +62,11 @@ export const schemaSkm = z.object({
   kritiksaran: z
     .string()
     .refine((val) => val !== "", "Kritik Saran Harus Diisi"),
+  name: z.string({ message: "Nama harus diisi" }),
+  email: z.string({ message: "Email harus diisi" }).email("Email tidak valid"),
+  telepon: z.string({ message: "Telepon harus diisi" }),
+  alamat: z.string({ message: "Alamat harus diisi" }),
+  pekerjaan: z.string({ message: "Pekerjaan harus diisi" }),
 });
 
 export const schemaUpdateDiri = z.object({

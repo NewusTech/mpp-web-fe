@@ -235,7 +235,7 @@ function Home() {
   return (
     <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20 relative">
       {isAnnouncement && (
-        <div className="fixed left-1/2 transform -translate-x-1/2 bg-neutral-50 w-11/12 md:w-8/12 rounded-xl border border-neutral-600 text-black p-4 shadow-xl z-50">
+        <div className="fixed left-1/2 transform -translate-x-1/2 bg-neutral-50 w-11/12 md:w-8/12 md:h-4/6 rounded-xl border border-neutral-600 text-black p-4 shadow-xl z-50">
           <div className="flex justify-between flex-row w-full p-2">
             <h2 className="font-semibold text-neutral-900 text-[20px] md:text-[26px]">
               Pengumuman
@@ -247,13 +247,13 @@ function Home() {
             />
           </div>
 
-          <div className="w-full max-h-[300px] md:min-h-[500px] flex flex-col p-1 md:p-2">
+          <div className="w-full h-full flex flex-col p-1 md:p-2">
             {announcement && (
               <Image
                 src={announcement?.file}
                 alt="Pengumuman MPP"
                 width={300}
-                height={500}
+                height={300}
                 className="w-full h-full rounded-lg
               "
               />
