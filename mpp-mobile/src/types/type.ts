@@ -435,6 +435,7 @@ export type LayananFormType = {
 };
 
 export type LayananType = {
+  id: number;
   Layananforms: [LayananFormType];
   desc: string;
   image: string;
@@ -598,4 +599,33 @@ export interface InformatiDinasType {
   id: number;
   name: string;
   Infoinstansi: InformasyType;
+}
+
+export interface NilaiSKMPerDinasType {
+  id: number;
+  layanan_name: string;
+  Surveyformnums_nilai: number;
+}
+
+export interface DataSKMGrafikType {
+  rataRataNilaiSKM: number;
+  jmlSKMbyGender: {
+    countSKM: number;
+    jmlSKMbyPria: number;
+    jmlSKMbyWanita: number;
+  };
+  jmlSKMbyEdu: {
+    countSKM: number;
+    jmlSKMTdkSklh: number;
+    jmlSKMbySD: number;
+    jmlSKMbySMP: number;
+    jmlSKMbySMA: number;
+    jmlSKMbyD1: number;
+    jmlSKMbyD2: number;
+    jmlSKMbyD3: number;
+    jmlSKMbyS1: number;
+    jmlSKMbyS2: number;
+    jmlSKMbyS3: number;
+  };
+  nilaiSKM_perlayanan: NilaiSKMPerDinasType[];
 }

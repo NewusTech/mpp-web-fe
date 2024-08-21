@@ -26,7 +26,6 @@ import {
   Legend,
   ChartData,
 } from "chart.js";
-
 import { Doughnut } from "react-chartjs-2";
 import { Progress } from "@/components/ui/progress";
 import { useMediaQuery } from "@/hooks/useMediaQuery/useMediaQuery";
@@ -37,37 +36,33 @@ import {
 } from "@/helpers/logout/surveiHelp";
 import Image from "next/legacy/image";
 import { LogIn } from "lucide-react";
+import { DataSKMGrafikType, LayananType } from "@/types/type";
+import fetchInstansi from "@/components/fetching/instansi/instansi";
+import SKMPerDinasFetch from "@/components/fetching/skmPerDinas/skmPerDinas";
+import CardDinasStatistikSurvei from "@/components/fetching/skmPerDinas/cardDinasSKM/cardDinasSkm";
+import CardDinasStatistikSurveiEducation from "@/components/fetching/skmPerDinas/cardDinasSkmEdu/cardDinasSkmEdu";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ProgressBar = ({
-  name,
-  value,
-  id,
-}: {
-  name: string;
-  value: number;
-  id: number;
-}) => {
-  const description = getDescription(value);
+const ProgressBar = ({ name, value }: { name: string; value: number }) => {
+  const fixValue = Math.round(value);
+  const description = getDescription(fixValue);
   const backgroundClass = getBackgroundClass(description);
 
   return (
-    <div className="flex space-x-3 items-center">
+    <div className="flex space-x-3 space-y-3 items-center">
       <div className="w-full space-y-1">
         <div className="flex justify-between text-sm text-neutral-800">
-          <Link
-            href={`/survey/result/${id}`}
-            className="hover:text-primary-700 hover:underline transition-colors duration-300">
-            <h4>{name}</h4>
-          </Link>
-          <Link
-            href={`/survey/result/${id}`}
-            className="hover:text-primary-700 hover:underline transition-colors duration-300">
-            <p>{value}</p>
-          </Link>
+          <div className="hover:text-primary-700 hover:underline transition-colors duration-300">
+            <h4 className="text-[12px] md:text-[14px]">{name}</h4>
+          </div>
+          <div className="hover:text-primary-700 hover:underline transition-colors duration-300">
+            <p className="text-[12px] md:text-[14px]">{fixValue}</p>
+          </div>
         </div>
-        <Progress className="bg-primary-700 text-primary-700" value={value} />
+        <div className="border border-neutral-50 bg-neutral-300 rounded-full">
+          <Progress value={fixValue} />
+        </div>
       </div>
       <div
         className={`text-[10px] ${backgroundClass} h-10 w-20 flex items-center justify-center rounded-lg text-neutral-50 px-2 py-1`}>
@@ -80,23 +75,58 @@ const ProgressBar = ({
 export default function SurveiScreenMpp() {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const [token, setToken] = useState<string | undefined>(undefined);
-  const [dataChart, setDataChart] = useState<
+  const [data, setData] = useState<DataSKMGrafikType>();
+  const [instansis, setInstansis] = useState<LayananType[]>();
+  const [selectedInstansi, setSelectedInstansi] = useState<number | undefined>(
+    undefined
+  );
+  const [dataChartEdu, setDataChartEdu] = useState<
     ChartData<"doughnut", number[], unknown>
   >({
-    labels: ["Suara", "hati", "siapa"],
-    datasets: [
-      {
-        label: "Statistics",
-        data: [300, 500, 800],
-        backgroundColor: ["#3568C0", "#FF9742", "#FFC595"],
-      },
-    ],
+    labels: [],
+    datasets: [],
+  });
+  const [dataChartGender, setDataChartGender] = useState<
+    ChartData<"doughnut", number[], unknown>
+  >({
+    labels: [],
+    datasets: [],
   });
   const [aspectRatio, setAspectRatio] = useState(2.5);
   const [isWideScreen, setIsWideScreen] = useState(false);
 
   const now = new Date();
   const thisYear = now.getFullYear();
+
+  const fetchDinas = async () => {
+    try {
+      const res = await fetchInstansi("", 1, 100000);
+
+      setInstansis(res.data || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDinas();
+  }, []);
+
+  const fetchDataSKMDinas = async (id?: number) => {
+    try {
+      const res = await SKMPerDinasFetch(id);
+
+      setData(res.data);
+      updateChartDataGender(res.data.jmlSKMbyGender);
+      updateChartDataEducation(res.data.jmlSKMbyEdu);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataSKMDinas(selectedInstansi);
+  }, [selectedInstansi]);
 
   useEffect(() => {
     setToken(Cookies.get("Authorization"));
@@ -105,7 +135,7 @@ export default function SurveiScreenMpp() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setAspectRatio(4.0);
+        setAspectRatio(1);
         setIsWideScreen(true);
       } else {
         setAspectRatio(2.5);
@@ -120,16 +150,74 @@ export default function SurveiScreenMpp() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const updateChartData = (countPerYear: { [key: string]: number }) => {
-    const labels = Object.keys(countPerYear);
-    const data = Object.values(countPerYear);
-    setDataChart({
-      labels: labels,
+  const updateChartDataGender = (jmlSKMbyGender: {
+    jmlSKMbyPria: number;
+    jmlSKMbyWanita: number;
+  }) => {
+    setDataChartGender({
+      labels: ["Laki-laki", "Perempuan"],
       datasets: [
         {
           label: "Statistics",
-          data: [300, 500, 800],
-          backgroundColor: ["#3568C0", "#FF9742", "#FFC595"],
+          data: [jmlSKMbyGender.jmlSKMbyPria, jmlSKMbyGender.jmlSKMbyWanita],
+          backgroundColor: ["#3568C0", "#FF9742"],
+        },
+      ],
+    });
+  };
+
+  const updateChartDataEducation = (jmlSKMbyEdu: {
+    jmlSKMTdkSklh: number;
+    jmlSKMbyD1: number;
+    jmlSKMbyD2: number;
+    jmlSKMbyD3: number;
+    jmlSKMbyS1: number;
+    jmlSKMbyS2: number;
+    jmlSKMbyS3: number;
+    jmlSKMbySD: number;
+    jmlSKMbySMA: number;
+    jmlSKMbySMP: number;
+  }) => {
+    setDataChartEdu({
+      labels: [
+        "Tidak Sekolah",
+        "SD",
+        "SMP",
+        "SMA",
+        "D1",
+        "D2",
+        "D3",
+        "D4/S1",
+        "S2",
+        "S3",
+      ],
+      datasets: [
+        {
+          label: "Statistics",
+          data: [
+            jmlSKMbyEdu.jmlSKMTdkSklh,
+            jmlSKMbyEdu.jmlSKMbySD,
+            jmlSKMbyEdu.jmlSKMbySMP,
+            jmlSKMbyEdu.jmlSKMbySMA,
+            jmlSKMbyEdu.jmlSKMbyD1,
+            jmlSKMbyEdu.jmlSKMbyD2,
+            jmlSKMbyEdu.jmlSKMbyD3,
+            jmlSKMbyEdu.jmlSKMbyS1,
+            jmlSKMbyEdu.jmlSKMbyS2,
+            jmlSKMbyEdu.jmlSKMbyS3,
+          ],
+          backgroundColor: [
+            "#C4C4C4",
+            "#3568C0",
+            "#FF9742",
+            "#28C382",
+            "#F29B4A",
+            "#EE3F62",
+            "#1D3A6C",
+            "#AB4D00",
+            "#176E4A",
+            "#9E520B",
+          ],
         },
       ],
     });
@@ -150,6 +238,60 @@ export default function SurveiScreenMpp() {
     },
     aspectRatio: aspectRatio,
   };
+
+  const datas = [
+    {
+      kunci: "Laki-laki",
+      value: data?.jmlSKMbyGender?.jmlSKMbyPria,
+    },
+    {
+      kunci: "Perempuan",
+      value: data?.jmlSKMbyGender?.jmlSKMbyWanita,
+    },
+  ];
+
+  const eduDatas = [
+    {
+      kunci: "Tidak Sekolah",
+      value: data?.jmlSKMbyEdu?.jmlSKMTdkSklh,
+    },
+    {
+      kunci: "SD",
+      value: data?.jmlSKMbyEdu?.jmlSKMbySD,
+    },
+    {
+      kunci: "SMP",
+      value: data?.jmlSKMbyEdu?.jmlSKMbySMP,
+    },
+    {
+      kunci: "SMA",
+      value: data?.jmlSKMbyEdu?.jmlSKMbySMA,
+    },
+    {
+      kunci: "D1",
+      value: data?.jmlSKMbyEdu?.jmlSKMbyD1,
+    },
+    {
+      kunci: "D2",
+      value: data?.jmlSKMbyEdu?.jmlSKMbyD2,
+    },
+    {
+      kunci: "D3",
+      value: data?.jmlSKMbyEdu?.jmlSKMbyD3,
+    },
+    {
+      kunci: "D4/S1",
+      value: data?.jmlSKMbyEdu?.jmlSKMbyS1,
+    },
+    {
+      kunci: "S2",
+      value: data?.jmlSKMbyEdu?.jmlSKMbyS2,
+    },
+    {
+      kunci: "S3",
+      value: data?.jmlSKMbyEdu?.jmlSKMbyS3,
+    },
+  ];
 
   return (
     <div className="w-full flex flex-col gap-y-10 pb-40">
@@ -220,7 +362,7 @@ export default function SurveiScreenMpp() {
               </h5>
 
               <p className="font-semibold text-[40px] text-neutral-50 py-10">
-                89.19
+                {data && Math.round(data?.rataRataNilaiSKM)}
               </p>
 
               <p className="font-normal text-[14px] text-neutral-50">
@@ -235,90 +377,109 @@ export default function SurveiScreenMpp() {
 
       <div className="w-full flex flex-col md:flex-row justify-center items-center gap-y-5 md:gap-y-0 self-center">
         <div className="w-11/12 flex flex-col items-center md:items-stretch gap-y-3 md:gap-y-0 md:flex-row gap-x-5">
-          <div className="flex flex-col bg-neutral-50 w-11/12 md:w-full shadow-md rounded-xl relative">
+          <div className="w-full flex flex-col bg-neutral-50 md:w-full shadow-md rounded-xl relative">
             <div className="w-full flex flex-col p-6 gap-y-5">
-              <h5>Grafik Survey Kepuasan Masyarakat berdasarkan Instansi</h5>
+              <h5 className="font-semibold text-primary-800 md:text-[22px]">
+                Grafik Survey Kepuasan Masyarakat berdasarkan Instansi
+              </h5>
 
               <div className="w-full">
-                <Select>
+                <Select
+                  onValueChange={(value) => setSelectedInstansi(Number(value))}>
                   <SelectTrigger className="w-full md:w-5/12 border border-neutral-700 rounded-full">
-                    <SelectValue placeholder="Theme" />
+                    <SelectValue placeholder="Pilih Instansi" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
+                    {instansis &&
+                      instansis?.map((item: LayananType, i: number) => {
+                        return (
+                          <SelectItem key={i} value={String(item?.id)}>
+                            {item?.name}
+                          </SelectItem>
+                        );
+                      })}
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <ProgressBar
-                  // key={v.id}
-                  id={1}
-                  name={"chart"}
-                  value={90}
-                />
+                {data &&
+                  data.nilaiSKM_perlayanan?.map((item: any, i: number) => {
+                    return (
+                      <ProgressBar
+                        key={i}
+                        name={item?.layanan_name}
+                        value={item?.Surveyformnums_nilai}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>
 
-          <div className="w-full flex flex-col items-center gap-y-5">
-            <div className="flex flex-col bg-neutral-50 w-11/12 md:w-full shadow-md rounded-xl relative">
+          <div className="w-full md:w-8/12 flex flex-col items-center gap-y-5">
+            <div className="flex flex-col bg-neutral-50 w-full shadow-md rounded-xl relative">
               <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
                 <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
-                  Antrian Online
+                  Jenis Kelamin
                 </h5>
 
                 <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
-                  Grafik Tahunan
+                  Grafik Koresponden
                 </p>
               </div>
 
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h5 className="text-[18px] text-primary-900 font-semibold">
-                  {/* {statistik?.totalantrian3year} */}
-                </h5>
+              <div className="relative w-full flex items-center justify-center my-[42px]">
+                <Doughnut
+                  className="w-full"
+                  data={dataChartEdu}
+                  options={chartOptions}
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <h5 className="text-[18px] text-primary-900 font-semibold">
+                    {data && data?.jmlSKMbyEdu.countSKM}
+                  </h5>
+                </div>
               </div>
 
-              <Doughnut
-                className="flex items-center justify-center self-center my-[42px]"
-                data={dataChart}
-                options={chartOptions}
-              />
-
-              <div className="flex flex-row self-center w-10/12 md:w-full justify-between pb-[10.5px] px-[12px] md:px-12">
-                {/* {renderAntrianYearStats()} */}
+              <div className="grid grid-cols-5 md:grid-cols-5 md:place-content-center md:gap-y-2 self-center w-full md:w-10/12 justify-between pb-[10.5px] md:px-0 md:ml-16">
+                {eduDatas?.map((item: any, i: number) => {
+                  return (
+                    <CardDinasStatistikSurveiEducation key={i} item={item} />
+                  );
+                })}
               </div>
             </div>
 
             {/* hhe */}
 
-            <div className="flex flex-col bg-neutral-50 w-11/12 md:w-full shadow-md rounded-xl relative">
+            <div className="flex flex-col bg-neutral-50 w-full shadow-md rounded-xl relative">
               <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
                 <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
-                  Antrian Online
+                  Pendidikan
                 </h5>
 
                 <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
-                  Grafik Tahunan
+                  Grafik Koresponden
                 </p>
               </div>
 
               <div className="absolute inset-0 flex items-center justify-center">
                 <h5 className="text-[18px] text-primary-900 font-semibold">
-                  {/* {statistik?.totalantrian3year} */}
+                  {data && data?.jmlSKMbyGender?.countSKM}
                 </h5>
               </div>
 
               <Doughnut
                 className="flex items-center justify-center self-center my-[42px]"
-                data={dataChart}
+                data={dataChartGender}
                 options={chartOptions}
               />
 
-              <div className="flex flex-row self-center w-10/12 md:w-full justify-between pb-[10.5px] px-[12px] md:px-12">
-                {/* {renderAntrianYearStats()} */}
+              <div className="flex flex-row self-center w-8/12 md:w-5/12 justify-between pb-[10.5px] px-[12px] md:px-0">
+                {datas?.map((item: any, i: number) => {
+                  return <CardDinasStatistikSurvei key={i} item={item} />;
+                })}
               </div>
             </div>
           </div>
