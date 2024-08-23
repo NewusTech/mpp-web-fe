@@ -31,6 +31,8 @@ import Cookies from "js-cookie";
 import { redirect, useRouter } from "next/navigation";
 import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 import DocSyarat from "@/components/fetching/document-download-persyaratan/docSyarat";
+import { useDebounce } from "@/hooks/useDebounce/useDebounce";
+import SearchComponent from "@/components/others/searchComponent/searchComponent";
 
 const steps = [
   { id: 1, title: "1" },
@@ -61,15 +63,17 @@ export default function PermohonanLayananFirstScreen({
   const [syarats, setSyarats] = useState<LayananFilesType[]>();
   const [isLoading, setIsLoading] = useState(false);
   const [myItem, setMyItem] = useState<any>();
+  const [search, setSearch] = useState<string>("");
+  const debounceSearch = useDebounce(search);
 
   useEffect(() => {
     const item = localStorage.getItem("instanceId");
     setMyItem(item);
   }, []);
 
-  const fetchLayanan = async (id: number) => {
+  const fetchLayanan = async (id: number, search: string) => {
     try {
-      const layananByInstansi = await ByInstansi(id);
+      const layananByInstansi = await ByInstansi(id, 1000000, search);
 
       setService(layananByInstansi.data);
 
@@ -88,8 +92,8 @@ export default function PermohonanLayananFirstScreen({
     if (!token) {
       redirect("/login");
     }
-    fetchLayanan(params.id);
-  }, [params.id]);
+    fetchLayanan(params.id, debounceSearch);
+  }, [params.id, debounceSearch]);
 
   const fetchDownload = async (id: number) => {
     try {
@@ -152,6 +156,10 @@ export default function PermohonanLayananFirstScreen({
     }, 2000);
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center mt-6 md:mt-4 mx-6 md:mx-[70px] mb-[132px] md:mb-0 bg-primary-100 md:pb-[210px]">
       <div className="flex flex-col w-full px-4 items-center bg-neutral-50 rounded-xl shadow-md py-4 md:py-9 md:px-16 gap-[16px]">
@@ -188,6 +196,12 @@ export default function PermohonanLayananFirstScreen({
                       <SelectValue placeholder="Pilih Layanan Permohonan" />
                     </SelectTrigger>
                     <SelectContent className="w-[96%] md:w-full">
+                      <div className="w-full md:w-full">
+                        <SearchComponent
+                          change={handleSearch}
+                          search={search}
+                        />
+                      </div>
                       {service?.map((el: JenisLayananType) => {
                         return (
                           <div key={el?.id} className="w-11/12 md:w-full">

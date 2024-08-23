@@ -5,6 +5,22 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import { TrendingUp } from "lucide-react";
+import { Pie, PieChart } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import {
   Dialog,
   DialogContent,
@@ -80,21 +96,6 @@ export default function SurveiScreenMpp() {
   const [selectedInstansi, setSelectedInstansi] = useState<number | undefined>(
     undefined
   );
-  const [dataChartEdu, setDataChartEdu] = useState<
-    ChartData<"doughnut", number[], unknown>
-  >({
-    labels: [],
-    datasets: [],
-  });
-  const [dataChartGender, setDataChartGender] = useState<
-    ChartData<"doughnut", number[], unknown>
-  >({
-    labels: [],
-    datasets: [],
-  });
-  const [aspectRatio, setAspectRatio] = useState(2.5);
-  const [isWideScreen, setIsWideScreen] = useState(false);
-
   const now = new Date();
   const thisYear = now.getFullYear();
 
@@ -117,8 +118,6 @@ export default function SurveiScreenMpp() {
       const res = await SKMPerDinasFetch(id);
 
       setData(res.data);
-      updateChartDataGender(res.data.jmlSKMbyGender);
-      updateChartDataEducation(res.data.jmlSKMbyEdu);
     } catch (error) {
       console.log(error);
     }
@@ -132,166 +131,131 @@ export default function SurveiScreenMpp() {
     setToken(Cookies.get("Authorization"));
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setAspectRatio(1);
-        setIsWideScreen(true);
-      } else {
-        setAspectRatio(2.5);
-        setIsWideScreen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    handleResize();
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const updateChartDataGender = (jmlSKMbyGender: {
-    jmlSKMbyPria: number;
-    jmlSKMbyWanita: number;
-  }) => {
-    setDataChartGender({
-      labels: ["Laki-laki", "Perempuan"],
-      datasets: [
-        {
-          label: "Statistics",
-          data: [jmlSKMbyGender.jmlSKMbyPria, jmlSKMbyGender.jmlSKMbyWanita],
-          backgroundColor: ["#3568C0", "#FF9742"],
-        },
-      ],
-    });
-  };
-
-  const updateChartDataEducation = (jmlSKMbyEdu: {
-    jmlSKMTdkSklh: number;
-    jmlSKMbyD1: number;
-    jmlSKMbyD2: number;
-    jmlSKMbyD3: number;
-    jmlSKMbyS1: number;
-    jmlSKMbyS2: number;
-    jmlSKMbyS3: number;
-    jmlSKMbySD: number;
-    jmlSKMbySMA: number;
-    jmlSKMbySMP: number;
-  }) => {
-    setDataChartEdu({
-      labels: [
-        "Tidak Sekolah",
-        "SD",
-        "SMP",
-        "SMA",
-        "D1",
-        "D2",
-        "D3",
-        "D4/S1",
-        "S2",
-        "S3",
-      ],
-      datasets: [
-        {
-          label: "Statistics",
-          data: [
-            jmlSKMbyEdu.jmlSKMTdkSklh,
-            jmlSKMbyEdu.jmlSKMbySD,
-            jmlSKMbyEdu.jmlSKMbySMP,
-            jmlSKMbyEdu.jmlSKMbySMA,
-            jmlSKMbyEdu.jmlSKMbyD1,
-            jmlSKMbyEdu.jmlSKMbyD2,
-            jmlSKMbyEdu.jmlSKMbyD3,
-            jmlSKMbyEdu.jmlSKMbyS1,
-            jmlSKMbyEdu.jmlSKMbyS2,
-            jmlSKMbyEdu.jmlSKMbyS3,
-          ],
-          backgroundColor: [
-            "#C4C4C4",
-            "#3568C0",
-            "#FF9742",
-            "#28C382",
-            "#F29B4A",
-            "#EE3F62",
-            "#1D3A6C",
-            "#AB4D00",
-            "#176E4A",
-            "#9E520B",
-          ],
-        },
-      ],
-    });
-  };
-
-  const chartOptions = {
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    responsive: true,
-    cutout: "60%",
-    datasets: {
-      doughnut: {
-        weight: 0.1,
-      },
-    },
-    aspectRatio: aspectRatio,
-  };
-
-  const datas = [
+  const chartDataEdu = [
     {
-      kunci: "Laki-laki",
-      value: data?.jmlSKMbyGender?.jmlSKMbyPria,
+      status: "Tidak Sekolah",
+      data: data?.jmlSKMbyEdu?.jmlSKMTdkSklh,
+      fill: "#c4c4c4",
     },
     {
-      kunci: "Perempuan",
-      value: data?.jmlSKMbyGender?.jmlSKMbyWanita,
+      status: "SD",
+      data: data?.jmlSKMbyEdu?.jmlSKMbySD,
+      fill: "#3568c0",
+    },
+    {
+      status: "SMP",
+      data: data?.jmlSKMbyEdu?.jmlSKMbySMP,
+      fill: "#ff9742",
+    },
+    {
+      status: "SMA",
+      data: data?.jmlSKMbyEdu?.jmlSKMbySMA,
+      fill: "#28c382",
+    },
+    {
+      status: "Diploma 1",
+      data: data?.jmlSKMbyEdu?.jmlSKMbyD1,
+      fill: "#f29b4a",
+    },
+    {
+      status: "Diploma 2",
+      data: data?.jmlSKMbyEdu?.jmlSKMbyD2,
+      fill: "#ee3f62",
+    },
+    {
+      status: "Diploma 3",
+      data: data?.jmlSKMbyEdu?.jmlSKMbyD3,
+      fill: "#608AD3",
+    },
+    {
+      status: "Diploma 4 / Strata 1",
+      data: data?.jmlSKMbyEdu?.jmlSKMbyS1,
+      fill: "#FFB06F",
+    },
+    {
+      status: "Strata 2",
+      data: data?.jmlSKMbyEdu?.jmlSKMbyS2,
+      fill: "#50DBA1",
+    },
+    {
+      status: "Strata 3",
+      data: data?.jmlSKMbyEdu?.jmlSKMbyS3,
+      fill: "#F5B374",
     },
   ];
 
-  const eduDatas = [
+  const chartConfigEdu = {
+    data: {
+      label: "Data",
+    },
+    tidak_sekolah: {
+      label: "Tidak Sekolah",
+      color: "#c4c4c4",
+    },
+    sd: {
+      label: "SD",
+      color: "#3568c0",
+    },
+    smp: {
+      label: "SMP",
+      color: "#ff9742",
+    },
+    sma: {
+      label: "SMA",
+      color: "#28c382",
+    },
+    diploma1: {
+      label: "Diploma 1",
+      color: "#f29b4a",
+    },
+    diploma2: {
+      label: "Diploma 2",
+      color: "#ee3f62",
+    },
+    diploma3: {
+      label: "Diploma 3",
+      color: "#608AD3",
+    },
+    diploma4_Strata1: {
+      label: "Diploma 1 / Strata 1",
+      color: "#FFB06F",
+    },
+    strata2: {
+      label: "Strata 2",
+      color: "#50DBA1",
+    },
+    strata3: {
+      label: "Strata 3",
+      color: "#F5B374",
+    },
+  } satisfies ChartConfig;
+
+  const chartDataGender = [
     {
-      kunci: "Tidak Sekolah",
-      value: data?.jmlSKMbyEdu?.jmlSKMTdkSklh,
+      status: "Laki-laki",
+      data: data?.jmlSKMbyGender?.jmlSKMbyPria,
+      fill: "#3568C0",
     },
     {
-      kunci: "SD",
-      value: data?.jmlSKMbyEdu?.jmlSKMbySD,
-    },
-    {
-      kunci: "SMP",
-      value: data?.jmlSKMbyEdu?.jmlSKMbySMP,
-    },
-    {
-      kunci: "SMA",
-      value: data?.jmlSKMbyEdu?.jmlSKMbySMA,
-    },
-    {
-      kunci: "D1",
-      value: data?.jmlSKMbyEdu?.jmlSKMbyD1,
-    },
-    {
-      kunci: "D2",
-      value: data?.jmlSKMbyEdu?.jmlSKMbyD2,
-    },
-    {
-      kunci: "D3",
-      value: data?.jmlSKMbyEdu?.jmlSKMbyD3,
-    },
-    {
-      kunci: "D4/S1",
-      value: data?.jmlSKMbyEdu?.jmlSKMbyS1,
-    },
-    {
-      kunci: "S2",
-      value: data?.jmlSKMbyEdu?.jmlSKMbyS2,
-    },
-    {
-      kunci: "S3",
-      value: data?.jmlSKMbyEdu?.jmlSKMbyS3,
+      status: "Wanita",
+      data: data?.jmlSKMbyGender?.jmlSKMbyWanita,
+      fill: "#FF9742",
     },
   ];
+
+  const chartConfigGender = {
+    data: {
+      label: "Data",
+    },
+    laki_laki: {
+      label: "Laki-laki",
+      color: "#3568C0",
+    },
+    wamita: {
+      label: "Wanita",
+      color: "#FF9742",
+    },
+  } satisfies ChartConfig;
 
   return (
     <div className="w-full flex flex-col gap-y-10 pb-40">
@@ -419,68 +383,93 @@ export default function SurveiScreenMpp() {
 
           <div className="w-full md:w-8/12 flex flex-col items-center gap-y-5">
             <div className="flex flex-col bg-neutral-50 w-full shadow-md rounded-xl relative">
-              <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
-                <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
-                  Jenis Kelamin
-                </h5>
+              <Card className="flex flex-col gap-y-5">
+                <CardHeader className="items-center pb-0">
+                  <CardTitle>
+                    <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
+                      <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
+                        Pendidikan
+                      </h5>
 
-                <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
-                  Grafik Koresponden
-                </p>
-              </div>
-
-              <div className="relative w-full flex items-center justify-center my-[42px]">
-                <Doughnut
-                  className="w-full"
-                  data={dataChartEdu}
-                  options={chartOptions}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h5 className="text-[18px] text-primary-900 font-semibold">
-                    {data && data?.jmlSKMbyEdu.countSKM}
-                  </h5>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-5 md:grid-cols-5 md:place-content-center md:gap-y-2 self-center w-full md:w-10/12 justify-between pb-[10.5px] md:px-0 md:ml-16">
-                {eduDatas?.map((item: any, i: number) => {
-                  return (
-                    <CardDinasStatistikSurveiEducation key={i} item={item} />
-                  );
-                })}
-              </div>
+                      <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
+                        Grafik Koresponden
+                      </p>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 pb-0">
+                  <ChartContainer
+                    config={chartConfigEdu}
+                    className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground">
+                    <PieChart>
+                      <ChartTooltip
+                        content={<ChartTooltipContent hideLabel />}
+                      />
+                      <Pie
+                        data={chartDataEdu}
+                        dataKey="data"
+                        label
+                        nameKey="pendidikan"
+                      />
+                    </PieChart>
+                  </ChartContainer>
+                </CardContent>
+                <CardFooter className="flex-col gap-2 text-sm">
+                  <div className="flex items-center gap-2 font-medium leading-none">
+                    <p className="text-neutral-900 font-semibold text-[18px]">
+                      Total Survei Pendidikan:
+                    </p>
+                    <p className="text-neutral-900 font-semibold text-[18px]">
+                      {data && data?.jmlSKMbyEdu?.countSKM}
+                    </p>
+                  </div>
+                </CardFooter>
+              </Card>
             </div>
 
-            {/* hhe */}
-
             <div className="flex flex-col bg-neutral-50 w-full shadow-md rounded-xl relative">
-              <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
-                <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
-                  Pendidikan
-                </h5>
+              <Card className="flex flex-col">
+                <CardHeader className="items-center pb-0">
+                  <CardTitle>
+                    <div className="flex flex-row items-center justify-center gap-[5px] mt-[15px] mx-[10px]">
+                      <h5 className="text-[16px] md:text-[20px] text-primary-800 font-semibold">
+                        Jenis Kelamin
+                      </h5>
 
-                <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
-                  Grafik Koresponden
-                </p>
-              </div>
-
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h5 className="text-[18px] text-primary-900 font-semibold">
-                  {data && data?.jmlSKMbyGender?.countSKM}
-                </h5>
-              </div>
-
-              <Doughnut
-                className="flex items-center justify-center self-center my-[42px]"
-                data={dataChartGender}
-                options={chartOptions}
-              />
-
-              <div className="flex flex-row self-center w-8/12 md:w-5/12 justify-between pb-[10.5px] px-[12px] md:px-0">
-                {datas?.map((item: any, i: number) => {
-                  return <CardDinasStatistikSurvei key={i} item={item} />;
-                })}
-              </div>
+                      <p className="text-[10px] md:text-[12px] text-neutral-800 font-light">
+                        Grafik Koresponden
+                      </p>
+                    </div>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 pb-0">
+                  <ChartContainer
+                    config={chartConfigGender}
+                    className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground">
+                    <PieChart>
+                      <ChartTooltip
+                        content={<ChartTooltipContent hideLabel />}
+                      />
+                      <Pie
+                        data={chartDataGender}
+                        dataKey="data"
+                        label
+                        nameKey="pendidikan"
+                      />
+                    </PieChart>
+                  </ChartContainer>
+                </CardContent>
+                <CardFooter className="flex-col gap-2 text-sm">
+                  <div className="flex items-center gap-2 font-medium leading-none">
+                    <p className="text-neutral-900 font-semibold text-[18px]">
+                      Total Survei Jenis Kelamin:
+                    </p>
+                    <p className="text-neutral-900 font-semibold text-[18px]">
+                      {data && data?.jmlSKMbyGender?.countSKM}
+                    </p>
+                  </div>
+                </CardFooter>
+              </Card>
             </div>
           </div>
         </div>
