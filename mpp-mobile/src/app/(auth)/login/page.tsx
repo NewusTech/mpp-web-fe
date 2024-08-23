@@ -20,6 +20,7 @@ import parse from "html-react-parser";
 import { TermType } from "@/types/type";
 import TermCondition from "@/components/fetching/termCond/termCond";
 import Swal from "sweetalert2";
+import { GoogleLogin } from "@react-oauth/google";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -34,6 +35,10 @@ const formSchema = z.object({
     .string({ message: "Password harus lebih dari 6 karakter" })
     .min(6, { message: "Password harus lebih dari 6 karakter" }),
 });
+
+interface Window {
+  google: any;
+}
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -124,6 +129,58 @@ export default function LoginScreen() {
       setIsLoading(false);
     }
   };
+
+  const handleOnSubmitGoogle = async (response: any) => {
+    try {
+      setIsLoading(true);
+
+      console.log(response, "ini response");
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // google_token: response?.credential,
+          },
+          cache: "no-store",
+        }
+      );
+
+      const result = await res.json();
+
+      console.log(result, "ini rs");
+
+      // if (result?.data?.token) {
+      //   Cookies.set("Authorization", result?.data?.token);
+      //   router.push("/");
+      //   Swal.fire({
+      //     icon: "success",
+      //     title: "Login berhasil!",
+      //     timer: 2000,
+      //     showConfirmButton: false,
+      //     position: "center",
+      //   });
+      // } else {
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Login gagal. Periksa akun anda kembali!",
+      //     timer: 2000,
+      //     showConfirmButton: false,
+      //     position: "center",
+      //   });
+      // }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // const handleOnSubmitGoogle = async (response: any) => {
+  //   console.log("login google", response);
+  // };
 
   const handleAgree = () => {
     setIsDialogOpen(false);
@@ -255,7 +312,23 @@ export default function LoginScreen() {
           </div>
 
           <div className="w-8/12 flex items-center justify-center self-center">
-            <Button className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
+            <GoogleLogin
+              onSuccess={handleOnSubmitGoogle}
+              // onError={() => {
+              //   console.log("Login Failed, Periksa akun anda kembali!");
+              // }}
+              onError={() => {
+                Swal.fire({
+                  icon: "error",
+                  title: "Login gagal!",
+                  timer: 2000,
+                  showConfirmButton: false,
+                  position: "center",
+                });
+              }}
+            />
+
+            {/* <Button className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
               <div className="w-2/12 flex items-center">
                 <Image
                   src={google}
@@ -269,7 +342,7 @@ export default function LoginScreen() {
               <p className="text-primary-800 font-semibold text-[12px] md:text-[14px]">
                 Masuk Dengan Google
               </p>
-            </Button>
+            </Button> */}
           </div>
         </div>
 
