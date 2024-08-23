@@ -420,7 +420,7 @@ export default function SurveiScreenMpp() {
                       Total Survei Pendidikan:
                     </p>
                     <p className="text-neutral-900 font-semibold text-[18px]">
-                      {data && data?.jmlSKMbyEdu.countSKM}
+                      {data && data?.jmlSKMbyEdu?.countSKM}
                     </p>
                   </div>
                 </CardFooter>

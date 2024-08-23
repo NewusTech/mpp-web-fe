@@ -72,7 +72,7 @@ export default function BookingAntrianPage({
 
   const fetchLayanan = async (id: number) => {
     try {
-      const layananByInstansi = await ByInstansi(id);
+      const layananByInstansi = await ByInstansi(id, 1000000, "");
 
       setServices(layananByInstansi.data);
     } catch (error) {

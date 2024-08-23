@@ -14,6 +14,7 @@ import { formatTime } from "@/utils/formatTime";
 import { formattedDate } from "@/helpers/logout/formatted";
 import { redirect } from "next/navigation";
 import Swal from "sweetalert2";
+import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -183,7 +184,9 @@ export default function BookingResult({ params }: { params: { id: number } }) {
             </h5>
 
             <div className="text-[12px] md:text-[16px] text-neutral-900 font-normal">
-              {antrian?.Layanan.syarat && parse(antrian?.Layanan.syarat)}
+              {antrian?.Layanan.syarat && (
+                <RichTextDisplay content={antrian?.Layanan.syarat} />
+              )}
             </div>
           </div>
         </div>

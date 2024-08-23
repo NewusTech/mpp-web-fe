@@ -4,6 +4,7 @@ import { formatLongDate } from "@/helpers/logout/formatted";
 import { Berita } from "@/types/type";
 import Image from "next/image";
 import parse from "html-react-parser";
+import { RichTextDisplay } from "@/components/richTextDisplay/richTextDisplay";
 
 async function fetchDetailNews(slug: string) {
   const response = await fetch(
@@ -74,7 +75,10 @@ export default async function DetailBeritaPage({
 
           <div className="flex justify-center items-center w-full">
             <div className="text-[10px] md:text-[16px] text-justify leading-8 font-normal text-neutral-900">
-              {parse(detail.data?.desc)}
+              {/* {parse(detail.data?.desc)} */}
+              {detail?.data?.desc && (
+                <RichTextDisplay content={detail?.data?.desc} />
+              )}
             </div>
           </div>
         </div>
