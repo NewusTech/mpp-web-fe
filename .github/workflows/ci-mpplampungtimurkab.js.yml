@@ -30,4 +30,4 @@ jobs:
       working-directory: ./mpp-mobile
       run: npm run build --if-present
     - name : change repo
-      run : pm2 restart 8
+      run : pm2 restart all
