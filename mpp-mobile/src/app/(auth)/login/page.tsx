@@ -130,58 +130,6 @@ export default function LoginScreen() {
     }
   };
 
-  const handleOnSubmitGoogle = async (response: any) => {
-    try {
-      setIsLoading(true);
-
-      console.log(response, "ini response");
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // google_token: response?.credential,
-          },
-          cache: "no-store",
-        }
-      );
-
-      const result = await res.json();
-
-      console.log(result, "ini rs");
-
-      // if (result?.data?.token) {
-      //   Cookies.set("Authorization", result?.data?.token);
-      //   router.push("/");
-      //   Swal.fire({
-      //     icon: "success",
-      //     title: "Login berhasil!",
-      //     timer: 2000,
-      //     showConfirmButton: false,
-      //     position: "center",
-      //   });
-      // } else {
-      //   Swal.fire({
-      //     icon: "error",
-      //     title: "Login gagal. Periksa akun anda kembali!",
-      //     timer: 2000,
-      //     showConfirmButton: false,
-      //     position: "center",
-      //   });
-      // }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // const handleOnSubmitGoogle = async (response: any) => {
-  //   console.log("login google", response);
-  // };
-
   const handleAgree = () => {
     setIsDialogOpen(false);
   };
@@ -311,38 +259,25 @@ export default function LoginScreen() {
             <div className="w-full h-[0.5px] bg-neutral-800"></div>
           </div>
 
-          <div className="w-8/12 flex items-center justify-center self-center">
-            <GoogleLogin
-              onSuccess={handleOnSubmitGoogle}
-              // onError={() => {
-              //   console.log("Login Failed, Periksa akun anda kembali!");
-              // }}
-              onError={() => {
-                Swal.fire({
-                  icon: "error",
-                  title: "Login gagal!",
-                  timer: 2000,
-                  showConfirmButton: false,
-                  position: "center",
-                });
-              }}
-            />
+          <div className="flex items-center justify-center self-center"> 
+            <Link className="w-full" href={`${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`}>
+              <Button className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
+                <div className="w-8/12 flex items-center">
+                  <Image
+                    src={google}
+                    alt="Google Login"
+                    width={30}
+                    height={30}
+                    className="w-full h-full"
+                  />
+                </div>
 
-            {/* <Button className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
-              <div className="w-2/12 flex items-center">
-                <Image
-                  src={google}
-                  alt="Google Login"
-                  width={30}
-                  height={30}
-                  className="w-full h-full"
-                />
-              </div>
+                <p className="m-3 text-primary-800 font-semibold text-[12px] md:text-[14px]">
+                  Masuk Dengan Google
+                </p>
 
-              <p className="text-primary-800 font-semibold text-[12px] md:text-[14px]">
-                Masuk Dengan Google
-              </p>
-            </Button> */}
+              </Button>
+            </Link>
           </div>
         </div>
 
