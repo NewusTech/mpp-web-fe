@@ -133,6 +133,8 @@ function Home() {
   // };
 
   useEffect(() => {
+    const auth = Cookies.get("Authorization");
+    console.log("token", auth)
     fetchCarousels();
   }, []);
 
