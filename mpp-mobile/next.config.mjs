@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async middleware() {
-    const { middleware } = await import("./src/middlewares.ts");
-    return middleware;
-  },
+  // async middleware() {
+  //   const { middleware } = await import("./src/middlewares.ts");
+  //   return middleware;
+  // },
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;
