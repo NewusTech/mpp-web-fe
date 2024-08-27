@@ -47,7 +47,7 @@ export default function NavbarMobile() {
         </div>
       </Link>
 
-      <div className="flex flex-row bg-primary-100 justify-center pr-5">
+      {auth && (<div className="flex flex-row bg-primary-100 justify-center pr-5">
         <Popover>
           <PopoverTrigger>
             <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
@@ -68,7 +68,7 @@ export default function NavbarMobile() {
             </div>
           </PopoverContent>
         </Popover>
-      </div>
+      </div>)}
     </div>
   );
 }
