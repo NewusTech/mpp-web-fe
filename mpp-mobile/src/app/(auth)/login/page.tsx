@@ -139,16 +139,12 @@ export default function LoginScreen() {
   const handleLogin = () => {
     const googleLoginUrl = `${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`;
     const popup = window.open(googleLoginUrl, '_blank', 'width=500,height=600');
-    console.log('a')
 
     window.addEventListener('message', (event) => {
-      console.log('b')
       if (event.origin === process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE) {
-        console.log('c')
         const { token } = event.data;
 
         if (token) {
-          console.log('d')
           Cookies.set('Authorization', token, { expires: 7 });
 
           const tokenget = Cookies.get("Authorization");
@@ -162,8 +158,6 @@ export default function LoginScreen() {
           //   popup.close();  // Tutup popup dari parent window
           // }
         }
-        console.log('e')
-        console.log('f')
       }
     });
   };

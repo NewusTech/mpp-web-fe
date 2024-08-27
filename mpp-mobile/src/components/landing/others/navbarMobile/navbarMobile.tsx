@@ -9,11 +9,14 @@ import {
 } from "@/components/ui/popover";
 import { Bell } from "lucide-react";
 import MobileNotifikasi from "../notifikasi/mobileNotifikasi";
+import Cookies from "js-cookie";
 
 const raleway = Raleway({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
+
+const auth = Cookies.get("Authorization");
 
 export default function NavbarMobile() {
   return (
