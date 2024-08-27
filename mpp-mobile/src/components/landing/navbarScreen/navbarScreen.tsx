@@ -40,6 +40,7 @@ interface JwtPayload {
 }
 
 export default function NavbarScreen() {
+  const auth = Cookies.get("Authorization");
   const pathName = usePathname();
   const [currentPath, setCurrentPath] = useState(pathName);
   const [decoded, setDecoded] = useState<JwtPayload | null>(null);
@@ -290,7 +291,7 @@ export default function NavbarScreen() {
           </Link>
         </div>
 
-        <div className="flex flex-row justify-center ml-5">
+        {auth && (<div className="flex flex-row justify-center ml-5">
           <Popover>
             <PopoverTrigger>
               <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
@@ -311,7 +312,7 @@ export default function NavbarScreen() {
               </div>
             </PopoverContent>
           </Popover>
-        </div>
+        </div>)}
 
         <div className="flex flex-row justify-center ml-[10px]">
           {decoded ? (
