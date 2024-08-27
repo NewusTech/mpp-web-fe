@@ -134,6 +134,40 @@ export default function LoginScreen() {
     setIsDialogOpen(false);
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleLogin = () => {
+    const googleLoginUrl = `${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`;
+    const popup = window.open(googleLoginUrl, '_blank', 'width=500,height=600');
+    console.log('a')
+
+    window.addEventListener('message', (event) => {
+      console.log('b')
+      if (event.origin === process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE) {
+        console.log('c')
+        const { token } = event.data;
+
+        if (token) {
+          console.log('d')
+          Cookies.set('Authorization', token, { expires: 7 });
+
+          const tokenget = Cookies.get("Authorization");
+
+          if (tokenget) {
+            router.push("/");
+          }
+          // setIsModalOpen(true);  // Buka modal setelah login berhasil
+          // if (popup) {
+          //   console.log(popup)
+          //   popup.close();  // Tutup popup dari parent window
+          // }
+        }
+        console.log('e')
+        console.log('f')
+      }
+    });
+  };
+
   return (
     <section className="flex justify-center items-center bg-gradient-to-bl from-neutral-50 from-[-40%] via-primary-700 via-99% to-neutral-700 to-[120%] w-screen h-screen md:w-screen">
       <div className="flex flex-col w-11/12 md:w-6/12 gap-[10px] md:gap-0 items-center md:items-start justify-center md:justify-start rounded-xl bg-primary-200 px-8 py-6 md:py-12 md:px-20">
@@ -259,27 +293,34 @@ export default function LoginScreen() {
             <div className="w-full h-[0.5px] bg-neutral-800"></div>
           </div>
 
-          <div className="flex items-center justify-center self-center"> 
-            <Link className="w-full" href={`${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`}>
-              <Button className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
-                <div className="w-8/12 flex items-center">
-                  <Image
-                    src={google}
-                    alt="Google Login"
-                    width={30}
-                    height={30}
-                    className="w-full h-full"
-                  />
-                </div>
+          <div className="flex items-center justify-center self-center">
+            {/* <Link className="w-full" href={`${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`}> */}
+            <Button onClick={handleLogin} className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
+              <div className="w-8/12 flex items-center">
+                <Image
+                  src={google}
+                  alt="Google Login"
+                  width={30}
+                  height={30}
+                  className="w-full h-full"
+                />
+              </div>
 
-                <p className="m-3 text-primary-800 font-semibold text-[12px] md:text-[14px]">
-                  Masuk Dengan Google
-                </p>
+              <p className="m-3 text-primary-800 font-semibold text-[12px] md:text-[14px]">
+                Masuk Dengan Google
+              </p>
 
-              </Button>
-            </Link>
+            </Button>
+            {/* </Link> */}
           </div>
         </div>
+
+        {isModalOpen && (
+          <div className="modal">
+            <p>Login berhasil! Anda telah masuk dengan Google.</p>
+            <button onClick={() => router.push('/dashboard')}>Lanjut ke Dashboard</button>
+          </div>
+        )}
 
         <div className="w-full text-center text-primary-700 text-[14px] md:mt-8">
           Dengan mendaftar, Anda menyetujui{" "}
