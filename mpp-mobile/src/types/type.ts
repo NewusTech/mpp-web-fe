@@ -239,6 +239,16 @@ export interface CarouselType {
   image: string;
 }
 
+export interface NotificationsType {
+  id: string,
+  layananformnum_id: number,
+  userinfo: number,
+  title: string,
+  description: string,
+  url: string;
+  date: string
+}
+
 export interface VideoType {
   video: string;
 }
