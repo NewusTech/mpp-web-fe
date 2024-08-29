@@ -10,6 +10,11 @@ import {
 import { Bell } from "lucide-react";
 import MobileNotifikasi from "../notifikasi/mobileNotifikasi";
 import Cookies from "js-cookie";
+import fetchNotifications from "@/components/fetching/notifications/notifications";
+import { NotificationsType } from "@/types/type";
+import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -18,7 +23,73 @@ const raleway = Raleway({
 
 const auth = Cookies.get("Authorization");
 
+interface JwtPayload {
+  userId: string;
+}
+
 export default function NavbarMobile() {
+  let socket: Socket;
+  const auth = Cookies.get("Authorization");
+  const [notifications, setNotifications] = useState<NotificationsType[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [decoded, setDecoded] = useState<JwtPayload | null>(null);
+
+  useEffect(() => {
+
+    const auth = Cookies.get("Authorization");
+
+    let socket: Socket | null = null;
+
+    if (auth) {
+      try {
+        const decodedToken = jwtDecode<JwtPayload>(auth);
+
+        socket = io(`${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}`);
+
+        // Dengarkan event dari server
+        socket.on('UpdateStatus', (pesansocket: any) => {
+          console.log("bbb", currentPage)
+          if (pesansocket.iduser == decodedToken?.userId) {
+            fetchNotifications(currentPage);
+          }
+        });
+
+        setDecoded(decodedToken);
+      } catch (error) {
+        console.error("Invalid token", error);
+      }
+    }
+
+    // Cleanup ketika komponen di-unmount
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+
+  }, []);
+
+  const fetchNotifications = async (page: number) => {
+    try {
+      console.log(page)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MPP}/notifications?page=${page}&limit=10`, {
+        headers: {
+          "Authorization": `Bearer ${Cookies.get("Authorization")}`,
+        }
+      });
+      const data = await response.json();
+      setNotifications(data?.data);
+      setTotalPages(Math.ceil(data?.pagination?.totalCount / 10));
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications(currentPage);
+  }, [currentPage]);
+
   return (
     <div className="w-full flex flex-row">
       <Link
@@ -52,7 +123,7 @@ export default function NavbarMobile() {
           <PopoverTrigger>
             <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
           </PopoverTrigger>
-          <PopoverContent className="w-full max-w-[390px] bg-primary-500 bg-opacity-80 border border-primary-500 shadow-lg rounded-lg">
+          <PopoverContent className="w-full max-w-[270px] bg-primary-100 bg-opacity-80 border border-primary-900 shadow-lg rounded-lg max-h-[550px] overflow-y-scroll mr-3">
             <div className="w-full flex flex-col gap-y-3">
               <div className="w-full border-b border-neutral-900">
                 <h3 className="text-neutral-900 font-semibold text-[20px]">
@@ -60,11 +131,32 @@ export default function NavbarMobile() {
                 </h3>
               </div>
 
-              <div className="w-full flex flex-col overflow-y-auto gap-y-3 verticalScroll max-h-screen pb-4">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
-                  <MobileNotifikasi key={i} />
+              <div className="w-full flex flex-col overflow-y-auto gap-y-3 verticalScroll max-h-screen">
+                {notifications?.map((notification, i) => (
+                  <MobileNotifikasi key={i} notification={notification} />
                 ))}
               </div>
+
+                {/* Pagination Controls */}
+                <div className="flex justify-between mt-4 px-2">
+                    <button
+                      className="px-4 py-2 bg-primary-700 text-white rounded disabled:opacity-50"
+                      onClick={() => setCurrentPage(prevPage => prevPage - 1)}
+                      disabled={currentPage <= 1}
+                    >
+                      Previous
+                    </button>
+                    {/* <span className="self-center text-neutral-900">
+                      Page {currentPage} of {totalPages}
+                    </span> */}
+                    <button
+                      className="px-4 py-2 bg-primary-700 text-white rounded disabled:opacity-50"
+                      onClick={() => setCurrentPage(prevPage => prevPage + 1)}
+                      disabled={currentPage >= totalPages}
+                    >
+                      Next
+                    </button>
+                  </div>
             </div>
           </PopoverContent>
         </Popover>
