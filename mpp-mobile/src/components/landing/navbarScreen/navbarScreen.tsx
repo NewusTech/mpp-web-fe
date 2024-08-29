@@ -31,6 +31,7 @@ import LogoutScreen from "@/components/actions/logoutScreen/logoutScreen";
 import NotifikasiWebiste from "../others/notifikasi/notifikasi";
 import fetchNotifications from "@/components/fetching/notifications/notifications";
 import { NotificationsType } from "@/types/type";
+import { io, Socket } from 'socket.io-client';
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -42,12 +43,15 @@ interface JwtPayload {
 }
 
 export default function NavbarScreen() {
+  let socket: Socket;
   const auth = Cookies.get("Authorization");
   const pathName = usePathname();
   const [currentPath, setCurrentPath] = useState(pathName);
   const [decoded, setDecoded] = useState<JwtPayload | null>(null);
   const [navbarColor, setNavbarColor] = useState("bg-primary-800");
-  const [notifications, setnotifications] = useState<NotificationsType[] | undefined>();
+  const [notifications, setNotifications] = useState<NotificationsType[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     setCurrentPath(pathName);
@@ -58,30 +62,57 @@ export default function NavbarScreen() {
     }
 
     const auth = Cookies.get("Authorization");
+
+    let socket: Socket | null = null;
+
     if (auth) {
       try {
         const decodedToken = jwtDecode<JwtPayload>(auth);
+
+        socket = io(`${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}`);
+
+        // Dengarkan event dari server
+        socket.on('UpdateStatus', (pesansocket: any) => {
+          console.log("bbb", currentPage)
+          if (pesansocket.iduser == decodedToken?.userId) {
+            fetchNotifications(currentPage);
+          }
+        });
+
         setDecoded(decodedToken);
       } catch (error) {
         console.error("Invalid token", error);
       }
     }
+
+    // Cleanup ketika komponen di-unmount
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+
   }, [pathName]);
 
-  const fetchnotif = async () => {
+  const fetchNotifications = async (page: number) => {
     try {
-      const notifications = await fetchNotifications();
-      console.log("aaa", notifications)
-      setnotifications(notifications);
-      console.log("bbbb", notifications)
+      console.log(page)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL_MPP}/notifications?page=${page}&limit=10`, {
+        headers: {
+          "Authorization": `Bearer ${Cookies.get("Authorization")}`,
+        }
+      });
+      const data = await response.json();
+      setNotifications(data?.data);
+      setTotalPages(Math.ceil(data?.pagination?.totalCount / 10));
     } catch (error) {
-      console.log(error);
+      console.error("Failed to fetch notifications:", error);
     }
   };
 
   useEffect(() => {
-    fetchnotif()
-  }, []);
+    fetchNotifications(currentPage);
+  }, [currentPage]);
 
   const handleLogout = () => {
     Cookies.remove("Authorization");
@@ -114,8 +145,8 @@ export default function NavbarScreen() {
           <Link
             href="/"
             className={`text-center w-full text-[20px] text-primary-800 ${pathName === "/"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
+              ? "text-secondary-700 hover:text-primary-800"
+              : "text-primary-800 hover:text-secondary-700"
               } font-light`}>
             Beranda
           </Link>
@@ -126,28 +157,28 @@ export default function NavbarScreen() {
                 <div className="flex flex-row gap-x-5 justify-center items-center group">
                   <h3
                     className={`text-center text-[20px] font-normal ${pathName === "/mpp/tentang-mpp" ||
-                        pathName === "/mpp/fasilitas" ||
-                        pathName === "/mpp/aplikasi-pendukung" ||
-                        pathName ===
-                        "/mpp/maklumat-mal-pelayanan-publik-lampung-timur" ||
-                        pathName ===
-                        "/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur"
-                        ? "text-secondary-700 group-hover:text-primary-800"
-                        : "text-primary-800 group-hover:text-secondary-700"
+                      pathName === "/mpp/fasilitas" ||
+                      pathName === "/mpp/aplikasi-pendukung" ||
+                      pathName ===
+                      "/mpp/maklumat-mal-pelayanan-publik-lampung-timur" ||
+                      pathName ===
+                      "/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur"
+                      ? "text-secondary-700 group-hover:text-primary-800"
+                      : "text-primary-800 group-hover:text-secondary-700"
                       }`}>
                     MPP
                   </h3>
 
                   <ChevronDown
                     className={`w-[24px] h-[24px] ${pathName === "/mpp/tentang-mpp" ||
-                        pathName === "/mpp/fasilitas" ||
-                        pathName === "/mpp/aplikasi-pendukung" ||
-                        pathName ===
-                        "/mpp/maklumat-mal-pelayanan-publik-lampung-timur" ||
-                        pathName ===
-                        "/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur"
-                        ? "text-secondary-700 group-hover:text-primary-800"
-                        : "text-primary-800 group-hover:text-secondary-700"
+                      pathName === "/mpp/fasilitas" ||
+                      pathName === "/mpp/aplikasi-pendukung" ||
+                      pathName ===
+                      "/mpp/maklumat-mal-pelayanan-publik-lampung-timur" ||
+                      pathName ===
+                      "/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur"
+                      ? "text-secondary-700 group-hover:text-primary-800"
+                      : "text-primary-800 group-hover:text-secondary-700"
                       }`}
                   />
                 </div>
@@ -156,14 +187,14 @@ export default function NavbarScreen() {
                 <Link
                   href={`/mpp/tentang-mpp`}
                   className={`${pathName === `/mpp/tentang-mpp`
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${pathName === `/mpp/tentang-mpp`
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Tentang MPP
                     </p>
@@ -173,14 +204,14 @@ export default function NavbarScreen() {
                 <Link
                   href="/mpp/fasilitas"
                   className={`${pathName === "/pengaduan"
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${pathName === "/mpp/fasilitas"
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Fasilitas
                     </p>
@@ -190,14 +221,14 @@ export default function NavbarScreen() {
                 <Link
                   href="/mpp/aplikasi-pendukung"
                   className={`${pathName === "/mpp/aplikasi-pendukung"
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${pathName === "/mpp/aplikasi-pendukung"
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Aplikasi Pendukung
                     </p>
@@ -207,16 +238,16 @@ export default function NavbarScreen() {
                 <Link
                   href={`/mpp/maklumat-mal-pelayanan-publik-lampung-timur`}
                   className={`${pathName ===
-                      `/mpp/maklumat-mal-pelayanan-publik-lampung-timur`
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    `/mpp/maklumat-mal-pelayanan-publik-lampung-timur`
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${pathName ===
-                          `/mpp/maklumat-mal-pelayanan-publik-lampung-timur`
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        `/mpp/maklumat-mal-pelayanan-publik-lampung-timur`
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Maklumat MPP
                     </p>
@@ -226,16 +257,16 @@ export default function NavbarScreen() {
                 <Link
                   href={`/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`}
                   className={`${pathName ===
-                      `/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    `/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 cursor-pointer hover:text-secondary-700 focus:text-secondary-700 group">
                     <p
                       className={`${pathName ===
-                          `/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        `/mpp/standar-operasional-mal-pelayanan-publik-lampung-timur`
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700 cursor-pointer`}>
                       Standar Operasional
                     </p>
@@ -248,8 +279,8 @@ export default function NavbarScreen() {
           <Link
             href="/instansi"
             className={`text-center w-full text-[20px] text-primary-800 ${pathName === "/instansi"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
+              ? "text-secondary-700 hover:text-primary-800"
+              : "text-primary-800 hover:text-secondary-700"
               } font-light`}>
             Instansi
           </Link>
@@ -257,8 +288,8 @@ export default function NavbarScreen() {
           <Link
             href="/survei"
             className={`text-center w-full text-[20px] text-primary-800 ${pathName === "/survei"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
+              ? "text-secondary-700 hover:text-primary-800"
+              : "text-primary-800 hover:text-secondary-700"
               } font-light`}>
             SKM
           </Link>
@@ -266,8 +297,8 @@ export default function NavbarScreen() {
           <Link
             href="/berita"
             className={`text-center w-full text-[20px] text-primary-800 ${pathName === "/berita"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
+              ? "text-secondary-700 hover:text-primary-800"
+              : "text-primary-800 hover:text-secondary-700"
               } font-light`}>
             Berita
           </Link>
@@ -275,8 +306,8 @@ export default function NavbarScreen() {
           <Link
             href="/kontak"
             className={`text-center w-full text-[20px] text-primary-800 ${pathName === "/kontak"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
+              ? "text-secondary-700 hover:text-primary-800"
+              : "text-primary-800 hover:text-secondary-700"
               } font-light`}>
             Kontak
           </Link>
@@ -284,35 +315,59 @@ export default function NavbarScreen() {
           <Link
             href="/statistik"
             className={`text-center w-full text-[20px] text-primary-800 ${pathName === "/statistik"
-                ? "text-secondary-700 hover:text-primary-800"
-                : "text-primary-800 hover:text-secondary-700"
+              ? "text-secondary-700 hover:text-primary-800"
+              : "text-primary-800 hover:text-secondary-700"
               } font-light`}>
             Statistik
           </Link>
         </div>
 
-        {auth && (<div className="flex flex-row justify-center ml-5">
-          <Popover>
-            <PopoverTrigger>
-              <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
-            </PopoverTrigger>
-            <PopoverContent className="min-w-[700px] bg-primary-500 bg-opacity-80 border border-primary-500 shadow-lg rounded-lg h-screen">
-              <div className="w-full flex flex-col gap-y-3">
-                <div className="w-full border-b border-neutral-900">
-                  <h3 className="text-neutral-900 font-semibold text-[20px]">
-                    Notifikasi
-                  </h3>
-                </div>
+        {auth && (
+          <div className="flex flex-row justify-center ml-5">
+            <Popover>
+              <PopoverTrigger>
+                <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
+              </PopoverTrigger>
+              <PopoverContent className="min-w-[500px] bg-primary-100 mr-5 bg-opacity-95 border border-primary-900 shadow-lg rounded-lg max-h-[550px] overflow-y-scroll">
+                <div className="w-full flex flex-col gap-y-3">
+                  <div className="w-full border-b border-neutral-900">
+                    <h3 className="text-neutral-900 font-semibold text-[20px]">
+                      Notifikasi
+                    </h3>
+                  </div>
 
-                <div className="w-full flex flex-col overflow-y-auto gap-y-3 verticalScroll max-h-screen pb-36">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, i) => (
-                    <NotifikasiWebiste key={i} />
-                  ))}
+                  <div className="w-full flex flex-col overflow-y-scroll gap-y-3 verticalScroll max-h-screen">
+                    {notifications?.map((notification, i) => (
+                      <NotifikasiWebiste key={i} notification={notification} />
+                    ))}
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="flex justify-between mt-4 px-2">
+                    <button
+                      className="px-4 py-2 bg-primary-700 text-white rounded disabled:opacity-50"
+                      onClick={() => setCurrentPage(prevPage => prevPage - 1)}
+                      disabled={currentPage <= 1}
+                    >
+                      Previous
+                    </button>
+                    <span className="self-center text-neutral-900">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                      className="px-4 py-2 bg-primary-700 text-white rounded disabled:opacity-50"
+                      onClick={() => setCurrentPage(prevPage => prevPage + 1)}
+                      disabled={currentPage >= totalPages}
+                    >
+                      Next
+                    </button>
+                  </div>
+
                 </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>)}
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
 
         <div className="flex flex-row justify-center ml-[10px]">
           {decoded ? (
@@ -321,21 +376,21 @@ export default function NavbarScreen() {
                 <div className="flex flex-row justify-center ml-[10px] group">
                   <CircleUserRound
                     className={`w-[24px] h-[24px] ${pathName === "/profile" ||
-                        pathName === "/survei" ||
-                        pathName === "/pengaduan" ||
-                        pathName === "/riwayat"
-                        ? "text-secondary-700 group-hover:text-primary-800"
-                        : "text-primary-800 group-hover:text-secondary-700"
+                      pathName === "/survei" ||
+                      pathName === "/pengaduan" ||
+                      pathName === "/riwayat"
+                      ? "text-secondary-700 group-hover:text-primary-800"
+                      : "text-primary-800 group-hover:text-secondary-700"
                       }`}
                   />
 
                   <ChevronDown
                     className={`w-[24px] h-[24px] ${pathName === "/profile" ||
-                        pathName === "/survei" ||
-                        pathName === "/pengaduan" ||
-                        pathName === "/riwayat"
-                        ? "text-secondary-700 group-hover:text-primary-800"
-                        : "text-primary-800 group-hover:text-secondary-700"
+                      pathName === "/survei" ||
+                      pathName === "/pengaduan" ||
+                      pathName === "/riwayat"
+                      ? "text-secondary-700 group-hover:text-primary-800"
+                      : "text-primary-800 group-hover:text-secondary-700"
                       }`}
                   />
                 </div>
@@ -344,21 +399,21 @@ export default function NavbarScreen() {
                 <Link
                   href={`/profile`}
                   className={`${pathName === `/profile`
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <CircleUserRound
                       className={`${pathName === `/profile`
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
                     />
 
                     <p
                       className={`${pathName === `/profile`
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700`}>
                       Profile
                     </p>
@@ -395,21 +450,21 @@ export default function NavbarScreen() {
                 <Link
                   href="/pengaduan"
                   className={`${pathName === "/pengaduan"
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <Send
                       className={`${pathName === "/pengaduan"
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
                     />
 
                     <p
                       className={`${pathName === "/pengaduan"
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700`}>
                       Pengaduan
                     </p>
@@ -419,21 +474,21 @@ export default function NavbarScreen() {
                 <Link
                   href="/riwayat"
                   className={`${pathName === "/riwayat"
-                      ? "text-secondary-700 hover:text-neutral-700"
-                      : "text-neutral-700 hover:text-secondary-700"
+                    ? "text-secondary-700 hover:text-neutral-700"
+                    : "text-neutral-700 hover:text-secondary-700"
                     }`}>
                   <DropdownMenuItem className="text-neutral-700 hover:pl-3 hover:text-secondary-700 focus:text-secondary-700 group cursor-pointer">
                     <History
                       className={`${pathName === "/riwayat"
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } w-[20px] h-[20px] mr-[16px] group-hover:text-secondary-700`}
                     />
 
                     <p
                       className={`${pathName === "/riwayat"
-                          ? "text-secondary-700 hover:text-neutral-700"
-                          : "text-neutral-700 hover:text-secondary-700"
+                        ? "text-secondary-700 hover:text-neutral-700"
+                        : "text-neutral-700 hover:text-secondary-700"
                         } text-[16px] group-hover:text-secondary-700`}>
                       Riwayat
                     </p>

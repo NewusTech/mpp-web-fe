@@ -246,7 +246,8 @@ export interface NotificationsType {
   title: string,
   description: string,
   url: string;
-  date: string
+  date: string,
+  isopen: number
 }
 
 export interface VideoType {
