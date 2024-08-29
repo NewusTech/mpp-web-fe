@@ -326,9 +326,14 @@ export default function NavbarScreen() {
           <div className="flex flex-row justify-center ml-5">
             <Popover>
               <PopoverTrigger>
-                <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
+                <div className="relative">
+                  <Bell className="w-6 h-6 text-primary-800 hover:text-secondary-700" />
+                  {notifications?.some((notification) => notification.isopen === 0) && (
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center w-2 h-2 p-1.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"></span>
+                  )}
+                </div>
               </PopoverTrigger>
-              <PopoverContent className="min-w-[500px] bg-primary-100 mr-5 bg-opacity-95 border border-primary-900 shadow-lg rounded-lg max-h-[550px] overflow-y-scroll">
+              <PopoverContent className="min-w-[500px] bg-primary-100 mr-5 border border-primary-900 shadow-lg rounded-lg max-h-[550px] overflow-y-scroll">
                 <div className="w-full flex flex-col gap-y-3">
                   <div className="w-full border-b border-neutral-900">
                     <h3 className="text-neutral-900 font-semibold text-[20px]">
