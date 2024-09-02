@@ -84,7 +84,7 @@ export default function LoginScreen() {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/login`,
+        `${process.env.NEXT_PUBLIC_API_URL_MPP}/user/login?user=true`,
         {
           method: "POST",
           headers: {
