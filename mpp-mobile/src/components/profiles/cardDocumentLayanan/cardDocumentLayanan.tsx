@@ -16,13 +16,21 @@ export default function CardDocumentLayanan({
           {document.layanan_name}
         </h6>
       </div>
-      <div className="flex self-center items-center w-full justify-end">
+      <div className="flex flex-col md:flex-row self-center items-end w-full justify-end">
         {document.fileoutput && (
           <Link
             href={document?.fileoutput}
             target="_blank"
-            className="flex items-center w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] bg-primary-700 hover:bg-primary-600 hover:text-neutral-50 text-neutral-50 py-[10px] cursor-pointer">
-            Lihat
+            className="flex items-center w-10/12 md:w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] mb-1.5 md:mb-0 mx-0 md:mx-1 bg-primary-700 hover:bg-primary-600 hover:text-neutral-50 text-neutral-50 py-[10px] cursor-pointer">
+            Surat Rekomendasi
+          </Link>
+        )}
+        {document.filesertif && (
+          <Link
+            href={document?.filesertif}
+            target="_blank"
+            className="flex items-center w-10/12 md:w-5/12 h-[25px] md:h-[40px] rounded-[50px] justify-center font-normal text-[11px] md:text-[14px] mx-0 md:mx-1 bg-primary-700 hover:bg-primary-600 hover:text-neutral-50 text-neutral-50 py-[10px] cursor-pointer">
+            Dokumen Hasil
           </Link>
         )}
       </div>
