@@ -21,6 +21,7 @@ export default function HasilPermohonan({
   const [permohonan, setPermohonan] = useState<PermohonanDataType>();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -29,9 +30,22 @@ export default function HasilPermohonan({
     setIsModalOpen(false);
   };
 
+  const openModal2 = () => {
+    setIsModalOpen2(true);
+  };
+  const closeModal2 = () => {
+    setIsModalOpen2(false);
+  };
+
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       closeModal();
+    }
+  };
+
+  const handleBackdropClick2 = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      closeModal2();
     }
   };
 
@@ -240,27 +254,40 @@ export default function HasilPermohonan({
       </div>
 
       <div className="flex flex-row items-center justify-center mt-8 gap-x-4">
-        {permohonan?.input_skm === true && permohonan?.status === 3 ? (
+        {permohonan?.input_skm === true && permohonan?.status === 3 && permohonan?.fileoutput ? (
           <Button
             onClick={() => openModal()}
             type="submit"
             className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
-            Lihat
+            Surat Rekomendasi
           </Button>
-        ) : permohonan?.status === 4 ? (
+        ) : permohonan?.status === 4 && permohonan?.fileoutput ? (
           <Button
             disabled
             type="submit"
             className="hidden text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
-            Lihat
+            Surat Rekomendasi
           </Button>
         ) : (
+          ''
+        )}
+
+        {permohonan?.input_skm === true && permohonan?.status === 3 && permohonan?.filesertif ? (
+          <Button
+            onClick={() => openModal2()}
+            type="submit"
+            className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+            Dokumen Hasil
+          </Button>
+        ) : permohonan?.status === 4 && permohonan?.filesertif ? (
           <Button
             disabled
             type="submit"
-            className="text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
-            Lihat
+            className="hidden text-[12px] md:w-2/12 text-primary-700 hover:bg-neutral-200 font-normal bg-neutral-50 border border-neutral-700">
+            Dokumen Hasil
           </Button>
+        ) : (
+          ''
         )}
 
         {isModalOpen && (
@@ -281,7 +308,25 @@ export default function HasilPermohonan({
           </div>
         )}
 
-        {permohonan?.input_skm === false && permohonan?.status === 3 ? (
+        {isModalOpen2 && (
+          <div
+            className="fixed inset-0 bg-neutral-900 bg-opacity-50 flex items-center justify-center z-50"
+            onClick={handleBackdropClick2}>
+            <div className="bg-neutral-50 p-4 rounded-xl w-10/12 md:w-6/12 h-4/6">
+              {permohonan?.fileoutput && (
+                <iframe
+                  allowFullScreen
+                  src={permohonan?.filesertif}
+                  title="Manual Book"
+                  className="w-full h-full rounded-md">
+                  {permohonan?.layanan_name}
+                </iframe>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* {permohonan?.input_skm === false && permohonan?.status === 3 ? (
           <Button
             className="text-[12px] md:w-2/12 text-neutral-50 font-normal"
             disabled>
@@ -318,7 +363,7 @@ export default function HasilPermohonan({
             disabled>
             Unduh
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   );

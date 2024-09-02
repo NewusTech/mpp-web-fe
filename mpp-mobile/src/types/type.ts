@@ -70,6 +70,7 @@ export interface PermohonanDataType {
   updatedAt: string;
   input_skm: boolean;
   fileoutput: string;
+  filesertif: string;
 }
 
 export interface AntrianDataType {
@@ -379,6 +380,7 @@ export interface DesaType {
 export interface DocumentTerbitType {
   layanan_name: string;
   fileoutput: string;
+  filesertif: string;
   no_request: string;
   tgl_selesai: string;
   createdAt: string;
