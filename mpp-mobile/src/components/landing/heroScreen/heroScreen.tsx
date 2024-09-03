@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/legacy/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -32,7 +34,7 @@ export default function HeroScreen({ carousel }: { carousel: CarouselType[] }) {
           {carousel.map((image, index) => (
             <SwiperSlide key={index}>
               {/* min-h-[300px] md:min-h-[650px] */}
-              <div className="w-screen min-h-[300px] md:min-h-[665px]">
+              <div className="w-screen min-h-[300px] md:min-h-[665px] relative">
                 <Image
                   src={image?.image}
                   className="w-full h-full object-cover"
