@@ -10,7 +10,6 @@ import {
 import { Bell } from "lucide-react";
 import MobileNotifikasi from "../notifikasi/mobileNotifikasi";
 import Cookies from "js-cookie";
-import fetchNotifications from "@/components/fetching/notifications/notifications";
 import { NotificationsType } from "@/types/type";
 import { io, Socket } from "socket.io-client";
 import { useEffect, useState } from "react";
@@ -87,7 +86,10 @@ export default function NavbarMobile() {
   };
 
   useEffect(() => {
-    fetchNotifications(currentPage);
+    const auth = Cookies.get("Authorization");
+    if (auth) {
+      fetchNotifications(currentPage);
+    }
   }, [currentPage]);
 
   return (
@@ -127,8 +129,8 @@ export default function NavbarMobile() {
                 {notifications?.some(
                   (notification) => notification.isopen === 0
                 ) && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center w-2 h-2 p-1.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"></span>
-                )}
+                    <span className="absolute top-0 right-0 inline-flex items-center justify-center w-2 h-2 p-1.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"></span>
+                  )}
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-full max-w-[270px] bg-primary-100 border border-primary-900 shadow-lg rounded-lg max-h-[550px] overflow-y-scroll mr-3">
