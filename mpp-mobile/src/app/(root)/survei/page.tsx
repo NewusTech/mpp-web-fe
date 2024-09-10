@@ -251,7 +251,7 @@ export default function SurveiScreenMpp() {
       label: "Laki-laki",
       color: "#3568C0",
     },
-    wamita: {
+    wanita: {
       label: "Wanita",
       color: "#FF9742",
     },
@@ -373,7 +373,7 @@ export default function SurveiScreenMpp() {
                       <ProgressBar
                         key={i}
                         name={item?.layanan_name}
-                        value={item?.Surveyformnums_nilai}
+                        value={item?.totalNilaiPerLayanan}
                       />
                     );
                   })}
@@ -409,7 +409,7 @@ export default function SurveiScreenMpp() {
                         data={chartDataEdu}
                         dataKey="data"
                         label
-                        nameKey="pendidikan"
+                        nameKey="status"
                       />
                     </PieChart>
                   </ChartContainer>
@@ -454,7 +454,7 @@ export default function SurveiScreenMpp() {
                         data={chartDataGender}
                         dataKey="data"
                         label
-                        nameKey="pendidikan"
+                        nameKey="status"
                       />
                     </PieChart>
                   </ChartContainer>

@@ -49,8 +49,8 @@ export default async function DetailBeritaPage({
             src={detail.data?.image}
             className="w-full h-full object-cover rounded-xl"
             alt="Berita"
-            width={80}
-            height={80}
+            width={1000}
+            height={800}
           />
         </div>
 

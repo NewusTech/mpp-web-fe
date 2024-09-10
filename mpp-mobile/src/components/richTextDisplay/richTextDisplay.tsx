@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 
 interface RichTextDisplayProps {
   content: string;
+  keys?: boolean | undefined;
 }
 
-export const RichTextDisplay = ({ content }: RichTextDisplayProps) => {
+export const RichTextDisplay = ({ content, keys }: RichTextDisplayProps) => {
   const [sanitizedContent, setSanitizedContent] = useState<any>("");
 
   useEffect(() => {
@@ -16,7 +17,7 @@ export const RichTextDisplay = ({ content }: RichTextDisplayProps) => {
 
   return (
     <div
-      className="prose"
+      className={`${keys === true ? "prose-mpp" : "prose"}`}
       dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
   );

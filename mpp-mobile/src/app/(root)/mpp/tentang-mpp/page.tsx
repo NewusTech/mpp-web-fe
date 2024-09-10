@@ -1,5 +1,7 @@
 "use client";
 
+import eye_vision from "@/../../public/assets/eye-vision.svg";
+import targeting from "@/../../public/assets/targeting.svg";
 import fetchVisiMisi from "@/components/fetching/visimisi/visimisi";
 import { useEffect, useState } from "react";
 import {
@@ -61,36 +63,64 @@ export default function MppPage() {
   return (
     <div className="bg-primary-100 md:mx-12 md:h-full">
       <div className="flex flex-col w-full items-center justify-center pb-32 pt-4 px-[35px] md:px-0 bg-primary-100 md:mx-0 mb-4 md:mb-0 md:pb-[150px]">
-        <div className="flex flex-col md:grid md:grid-cols-2 md:mx-[35px] gap-[16px]">
-          <div className="flex flex-col text-center gap-[16px] md:gap-y-36">
+        <div className="flex flex-col md:mx-[35px] gap-[16px]">
+          <div className="flex flex-col md:grid md:grid-cols-2 text-center gap-[16px] md:gap-y-36">
             <div className="flex flex-col text-center gap-[16px] md:gap-[40px]">
-              <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
-                Motto
-              </h4>
+              <div className="w-full flex flex-col shadow-md">
+                <div className="w-full h-full p-5 bg-primary-700 rounded-t-lg">
+                  <Image
+                    src={eye_vision}
+                    width={150}
+                    height={150}
+                    className="w-full h-full"
+                  />
+                </div>
 
-              <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-                {visimisi && <RichTextDisplay content={visimisi.motto} />}
+                <div className="w-full flex flex-col bg-white py-5 rounded-b-lg">
+                  <h4 className="text-primary-700 text-[18px] md:text-[26px] font-semibold">
+                    Motto
+                  </h4>
+
+                  <div className="text-[14px] md:text-[16px] px-3 md:px-[25px] text-primary-700 text-center">
+                    {visimisi && <RichTextDisplay content={visimisi.motto} />}
+                  </div>
+                </div>
               </div>
             </div>
 
             <div className="flex flex-col text-center gap-[16px] md:gap-[40px]">
-              <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
-                VISI
-              </h4>
+              <div className="w-full flex flex-col shadow-md">
+                <div className="w-full h-full p-5 bg-primary-700 rounded-t-lg">
+                  <Image
+                    src={targeting}
+                    width={150}
+                    height={150}
+                    className="w-full h-full"
+                  />
+                </div>
 
-              <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-                {visimisi && <RichTextDisplay content={visimisi.visi} />}
+                <div className="w-full flex flex-col py-5 bg-white rounded-b-lg">
+                  <h4 className="text-primary-700 text-[18px] md:text-[26px] font-semibold">
+                    VISI
+                  </h4>
+
+                  <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
+                    {visimisi && <RichTextDisplay content={visimisi.visi} />}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col justify-center text-center gap-4 md:gap-[40px]">
-            <h4 className="text-secondary-700 text-[18px] md:text-[26px] font-semibold">
+          <div className="flex flex-col w-full px-3 md:px-0 py-5 shadow-md bg-primary-700 rounded-lg justify-center text-center gap-4 md:gap-[40px]">
+            <h4 className="text-neutral-50 text-[18px] md:text-[26px] font-semibold">
               MISI
             </h4>
 
-            <div className="text-[14px] md:text-[16px] md:px-[25px] text-primary-700 text-center">
-              {visimisi && <RichTextDisplay content={visimisi.misi} />}
+            <div className="text-[14px] md:text-[16px] md:px-[25px] text-neutral-50 text-center">
+              {visimisi && (
+                <RichTextDisplay content={visimisi.misi} keys={true} />
+              )}
             </div>
           </div>
         </div>
