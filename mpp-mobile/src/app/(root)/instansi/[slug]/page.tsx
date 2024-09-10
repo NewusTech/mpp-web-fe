@@ -456,7 +456,7 @@ export default function InstansiDetail({
           </TabsContent>
 
           <TabsContent value="Informasi Dinas" className="mt-8">
-            {info && (
+            {info && info.Infoinstansi && (
               <div className="flex flex-col w-full items-center justify-center gap-6">
                 <div className="w-full md:w-full flex flex-col self-center">
                   <Image

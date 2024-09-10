@@ -238,7 +238,7 @@ function Home() {
               Instansi Layanan MPP
             </h4>
 
-            <div className="flex flex-col w-full flex-wrap justify-center md:flex-none md:grid md:grid-cols-5 items-center gap-2 my-4">
+            <div className="flex flex-col w-full flex-wrap justify-center md:flex-none md:grid md:grid-cols-5 items-center gap-2 md:gap-y-4 my-4">
               {photos && (
                 <>
                   {layanan?.data?.map((el: Instansi, i: number) => {
