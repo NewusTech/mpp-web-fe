@@ -241,14 +241,14 @@ export interface CarouselType {
 }
 
 export interface NotificationsType {
-  id: string,
-  layananformnum_id: number,
-  userinfo: number,
-  title: string,
-  description: string,
+  id: string;
+  layananformnum_id: number;
+  userinfo: number;
+  title: string;
+  description: string;
   url: string;
-  date: string,
-  isopen: number
+  date: string;
+  isopen: number;
 }
 
 export interface VideoType {
@@ -548,6 +548,7 @@ export interface detailType {
   active_offline?: boolean;
   Apkinstansis?: AppIntansiType[];
   linkmaps: string;
+  website: string;
 }
 
 export interface LayanansType {
@@ -585,6 +586,8 @@ export interface MaklumatMppType {
 export interface InstansiSopType {
   id: number;
   file: string;
+  name: string;
+  desc: string;
 }
 
 export interface SopDinasType {
@@ -606,6 +609,7 @@ export interface InformasyType {
   title: string;
   content: string;
   image: string;
+  createdAt: string;
 }
 
 export interface InformatiDinasType {

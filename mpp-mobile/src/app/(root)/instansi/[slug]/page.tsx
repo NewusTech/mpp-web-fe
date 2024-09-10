@@ -1,6 +1,5 @@
 "use client";
 
-import berita from "@/../../public/assets/berita.jpg";
 import mapLogo from "@/../../public/assets/map-logo.svg";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -8,7 +7,7 @@ import "swiper/css/grid";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Autoplay, Grid } from "swiper/modules";
 import Image from "next/legacy/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -29,7 +28,6 @@ import Link from "next/link";
 import Cookies from "js-cookie";
 import { LogIn } from "lucide-react";
 import wrapText from "@/utils/formatText";
-import parse from "html-react-parser";
 import { formatTime } from "@/utils/formatTime";
 import {
   AppIntansiType,
@@ -53,6 +51,8 @@ import {
   getFileExtension,
 } from "@/helpers/logout/ekstention";
 import DinasInfomationFetch from "@/components/fetching/dinasInfomation";
+import dynamic from "next/dynamic";
+import { formatLongDate } from "@/helpers/logout/formatted";
 
 export default function InstansiDetail({
   params,
@@ -195,7 +195,7 @@ export default function InstansiDetail({
               </h6>
 
               <p className="text-[12px] md:text-[16px] text-neutral-900 font-normal pl-2">
-                -
+                {detailins?.website || "-"}
               </p>
             </div>
 
@@ -477,7 +477,7 @@ export default function InstansiDetail({
 
                       <ul>
                         <li className="text-[12px] list-disc md:text-[14px] text-neutral-900 font-normal">
-                          Jumat, 20 Agustus 2024
+                          {info && formatLongDate(info?.Infoinstansi.createdAt)}
                         </li>
                       </ul>
                     </div>
@@ -566,10 +566,10 @@ export default function InstansiDetail({
 
                               <div className="flex flex-col text-start">
                                 <p className="font-semibold text-primary-700 text-[12px] md:text-[16px] hover:underline">
-                                  {name}
+                                  {item && item?.name}
                                 </p>
                                 <p className="font-normal text-neutral-900 text-[10px] md:text-[14px]">
-                                  {description}
+                                  {item && item?.desc}
                                 </p>
                               </div>
                             </Link>

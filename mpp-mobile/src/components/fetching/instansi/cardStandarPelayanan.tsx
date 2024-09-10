@@ -33,10 +33,10 @@ export default function CardStandarPelayanan({
 
       <div className="flex flex-col text-start">
         <p className="font-semibold text-primary-700 text-[12px] md:text-[16px] hover:underline">
-          {name}
+          {item && item?.name}
         </p>
         <p className="font-normal text-neutral-900 text-[10px] md:text-[14px]">
-          {description}
+          {item && item?.desc}
         </p>
       </div>
     </Link>

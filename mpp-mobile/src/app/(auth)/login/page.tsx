@@ -138,14 +138,14 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     const googleLoginUrl = `${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`;
-    const popup = window.open(googleLoginUrl, '_blank', 'width=500,height=600');
+    const popup = window.open(googleLoginUrl, "_blank", "width=500,height=600");
 
-    window.addEventListener('message', (event) => {
+    window.addEventListener("message", (event) => {
       if (event.origin === process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE) {
         const { token } = event.data;
 
         if (token) {
-          Cookies.set('Authorization', token, { expires: 7 });
+          Cookies.set("Authorization", token, { expires: 7 });
 
           const tokenget = Cookies.get("Authorization");
 
@@ -154,7 +154,6 @@ export default function LoginScreen() {
           }
           // setIsModalOpen(true);  // Buka modal setelah login berhasil
           // if (popup) {
-          //   console.log(popup)
           //   popup.close();  // Tutup popup dari parent window
           // }
         }
@@ -289,7 +288,9 @@ export default function LoginScreen() {
 
           <div className="flex items-center justify-center self-center">
             {/* <Link className="w-full" href={`${process.env.NEXT_PUBLIC_API_URL_MPP_GOOGLE}/auth/google`}> */}
-            <Button onClick={handleLogin} className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
+            <Button
+              onClick={handleLogin}
+              className="border border-neutral-700 rounded-full bg-neutral-50 shadow-md w-full flex flex-row items-center py-6 gap-x-1 md:gap-x-0">
               <div className="w-8/12 flex items-center">
                 <Image
                   src={google}
@@ -303,7 +304,6 @@ export default function LoginScreen() {
               <p className="m-3 text-primary-800 font-semibold text-[12px] md:text-[14px]">
                 Masuk Dengan Google
               </p>
-
             </Button>
             {/* </Link> */}
           </div>
@@ -312,7 +312,9 @@ export default function LoginScreen() {
         {isModalOpen && (
           <div className="modal">
             <p>Login berhasil! Anda telah masuk dengan Google.</p>
-            <button onClick={() => router.push('/dashboard')}>Lanjut ke Dashboard</button>
+            <button onClick={() => router.push("/dashboard")}>
+              Lanjut ke Dashboard
+            </button>
           </div>
         )}
 

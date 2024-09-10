@@ -40,6 +40,7 @@ import { truncateTitle } from "@/utils/formatTitle";
 import TermCondition from "@/components/fetching/termCond/termCond";
 import { X } from "lucide-react";
 import AnnouncementFetch from "@/components/fetching/announcement";
+import LoadingComponent from "@/components/loading/LoadingComponent";
 
 function Home() {
   const [berita, setBerita] = useState<MyBerita>();
@@ -57,13 +58,17 @@ function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [announcement, setAnnouncement] = useState<AnnouncementType>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchAnnouncement = async () => {
+    setIsLoading(true);
     try {
       const res = await AnnouncementFetch();
       setAnnouncement(res.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -183,7 +188,7 @@ function Home() {
   return (
     <div className="bg-primary-50 w-full h-full mb-[24px] md:pb-[75px] pb-20 relative">
       {isAnnouncement && (
-        <div className="fixed inset-0 top-20 bg-black bg-opacity-80 z-40">
+        <div className="fixed inset-0 top-20 md:top-28 bg-black bg-opacity-80 z-40">
           <div className="fixed left-1/2 transform -translate-x-1/2 bg-neutral-50 w-11/12 md:w-8/12 md:h-4/6 rounded-xl border border-neutral-600 text-black p-4 shadow-xl z-50">
             <div className="flex justify-between flex-row w-full p-2">
               <h2 className="font-semibold text-neutral-900 text-[20px] md:text-[26px]">
@@ -194,17 +199,21 @@ function Home() {
                 className="w-6 h-6 cursor-pointer text-primary-800 hover:text-secondary-700"
               />
             </div>
-            <div className="w-full h-full flex flex-col p-1 md:p-2">
-              {announcement && (
-                <Image
-                  src={announcement?.file}
-                  alt="Pengumuman MPP"
-                  width={300}
-                  height={300}
-                  className="w-full h-full rounded-lg"
-                />
-              )}
-            </div>
+            {isLoading ? (
+              <LoadingComponent />
+            ) : (
+              <div className="w-full h-full flex flex-col p-1 md:p-2">
+                {announcement && (
+                  <Image
+                    src={announcement?.file}
+                    alt="Pengumuman MPP"
+                    width={1000}
+                    height={400}
+                    className="w-10/12 h-full rounded-lg"
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       )}
