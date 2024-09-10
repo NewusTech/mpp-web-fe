@@ -12,6 +12,7 @@ import loginDong from "@/../../public/assets/undraw_login_re_4vu2.svg";
 import { LogIn } from "lucide-react";
 import { Layanantype } from "@/types/type";
 import { Button } from "@/components/ui/button";
+import { truncateTitle } from "@/utils/formatTitle";
 
 export default function CardLayananComponent({
   layanan,
@@ -49,7 +50,7 @@ export default function CardLayananComponent({
         <div className="flex flex-col justify-start md:justify-center pb-2 mt-2 w-full">
           <Link href={`/instansi/${layanan.slug}`}>
             <h6 className="text-[14px] text-start md:text-center text-primary-800 font-semibold">
-              {layanan.name}
+              {truncateTitle(layanan.name, 65)}
             </h6>
           </Link>
 
