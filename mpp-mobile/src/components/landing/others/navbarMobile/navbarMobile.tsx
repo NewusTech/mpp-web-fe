@@ -68,7 +68,6 @@ export default function NavbarMobile() {
 
   const fetchNotifications = async (page: number) => {
     try {
-      console.log(page);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL_MPP}/notifications?page=${page}&limit=10`,
         {

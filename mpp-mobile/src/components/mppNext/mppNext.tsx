@@ -197,7 +197,7 @@ export default function MppNext({
             <div className="flex flex-col px-10 justify-between w-full items-center gap-y-2 self-center">
               <Button
                 variant="secondary"
-                className="bg-secondary-700 px-6 hover:bg-secondary-600 text-neutral-50 w-10/12">
+                className="bg-secondary-700 px-6 hover:bg-secondary-600 text-neutral-50 w-full md:w-10/12">
                 <Link
                   href={"/pengaduan"}
                   className="w-full flex justify-center items-center gap-x-6">
@@ -210,8 +210,8 @@ export default function MppNext({
               <Link
                 href={`https://www.lapor.go.id`}
                 target="_blank"
-                className="w-10/12 flex justify-center rounded-full h-[40px] items-center gap-x-4 bg-secondary-700 hover:bg-secondary-600 text-neutral-50 px-5">
-                <MessageCircleWarning className="w-5" />
+                className="w-full md:w-8/12 flex justify-center rounded-full h-[40px] items-center gap-x-4 bg-secondary-700 hover:bg-secondary-600 text-neutral-50 px-5">
+                <MessageCircleWarning className="w-5 h-5" />
 
                 <p className="text-[16px]">Lapor</p>
               </Link>
