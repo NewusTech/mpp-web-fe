@@ -59,7 +59,7 @@ export default function TablePermohonanComponent({
       statusColor = "text-warning-700";
       break;
     default:
-      statusColor = "text-success-600";
+      statusColor = "text-secondary-700";
       break;
   }
 
@@ -76,8 +76,7 @@ export default function TablePermohonanComponent({
       <TableCell className="w-3/12">
         {permohonan.status === 3 ||
         permohonan.status === 4 ||
-        permohonan.status === 5 ||
-        permohonan.status === 6 ? (
+        permohonan.status === 5 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}

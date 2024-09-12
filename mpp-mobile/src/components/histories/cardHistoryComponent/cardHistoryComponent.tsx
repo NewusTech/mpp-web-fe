@@ -50,7 +50,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
       statusColor = "text-warning-700";
       break;
     default:
-      statusColor = "text-success-600";
+      statusColor = "text-secondary-700";
       break;
   }
 
@@ -130,8 +130,7 @@ export default function CardHistoryComponent({ permohonan }: PermohonanType) {
       <div className="flex self-end justify-end items-end mx-4 px-2 pb-4">
         {permohonan.status === 3 ||
         permohonan.status === 4 ||
-        permohonan.status === 5 ||
-        permohonan.status === 6 ? (
+        permohonan.status === 5 ? (
           <div>
             <Link
               href={`riwayat/${permohonan.id}`}
