@@ -190,6 +190,29 @@ body {
   font-family: poppins, sans-serif !important;
 }
 
+.prose-maklumat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.prose-maklumat ol {
+  display: flex;
+  flex-direction: column;
+  list-style-type: decimal;
+  margin-left: 3em;
+  gap: 1.5rem;
+}
+
+.prose-maklumat ul {
+  list-style-type: disc;
+  margin-left: 3em;
+}
+
+.prose-maklumat li > span {
+  color: white !important;
+}
+
 .background-blend {
   background: linear-gradient(
       to bottom,
