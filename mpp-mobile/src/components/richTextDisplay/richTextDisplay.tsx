@@ -17,7 +17,13 @@ export const RichTextDisplay = ({ content, keys }: RichTextDisplayProps) => {
 
   return (
     <div
-      className={`${keys === true ? "prose-mpp" : "prose"}`}
+      className={`${
+        keys === true
+          ? "prose-mpp"
+          : keys === false
+          ? "prose-maklumat"
+          : "prose"
+      }`}
       dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
   );
