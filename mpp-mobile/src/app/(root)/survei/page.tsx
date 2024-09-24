@@ -349,11 +349,16 @@ export default function SurveiScreenMpp() {
 
               <div className="w-full">
                 <Select
-                  onValueChange={(value) => setSelectedInstansi(Number(value))}>
+                  onValueChange={(value) =>
+                    setSelectedInstansi(
+                      value === "all" ? undefined : Number(value)
+                    )
+                  }>
                   <SelectTrigger className="w-full md:w-5/12 border border-neutral-700 rounded-full">
                     <SelectValue placeholder="Pilih Instansi" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="all">Semua Instansi</SelectItem>
                     {instansis &&
                       instansis?.map((item: LayananType, i: number) => {
                         return (
